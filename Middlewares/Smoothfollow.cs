@@ -9,7 +9,9 @@ namespace Camera2.Configuration {
 	class Settings_Smoothfollow {
 		public float position = 10f;
 		public float rotation = 5f;
-		public bool forceUpright = false;
+
+		public float antiRoll = 0.5f;
+		public float antiPitch = 0.5f;
 
 		[JsonIgnore]
 		internal Transform parent;
@@ -32,9 +34,9 @@ namespace Camera2.Middlewares {
 			if(settings.type == Configuration.CameraType.Positionable)
 				return true;
 
-			bool checkCamDed() { return parent == null || parent.position == null || parent?.gameObject.activeInHierarchy != true; }
+			// Need to EXPLICITLY null check before, chaining parent?. breaks if parent is null, idk, unity
+			bool checkCamDed() { return parent == null || parent.gameObject?.activeInHierarchy != true; }
 
-			// If our parents position (And thus it) doesnt exist we might as well not render
 			if(checkCamDed()) {
 				// If we are not a FP cam we cannot auto-retrieve what we're supposed to be attached to
 				if(settings.type != Configuration.CameraType.FirstPerson)
@@ -43,23 +45,27 @@ namespace Camera2.Middlewares {
 				// If we are in a Scoresaber replay we wanna attach to that view instead of the HMD (Maybe configurable?)
 				parent = ScoresaberUtil.replayCamera?.transform ?? Camera.main?.transform;
 
+				// If our parent doesnt exist we might as well not render
 				if(checkCamDed())
 					return false;
 			}
 
 			var targetRotation = parent.rotation;
 
-			if(settings.Smoothfollow.forceUpright) {
+			if(settings.Smoothfollow.antiPitch > 0f || settings.Smoothfollow.antiRoll > 0f) {
+				float zVal;
 				if(SceneUtil.songWorldTransform != null) {
 					/*
-					 * Substract the world rotation so that the only thing we "correct" for for being upright is the HMD
-					 * E.g. Map turns you upside down - The view should still be upside down, but "upright" (No Z rotation other than the maps one)
+					 * Substract the world rotation so that the only thing we "correct" for being upright is the HMD
+					 * E.g. Map turns you upside down - The view should still be upside down, but "upright" (No rotation other than the maps one)
 					 */
 					var isolatedHmdRotation = targetRotation * Quaternion.Inverse(SceneUtil.songWorldTransform.rotation);
-					targetRotation *= Quaternion.Euler(0, 0, -(isolatedHmdRotation.eulerAngles.z));
+					zVal = isolatedHmdRotation.eulerAngles.z;
 				} else {
-					targetRotation *= Quaternion.Euler(0, 0, -(targetRotation.eulerAngles.z));
+					zVal = targetRotation.eulerAngles.z;
 				}
+
+				targetRotation *= Quaternion.Euler(0, 0, -zVal);
 			}
 
 			if(lastScene != SceneUtil.currentScene) {

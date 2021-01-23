@@ -106,6 +106,9 @@
     <Reference Include="UnityEngine.JSONSerializeModule">
       <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\UnityEngine.JSONSerializeModule.dll</HintPath>
     </Reference>
+    <Reference Include="UnityEngine.PhysicsModule">
+      <HintPath>E:\SteamLibrary\steamapps\common\Beat Saber\Beat Saber_Data\Managed\UnityEngine.PhysicsModule.dll</HintPath>
+    </Reference>
     <Reference Include="UnityEngine.UI">
       <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\UnityEngine.UI.dll</HintPath>
       <Private>False</Private>
@@ -130,7 +133,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Behaviours\CustomScreen.cs" />
+    <Compile Include="Behaviours\CamerasViewport.cs" />
+    <Compile Include="Behaviours\PositionableCam.cs" />
     <Compile Include="CamManager.cs" />
     <Compile Include="Configuration\CameraSettings.cs" />
     <Compile Include="HarmonyPatches\DisableDefaultCamera.cs" />

@@ -1,23 +1,19 @@
 ﻿using Camera2.Behaviours;
-using Camera2.Configuration;
 using Camera2.Utils;
-using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.XR;
 
 namespace Camera2 {
 	static class CamManager {
 		public static Dictionary<string, Cam2> cams { get; private set; } = new Dictionary<string, Cam2>();
-		static CustomScreen customScreen;
+		static CamerasViewport customScreen;
 
 		public static void Init() {
-			customScreen = new GameObject("Cam2_Renderer").AddComponent<CustomScreen>();
+			customScreen = new GameObject("Cam2_Renderer").AddComponent<CamerasViewport>();
 
 			if(!Directory.Exists(ConfigUtil.CamsDir)) {
 				Directory.CreateDirectory(ConfigUtil.CamsDir);
@@ -32,13 +28,10 @@ namespace Camera2 {
 			}
 
 			if(cams.Count() == 0) {
-				var cam = AddCamera("Main");
-
-				cam.settings.layer = -1000;
+				var cam = AddCamera("Main", false);
 			}
 			
 			ScenesManager.Load();
-			ScenesManager.SceneLoaded();
 
 			XRSettings.gameViewRenderMode = GameViewRenderMode.None;
 		}
@@ -49,13 +42,13 @@ namespace Camera2 {
 				cam.screenImage.transform.SetAsLastSibling();
 		}
 
-		public static Cam2 AddCamera(string name) {
+		public static Cam2 AddCamera(string name, bool loadConfig = true) {
 			if(cams.ContainsKey(name))
 				throw new Exception("Already exists??");
 
 			var cam = new GameObject($"Cam2_{name}").AddComponent<Cam2>();
 
-			cam.Init(name, customScreen.AddNewView());
+			cam.Init(name, customScreen.AddNewView(), loadConfig);
 
 			cams.Add(name, cam);
 

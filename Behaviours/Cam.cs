@@ -16,13 +16,15 @@ using Camera2.Utils;
 namespace Camera2.Behaviours {
 
 	class Cam2 : MonoBehaviour {
+		public new string name { get; private set; }
+		public string configPath { get { return ConfigUtil.getCameraPath(name); } }
+
 		internal Camera UCamera { get; private set; }
 		public CameraSettings settings { get; private set; }
 		internal RenderTexture renderTexture { get; private set; }
+
 		internal LessRawImage screenImage { get; private set; }
 
-		public new string name { get; private set; }
-		public string configPath { get { return ConfigUtil.getCameraPath(name); } }
 
 		List<IMHandler> middlewares = new List<IMHandler>();
 
@@ -62,7 +64,7 @@ namespace Camera2.Behaviours {
 			screenImage.SetSource(this);
 		}
 
-		public void Init(string name, LessRawImage presentor) {
+		public void Init(string name, LessRawImage presentor, bool loadConfig = false) {
 			this.name = name;
 			screenImage = presentor;
 
@@ -89,7 +91,11 @@ namespace Camera2.Behaviours {
 			//TODO: maybe clone the effectcontroller+>_mainEffectContainer+>_mainEffect so we can customize bloom on a per-camera basis
 
 			settings = new CameraSettings(this);
-			settings.Load();
+			settings.Load(loadConfig);
+			
+			var x = new GameObject("Whatever").AddComponent<PositionableCam>();
+			x.transform.SetParent(transform, false);
+
 
 			AddTransformer<FPSLimiter>();
 			AddTransformer<Smoothfollow>();
@@ -127,21 +133,21 @@ namespace Camera2.Behaviours {
 		/// Called when the script becomes enabled and active
 		/// </summary>
 		private void OnEnable() {
-			//if(UCamera != null) UCamera.enabled = true;
+			if(screenImage != null) screenImage.enabled = true;
 		}
 
 		/// <summary>
 		/// Called when the script becomes disabled or when it is being destroyed.
 		/// </summary>
 		private void OnDisable() {
-			//if(UCamera != null) UCamera.enabled = false;
+			if(screenImage != null) screenImage.enabled = false;
 		}
 
 		/// <summary>
 		/// Called when the script is being destroyed.
 		/// </summary>
 		private void OnDestroy() {
-			this.settings?.Save();
+			settings?.Save();
 			Destroy(UCamera);
 			Destroy(screenImage);
 		}

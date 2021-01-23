@@ -73,7 +73,7 @@ namespace Camera2.Behaviours {
 			this.cam = cam;
 			
 			//if(material != null) Destroy(material);
-			material = new Material(CustomScreen.blitCopyShader);
+			material = new Material(CamerasViewport.blitCopyShader);
 			material.SetTexture("_MainTex", cam.renderTexture);
 			rekt.sizeDelta = cam.settings.viewRect.size;
 			position = cam.settings.viewRect.position;
@@ -82,7 +82,7 @@ namespace Camera2.Behaviours {
 		
 	}
 
-	class CustomScreen : MonoBehaviour {
+	class CamerasViewport : MonoBehaviour {
 		public static Canvas canvas { get; private set; }
 		public static Shader blitCopyShader;
 
@@ -152,7 +152,7 @@ namespace Camera2.Behaviours {
 
 				targetCam = GetViewAtPoint(lastMousePos, ref grabAction);
 
-				CursorUtil.ChangeCursor(grabAction == GrabAction.Resize_BR ? CursorUtil.WindowsCursor.IDC_SIZENWSE : CursorUtil.WindowsCursor.IDC_ARROW);
+				CursorUtil.SetCursor(grabAction == GrabAction.Resize_BR ? CursorUtil.WindowsCursor.IDC_SIZENWSE : CursorUtil.WindowsCursor.IDC_ARROW);
 			}
 
 			if(grabAction != GrabAction.None) {
@@ -186,6 +186,16 @@ namespace Camera2.Behaviours {
 			// Menu handler
 			} else if(Input.GetMouseButtonUp(1)) {
 
+			} else if(Input.anyKeyDown) { //Some custom scenes to do funny stuff with
+				if(Input.GetKeyDown(KeyCode.F1)) {
+					ScenesManager.LoadGameScene(SceneUtil.currentScene.name);
+				} else if(Input.GetKeyDown(KeyCode.F2)) {
+					ScenesManager.SwitchToScene(SceneTypes.Custom1);
+				} else if(Input.GetKeyDown(KeyCode.F3)) {
+					ScenesManager.SwitchToScene(SceneTypes.Custom2);
+				} else if(Input.GetKeyDown(KeyCode.F4)) {
+					ScenesManager.SwitchToScene(SceneTypes.Custom3);
+				}
 			}
 		}
 	}

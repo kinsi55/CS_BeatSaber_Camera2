@@ -16,7 +16,7 @@ namespace Camera2.Utils {
 		public static void OnActiveSceneChanged(Scene oldScene, Scene newScene) {
 			currentScene = newScene;
 			isInMenu = newScene.name == "MenuViewControllers";
-			ScenesManager.SceneLoaded(newScene.name);
+			ScenesManager.ActiveSceneChanged(newScene.name);
 			ScoresaberUtil.UpdateIsInReplay();
 		}
 

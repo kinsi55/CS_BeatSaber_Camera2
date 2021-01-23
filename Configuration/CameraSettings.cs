@@ -24,17 +24,17 @@ namespace Camera2.Configuration {
 			this.cam = cam;
 		}
 
-		public void Load() {
+		public void Load(bool loadConfig = true) {
 			// Set default values incase they're removed from the JSON because of user stoopid
 			FOV = 90;
 			viewRect = new Rect(0, 0, Screen.width, Screen.height);
 
-			if(System.IO.File.Exists(cam.configPath)) {
+			if(loadConfig && System.IO.File.Exists(cam.configPath)) {
 				JsonConvert.PopulateObject(System.IO.File.ReadAllText(cam.configPath, Encoding.UTF8), this, new JsonSerializerSettings {
 					NullValueHandling = NullValueHandling.Ignore
 				});
 			} else {
-				layer = CamManager.cams.Min(x => x.Value.settings.layer) - 1;
+				layer = CamManager.cams.Count == 0 ? -1000 : CamManager.cams.Max(x => x.Value.settings.layer) - 1;
 
 				Save();
 			}

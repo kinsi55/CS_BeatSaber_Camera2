@@ -24,7 +24,7 @@ namespace Camera2.Utils {
 			IDC_WAIT = 32514
 		}
 
-		public static void ChangeCursor(WindowsCursor cursor) {
+		public static void SetCursor(WindowsCursor cursor) {
 			SetCursor(LoadCursor(IntPtr.Zero, (int)cursor));
 		}
 
