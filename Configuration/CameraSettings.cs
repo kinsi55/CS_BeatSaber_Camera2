@@ -46,16 +46,21 @@ namespace Camera2.Configuration {
 			if(type != CameraType.Positionable)
 				return;
 
-			cam.UCamera.transform.position = targetPos;
-			cam.UCamera.transform.eulerAngles = targetRot;
+			cam.transform.position = targetPos;
+			cam.transform.eulerAngles = targetRot;
 		}
 
 		public void Save() {
 			System.IO.File.WriteAllText(cam.configPath, JsonConvert.SerializeObject(this, Formatting.Indented), Encoding.UTF8);
 		}
 
+		private CameraType _type = CameraType.Attached;
 		[JsonConverter(typeof(StringEnumConverter))]
-		public CameraType type = CameraType.Attached;
+		public CameraType type { get { return _type; } set { _type = value; cam.ActivateWorldCamIfNecessary(); } }
+
+		private bool _showWorldCam = true;
+		public bool showWorldCam { get { return _showWorldCam; } set { _showWorldCam = value; cam.ActivateWorldCamIfNecessary(); } }
+
 		public float FOV { get { return cam.UCamera.fieldOfView; } set { cam.UCamera.fieldOfView = value; } }
 		public int layer { get { return (int)cam.UCamera.depth; } set { cam.UCamera.depth = value; CamManager.ApplyViewLayers(); } }
 
@@ -91,9 +96,9 @@ namespace Camera2.Configuration {
 
 
 		[JsonConverter(typeof(Vector3Converter))]
-		public Vector3 targetPos = new Vector3(0, 1.5f);// { get { return cam.UCamera.transform.position; } set { cam.UCamera.transform.position = value; } }
+		public Vector3 targetPos = new Vector3(0, 1.5f, -1.5f);// { get { return cam.UCamera.transform.position; } set { cam.UCamera.transform.position = value; } }
 		[JsonConverter(typeof(Vector3Converter))]
-		public Vector3 targetRot = new Vector3(5f, 0, 0);// { get { return cam.UCamera.transform.rotation; } set { cam.UCamera.transform.rotation = value; } }
+		public Vector3 targetRot = new Vector3(3f, 0, 0);// { get { return cam.UCamera.transform.rotation; } set { cam.UCamera.transform.rotation = value; } }
 
 		//public bool ShouldSerializetargetPos() { return this.type == CameraType.Positionable; }
 		//public bool ShouldSerializetargetRot() { return this.type == CameraType.Positionable; }

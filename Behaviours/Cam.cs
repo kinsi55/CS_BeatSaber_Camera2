@@ -24,7 +24,7 @@ namespace Camera2.Behaviours {
 		internal RenderTexture renderTexture { get; private set; }
 
 		internal LessRawImage screenImage { get; private set; }
-
+		internal PositionableCam worldCam { get; private set; }
 
 		List<IMHandler> middlewares = new List<IMHandler>();
 
@@ -61,7 +61,12 @@ namespace Camera2.Behaviours {
 
 			UCamera.targetTexture = renderTexture;
 
-			screenImage.SetSource(this);
+			screenImage?.SetSource(this);
+			worldCam?.SetSource(this);
+		}
+
+		internal void ActivateWorldCamIfNecessary() {
+			worldCam?.gameObject.SetActive(settings.type != Configuration.CameraType.FirstPerson && settings.showWorldCam);
 		}
 
 		public void Init(string name, LessRawImage presentor, bool loadConfig = false) {
@@ -69,12 +74,14 @@ namespace Camera2.Behaviours {
 			screenImage = presentor;
 
 			var camClone = Instantiate(Camera.main.gameObject);
+			camClone.name = "Cam";
+
 
 			UCamera = camClone.GetComponent<Camera>();
 			UCamera.enabled = false;
-			
-			camClone.name = "Cam";
-			camClone.transform.parent = transform;
+			UCamera.clearFlags = CameraClearFlags.SolidColor;
+			UCamera.stereoTargetEye = StereoTargetEyeMask.None;
+
 
 			foreach(var child in camClone.transform.Cast<Transform>()) Destroy(child.gameObject);
 
@@ -84,17 +91,20 @@ namespace Camera2.Behaviours {
 				if(trash.Contains(component.GetType().Name)) Destroy(component);
 
 
-			UCamera.clearFlags = CameraClearFlags.SolidColor;
-			UCamera.stereoTargetEye = StereoTargetEyeMask.None;
+			camClone.transform.parent = transform;
+			camClone.transform.localRotation = Quaternion.identity;
+			camClone.transform.localPosition = Vector3.zero;
 
 
 			//TODO: maybe clone the effectcontroller+>_mainEffectContainer+>_mainEffect so we can customize bloom on a per-camera basis
+			
+			worldCam = new GameObject("WorldCam").AddComponent<PositionableCam>();
+			worldCam.transform.parent = transform;
 
 			settings = new CameraSettings(this);
 			settings.Load(loadConfig);
-			
-			var x = new GameObject("Whatever").AddComponent<PositionableCam>();
-			x.transform.SetParent(transform, false);
+
+			//worldCam.SetPreviewPositionAndSize();
 
 
 			AddTransformer<FPSLimiter>();

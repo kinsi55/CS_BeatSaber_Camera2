@@ -70,12 +70,12 @@ namespace Camera2.Middlewares {
 
 			if(lastScene != SceneUtil.currentScene) {
 				// If we switched scenes (E.g. left / entered a song) we want to snap to the correct position before smoothing again
-				cam.UCamera.transform.SetPositionAndRotation(parent.position, targetRotation);
+				cam.transform.SetPositionAndRotation(parent.position, targetRotation);
 
 				lastScene = SceneUtil.currentScene;
 			} else {
-				cam.UCamera.transform.position = Vector3.Lerp(cam.UCamera.transform.position, parent.position, tickSum * settings.Smoothfollow.position);
-				cam.UCamera.transform.rotation = Quaternion.Slerp(cam.UCamera.transform.rotation, targetRotation, tickSum * settings.Smoothfollow.position);
+				cam.transform.position = Vector3.Lerp(cam.transform.position, parent.position, tickSum * settings.Smoothfollow.position);
+				cam.transform.rotation = Quaternion.Slerp(cam.transform.rotation, targetRotation, tickSum * settings.Smoothfollow.position);
 			}
 			tickSum = 0f;
 			return true;

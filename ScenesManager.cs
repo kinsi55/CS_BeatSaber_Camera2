@@ -7,6 +7,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using UnityEngine;
 using UnityEngine.SceneManagement;
 
 namespace Camera2 {
@@ -47,7 +48,7 @@ namespace Camera2 {
 			SceneTypes[] toLookup = null;
 
 			//TODO: Handle MP
-			if(sceneName == "MenuViewCore" || sceneName == "MenuCore" || sceneName == "Credits") {
+			if(sceneName.StartsWith("MenuView") || sceneName == "MenuCore" || sceneName == "Credits") {
 				toLookup = new SceneTypes[] { SceneTypes.Menu };
 			} else if(sceneName == "GameCore") {
 				toLookup = new SceneTypes[] { SceneTypes.Playing };
@@ -67,16 +68,22 @@ namespace Camera2 {
 		}
 
 		private static void SwitchToCamlist(List<string> cams) {
+			if(cams?.Count() == 0)
+				cams = null;
 			/*
-			 * Intentionally checking != false, this way if the respectice scene is empty OR
-			 * it contains the cam we're looking for the cam will be activated, only if its
+			 * Intentionally checking != false, this way if cams is null OR
+			 * it contains it, the cam will be activated, only if its
 			 * a non-empty scene we want to hide cams that are not in it
 			 */
 			foreach(var cam in CamManager.cams)
 				cam.Value.gameObject.SetActive(cams?.Contains(cam.Key) != false);
+
+			GL.Clear(true, true, Color.black);
 		}
 
 		private static List<string> GetPopulatedScene(SceneTypes[] types) {
+			if(settings.scenes.Count == 0) return null;
+
 			foreach(var type in types) {
 				if(settings.scenes[type].Count() > 0)
 					return settings.scenes[type];

@@ -11,31 +11,44 @@ namespace Camera2.Behaviours {
 
 		GameObject camOriginCube;
 		GameObject camPreview;
+		Material viewMaterial;
 
 		public void Awake() {
 			DontDestroyOnLoad(this);
 
-			camOriginCube = GameObject.CreatePrimitive(PrimitiveType.Cube);
+			camOriginCube = GameObject.CreatePrimitive(PrimitiveType.Cylinder);
 			camOriginCube.transform.parent = transform;
 
-			camOriginCube.transform.localScale = new Vector3(0.15f, 0.15f, 0.22f);
-			//camOriginCube.layer = 0;
+			camOriginCube.transform.localScale = new Vector3(0.1f, 0.1f, 0.15f);
+			camOriginCube.transform.localPosition = new Vector3(0, 0, -(camOriginCube.transform.localScale.z / 2));
+			camOriginCube.transform.localEulerAngles = new Vector3(90f, 0, 0);
 
+			//var x = new Material(Shader.Find("Hidden/Internal-DepthNormalsTexture"));
+			//camOriginCube.GetComponent<MeshRenderer>().material = x;
 
 			camPreview = GameObject.CreatePrimitive(PrimitiveType.Quad);
-			DestroyImmediate(camPreview.GetComponent<Collider>());
-			camPreview.transform.parent = camOriginCube.transform;
+			Destroy(camPreview.GetComponent<Collider>());
+			camPreview.transform.parent = transform;
+			
+			camPreview.transform.localEulerAngles = new Vector3(0, 180f, 0);
+			camPreview.layer = 1;
 
-			//camPreview.transform.localPosition = new Vector3(-1f * ((16f/ - 1) / 2 + 1), 0, 0.22f);
-			camPreview.transform.localEulerAngles = new Vector3(0, 180, 0);
-			camPreview.transform.localScale = new Vector3(2, 1, 1);
-			//camPreview.layer = 0;
+			viewMaterial = new Material(Shader.Find("Hidden/BlitCopyWithDepth"));
+			camPreview.GetComponent<MeshRenderer>().material = viewMaterial;
 		}
 
-		public void Init(Cam2 cam) {
+		public void SetSource(Cam2 cam) {
 			this.cam = cam;
 
-			camPreview.GetComponent<MeshRenderer>().material = cam.screenImage.material;
+			viewMaterial.SetTexture("_MainTex", cam.renderTexture);
+			SetPreviewPositionAndSize(true);
+		}
+
+		public void SetPreviewPositionAndSize(bool small = true) {
+			var size = small ? 0.3f : 0.75f;
+
+			camPreview.transform.localScale = new Vector3(size, size / cam.UCamera.aspect, 0);
+			camPreview.transform.localPosition = new Vector3(0, camPreview.transform.localScale.y, camOriginCube.transform.localPosition.z / 2);
 		}
 	}
 }

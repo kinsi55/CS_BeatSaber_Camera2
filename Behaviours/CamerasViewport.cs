@@ -73,6 +73,7 @@ namespace Camera2.Behaviours {
 			this.cam = cam;
 			
 			//if(material != null) Destroy(material);
+			// Cannot reuse the material, else the preview will just stay black.
 			material = new Material(CamerasViewport.blitCopyShader);
 			material.SetTexture("_MainTex", cam.renderTexture);
 			rekt.sizeDelta = cam.settings.viewRect.size;
@@ -155,6 +156,22 @@ namespace Camera2.Behaviours {
 				CursorUtil.SetCursor(grabAction == GrabAction.Resize_BR ? CursorUtil.WindowsCursor.IDC_SIZENWSE : CursorUtil.WindowsCursor.IDC_ARROW);
 			}
 
+			if(Input.GetMouseButtonUp(1)) {
+
+			}
+
+			if(Input.anyKeyDown) { //Some custom scenes to do funny stuff with
+				if(Input.GetKeyDown(KeyCode.F1)) {
+					ScenesManager.LoadGameScene(SceneUtil.currentScene.name);
+				} else if(Input.GetKeyDown(KeyCode.F2)) {
+					ScenesManager.SwitchToScene(SceneTypes.Custom1);
+				} else if(Input.GetKeyDown(KeyCode.F3)) {
+					ScenesManager.SwitchToScene(SceneTypes.Custom2);
+				} else if(Input.GetKeyDown(KeyCode.F4)) {
+					ScenesManager.SwitchToScene(SceneTypes.Custom3);
+				}
+			}
+
 			if(grabAction != GrabAction.None) {
 				// Drag handler / Resize
 				if(Input.GetMouseButtonDown(0) && targetCam != null) {
@@ -184,18 +201,6 @@ namespace Camera2.Behaviours {
 					isInAction = false;
 
 			// Menu handler
-			} else if(Input.GetMouseButtonUp(1)) {
-
-			} else if(Input.anyKeyDown) { //Some custom scenes to do funny stuff with
-				if(Input.GetKeyDown(KeyCode.F1)) {
-					ScenesManager.LoadGameScene(SceneUtil.currentScene.name);
-				} else if(Input.GetKeyDown(KeyCode.F2)) {
-					ScenesManager.SwitchToScene(SceneTypes.Custom1);
-				} else if(Input.GetKeyDown(KeyCode.F3)) {
-					ScenesManager.SwitchToScene(SceneTypes.Custom2);
-				} else if(Input.GetKeyDown(KeyCode.F4)) {
-					ScenesManager.SwitchToScene(SceneTypes.Custom3);
-				}
 			}
 		}
 	}
