@@ -26,7 +26,7 @@ namespace Camera2.Utils {
 			ScoresaberUtil.UpdateIsInReplay();
 		}
 
-		public static void OnSceneUnloadPre() {
+		public static void OnSceneMaybeUnloadPre() {
 			ModmapExtensions.ForceDetachTracks();
 			songWorldTransform = null;
 		}

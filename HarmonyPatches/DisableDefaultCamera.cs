@@ -16,7 +16,7 @@ namespace Camera2.HarmonyPatches {
 
 	[HarmonyPatch(typeof(SmoothCamera), "OnEnable")]
 	class BlockSmoothCamera {
-		static bool Prefix(MainCamera ____mainCamera) {
+		static bool Prefix() {
 			return false;
 		}
 	}

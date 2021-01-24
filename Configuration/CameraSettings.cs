@@ -16,12 +16,29 @@ namespace Camera2.Configuration {
 		Attached, //Unused for now, but mostly implemented - Parent to arbitrary things
 		Positionable
 	}
+
+	class GameObjects {
+		CameraSettings parentSetting;
+		public GameObjects(CameraSettings parentSetting) {
+			this.parentSetting = parentSetting;
+		}
+
+		private bool _Walls = true;
+		private bool _Debris = true;
+		private bool _UI = true;
+
+		public bool Walls { get { return _Walls; } set { _Walls = value; parentSetting.ApplyLayerBitmask(); } }
+		public bool Debris { get { return _Debris; } set { _Debris = value; parentSetting.ApplyLayerBitmask(); } }
+		public bool UI { get { return _UI; } set { _UI = value; parentSetting.ApplyLayerBitmask(); } }
+	}
 	
 	class CameraSettings {
 		[JsonIgnore]
 		private Cam2 cam;
 		public CameraSettings(Cam2 cam) {
 			this.cam = cam;
+
+			visibleObjects = new GameObjects(this);
 		}
 
 		public void Load(bool loadConfig = true) {
@@ -68,6 +85,7 @@ namespace Camera2.Configuration {
 		public float FOV { get { return cam.UCamera.fieldOfView; } set { cam.UCamera.fieldOfView = value; } }
 		public int layer { get { return (int)cam.UCamera.depth; } set { cam.UCamera.depth = value; CamManager.ApplyViewLayers(); } }
 
+		public GameObjects visibleObjects;
 
 		private float _renderScale = 1;
 		public float renderScale {

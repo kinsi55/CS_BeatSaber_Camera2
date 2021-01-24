@@ -11,14 +11,14 @@ namespace Camera2.HarmonyPatches {
 	[HarmonyPatch(typeof(GameScenesManager), "PopScenes")]
 	class HookSceneUnload {
 		static void Prefix() {
-			SceneUtil.OnSceneUnloadPre();
+			SceneUtil.OnSceneMaybeUnloadPre();
 		}
 	}
 
 	[HarmonyPatch(typeof(GameScenesManager), "ReplaceScenes")]
 	class HookSceneReplace {
 		static void Prefix() {
-			SceneUtil.OnSceneUnloadPre();
+			SceneUtil.OnSceneMaybeUnloadPre();
 		}
 	}
 }
