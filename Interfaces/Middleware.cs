@@ -26,6 +26,7 @@ namespace Camera2.Interfaces {
 			this.cam = cam;
 			return (IMHandler)this;
 		}
+		// Prevents the cam from rendering this frame if returned false
 		public bool Pre() { return true; }
 		public void Post() { }
 	}

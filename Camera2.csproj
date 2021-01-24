@@ -66,6 +66,9 @@
     <Reference Include="SiraUtil">
       <HintPath>$(BeatSaberDir)\Plugins\SiraUtil.dll</HintPath>
     </Reference>
+    <Reference Include="SongCore">
+      <HintPath>E:\SteamLibrary\steamapps\common\Beat Saber\Plugins\SongCore.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -142,10 +145,12 @@
     <Compile Include="HarmonyPatches\HookSceneUnload.cs" />
     <Compile Include="HarmonyPatches\HookSongStarted.cs" />
     <Compile Include="HarmonyPatches\InitOnMainAvailable.cs" />
+    <Compile Include="HarmonyPatches\LeveldataHook.cs" />
+    <Compile Include="HarmonyPatches\TransparentWalls.cs" />
     <Compile Include="Interfaces\Middleware.cs" />
     <Compile Include="ScenesManager.cs" />
     <Compile Include="Middlewares\Follow360.cs" />
-    <Compile Include="Middlewares\NoodleExtensions.cs" />
+    <Compile Include="Middlewares\ModmapExtensions.cs" />
     <Compile Include="Middlewares\Smoothfollow.cs" />
     <Compile Include="Middlewares\FPSLimiter.cs" />
     <Compile Include="Plugin.cs" />
@@ -154,6 +159,7 @@
     <Compile Include="Utils\Configs.cs" />
     <Compile Include="Utils\Cursor.cs" />
     <Compile Include="Utils\JsonConverters.cs" />
+    <Compile Include="Utils\ModMaps.cs" />
     <Compile Include="Utils\Scenes.cs" />
     <Compile Include="Utils\Scoresaber.cs" />
     <Compile Include="Utils\VisibilityMasks.cs" />

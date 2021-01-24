@@ -10,8 +10,7 @@ namespace Camera2.Configuration {
 		public float position = 10f;
 		public float rotation = 5f;
 
-		public float antiRoll = 0.5f;
-		public float antiPitch = 0.5f;
+		public bool forceUpright = false;
 
 		[JsonIgnore]
 		internal Transform parent;
@@ -52,7 +51,7 @@ namespace Camera2.Middlewares {
 
 			var targetRotation = parent.rotation;
 
-			if(settings.Smoothfollow.antiPitch > 0f || settings.Smoothfollow.antiRoll > 0f) {
+			if(settings.Smoothfollow.forceUpright) {
 				float zVal;
 				if(SceneUtil.songWorldTransform != null) {
 					/*
@@ -75,7 +74,7 @@ namespace Camera2.Middlewares {
 				lastScene = SceneUtil.currentScene;
 			} else {
 				cam.transform.position = Vector3.Lerp(cam.transform.position, parent.position, tickSum * settings.Smoothfollow.position);
-				cam.transform.rotation = Quaternion.Slerp(cam.transform.rotation, targetRotation, tickSum * settings.Smoothfollow.position);
+				cam.transform.rotation = Quaternion.Slerp(cam.transform.rotation, targetRotation, tickSum * settings.Smoothfollow.rotation);
 			}
 			tickSum = 0f;
 			return true;

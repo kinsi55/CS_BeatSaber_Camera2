@@ -99,7 +99,7 @@ namespace Camera2.Behaviours {
 			//TODO: maybe clone the effectcontroller+>_mainEffectContainer+>_mainEffect so we can customize bloom on a per-camera basis
 			
 			worldCam = new GameObject("WorldCam").AddComponent<PositionableCam>();
-			worldCam.transform.parent = transform;
+			worldCam.transform.parent = camClone.transform;
 
 			settings = new CameraSettings(this);
 			settings.Load(loadConfig);
@@ -109,7 +109,7 @@ namespace Camera2.Behaviours {
 
 			AddTransformer<FPSLimiter>();
 			AddTransformer<Smoothfollow>();
-			AddTransformer<NoodleExtensions>();
+			AddTransformer<ModmapExtensions>();
 			AddTransformer<Follow360>();
 			//TODO: FlyingGameHUDRotation - Set as child for 360 maps to apply
 		}

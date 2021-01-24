@@ -33,6 +33,7 @@ namespace Camera2 {
 			Log.Info("Camera2 initialized.");
 
 			ScoresaberUtil.Init();
+			ModMapUtil.Init();
 
 			var harmony = new Harmony("Kinsi55.BeatSaber.Cam2");
 			harmony.PatchAll(Assembly.GetExecutingAssembly());

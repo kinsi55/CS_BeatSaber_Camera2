@@ -68,7 +68,7 @@ namespace Camera2 {
 		}
 
 		private static void SwitchToCamlist(List<string> cams) {
-			if(cams?.Count() == 0)
+			if(cams?.Count == 0)
 				cams = null;
 			/*
 			 * Intentionally checking != false, this way if cams is null OR

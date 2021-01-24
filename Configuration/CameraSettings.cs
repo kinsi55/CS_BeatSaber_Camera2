@@ -13,7 +13,7 @@ using System.ComponentModel;
 namespace Camera2.Configuration {
 	enum CameraType {
 		FirstPerson,
-		Attached,
+		Attached, //Unused for now, but mostly implemented - Parent to arbitrary things
 		Positionable
 	}
 	
@@ -48,6 +48,10 @@ namespace Camera2.Configuration {
 
 			cam.transform.position = targetPos;
 			cam.transform.eulerAngles = targetRot;
+		}
+
+		public void ApplyLayerBitmask() {
+
 		}
 
 		public void Save() {
@@ -92,16 +96,12 @@ namespace Camera2.Configuration {
 		
 		public Settings_FPSLimiter FPSLimiter = new Settings_FPSLimiter();
 		public Settings_Smoothfollow Smoothfollow = new Settings_Smoothfollow();
-		public Settings_NoodleExtensions NoodleExtensions = new Settings_NoodleExtensions();
+		public Settings_ModmapExtensions ModmapExtensions = new Settings_ModmapExtensions();
 
 
 		[JsonConverter(typeof(Vector3Converter))]
-		public Vector3 targetPos = new Vector3(0, 1.5f, -1.5f);// { get { return cam.UCamera.transform.position; } set { cam.UCamera.transform.position = value; } }
+		public Vector3 targetPos = new Vector3(0, 1.5f, -1.5f);
 		[JsonConverter(typeof(Vector3Converter))]
-		public Vector3 targetRot = new Vector3(3f, 0, 0);// { get { return cam.UCamera.transform.rotation; } set { cam.UCamera.transform.rotation = value; } }
-
-		//public bool ShouldSerializetargetPos() { return this.type == CameraType.Positionable; }
-		//public bool ShouldSerializetargetRot() { return this.type == CameraType.Positionable; }
-
+		public Vector3 targetRot = new Vector3(3f, 0, 0);
 	}
 }

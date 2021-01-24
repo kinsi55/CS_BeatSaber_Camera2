@@ -11,6 +11,9 @@
 	},
 	"features": [],
 	"loadAfter": [
-		"ScoreSaber"
+		"ScoreSaber",
+		"SongCore",
+		"Noodle Extensions",
+		"MappingExtensions"
 	]
 }
