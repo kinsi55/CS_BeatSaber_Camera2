@@ -1,13 +1,7 @@
-﻿using HarmonyLib;
-using System;
-using System.Collections;
+﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using UnityEngine;
-using System.Reflection;
 using Camera2.Interfaces;
 using Camera2.Middlewares;
 using Camera2.Configuration;
@@ -16,11 +10,11 @@ using Camera2.Utils;
 namespace Camera2.Behaviours {
 
 	class Cam2 : MonoBehaviour {
-		public new string name { get; private set; }
-		public string configPath { get { return ConfigUtil.getCameraPath(name); } }
+		internal new string name { get; private set; }
+		internal string configPath { get { return ConfigUtil.getCameraPath(name); } }
 
 		internal Camera UCamera { get; private set; }
-		public CameraSettings settings { get; private set; }
+		internal CameraSettings settings { get; private set; }
 		internal RenderTexture renderTexture { get; private set; }
 
 		internal LessRawImage screenImage { get; private set; }
@@ -50,7 +44,7 @@ namespace Camera2.Behaviours {
 			}
 		}
 
-		internal void SetRenderTexture() {
+		internal void UpdateRenderTexture() {
 			renderTexture?.Release();
 			renderTexture = new RenderTexture((int)Math.Round(settings.viewRect.width * settings.renderScale), (int)Math.Round(settings.viewRect.height * settings.renderScale), 24) {
 				autoGenerateMips = false,
@@ -118,8 +112,12 @@ namespace Camera2.Behaviours {
 			middlewares.Add(gameObject.AddComponent<T>().Init(this));
 		}
 
+		internal float timeSinceLastRender { get; private set; } = 0f;
+
 		private void Update() {
 			if(UCamera != null && renderTexture != null) {
+				timeSinceLastRender += Time.deltaTime;
+
 				foreach(var t in middlewares) {
 					if(!t.Pre())
 						return;
@@ -129,6 +127,8 @@ namespace Camera2.Behaviours {
 
 				foreach(var t in middlewares)
 					t.Post();
+
+				timeSinceLastRender = 0f;
 			}
 		}
 

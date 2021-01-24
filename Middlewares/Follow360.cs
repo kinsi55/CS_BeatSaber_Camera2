@@ -1,18 +1,19 @@
-﻿using Camera2.HarmonyPatches;
+﻿using UnityEngine;
+using Camera2.HarmonyPatches;
 using Camera2.Interfaces;
 using Camera2.Utils;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using UnityEngine;
+
+namespace Camera2.Configuration {
+	class Settings_Follow360 {
+		public bool enabled = true;
+	}
+}
 
 namespace Camera2.Middlewares {
 	class Follow360 : CamMiddleware, IMHandler {
 		float currentRotateAmount = 0f;
 		new public bool Pre() {
-			if(!this.enabled || SceneUtil.isInMenu || HookLevelRotation.Instance == null || settings.type != Configuration.CameraType.Positionable) {
+			if(!enabled || !settings.Follow360.enabled || SceneUtil.isInMenu || HookLevelRotation.Instance == null || settings.type != Configuration.CameraType.Positionable) {
 				currentRotateAmount = 0f;
 				return true;
 			}

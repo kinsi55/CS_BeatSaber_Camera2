@@ -1,10 +1,6 @@
-﻿using IPA.Loader;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Linq;
 using SongCore;
+using IPA.Loader;
 
 namespace Camera2.Utils {
 	static class ModMapUtil {

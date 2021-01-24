@@ -1,13 +1,8 @@
-﻿using Camera2.Utils;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Linq;
 using UnityEngine;
-using UnityEngine.EventSystems;
 using UnityEngine.UI;
-using UnityEngine.UIElements;
+using Camera2.Configuration;
+using Camera2.Utils;
 
 namespace Camera2.Behaviours {
 	class LessRawImage : RawImage {
@@ -84,16 +79,15 @@ namespace Camera2.Behaviours {
 	}
 
 	class CamerasViewport : MonoBehaviour {
-		public static Canvas canvas { get; private set; }
-		public static Shader blitCopyShader;
+		private static Canvas canvas;
+		internal static Shader blitCopyShader = Shader.Find("Hidden/BlitCopy");
 
 		public void Awake() {
 			DontDestroyOnLoad(this);
-			// I know this throws a stupid warning because VR is active, no way to fix that it seems.
-			canvas = gameObject.AddComponent<Canvas>();
-			canvas.renderMode = RenderMode.ScreenSpaceOverlay;
 
-			blitCopyShader = Shader.Find("Hidden/BlitCopy");
+			canvas = gameObject.AddComponent<Canvas>();
+			// I know this throws a stupid warning because VR is active, no way to fix that it seems.
+			canvas.renderMode = RenderMode.ScreenSpaceOverlay;
 		}
 
 		public LessRawImage AddNewView() {
@@ -104,33 +98,34 @@ namespace Camera2.Behaviours {
 			return img;
 		}
 
-		enum GrabAction {
+		enum CamAction {
 			None,
 			Move,
+			Menu,
 			Resize_BR // Cba to implement scaling on other corners atm
 		}
 
-		const int grabbersize = 16;
+		const int grabbersize = 20;
 
-		LessRawImage GetViewAtPoint(Vector2 point, ref GrabAction actionAtPoint) {
+		LessRawImage GetViewAtPoint(Vector2 point, ref CamAction actionAtPoint) {
 			// This should already be sorted in the correct order
-			foreach(var cam in GetComponentsInChildren<LessRawImage>().Reverse()) {
+			foreach(var cam in GetComponentsInChildren<LessRawImage>(false).Reverse()) {
 				var d = new Rect(cam.rekt.position, cam.rekt.sizeDelta);
 
 				if(d.Contains(point)) {
 					var relativeCursorPos = point - d.position;
 
 					if(relativeCursorPos.y <= grabbersize && relativeCursorPos.x >= d.width - grabbersize) {
-						actionAtPoint = GrabAction.Resize_BR;
+						actionAtPoint = CamAction.Resize_BR;
 					} else {
-						actionAtPoint = GrabAction.Move;
+						actionAtPoint = CamAction.Move;
 					}
 
 					return cam;
 				}
 			}
 
-			actionAtPoint = GrabAction.None;
+			actionAtPoint = CamAction.None;
 
 			return null;
 		}
@@ -138,28 +133,12 @@ namespace Camera2.Behaviours {
 
 		private Vector2 mouseStartPos;
 		private LessRawImage targetCam;
-		private GrabAction grabAction;
+		private CamAction possibleAction = CamAction.None;
+		private CamAction currentAction = CamAction.None;
 
 		private Vector3 lastMousePos;
-		bool isInAction = false;
 
 		void Update() {
-			if(!isInAction && lastMousePos != Input.mousePosition) {
-				grabAction = GrabAction.None;
-				lastMousePos = Input.mousePosition;
-
-				if(lastMousePos.x < 0 || lastMousePos.y < 0 || lastMousePos.x > Screen.width || lastMousePos.y > Screen.height)
-					return;
-
-				targetCam = GetViewAtPoint(lastMousePos, ref grabAction);
-
-				CursorUtil.SetCursor(grabAction == GrabAction.Resize_BR ? CursorUtil.WindowsCursor.IDC_SIZENWSE : CursorUtil.WindowsCursor.IDC_ARROW);
-			}
-
-			if(Input.GetMouseButtonUp(1)) {
-
-			}
-
 			if(Input.anyKeyDown) { //Some custom scenes to do funny stuff with
 				if(Input.GetKeyDown(KeyCode.F1)) {
 					ScenesManager.LoadGameScene(SceneUtil.currentScene.name);
@@ -172,33 +151,50 @@ namespace Camera2.Behaviours {
 				}
 			}
 
-			if(grabAction != GrabAction.None) {
+			if(currentAction == CamAction.None && lastMousePos != Input.mousePosition) {
+				possibleAction = CamAction.None;
+				lastMousePos = Input.mousePosition;
+
+				if(lastMousePos.x < 0 || lastMousePos.y < 0 || lastMousePos.x > Screen.width || lastMousePos.y > Screen.height)
+					return;
+
+				targetCam = GetViewAtPoint(lastMousePos, ref possibleAction);
+
+				CursorUtil.SetCursor(possibleAction == CamAction.Resize_BR ? CursorUtil.WindowsCursor.IDC_SIZENWSE : CursorUtil.WindowsCursor.IDC_ARROW);
+			}
+
+			if(Input.GetMouseButtonUp(1) && currentAction == CamAction.None) {
+				//currentAction = CamAction.Menu;
+
+			}
+
+			if(possibleAction != CamAction.None) {
 				// Drag handler / Resize
-				if(Input.GetMouseButtonDown(0) && targetCam != null) {
+				if(Input.GetMouseButtonDown(0) && targetCam != null && currentAction == CamAction.None) {
 					mouseStartPos = lastMousePos;
-					isInAction = true;
+					currentAction = possibleAction;
 				}
 
-				if(!isInAction)
+				if(currentAction == CamAction.None)
 					return;
 
 				bool released = !Input.GetMouseButton(0);
 
-				if(grabAction == GrabAction.Move) {
+				if(currentAction == CamAction.Move) {
 					targetCam.SetPositionClamped(
 						// We take the current configured position and set the view position to it + the cursor move delta
 						targetCam.cam.settings.viewRect.position + (Vector2)Input.mousePosition - mouseStartPos,
 						// And only when the button was released, save it to the config to make it the new config value
 						released
 					);
-				} else if(grabAction == GrabAction.Resize_BR) {
+				} else if(currentAction == CamAction.Resize_BR) {
 					targetCam.ModifySizeClamped(
 						(Vector2)Input.mousePosition - mouseStartPos,
 						released
 					);
 				}
 				if(released)
-					isInAction = false;
+					currentAction = CamAction.None;
 
 			// Menu handler
 			}

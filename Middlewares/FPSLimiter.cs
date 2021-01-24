@@ -1,5 +1,4 @@
 ﻿using Camera2.Interfaces;
-using UnityEngine;
 
 namespace Camera2.Configuration {
 	class Settings_FPSLimiter {
@@ -9,15 +8,8 @@ namespace Camera2.Configuration {
 
 namespace Camera2.Middlewares {
 	class FPSLimiter : CamMiddleware, IMHandler {
-		float tickSum = 0;
-
-		private void Update() {
-			tickSum += Time.deltaTime;
-		}
-
 		new public bool Pre() {
-			if(this.enabled && tickSum < 1f / settings.FPSLimiter.limit) return false;
-			tickSum = 0;
+			if(enabled && cam.timeSinceLastRender < 1f / settings.FPSLimiter.limit) return false;
 			return true;
 		}
 	}

@@ -140,6 +140,7 @@
     <Compile Include="Behaviours\PositionableCam.cs" />
     <Compile Include="CamManager.cs" />
     <Compile Include="Configuration\CameraSettings.cs" />
+    <Compile Include="Configuration\SceneSettings.cs" />
     <Compile Include="HarmonyPatches\DisableDefaultCamera.cs" />
     <Compile Include="HarmonyPatches\HookLevelRotation.cs" />
     <Compile Include="HarmonyPatches\HookSceneUnload.cs" />

@@ -1,11 +1,5 @@
-﻿using Camera2.Middlewares;
+﻿using HarmonyLib;
 using Camera2.Utils;
-using HarmonyLib;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Camera2.HarmonyPatches {
 	[HarmonyPatch(typeof(GameScenesManager), "PopScenes")]

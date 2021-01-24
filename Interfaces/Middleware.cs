@@ -1,16 +1,6 @@
-﻿using Camera2.Behaviours;
-using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Dynamic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using UnityEngine;
-using Camera2.Middlewares;
+﻿using UnityEngine;
 using Camera2.Configuration;
+using Camera2.Behaviours;
 
 namespace Camera2.Interfaces {
 	interface IMHandler {

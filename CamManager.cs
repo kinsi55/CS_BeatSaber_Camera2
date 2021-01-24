@@ -1,11 +1,11 @@
-﻿using Camera2.Behaviours;
-using Camera2.Utils;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.XR;
+using Camera2.Behaviours;
+using Camera2.Utils;
 
 namespace Camera2 {
 	static class CamManager {
@@ -21,8 +21,9 @@ namespace Camera2 {
 				foreach(var cam in Directory.GetFiles(ConfigUtil.CamsDir)) {
 					try {
 						AddCamera(Path.GetFileNameWithoutExtension(cam));
-					} catch {
+					} catch(Exception ex) {
 						Plugin.Log.Error($"Failed to load Camera {Path.GetFileName(cam)}");
+						Plugin.Log.Error(ex);
 					}
 				}
 			}
@@ -31,7 +32,7 @@ namespace Camera2 {
 				var cam = AddCamera("Main", false);
 			}
 			
-			ScenesManager.Load();
+			ScenesManager.settings.Load();
 
 			XRSettings.gameViewRenderMode = GameViewRenderMode.None;
 		}

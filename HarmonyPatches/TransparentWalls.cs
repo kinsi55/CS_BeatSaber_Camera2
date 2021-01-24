@@ -1,11 +1,6 @@
-﻿using Camera2.Utils;
+﻿using UnityEngine;
 using HarmonyLib;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using UnityEngine;
+using Camera2.Utils;
 
 namespace Camera2.HarmonyPatches {
 	[HarmonyPatch(typeof(StretchableObstacle), "SetSizeAndColor")]

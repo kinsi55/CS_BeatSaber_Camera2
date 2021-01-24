@@ -1,17 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace Camera2.Behaviours {
 	class PositionableCam : MonoBehaviour {
-		Cam2 cam;
+		private Cam2 cam;
 
-		GameObject camOrigin;
-		GameObject camPreview;
-		Material viewMaterial;
+		private GameObject camOrigin;
+		private GameObject camPreview;
+		private Material viewMaterial;
 
 		public void Awake() {
 			DontDestroyOnLoad(this);

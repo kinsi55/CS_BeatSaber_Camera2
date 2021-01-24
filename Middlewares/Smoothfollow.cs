@@ -1,9 +1,8 @@
-﻿using Camera2.Interfaces;
-using Camera2.Utils;
-using Newtonsoft.Json;
-using System;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.SceneManagement;
+using Newtonsoft.Json;
+using Camera2.Interfaces;
+using Camera2.Utils;
 
 namespace Camera2.Configuration {
 	class Settings_Smoothfollow {
@@ -19,15 +18,9 @@ namespace Camera2.Configuration {
 
 namespace Camera2.Middlewares {
 	class Smoothfollow : CamMiddleware, IMHandler {
-		float tickSum = 0;
 		Scene lastScene;
 
 		Transform parent { get { return settings.Smoothfollow.parent; } set { settings.Smoothfollow.parent = value; } }
-
-		private void Update() {
-			if(settings.type != Configuration.CameraType.Positionable)
-				tickSum += Time.deltaTime;
-		}
 
 		new public bool Pre() {
 			if(settings.type == Configuration.CameraType.Positionable)
@@ -73,10 +66,9 @@ namespace Camera2.Middlewares {
 
 				lastScene = SceneUtil.currentScene;
 			} else {
-				cam.transform.position = Vector3.Lerp(cam.transform.position, parent.position, tickSum * settings.Smoothfollow.position);
-				cam.transform.rotation = Quaternion.Slerp(cam.transform.rotation, targetRotation, tickSum * settings.Smoothfollow.rotation);
+				cam.transform.position = Vector3.Lerp(cam.transform.position, parent.position, cam.timeSinceLastRender * settings.Smoothfollow.position);
+				cam.transform.rotation = Quaternion.Slerp(cam.transform.rotation, targetRotation, cam.timeSinceLastRender * settings.Smoothfollow.rotation);
 			}
-			tickSum = 0f;
 			return true;
 		}
 	}

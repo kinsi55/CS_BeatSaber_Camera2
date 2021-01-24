@@ -1,35 +1,34 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using UnityEngine;
-using Camera2.Behaviours;
 using Newtonsoft.Json;
-using Camera2.Utils;
 using Newtonsoft.Json.Converters;
-using System.ComponentModel;
+using Camera2.Behaviours;
+using Camera2.Utils;
 
 namespace Camera2.Configuration {
 	enum CameraType {
 		FirstPerson,
-		Attached, //Unused for now, but mostly implemented - Parent to arbitrary things
+		Attached, //Unused for now, but mostly implemented - For parenting to arbitrary things
 		Positionable
 	}
 
 	class GameObjects {
-		CameraSettings parentSetting;
+		private CameraSettings parentSetting;
 		public GameObjects(CameraSettings parentSetting) {
 			this.parentSetting = parentSetting;
 		}
 
 		private bool _Walls = true;
-		private bool _Debris = true;
+		private bool _Debris = true; //Maybe make Enum w/ Show / Hide / Linked like in Cam Plus
 		private bool _UI = true;
+		private bool _Avatar = true;
 
 		public bool Walls { get { return _Walls; } set { _Walls = value; parentSetting.ApplyLayerBitmask(); } }
 		public bool Debris { get { return _Debris; } set { _Debris = value; parentSetting.ApplyLayerBitmask(); } }
 		public bool UI { get { return _UI; } set { _UI = value; parentSetting.ApplyLayerBitmask(); } }
+		public bool Avatar { get { return _Avatar; } set { _Avatar = value; parentSetting.ApplyLayerBitmask(); } }
 	}
 	
 	class CameraSettings {
@@ -48,7 +47,8 @@ namespace Camera2.Configuration {
 
 			if(loadConfig && System.IO.File.Exists(cam.configPath)) {
 				JsonConvert.PopulateObject(System.IO.File.ReadAllText(cam.configPath, Encoding.UTF8), this, new JsonSerializerSettings {
-					NullValueHandling = NullValueHandling.Ignore
+					NullValueHandling = NullValueHandling.Ignore,
+					Error = (se, ev) => { ev.ErrorContext.Handled = true; }
 				});
 			} else {
 				layer = CamManager.cams.Count == 0 ? -1000 : CamManager.cams.Max(x => x.Value.settings.layer) - 1;
@@ -57,6 +57,7 @@ namespace Camera2.Configuration {
 			}
 
 			ApplyPositionAndRotation();
+			ApplyLayerBitmask();
 		}
 
 		public void ApplyPositionAndRotation() {
@@ -68,7 +69,19 @@ namespace Camera2.Configuration {
 		}
 
 		public void ApplyLayerBitmask() {
+			var maskBuilder = cam.UCamera.cullingMask;
 
+			foreach(int mask in Enum.GetValues(typeof(VisibilityMasks)))
+				maskBuilder &= ~mask;
+
+			if(visibleObjects.Walls) maskBuilder |= (int)VisibilityMasks.Walls;
+			if(visibleObjects.Debris) maskBuilder |= (int)VisibilityMasks.Debris;
+			if(visibleObjects.UI) maskBuilder |= (int)VisibilityMasks.UI;
+			if(visibleObjects.Avatar) maskBuilder |= (int)VisibilityMasks.Avatar;
+			//TODO: AlwaysVisible mask = Avatar layer??
+			maskBuilder |= (int)(type == CameraType.FirstPerson ? VisibilityMasks.FirstPerson : VisibilityMasks.ThirdPerson);
+
+			cam.UCamera.cullingMask = maskBuilder;
 		}
 
 		public void Save() {
@@ -77,7 +90,14 @@ namespace Camera2.Configuration {
 
 		private CameraType _type = CameraType.Attached;
 		[JsonConverter(typeof(StringEnumConverter))]
-		public CameraType type { get { return _type; } set { _type = value; cam.ActivateWorldCamIfNecessary(); } }
+		public CameraType type {
+			get { return _type; }
+			set {
+				_type = value;
+				cam.ActivateWorldCamIfNecessary();
+				ApplyLayerBitmask();
+			}
+		}
 
 		private bool _showWorldCam = true;
 		public bool showWorldCam { get { return _showWorldCam; } set { _showWorldCam = value; cam.ActivateWorldCamIfNecessary(); } }
@@ -85,7 +105,7 @@ namespace Camera2.Configuration {
 		public float FOV { get { return cam.UCamera.fieldOfView; } set { cam.UCamera.fieldOfView = value; } }
 		public int layer { get { return (int)cam.UCamera.depth; } set { cam.UCamera.depth = value; CamManager.ApplyViewLayers(); } }
 
-		public GameObjects visibleObjects;
+		public GameObjects visibleObjects { get; private set; }
 
 		private float _renderScale = 1;
 		public float renderScale {
@@ -93,7 +113,7 @@ namespace Camera2.Configuration {
 			set {
 				if(_renderScale == value) return;
 				_renderScale = Math.Min(value, 3);
-				cam.SetRenderTexture();
+				cam.UpdateRenderTexture();
 			}
 		}
 
@@ -102,19 +122,20 @@ namespace Camera2.Configuration {
 		public Rect viewRect {
 			get { return _viewRect; }
 			set {
-				var doUpdate = cam.renderTexture == null || _viewRect.width != value.width || _viewRect.height != value.height;
+				var sizeChanged = cam.renderTexture == null || _viewRect.width != value.width || _viewRect.height != value.height;
 				_viewRect = value;
 
-				if(doUpdate)
-					cam.SetRenderTexture();
-
-				cam.UCamera.aspect = value.width / value.height;
+				if(sizeChanged) {
+					cam.UCamera.aspect = value.width / value.height;
+					cam.UpdateRenderTexture();
+				}
 			}
 		}
 		
-		public Settings_FPSLimiter FPSLimiter = new Settings_FPSLimiter();
-		public Settings_Smoothfollow Smoothfollow = new Settings_Smoothfollow();
-		public Settings_ModmapExtensions ModmapExtensions = new Settings_ModmapExtensions();
+		public Settings_FPSLimiter FPSLimiter { get; private set; } = new Settings_FPSLimiter();
+		public Settings_Smoothfollow Smoothfollow { get; private set; } = new Settings_Smoothfollow();
+		public Settings_ModmapExtensions ModmapExtensions { get; private set; } = new Settings_ModmapExtensions();
+		public Settings_Follow360 Follow360 { get; private set; } = new Settings_Follow360();
 
 
 		[JsonConverter(typeof(Vector3Converter))]

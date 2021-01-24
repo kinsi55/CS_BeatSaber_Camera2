@@ -1,34 +1,10 @@
-﻿using Camera2.Utils;
-using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.IO;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using UnityEngine;
-using UnityEngine.SceneManagement;
+using Camera2.Configuration;
+using Camera2.Utils;
 
 namespace Camera2 {
-
-	public enum SceneTypes {
-		Menu,
-		Playing,
-		Multiplayer,
-		Replay,
-		Custom1,
-		Custom2,
-		Custom3
-	}
-
-	class ScenesSettings {
-		[JsonProperty(DefaultValueHandling = DefaultValueHandling.Ignore)]
-		public Dictionary<SceneTypes, List<string>> scenes = new Dictionary<SceneTypes, List<string>>();
-
-		public bool enable = true;
-		public bool dontAutoswitchFromCustom = false;
-	}
 
 	static class ScenesManager {
 		public static ScenesSettings settings = new ScenesSettings();
@@ -48,7 +24,7 @@ namespace Camera2 {
 			SceneTypes[] toLookup = null;
 
 			//TODO: Handle MP
-			if(sceneName.StartsWith("MenuView") || sceneName == "MenuCore" || sceneName == "Credits") {
+			if(SceneUtil.menuSceneNames.Contains(sceneName) || sceneName == "Credits") {
 				toLookup = new SceneTypes[] { SceneTypes.Menu };
 			} else if(sceneName == "GameCore") {
 				toLookup = new SceneTypes[] { SceneTypes.Playing };
@@ -89,28 +65,6 @@ namespace Camera2 {
 					return settings.scenes[type];
 			}
 			return null;
-		}
-
-		public static void Load() {
-			void populateMissing() {
-				foreach(SceneTypes foo in Enum.GetValues(typeof(SceneTypes)))
-					if(!settings.scenes.ContainsKey(foo))
-						settings.scenes.Add(foo, new List<string>());
-			}
-
-			if(File.Exists(ConfigUtil.ScenesCfg)) {
-				JsonConvert.PopulateObject(File.ReadAllText(ConfigUtil.ScenesCfg, Encoding.UTF8), settings);
-				populateMissing();
-			} else {
-				populateMissing();
-				Save();
-			}
-
-			LoadGameScene();
-		}
-
-		public static void Save() {
-			File.WriteAllText(ConfigUtil.ScenesCfg, JsonConvert.SerializeObject(settings, Formatting.Indented), Encoding.UTF8);
 		}
 	}
 }

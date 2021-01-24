@@ -1,12 +1,8 @@
-﻿using Camera2.HarmonyPatches;
-using Camera2.Middlewares;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using Camera2.HarmonyPatches;
+using Camera2.Middlewares;
 
 namespace Camera2.Utils {
 	static class SceneUtil {
@@ -15,12 +11,17 @@ namespace Camera2.Utils {
 		public static Transform songWorldTransform;
 		public static bool isProbablyInWallMap = false;
 
+		public static readonly string[] menuSceneNames = new string[] { "MenuViewCore", "MenuCore", "MenuViewControllers" };
+
 		public static void OnActiveSceneChanged(Scene oldScene, Scene newScene) {
 			currentScene = newScene;
-			isInMenu = newScene.name == "MenuViewControllers";
+			isInMenu = menuSceneNames.Contains(newScene.name);
 
-			if(currentScene.name == "GameCore")
+			if(currentScene.name != "GameCore") {
+				isProbablyInWallMap = false;
+			} else {
 				isProbablyInWallMap = ModMapUtil.IsProbablyWallmap(LeveldataHook.difficultyBeatmap);
+			}
 
 			ScenesManager.ActiveSceneChanged(newScene.name);
 			ScoresaberUtil.UpdateIsInReplay();

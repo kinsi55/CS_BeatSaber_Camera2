@@ -1,8 +1,5 @@
-﻿using Camera2.Behaviours;
+﻿using Camera2.Utils;
 using Camera2.Interfaces;
-using Camera2.Utils;
-using System;
-using UnityEngine;
 
 namespace Camera2.Configuration {
 	class Settings_ModmapExtensions {
