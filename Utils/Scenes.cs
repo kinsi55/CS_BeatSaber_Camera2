@@ -3,6 +3,8 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using Camera2.HarmonyPatches;
 using Camera2.Middlewares;
+using VRUIControls;
+using Camera2.Behaviours;
 
 namespace Camera2.Utils {
 	static class SceneUtil {

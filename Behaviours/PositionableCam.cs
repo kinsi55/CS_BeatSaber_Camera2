@@ -1,8 +1,10 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
+using UnityEngine.EventSystems;
 
 namespace Camera2.Behaviours {
-	class PositionableCam : MonoBehaviour {
-		private Cam2 cam;
+	class PositionableCam : MonoBehaviour, IPointerClickHandler {
+		public Cam2 cam { get; private set; }
 
 		private GameObject camOrigin;
 		private GameObject camPreview;
@@ -43,6 +45,10 @@ namespace Camera2.Behaviours {
 
 			camPreview.transform.localScale = new Vector3(size, size / cam.UCamera.aspect, 0);
 			camPreview.transform.localPosition = new Vector3(0, camPreview.transform.localScale.y, camOrigin.transform.localPosition.z / 2);
+		}
+
+		public void OnPointerClick(PointerEventData eventData) {
+			CamPositioner.BeingDragCamera(cam, eventData);
 		}
 	}
 }

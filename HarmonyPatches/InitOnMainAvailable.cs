@@ -1,4 +1,6 @@
-﻿using HarmonyLib;
+﻿using UnityEngine;
+using HarmonyLib;
+using Camera2.Behaviours;
 
 namespace Camera2.HarmonyPatches {
 	[HarmonyPatch(typeof(SmoothCameraController), "Start")]
@@ -8,6 +10,8 @@ namespace Camera2.HarmonyPatches {
 			if(isInited) return;
 			isInited = true;
 			CamManager.Init();
+
+			new GameObject("Cam2_Pointer").AddComponent<CamPositioner>();
 		}
 
 	}
