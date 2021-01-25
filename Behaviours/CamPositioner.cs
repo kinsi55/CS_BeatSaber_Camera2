@@ -11,13 +11,6 @@ namespace Camera2.Behaviours {
 		private static Vector3 grabStartPos;
 		private static Quaternion grabStartRot;
 
-		// These should in theory always be zero and unnecessary but whatever.
-		private static Vector3 camStartPos;
-		private static Quaternion camStartRot;
-
-
-		private static Vector3 diff;
-
 		public void Awake() {
 			DontDestroyOnLoad(this);
 		}

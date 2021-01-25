@@ -73,8 +73,10 @@ namespace Camera2.Behaviours {
 
 			UCamera = camClone.GetComponent<Camera>();
 			UCamera.enabled = false;
+			UCamera.allowMSAA = false;
 			UCamera.clearFlags = CameraClearFlags.SolidColor;
 			UCamera.stereoTargetEye = StereoTargetEyeMask.None;
+
 
 
 			foreach(var child in camClone.transform.Cast<Transform>()) Destroy(child.gameObject);
@@ -98,14 +100,11 @@ namespace Camera2.Behaviours {
 			settings = new CameraSettings(this);
 			settings.Load(loadConfig);
 
-			//worldCam.SetPreviewPositionAndSize();
-
 
 			AddTransformer<FPSLimiter>();
 			AddTransformer<Smoothfollow>();
 			AddTransformer<ModmapExtensions>();
 			AddTransformer<Follow360>();
-			//TODO: FlyingGameHUDRotation - Set as child for 360 maps to apply
 		}
 
 		private void AddTransformer<T>() where T: CamMiddleware, IMHandler {
@@ -131,31 +130,17 @@ namespace Camera2.Behaviours {
 				timeSinceLastRender = 0f;
 			}
 		}
-
-		/// <summary>
-		/// Called every frame after every other enabled script's Update().
-		/// </summary>
-		private void LateUpdate() {
-			
-		}
-
-		/// <summary>
-		/// Called when the script becomes enabled and active
-		/// </summary>
+		
 		private void OnEnable() {
-			if(screenImage != null) screenImage.enabled = true;
+			screenImage?.gameObject.SetActive(true);
+			worldCam?.gameObject.SetActive(true);
 		}
-
-		/// <summary>
-		/// Called when the script becomes disabled or when it is being destroyed.
-		/// </summary>
+		
 		private void OnDisable() {
-			if(screenImage != null) screenImage.enabled = false;
+			screenImage?.gameObject.SetActive(false);
+			ActivateWorldCamIfNecessary();
 		}
-
-		/// <summary>
-		/// Called when the script is being destroyed.
-		/// </summary>
+		
 		private void OnDestroy() {
 			settings?.Save();
 			Destroy(UCamera);

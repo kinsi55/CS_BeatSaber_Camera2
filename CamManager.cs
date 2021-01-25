@@ -19,6 +19,9 @@ namespace Camera2 {
 				Directory.CreateDirectory(ConfigUtil.CamsDir);
 			} else {
 				foreach(var cam in Directory.GetFiles(ConfigUtil.CamsDir)) {
+					if(!cam.ToLower().EndsWith(".json"))
+						continue;
+
 					try {
 						AddCamera(Path.GetFileNameWithoutExtension(cam));
 					} catch(Exception ex) {

@@ -195,8 +195,6 @@ namespace Camera2.Behaviours {
 				}
 				if(released)
 					currentAction = CamAction.None;
-
-			// Menu handler
 			}
 		}
 	}
