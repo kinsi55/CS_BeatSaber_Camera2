@@ -74,14 +74,17 @@ namespace Camera2.Configuration {
 			foreach(int mask in Enum.GetValues(typeof(VisibilityMasks)))
 				maskBuilder &= ~mask;
 
-			if(visibleObjects.Walls) maskBuilder |= (int)VisibilityMasks.Walls;
+			if(visibleObjects.Walls || (ModmapExtensions.autoOpaqueWalls && SceneUtil.isProbablyInWallMap))
+				maskBuilder |= (int)VisibilityMasks.Walls;
+
 			if(visibleObjects.Debris) maskBuilder |= (int)VisibilityMasks.Debris;
 			if(visibleObjects.UI) maskBuilder |= (int)VisibilityMasks.UI;
 			if(visibleObjects.Avatar) maskBuilder |= (int)VisibilityMasks.Avatar;
-			//TODO: AlwaysVisible mask = Avatar layer??
+
 			maskBuilder |= (int)(type == CameraType.FirstPerson ? VisibilityMasks.FirstPerson : VisibilityMasks.ThirdPerson);
 
-			cam.UCamera.cullingMask = maskBuilder;
+			if(cam.UCamera.cullingMask != maskBuilder)
+				cam.UCamera.cullingMask = maskBuilder;
 		}
 
 		public void Save() {
@@ -103,7 +106,7 @@ namespace Camera2.Configuration {
 		public bool showWorldCam { get { return _showWorldCam; } set { _showWorldCam = value; cam.ActivateWorldCamIfNecessary(); } }
 
 		public float FOV { get { return cam.UCamera.fieldOfView; } set { cam.UCamera.fieldOfView = value; } }
-		public int layer { get { return (int)cam.UCamera.depth; } set { cam.UCamera.depth = value; CamManager.ApplyViewLayers(); } }
+		public int layer { get { return (int)cam.UCamera.depth; } set { cam.UCamera.depth = value; CamManager.ApplyViewportLayers(); } }
 
 		public GameObjects visibleObjects { get; private set; }
 

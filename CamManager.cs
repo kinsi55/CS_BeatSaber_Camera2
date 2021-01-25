@@ -38,7 +38,7 @@ namespace Camera2 {
 		}
 
 		// Unfortunately the Canvas Images cannot have their "layer" / index set to arbitrary numbers
-		public static void ApplyViewLayers() {
+		public static void ApplyViewportLayers() {
 			foreach(var cam in cams.Values.OrderBy(x => x.settings.layer))
 				cam.screenImage.transform.SetAsLastSibling();
 		}
@@ -53,7 +53,7 @@ namespace Camera2 {
 
 			cams.Add(name, cam);
 
-			ApplyViewLayers();
+			ApplyViewportLayers();
 
 			return cam;
 		}

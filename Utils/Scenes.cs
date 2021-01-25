@@ -27,6 +27,10 @@ namespace Camera2.Utils {
 
 			ScenesManager.ActiveSceneChanged(newScene.name);
 			ScoresaberUtil.UpdateIsInReplay();
+
+			// Updating the bitmask on scene change to allow for the auto wall toggle
+			foreach(var cam in CamManager.cams.Values)
+				cam.settings.ApplyLayerBitmask();
 		}
 
 		public static void OnSceneMaybeUnloadPre() {

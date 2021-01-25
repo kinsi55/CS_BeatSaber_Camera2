@@ -3,12 +3,17 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 
 namespace Camera2.Behaviours {
-	class PositionableCam : MonoBehaviour, IPointerClickHandler {
+	class PositionableCam : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler, IPointerExitHandler {
 		public Cam2 cam { get; private set; }
 
 		private GameObject camOrigin;
 		private GameObject camPreview;
 		private Material viewMaterial;
+
+		private static Material hoverMaterial = new Material(Shader.Find("Hidden/Internal-DepthNormalsTexture"));
+		private static Material normalMaterial = new Material(Shader.Find("Standard"));
+
+		private MeshRenderer renderer;
 
 		public void Awake() {
 			DontDestroyOnLoad(this);
@@ -20,8 +25,7 @@ namespace Camera2.Behaviours {
 			camOrigin.transform.localPosition = new Vector3(0, 0, -(camOrigin.transform.localScale.z / 2));
 			camOrigin.transform.localEulerAngles = new Vector3(90f, 0, 0);
 
-			//var x = new Material(Shader.Find("Hidden/Internal-DepthNormalsTexture"));
-			//camOriginCube.GetComponent<MeshRenderer>().material = x;
+			renderer = camOrigin.GetComponent<MeshRenderer>();
 
 			camPreview = GameObject.CreatePrimitive(PrimitiveType.Quad);
 			Destroy(camPreview.GetComponent<Collider>());
@@ -48,7 +52,18 @@ namespace Camera2.Behaviours {
 		}
 
 		public void OnPointerClick(PointerEventData eventData) {
-			CamPositioner.BeingDragCamera(cam, eventData);
+			if(!(eventData.currentInputModule is VRUIControls.VRInputModule))
+				return;
+
+			CamPositioner.BeingDragCamera(cam);
+		}
+
+		public void OnPointerEnter(PointerEventData eventData) {
+			renderer.material = hoverMaterial;
+		}
+
+		public void OnPointerExit(PointerEventData eventData) {
+			renderer.material = normalMaterial;
 		}
 	}
 }
