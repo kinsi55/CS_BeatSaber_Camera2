@@ -26,6 +26,7 @@ namespace Camera2.Behaviours {
 			camOrigin.transform.localEulerAngles = new Vector3(90f, 0, 0);
 
 			renderer = camOrigin.GetComponent<MeshRenderer>();
+			renderer.material = normalMaterial;
 
 			camPreview = GameObject.CreatePrimitive(PrimitiveType.Quad);
 			Destroy(camPreview.GetComponent<Collider>());

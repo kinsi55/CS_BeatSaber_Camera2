@@ -10,7 +10,8 @@ namespace Camera2.HarmonyPatches {
 		}
 
 		public static void MakeWallsOpaqueForMainCam() {
-			Camera.main.cullingMask |= (int)VisibilityMasks.Walls;
+			if(Camera.main != null)
+				Camera.main.cullingMask |= (int)VisibilityMasks.Walls;
 		}
 	}
 }

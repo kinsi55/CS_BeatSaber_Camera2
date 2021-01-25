@@ -32,7 +32,7 @@ namespace Camera2.Configuration {
 			}
 
 			if(File.Exists(ConfigUtil.ScenesCfg)) {
-				JsonConvert.PopulateObject(File.ReadAllText(ConfigUtil.ScenesCfg, Encoding.UTF8), this, new JsonSerializerSettings {
+				JsonConvert.PopulateObject(File.ReadAllText(ConfigUtil.ScenesCfg, Encoding.ASCII), this, new JsonSerializerSettings {
 					NullValueHandling = NullValueHandling.Ignore,
 					Error = (se, ev) => { ev.ErrorContext.Handled = true; }
 				});
@@ -46,7 +46,7 @@ namespace Camera2.Configuration {
 		}
 
 		public void Save() {
-			File.WriteAllText(ConfigUtil.ScenesCfg, JsonConvert.SerializeObject(this, Formatting.Indented), Encoding.UTF8);
+			File.WriteAllText(ConfigUtil.ScenesCfg, JsonConvert.SerializeObject(this, Formatting.Indented), Encoding.ASCII);
 		}
 	}
 }

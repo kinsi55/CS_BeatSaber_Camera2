@@ -4,6 +4,7 @@ using IPA;
 using IPALogger = IPA.Logging.Logger;
 using HarmonyLib;
 using Camera2.Utils;
+using Camera2.HarmonyPatches;
 
 namespace Camera2 {
 
@@ -11,6 +12,8 @@ namespace Camera2 {
 	public class Plugin {
 		internal static Plugin Instance { get; private set; }
 		internal static IPALogger Log { get; private set; }
+
+		internal static Harmony harmony { get; private set; }
 
 		[Init]
 		/// <summary>
@@ -27,8 +30,9 @@ namespace Camera2 {
 			ScoresaberUtil.Init();
 			ModMapUtil.Init();
 
-			var harmony = new Harmony("Kinsi55.BeatSaber.Cam2");
+			harmony = new Harmony("Kinsi55.BeatSaber.Cam2");
 			harmony.PatchAll(Assembly.GetExecutingAssembly());
+			//HookFPFC.InitPatch();
 
 			SceneManager.activeSceneChanged += SceneUtil.OnActiveSceneChanged;
 		}
@@ -55,7 +59,8 @@ namespace Camera2 {
 		[OnExit]
 		public void OnApplicationQuit() {
 			Log.Debug("OnApplicationQuit");
-
+			foreach(var cam in CamManager.cams)
+				cam.Value.settings.Save();
 		}
 	}
 }

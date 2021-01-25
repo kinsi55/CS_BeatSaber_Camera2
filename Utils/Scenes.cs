@@ -18,6 +18,9 @@ namespace Camera2.Utils {
 		public static void OnActiveSceneChanged(Scene oldScene, Scene newScene) {
 			currentScene = newScene;
 			isInMenu = menuSceneNames.Contains(newScene.name);
+			
+			if(oldScene.name == "GameCore" && ScoresaberUtil.isInReplay)
+				ScoresaberUtil.isInReplay = false;
 
 			if(currentScene.name != "GameCore") {
 				isProbablyInWallMap = false;
@@ -26,7 +29,6 @@ namespace Camera2.Utils {
 			}
 
 			ScenesManager.ActiveSceneChanged(newScene.name);
-			ScoresaberUtil.UpdateIsInReplay();
 
 			// Updating the bitmask on scene change to allow for the auto wall toggle
 			foreach(var cam in CamManager.cams.Values)

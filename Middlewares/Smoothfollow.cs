@@ -3,6 +3,7 @@ using UnityEngine.SceneManagement;
 using Newtonsoft.Json;
 using Camera2.Interfaces;
 using Camera2.Utils;
+using Camera2.HarmonyPatches;
 
 namespace Camera2.Configuration {
 	class Settings_Smoothfollow {
@@ -26,8 +27,10 @@ namespace Camera2.Middlewares {
 			if(settings.type == Configuration.CameraType.Positionable)
 				return true;
 
+			var parentToUse = ScoresaberUtil.replayCamera == null ? parent : ScoresaberUtil.replayCamera.transform;
+
 			// Need to EXPLICITLY null check before, chaining parent?. breaks if parent is null, idk, unity
-			bool checkCamDed() { return parent == null || parent.gameObject?.activeInHierarchy != true; }
+			bool checkCamDed() { return parentToUse == null || parentToUse.gameObject?.activeInHierarchy != true; }
 
 			if(checkCamDed()) {
 				// If we are not a FP cam we cannot auto-retrieve what we're supposed to be attached to
@@ -35,14 +38,14 @@ namespace Camera2.Middlewares {
 					return false;
 
 				// If we are in a Scoresaber replay we wanna attach to that view instead of the HMD (Maybe configurable?)
-				parent = ScoresaberUtil.replayCamera?.transform ?? Camera.main?.transform;
+				parentToUse = parent = Camera.main?.transform;
 
 				// If our parent doesnt exist we might as well not render
 				if(checkCamDed())
 					return false;
 			}
 
-			var targetRotation = parent.rotation;
+			var targetRotation = parentToUse.rotation;
 
 			if(settings.Smoothfollow.forceUpright) {
 				float zVal;
@@ -60,13 +63,13 @@ namespace Camera2.Middlewares {
 				targetRotation *= Quaternion.Euler(0, 0, -zVal);
 			}
 
-			if(lastScene != SceneUtil.currentScene) {
-				// If we switched scenes (E.g. left / entered a song) we want to snap to the correct position before smoothing again
-				cam.transform.SetPositionAndRotation(parent.position, targetRotation);
+			// If we switched scenes (E.g. left / entered a song) we want to snap to the correct position before smoothing again
+			if(lastScene != SceneUtil.currentScene || (HookFPFC.currentController?.enabled == true && !ScoresaberUtil.isInReplay)) {
+				cam.transform.SetPositionAndRotation(parentToUse.position, targetRotation);
 
 				lastScene = SceneUtil.currentScene;
 			} else {
-				cam.transform.position = Vector3.Lerp(cam.transform.position, parent.position, cam.timeSinceLastRender * settings.Smoothfollow.position);
+				cam.transform.position = Vector3.Lerp(cam.transform.position, parentToUse.position, cam.timeSinceLastRender * settings.Smoothfollow.position);
 				cam.transform.rotation = Quaternion.Slerp(cam.transform.rotation, targetRotation, cam.timeSinceLastRender * settings.Smoothfollow.rotation);
 			}
 			return true;

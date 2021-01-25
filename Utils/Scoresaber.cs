@@ -9,7 +9,7 @@ namespace Camera2.Utils {
 		static Type ReplayPlayer;
 		static PropertyInfo ReplayPlayer_playbackEnabled;
 		
-		public static bool isInReplay { get; private set; }
+		public static bool isInReplay { get; internal set; }
 		public static Camera replayCamera { get; private set; }
 
 		public static void Init() {
@@ -24,8 +24,6 @@ namespace Camera2.Utils {
 			var x = (MonoBehaviour)Resources.FindObjectsOfTypeAll(ReplayPlayer).LastOrDefault();
 
 			return x?.isActiveAndEnabled == true && (bool)ReplayPlayer_playbackEnabled.GetValue(x);
-
-			//GameObject.Find("LocalPlayerGameCore/Recorder/RecorderCamera").gameObject.GetComponentInChildren<Camera>().gameObject.SetActive(false)
 		}
 
 		public static void UpdateIsInReplay() {

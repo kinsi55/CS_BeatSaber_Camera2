@@ -45,10 +45,16 @@ namespace Camera2.Behaviours {
 		}
 
 		internal void UpdateRenderTexture() {
+			var w = (int)Math.Round(settings.viewRect.width * settings.renderScale);
+			var h = (int)Math.Round(settings.viewRect.height * settings.renderScale);
+
+			if(renderTexture?.width == w && renderTexture?.height == h && renderTexture?.antiAliasing == settings.antiAliasing)
+				return;
+
 			renderTexture?.Release();
-			renderTexture = new RenderTexture((int)Math.Round(settings.viewRect.width * settings.renderScale), (int)Math.Round(settings.viewRect.height * settings.renderScale), 24) {
+			renderTexture = new RenderTexture(w, h, 24) {
 				autoGenerateMips = false,
-				antiAliasing = 1,
+				antiAliasing = settings.antiAliasing,
 				anisoLevel = 1,
 				useDynamicScale = false
 			};
@@ -73,15 +79,13 @@ namespace Camera2.Behaviours {
 
 			UCamera = camClone.GetComponent<Camera>();
 			UCamera.enabled = false;
-			UCamera.allowMSAA = false;
 			UCamera.clearFlags = CameraClearFlags.SolidColor;
 			UCamera.stereoTargetEye = StereoTargetEyeMask.None;
 
 
-
 			foreach(var child in camClone.transform.Cast<Transform>()) Destroy(child.gameObject);
 
-			//TODO: Not sure if VisualEffectsController is really unnecessary, doesnt seem to do anything.
+			//TODO: Not sure if VisualEffectsController is really unnecessary, doesnt seem to do anything currently?
 			var trash = new string[] { "AudioListener", "LIV", "MainCamera", "MeshCollider", "VisualEffectsController" };
 			foreach(var component in camClone.GetComponents<Behaviour>())
 				if(trash.Contains(component.GetType().Name)) Destroy(component);
@@ -142,7 +146,6 @@ namespace Camera2.Behaviours {
 		}
 		
 		private void OnDestroy() {
-			settings?.Save();
 			Destroy(UCamera);
 			Destroy(screenImage);
 		}
