@@ -6,7 +6,7 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("Camera2")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("If Camera Plus is so good, why is there no Camera Plus 2?")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("Camera2")]

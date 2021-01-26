@@ -38,6 +38,8 @@ namespace Camera2.Configuration {
 		private bool _Floor = true;
 		[JsonProperty("Notes")]
 		private bool _Notes = true;
+		//[JsonProperty("EverythingElse")]
+		//private bool _EverythingElse = true;
 
 
 		public WallVisiblity Walls { get { return _Walls; } set { _Walls = value; parentSetting.ApplyLayerBitmask(); } }
@@ -46,6 +48,7 @@ namespace Camera2.Configuration {
 		public bool Avatar { get { return _Avatar; } set { _Avatar = value; parentSetting.ApplyLayerBitmask(); } }
 		public bool Floor { get { return _Floor; } set { _Floor = value; parentSetting.ApplyLayerBitmask(); } }
 		public bool Notes { get { return _Notes; } set { _Notes = value; parentSetting.ApplyLayerBitmask(); } }
+		//public bool EverythingElse { get { return _EverythingElse; } set { _EverythingElse = value; parentSetting.ApplyLayerBitmask(); } }
 	}
 	
 	class CameraSettings {
@@ -90,7 +93,8 @@ namespace Camera2.Configuration {
 		}
 
 		public void ApplyLayerBitmask() {
-			var maskBuilder = cam.UCamera.cullingMask;
+			//var maskBuilder = visibleObjects.EverythingElse ? CamManager.baseCullingMask : 0;
+			var maskBuilder = CamManager.baseCullingMask;
 
 			foreach(int mask in Enum.GetValues(typeof(VisibilityMasks)))
 				maskBuilder &= ~mask;

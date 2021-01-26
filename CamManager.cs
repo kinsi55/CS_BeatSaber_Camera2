@@ -11,8 +11,11 @@ namespace Camera2 {
 	static class CamManager {
 		public static Dictionary<string, Cam2> cams { get; private set; } = new Dictionary<string, Cam2>();
 		static CamerasViewport customScreen;
+		public static int baseCullingMask { get; private set; }
 
 		public static void Init() {
+			baseCullingMask = Camera.main.cullingMask;
+
 			customScreen = new GameObject("Cam2_Renderer").AddComponent<CamerasViewport>();
 
 			if(!Directory.Exists(ConfigUtil.CamsDir)) {

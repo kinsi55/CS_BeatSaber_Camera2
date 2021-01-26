@@ -52,7 +52,7 @@ namespace Camera2.Behaviours {
 				return;
 
 			renderTexture?.Release();
-			renderTexture = new RenderTexture(w, h, 24) {
+			renderTexture = new RenderTexture(w, h, 24) { //, RenderTextureFormat.ARGB32
 				autoGenerateMips = false,
 				antiAliasing = settings.antiAliasing,
 				anisoLevel = 1,
@@ -80,10 +80,12 @@ namespace Camera2.Behaviours {
 			UCamera = camClone.GetComponent<Camera>();
 			UCamera.enabled = false;
 			UCamera.clearFlags = CameraClearFlags.SolidColor;
+			//UCamera.backgroundColor = new Color(0, 0, 0, 0);
 			UCamera.stereoTargetEye = StereoTargetEyeMask.None;
 
 
-			foreach(var child in camClone.transform.Cast<Transform>()) Destroy(child.gameObject);
+			foreach(var child in camClone.transform.Cast<Transform>())
+				Destroy(child.gameObject);
 
 			//TODO: Not sure if VisualEffectsController is really unnecessary, doesnt seem to do anything currently?
 			var trash = new string[] { "AudioListener", "LIV", "MainCamera", "MeshCollider", "VisualEffectsController" };

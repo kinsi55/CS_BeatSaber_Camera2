@@ -193,6 +193,7 @@ namespace Camera2.Behaviours {
 						released
 					);
 				}
+				GL.Clear(true, true, Color.black);
 				if(released)
 					currentAction = CamAction.None;
 			}
