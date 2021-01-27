@@ -3,15 +3,20 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using Camera2.HarmonyPatches;
 using Camera2.Middlewares;
-using VRUIControls;
-using Camera2.Behaviours;
 
 namespace Camera2.Utils {
 	static class SceneUtil {
-		public static Scene currentScene;
-		public static bool isInMenu = true;
-		public static Transform songWorldTransform;
-		public static bool isProbablyInWallMap = false;
+		public static Scene currentScene { get; private set; }
+		public static bool isInMenu { get; private set; } = true;
+		public static Transform songWorldTransform { get; private set; }
+		public static bool isProbablyInWallMap { get; private set; } = false;
+
+		public static AudioTimeSyncController audioTimeSyncController { get; private set; }
+		public static bool isSongPlaying {
+			get {
+				return audioTimeSyncController != null && audioTimeSyncController.state == AudioTimeSyncController.State.Playing;
+			}
+		}
 
 		public static readonly string[] menuSceneNames = new string[] { "MenuViewCore", "MenuCore", "MenuViewControllers" };
 
@@ -24,6 +29,7 @@ namespace Camera2.Utils {
 
 			if(currentScene.name != "GameCore") {
 				isProbablyInWallMap = false;
+				audioTimeSyncController = null;
 			} else {
 				isProbablyInWallMap = ModMapUtil.IsProbablyWallmap(LeveldataHook.difficultyBeatmap);
 			}
@@ -31,8 +37,7 @@ namespace Camera2.Utils {
 			ScenesManager.ActiveSceneChanged(newScene.name);
 
 			// Updating the bitmask on scene change to allow for the auto wall toggle
-			foreach(var cam in CamManager.cams.Values)
-				cam.settings.ApplyLayerBitmask();
+			CamManager.ApplyCameraValues(bitMask: true, worldCam: true);
 		}
 
 		public static void OnSceneMaybeUnloadPre() {
@@ -40,12 +45,14 @@ namespace Camera2.Utils {
 			songWorldTransform = null;
 		}
 
-		public static void SongStarted() {
+		public static void SongStarted(AudioTimeSyncController controller) {
+			audioTimeSyncController = controller;
 			ScoresaberUtil.UpdateIsInReplay();
 
 			songWorldTransform = GameObject.Find("LocalPlayerGameCore/Origin")?.transform;
 
 			TransparentWalls.MakeWallsOpaqueForMainCam();
+			CamManager.ApplyCameraValues(worldCam: true);
 		}
 	}
 }

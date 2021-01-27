@@ -1,25 +1,20 @@
-﻿using HarmonyLib;
+﻿using System;
+using System.Collections.Generic;
+using System.Reflection;
+using HarmonyLib;
 
 namespace Camera2.HarmonyPatches {
-	[HarmonyPatch(typeof(StandardLevelScenesTransitionSetupDataSO), "Init")]
+	[HarmonyPatch]
 	class LeveldataHook {
 		public static IDifficultyBeatmap difficultyBeatmap;
 		static void Prefix(IDifficultyBeatmap difficultyBeatmap) {
 			LeveldataHook.difficultyBeatmap = difficultyBeatmap;
 		}
 
-		[HarmonyPatch(typeof(MissionLevelScenesTransitionSetupDataSO), "Init")]
-		private class LeveldatahookM {
-			static void Prefix(IDifficultyBeatmap difficultyBeatmap) {
-				LeveldataHook.difficultyBeatmap = difficultyBeatmap;
-			}
-		}
-
-		[HarmonyPatch(typeof(MultiplayerLevelScenesTransitionSetupDataSO), "Init")]
-		private class LeveldatahookMp {
-			static void Prefix(IDifficultyBeatmap difficultyBeatmap) {
-				LeveldataHook.difficultyBeatmap = difficultyBeatmap;
-			}
+		[HarmonyTargetMethods]
+		static IEnumerable<MethodBase> TargetMethods() {
+			foreach(var t in new Type[] { typeof(StandardLevelScenesTransitionSetupDataSO), typeof(MissionLevelScenesTransitionSetupDataSO), typeof(MultiplayerLevelScenesTransitionSetupDataSO)})
+				yield return t.GetMethod("Init", BindingFlags.Instance | BindingFlags.Public);
 		}
 	}
 }

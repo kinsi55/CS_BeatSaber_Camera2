@@ -10,13 +10,18 @@ using Camera2.Utils;
 namespace Camera2.Configuration {
 	enum CameraType {
 		FirstPerson,
-		Attached, //Unused for now, but mostly implemented - For parenting to arbitrary things
+		Attached, //Unused for now, but mostly implemented - For parenting to arbitrary things like possibly to a saber, etc.
 		Positionable
 	}
 	enum WallVisiblity {
 		Visible,
 		Transparent,
 		Hidden
+	}
+	enum WorldCamVisibility {
+		Always,
+		OnlyInPause,
+		Never
 	}
 
 	[JsonObject(MemberSerialization.OptIn)]
@@ -48,12 +53,14 @@ namespace Camera2.Configuration {
 		public bool Avatar { get { return _Avatar; } set { _Avatar = value; parentSetting.ApplyLayerBitmask(); } }
 		public bool Floor { get { return _Floor; } set { _Floor = value; parentSetting.ApplyLayerBitmask(); } }
 		public bool Notes { get { return _Notes; } set { _Notes = value; parentSetting.ApplyLayerBitmask(); } }
+		// Wouldnt be very useful since I havent figured out yet how to make cams have transparency
 		//public bool EverythingElse { get { return _EverythingElse; } set { _EverythingElse = value; parentSetting.ApplyLayerBitmask(); } }
 	}
 	
 	class CameraSettings {
-		[JsonIgnore]
 		private Cam2 cam;
+		private bool isLoaded = false;
+
 		public CameraSettings(Cam2 cam) {
 			this.cam = cam;
 
@@ -62,14 +69,12 @@ namespace Camera2.Configuration {
 
 		public void Load(bool loadConfig = true) {
 			// Set default values incase they're removed from the JSON because of user stoopid
+			isLoaded = false;
 			FOV = 90;
 			viewRect = new Rect(0, 0, Screen.width, Screen.height);
 
 			if(loadConfig && System.IO.File.Exists(cam.configPath)) {
-				JsonConvert.PopulateObject(System.IO.File.ReadAllText(cam.configPath, Encoding.ASCII), this, new JsonSerializerSettings {
-					NullValueHandling = NullValueHandling.Ignore,
-					Error = (se, ev) => { ev.ErrorContext.Handled = true; }
-				});
+				JsonConvert.PopulateObject(System.IO.File.ReadAllText(cam.configPath), this, JsonHelpers.leanDeserializeSettings);
 			} else {
 				layer = CamManager.cams.Count == 0 ? -1000 : CamManager.cams.Max(x => x.Value.settings.layer) - 1;
 
@@ -78,18 +83,28 @@ namespace Camera2.Configuration {
 
 			ApplyPositionAndRotation();
 			ApplyLayerBitmask();
-			cam.ActivateWorldCamIfNecessary();
+			cam.ShowWorldCamIfNecessary();
 			// Trigger setter for cam aspect ratio
 			viewRect = viewRect;
 			cam.UpdateRenderTexture();
+			isLoaded = true;
 		}
 
 		public void ApplyPositionAndRotation() {
-			if(type != CameraType.Positionable)
-				return;
+			if(type == CameraType.Positionable) {
+				cam.transform.position = targetPos;
+				cam.transform.eulerAngles = targetRot;
+				cam.UCamera.transform.localPosition = Vector3.zero;
+				cam.UCamera.transform.localEulerAngles = Vector3.zero;
+			} else {
+				/*
+				 * The cam game object is what is parented, so I'm using the Cameras 
+				 * position (Which is nested / parented) to apply an offset
+				 */
+				cam.UCamera.transform.localPosition = targetPos;
+				cam.UCamera.transform.localEulerAngles = targetRot;
+			}
 
-			cam.transform.position = targetPos;
-			cam.transform.eulerAngles = targetRot;
 		}
 
 		public void ApplyLayerBitmask() {
@@ -118,29 +133,30 @@ namespace Camera2.Configuration {
 		}
 
 		public void Save() {
-			System.IO.File.WriteAllText(cam.configPath, JsonConvert.SerializeObject(this, Formatting.Indented), Encoding.ASCII);
+			System.IO.File.WriteAllText(cam.configPath, JsonConvert.SerializeObject(this, Formatting.Indented));
 		}
-
-		[JsonConverter(typeof(StringEnumConverter)), JsonProperty("type")]
+		
 		private CameraType _type = CameraType.Attached;
-		[JsonIgnore]
+		[JsonConverter(typeof(StringEnumConverter))]
 		public CameraType type {
 			get { return _type; }
 			set {
 				_type = value;
-				cam.ActivateWorldCamIfNecessary();
+				if(!isLoaded)
+					return;
+				cam.ShowWorldCamIfNecessary();
 				ApplyLayerBitmask();
 			}
 		}
-
-		[JsonProperty("showWorldCam")]
-		private bool _showWorldCam = true;
-		[JsonIgnore]
-		public bool showWorldCam {
-			get { return _showWorldCam; }
+		
+		private WorldCamVisibility _worldCamVisibility = WorldCamVisibility.OnlyInPause;
+		[JsonConverter(typeof(StringEnumConverter))]
+		public WorldCamVisibility worldCamVisibility {
+			get { return _worldCamVisibility; }
 			set {
-				_showWorldCam = value;
-				cam.ActivateWorldCamIfNecessary();
+				_worldCamVisibility = value;
+				if(isLoaded)
+					cam.ShowWorldCamIfNecessary();
 			}
 		}
 
@@ -149,7 +165,7 @@ namespace Camera2.Configuration {
 			get { return (int)cam.UCamera.depth; }
 			set {
 				cam.UCamera.depth = value;
-				CamManager.ApplyViewportLayers();
+				CamManager.ApplyCameraValues();
 			}
 		}
 
@@ -157,32 +173,35 @@ namespace Camera2.Configuration {
 		public int antiAliasing {
 			get { return _antiAliasing; }
 			set {
-				_antiAliasing = Math.Min(Math.Max(value, 0), 8);
-				cam.UpdateRenderTexture();
+				_antiAliasing = Mathf.Clamp(value, 1, 8);
+				if(isLoaded) 
+					cam.UpdateRenderTexture();
 			}
 		}
-		
-
-		public GameObjects visibleObjects { get; private set; }
 
 		private float _renderScale = 1;
 		public float renderScale {
 			get { return _renderScale; }
 			set {
-				if(_renderScale == value) return;
-				_renderScale = Math.Min(value, 3);
-				cam.UpdateRenderTexture();
+				_renderScale = Mathf.Clamp(value, 1, 3);
+				if(isLoaded)
+					cam.UpdateRenderTexture();
 			}
 		}
-		
+
+
+		public GameObjects visibleObjects { get; private set; }
+
+		[JsonConverter(typeof(RectConverter)), JsonProperty("viewRect")]
 		private Rect _viewRect = Rect.zero;
-		[JsonConverter(typeof(RectConverter))]
+		[JsonIgnore]
 		public Rect viewRect {
 			get { return _viewRect; }
 			set {
 				_viewRect = value;
 				cam.UCamera.aspect = value.width / value.height;
-				cam.UpdateRenderTexture();
+				if(isLoaded)
+					cam.UpdateRenderTexture();
 			}
 		}
 		
@@ -193,8 +212,8 @@ namespace Camera2.Configuration {
 
 
 		[JsonConverter(typeof(Vector3Converter))]
-		public Vector3 targetPos = new Vector3(0, 1.5f, -1.5f);
+		public Vector3 targetPos = new Vector3(0, 0, 0);
 		[JsonConverter(typeof(Vector3Converter))]
-		public Vector3 targetRot = new Vector3(3f, 0, 0);
+		public Vector3 targetRot = new Vector3(0, 0, 0);
 	}
 }

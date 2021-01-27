@@ -59,6 +59,7 @@ namespace Camera2 {
 		[OnExit]
 		public void OnApplicationQuit() {
 			Log.Debug("OnApplicationQuit");
+			ScenesManager.settings.Save();
 			foreach(var cam in CamManager.cams)
 				cam.Value.settings.Save();
 		}

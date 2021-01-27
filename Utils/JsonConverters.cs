@@ -3,16 +3,17 @@ using UnityEngine;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Globalization;
+using System.Collections.Generic;
 
 namespace Camera2.Utils {
 	class RectConverter : JsonConverter<Rect> {
 		public override void WriteJson(JsonWriter writer, Rect rect, JsonSerializer serializer) {
 			var x = new JObject();
 
-			x.Add("x", new JRaw(rect.xMin.ToString("0.0##", CultureInfo.InvariantCulture)));
-			x.Add("y", new JRaw(rect.yMin.ToString("0.0##", CultureInfo.InvariantCulture)));
-			x.Add("width", new JRaw(rect.width.ToString("0.0##", CultureInfo.InvariantCulture)));
-			x.Add("height", new JRaw(rect.height.ToString("0.0##", CultureInfo.InvariantCulture)));
+			x.Add("x", JsonHelpers.limitFloatResolution(rect.xMin));
+			x.Add("y", JsonHelpers.limitFloatResolution(rect.yMin));
+			x.Add("width", JsonHelpers.limitFloatResolution(rect.width));
+			x.Add("height", JsonHelpers.limitFloatResolution(rect.height));
 
 			x.WriteTo(writer);
 		}
@@ -28,9 +29,9 @@ namespace Camera2.Utils {
 		public override void WriteJson(JsonWriter writer, Vector3 vec, JsonSerializer serializer) {
 			var x = new JObject();
 
-			x.Add("x", new JRaw(vec.x.ToString("0.0##", CultureInfo.InvariantCulture)));
-			x.Add("y", new JRaw(vec.y.ToString("0.0##", CultureInfo.InvariantCulture)));
-			x.Add("z", new JRaw(vec.z.ToString("0.0##", CultureInfo.InvariantCulture)));
+			x.Add("x", JsonHelpers.limitFloatResolution(vec.x));
+			x.Add("y", JsonHelpers.limitFloatResolution(vec.y));
+			x.Add("z", JsonHelpers.limitFloatResolution(vec.z));
 
 			x.WriteTo(writer);
 		}
@@ -40,5 +41,45 @@ namespace Camera2.Utils {
 
 			return new Vector3((float)o.x, (float)o.y, (float)o.z);
 		}
+	}
+
+	public class DictionaryConverter<K, V> : JsonConverter<Dictionary<K, V>> where K: IConvertible where V : IConvertible {
+		public override void WriteJson(JsonWriter writer, Dictionary<K, V> value, JsonSerializer serializer) {
+			writer.WriteStartObject();
+
+			foreach(KeyValuePair<K, V> pair in value) {
+				writer.WritePropertyName(Enum.GetName(typeof(K), pair.Key));
+				writer.WriteValue(Enum.GetName(typeof(V), pair.Value));
+			}
+
+			writer.WriteEndObject();
+		}
+
+		public override Dictionary<K, V> ReadJson(JsonReader reader, Type objectType, Dictionary<K, V> existingValue, bool hasExistingValue, JsonSerializer serializer) {
+			var jObject = JObject.Load(reader);
+			var outVal = new Dictionary<K, V>();
+
+			foreach(var x in jObject) {
+				try {
+					outVal.Add(
+						(K)Enum.Parse(typeof(K), x.Key, true),
+						(V)Enum.Parse(typeof(V), x.Value.ToObject<string>(), true)
+					);
+				} catch { }
+			}
+
+			return outVal;
+		}
+	}
+
+	static class JsonHelpers {
+		public static JRaw limitFloatResolution(float val) {
+			return new JRaw(val.ToString("0.0##", CultureInfo.InvariantCulture));
+		}
+
+		public static readonly JsonSerializerSettings leanDeserializeSettings = new JsonSerializerSettings {
+			NullValueHandling = NullValueHandling.Ignore,
+			Error = (se, ev) => { ev.ErrorContext.Handled = true; }
+		};
 	}
 }

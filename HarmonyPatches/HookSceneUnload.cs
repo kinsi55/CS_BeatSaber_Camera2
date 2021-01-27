@@ -1,18 +1,19 @@
-﻿using HarmonyLib;
+﻿using System.Collections.Generic;
+using System.Reflection;
+using HarmonyLib;
 using Camera2.Utils;
 
 namespace Camera2.HarmonyPatches {
-	[HarmonyPatch(typeof(GameScenesManager), "PopScenes")]
+	[HarmonyPatch]
 	class HookSceneUnload {
 		static void Prefix() {
 			SceneUtil.OnSceneMaybeUnloadPre();
 		}
-	}
 
-	[HarmonyPatch(typeof(GameScenesManager), "ReplaceScenes")]
-	class HookSceneReplace {
-		static void Prefix() {
-			SceneUtil.OnSceneMaybeUnloadPre();
+		[HarmonyTargetMethods]
+		static IEnumerable<MethodBase> TargetMethods() {
+			yield return AccessTools.Method(typeof(GameScenesManager), "PopScenes");
+			yield return AccessTools.Method(typeof(GameScenesManager), "ReplaceScenes");
 		}
 	}
 }

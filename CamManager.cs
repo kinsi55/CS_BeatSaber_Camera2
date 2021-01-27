@@ -32,6 +32,7 @@ namespace Camera2 {
 						Plugin.Log.Error(ex);
 					}
 				}
+				ApplyCameraValues(viewLayer: true);
 			}
 
 			if(cams.Count() == 0) {
@@ -43,10 +44,19 @@ namespace Camera2 {
 			XRSettings.gameViewRenderMode = GameViewRenderMode.None;
 		}
 
-		// Unfortunately the Canvas Images cannot have their "layer" / index set to arbitrary numbers
-		public static void ApplyViewportLayers() {
-			foreach(var cam in cams.Values.OrderBy(x => x.settings.layer))
-				cam.screenImage.transform.SetAsLastSibling();
+		/* 
+		 * Unfortunately the Canvas Images cannot have their "layer" / z-index set to arbitrary numbers,
+		 * so we need to sort the cams by their set layer number and set the sibling index accordingly
+		 */
+		public static void ApplyCameraValues(bool viewLayer = false, bool bitMask = false, bool worldCam = false, bool posRot = false) {
+			var collection = viewLayer ? cams.Values.OrderBy(x => x.settings.layer).AsEnumerable() : cams.Values;
+			
+			foreach(var cam in collection) {
+				if(viewLayer) cam.screenImage.transform.SetAsLastSibling();
+				if(bitMask) cam.settings.ApplyLayerBitmask();
+				if(worldCam) cam.ShowWorldCamIfNecessary();
+				if(posRot) cam.settings.ApplyPositionAndRotation();
+			}
 		}
 
 		public static Cam2 AddCamera(string name, bool loadConfig = true) {
@@ -59,7 +69,8 @@ namespace Camera2 {
 
 			cams.Add(name, cam);
 
-			ApplyViewportLayers();
+			//Newly added cameras should always be the last child and thus on top
+			//ApplyCameraValues(viewLayer: true);
 
 			return cam;
 		}

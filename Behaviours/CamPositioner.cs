@@ -39,7 +39,7 @@ namespace Camera2.Behaviours {
 
 		public void Update() {
 			if(grabbedCamera != null) {
-				if(controller != null) {
+				if(controller != null && grabbedCamera.worldCam.isActiveAndEnabled) {
 					grabbedCamera.transform.position = controller.transform.TransformPoint(grabStartPos);
 					grabbedCamera.transform.rotation = controller.rotation * grabStartRot;
 

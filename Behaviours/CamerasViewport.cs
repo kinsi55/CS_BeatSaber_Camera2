@@ -142,12 +142,14 @@ namespace Camera2.Behaviours {
 			if(Input.anyKeyDown) { //Some custom scenes to do funny stuff with
 				if(Input.GetKeyDown(KeyCode.F1)) {
 					ScenesManager.LoadGameScene(SceneUtil.currentScene.name);
-				} else if(Input.GetKeyDown(KeyCode.F2)) {
-					ScenesManager.SwitchToScene(SceneTypes.Custom1);
-				} else if(Input.GetKeyDown(KeyCode.F3)) {
-					ScenesManager.SwitchToScene(SceneTypes.Custom2);
-				} else if(Input.GetKeyDown(KeyCode.F4)) {
-					ScenesManager.SwitchToScene(SceneTypes.Custom3);
+				} else {
+					foreach(var k in ScenesManager.settings.sceneBindings) {
+						if(!Input.GetKeyDown(k.Key))
+							continue;
+
+						ScenesManager.SwitchToScene(k.Value);
+						break;
+					}
 				}
 			}
 

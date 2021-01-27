@@ -65,8 +65,16 @@ namespace Camera2.Behaviours {
 			worldCam?.SetSource(this);
 		}
 
-		internal void ActivateWorldCamIfNecessary() {
-			worldCam?.gameObject.SetActive(settings.type != Configuration.CameraType.FirstPerson && settings.showWorldCam);
+		internal void ShowWorldCamIfNecessary() {
+			bool doShowCam = true;
+
+			if(settings.worldCamVisibility == WorldCamVisibility.OnlyInPause && SceneUtil.isSongPlaying)
+				doShowCam = false;
+
+			if(settings.type != Configuration.CameraType.Positionable || settings.worldCamVisibility == WorldCamVisibility.Never)
+				doShowCam = false;
+
+			worldCam?.gameObject.SetActive(doShowCam);
 		}
 
 		public void Init(string name, LessRawImage presentor, bool loadConfig = false) {
@@ -144,7 +152,7 @@ namespace Camera2.Behaviours {
 		
 		private void OnDisable() {
 			screenImage?.gameObject.SetActive(false);
-			ActivateWorldCamIfNecessary();
+			ShowWorldCamIfNecessary();
 		}
 		
 		private void OnDestroy() {

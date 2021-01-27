@@ -7,14 +7,14 @@ using Camera2.Utils;
 namespace Camera2 {
 
 	static class ScenesManager {
-		public static ScenesSettings settings = new ScenesSettings();
+		internal static ScenesSettings settings { get; private set; } = new ScenesSettings();
 		static SceneTypes loadedScene = SceneTypes.Menu;
 
 		public static void ActiveSceneChanged(string sceneName = "MenuCore") {
 			if(!settings.dontAutoswitchFromCustom && (loadedScene == SceneTypes.Custom1 || loadedScene == SceneTypes.Custom2 || loadedScene == SceneTypes.Custom3))
 				return;
 
-			if(!settings.enable)
+			if(!settings.enableAutoSwitch)
 				return;
 
 			LoadGameScene(sceneName);
@@ -33,8 +33,11 @@ namespace Camera2 {
 					toLookup.Prepend(SceneTypes.Replay);
 			}
 
-			if(toLookup != null)
-				SwitchToCamlist(GetPopulatedScene(toLookup));
+			if(toLookup != null) {
+				var targetList = GetPopulatedScene(toLookup);
+				if(targetList != null)
+					SwitchToScene((SceneTypes)targetList);
+			}
 		}
 
 		public static void SwitchToScene(SceneTypes scene) {
@@ -57,12 +60,12 @@ namespace Camera2 {
 			GL.Clear(true, true, Color.black);
 		}
 
-		private static List<string> GetPopulatedScene(SceneTypes[] types) {
+		private static SceneTypes? GetPopulatedScene(SceneTypes[] types) {
 			if(settings.scenes.Count == 0) return null;
 
 			foreach(var type in types) {
 				if(settings.scenes[type].Count() > 0)
-					return settings.scenes[type];
+					return type;
 			}
 			return null;
 		}

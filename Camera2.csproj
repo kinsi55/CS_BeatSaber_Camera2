@@ -135,7 +135,7 @@
     <Compile Include="HarmonyPatches\HookFPFC.cs" />
     <Compile Include="HarmonyPatches\HookLevelRotation.cs" />
     <Compile Include="HarmonyPatches\HookSceneUnload.cs" />
-    <Compile Include="HarmonyPatches\HookSongStarted.cs" />
+    <Compile Include="HarmonyPatches\HookSongStartPause.cs" />
     <Compile Include="HarmonyPatches\InitOnMainAvailable.cs" />
     <Compile Include="HarmonyPatches\LeveldataHook.cs" />
     <Compile Include="HarmonyPatches\TransparentWalls.cs" />
