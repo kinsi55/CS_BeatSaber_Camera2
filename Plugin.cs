@@ -27,14 +27,8 @@ namespace Camera2 {
 
 			Log.Info("Camera2 initialized.");
 
-			ScoresaberUtil.Init();
-			ModMapUtil.Init();
-
 			harmony = new Harmony("Kinsi55.BeatSaber.Cam2");
 			harmony.PatchAll(Assembly.GetExecutingAssembly());
-			//HookFPFC.InitPatch();
-
-			SceneManager.activeSceneChanged += SceneUtil.OnActiveSceneChanged;
 		}
 
 
@@ -54,6 +48,10 @@ namespace Camera2 {
 		public void OnApplicationStart() {
 			Log.Debug("OnApplicationStart");
 
+			ScoresaberUtil.Init();
+			ModMapUtil.Init();
+
+			SceneManager.activeSceneChanged += SceneUtil.OnActiveSceneChanged;
 		}
 
 		[OnExit]

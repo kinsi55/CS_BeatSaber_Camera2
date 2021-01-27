@@ -5,10 +5,10 @@ using HarmonyLib;
 
 namespace Camera2.HarmonyPatches {
 	[HarmonyPatch]
-	class LeveldataHook {
+	class HookLeveldata {
 		public static IDifficultyBeatmap difficultyBeatmap;
 		static void Prefix(IDifficultyBeatmap difficultyBeatmap) {
-			LeveldataHook.difficultyBeatmap = difficultyBeatmap;
+			HookLeveldata.difficultyBeatmap = difficultyBeatmap;
 		}
 
 		[HarmonyTargetMethods]

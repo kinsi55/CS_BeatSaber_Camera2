@@ -17,21 +17,28 @@ namespace Camera2.Utils {
 				return audioTimeSyncController != null && audioTimeSyncController.state == AudioTimeSyncController.State.Playing;
 			}
 		}
+		
+		public static bool isInMultiplayer {
+			get {
+				return HookMultiplayer.instance != null && HookMultiplayer.instance.isConnected;
+			}
+		}
+
 
 		public static readonly string[] menuSceneNames = new string[] { "MenuViewCore", "MenuCore", "MenuViewControllers" };
 
 		public static void OnActiveSceneChanged(Scene oldScene, Scene newScene) {
 			currentScene = newScene;
 			isInMenu = menuSceneNames.Contains(newScene.name);
-			
+
 			if(oldScene.name == "GameCore" && ScoresaberUtil.isInReplay)
 				ScoresaberUtil.isInReplay = false;
 
-			if(currentScene.name != "GameCore") {
+			if(newScene.name != "GameCore") {
 				isProbablyInWallMap = false;
 				audioTimeSyncController = null;
 			} else {
-				isProbablyInWallMap = ModMapUtil.IsProbablyWallmap(LeveldataHook.difficultyBeatmap);
+				isProbablyInWallMap = ModMapUtil.IsProbablyWallmap(HookLeveldata.difficultyBeatmap);
 			}
 
 			ScenesManager.ActiveSceneChanged(newScene.name);

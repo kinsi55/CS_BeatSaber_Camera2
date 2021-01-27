@@ -64,7 +64,7 @@ namespace Camera2.Middlewares {
 			}
 
 			// If we switched scenes (E.g. left / entered a song) we want to snap to the correct position before smoothing again
-			if(lastScene != SceneUtil.currentScene || (HookFPFC.currentController?.enabled == true && !ScoresaberUtil.isInReplay)) {
+			if(lastScene != SceneUtil.currentScene || (HookFPFC.instance?.enabled == true && !ScoresaberUtil.isInReplay)) {
 				cam.transform.SetPositionAndRotation(parentToUse.position, targetRotation);
 
 				lastScene = SceneUtil.currentScene;

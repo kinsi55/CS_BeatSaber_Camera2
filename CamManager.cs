@@ -18,30 +18,51 @@ namespace Camera2 {
 
 			customScreen = new GameObject("Cam2_Renderer").AddComponent<CamerasViewport>();
 
-			if(!Directory.Exists(ConfigUtil.CamsDir)) {
-				Directory.CreateDirectory(ConfigUtil.CamsDir);
-			} else {
-				foreach(var cam in Directory.GetFiles(ConfigUtil.CamsDir)) {
-					if(!cam.ToLower().EndsWith(".json"))
-						continue;
-
-					try {
-						AddCamera(Path.GetFileNameWithoutExtension(cam));
-					} catch(Exception ex) {
-						Plugin.Log.Error($"Failed to load Camera {Path.GetFileName(cam)}");
-						Plugin.Log.Error(ex);
-					}
-				}
-				ApplyCameraValues(viewLayer: true);
-			}
+			LoadCameras();
 
 			if(cams.Count() == 0) {
-				var cam = AddCamera("Main", false);
+				var cam = InitCamera("Main", false);
 			}
 			
 			ScenesManager.settings.Load();
 
 			XRSettings.gameViewRenderMode = GameViewRenderMode.None;
+		}
+
+		private static void LoadCameras(bool reload = false) {
+			if(!Directory.Exists(ConfigUtil.CamsDir)) {
+				Directory.CreateDirectory(ConfigUtil.CamsDir);
+			} else {
+				var loadedNames = new List<string>();
+
+				foreach(var cam in Directory.GetFiles(ConfigUtil.CamsDir)) {
+					if(!cam.ToLower().EndsWith(".json"))
+						continue;
+
+					try {
+						var name = Path.GetFileNameWithoutExtension(cam);
+
+						InitCamera(name, true, reload);
+
+						if(reload)
+							loadedNames.Add(name);
+					} catch(Exception ex) {
+						Plugin.Log.Error($"Failed to load Camera {Path.GetFileName(cam)}");
+						Plugin.Log.Error(ex);
+					}
+				}
+				if(reload) foreach(var deletedCam in cams.Where(x => !loadedNames.Contains(x.Key))) {
+					GameObject.Destroy(deletedCam.Value);
+					cams.Remove(deletedCam.Key);
+				}
+
+				ApplyCameraValues(viewLayer: true);
+			}
+		}
+
+		public static void Reload() {
+			LoadCameras(true);
+			ScenesManager.settings.Load();
 		}
 
 		/* 
@@ -59,9 +80,15 @@ namespace Camera2 {
 			}
 		}
 
-		public static Cam2 AddCamera(string name, bool loadConfig = true) {
-			if(cams.ContainsKey(name))
+		public static Cam2 InitCamera(string name, bool loadConfig = true, bool reload = false) {
+			if(cams.ContainsKey(name)) {
+				if(reload) {
+					cams[name].settings.Load();
+					return cams[name];
+				}
+
 				throw new Exception("Already exists??");
+			}
 
 			var cam = new GameObject($"Cam2_{name}").AddComponent<Cam2>();
 

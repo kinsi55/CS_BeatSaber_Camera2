@@ -46,7 +46,7 @@ namespace Camera2.Behaviours {
 		}
 
 		public void SetPreviewPositionAndSize(bool small = true) {
-			var size = small ? 0.3f : 0.75f;
+			var size = small ? cam.settings.previewScreenSize : Math.Min(cam.settings.previewScreenSize * 1.5f, 4);
 
 			camPreview.transform.localScale = new Vector3(size, size / cam.UCamera.aspect, 0);
 			camPreview.transform.localPosition = new Vector3(0, camPreview.transform.localScale.y, camOrigin.transform.localPosition.z / 2);

@@ -10,7 +10,8 @@ namespace Camera2.Configuration {
 	public enum SceneTypes {
 		Menu,
 		Playing,
-		Multiplayer,
+		MultiplayerMenu,
+		MultiplayerPlaying,
 		Replay,
 		Custom1,
 		Custom2,
@@ -48,8 +49,8 @@ namespace Camera2.Configuration {
 				populateMissing();
 				Save();
 			}
-
-			ScenesManager.LoadGameScene();
+			
+			ScenesManager.LoadGameScene(SceneUtil.currentScene.name);
 		}
 
 		public void Save() {

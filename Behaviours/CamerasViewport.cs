@@ -141,7 +141,11 @@ namespace Camera2.Behaviours {
 		void Update() {
 			if(Input.anyKeyDown) { //Some custom scenes to do funny stuff with
 				if(Input.GetKeyDown(KeyCode.F1)) {
-					ScenesManager.LoadGameScene(SceneUtil.currentScene.name);
+					if(Input.GetKey(KeyCode.LeftControl) && Input.GetKey(KeyCode.LeftShift)) {
+						CamManager.Reload();
+					} else {
+						ScenesManager.LoadGameScene(SceneUtil.currentScene.name);
+					}
 				} else {
 					foreach(var k in ScenesManager.settings.sceneBindings) {
 						if(!Input.GetKeyDown(k.Key))

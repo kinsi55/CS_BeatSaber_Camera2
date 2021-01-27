@@ -17,20 +17,27 @@ namespace Camera2 {
 			if(!settings.enableAutoSwitch)
 				return;
 
+
+			Plugin.Log.Notice($"IS IN MULTI: {sceneName} {SceneUtil.isInMultiplayer}");
+
 			LoadGameScene(sceneName);
 		}
 
 		public static void LoadGameScene(string sceneName = "MenuCore") {
 			SceneTypes[] toLookup = null;
-
-			//TODO: Handle MP
+			
 			if(SceneUtil.menuSceneNames.Contains(sceneName) || sceneName == "Credits") {
 				toLookup = new SceneTypes[] { SceneTypes.Menu };
+
+				if(SceneUtil.isInMultiplayer)
+					toLookup.Prepend(SceneTypes.MultiplayerMenu);
 			} else if(sceneName == "GameCore") {
 				toLookup = new SceneTypes[] { SceneTypes.Playing };
 
 				if(ScoresaberUtil.IsInReplay())
 					toLookup.Prepend(SceneTypes.Replay);
+				else if(SceneUtil.isInMultiplayer)
+					toLookup.Prepend(SceneTypes.MultiplayerPlaying);
 			}
 
 			if(toLookup != null) {

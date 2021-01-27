@@ -160,6 +160,16 @@ namespace Camera2.Configuration {
 			}
 		}
 
+		private float _previewScreenSize = 0.3f;
+		public float previewScreenSize {
+			get { return _previewScreenSize; }
+			set {
+				_previewScreenSize = Mathf.Clamp(value, 0.3f, 3f);
+				if(isLoaded)
+					cam.worldCam?.SetPreviewPositionAndSize();
+			}
+		}
+
 		public float FOV { get { return cam.UCamera.fieldOfView; } set { cam.UCamera.fieldOfView = value; } }
 		public int layer {
 			get { return (int)cam.UCamera.depth; }
@@ -183,7 +193,7 @@ namespace Camera2.Configuration {
 		public float renderScale {
 			get { return _renderScale; }
 			set {
-				_renderScale = Mathf.Clamp(value, 1, 3);
+				_renderScale = Mathf.Clamp(value, 1f, 3f);
 				if(isLoaded)
 					cam.UpdateRenderTexture();
 			}
