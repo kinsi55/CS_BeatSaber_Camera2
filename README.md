@@ -32,10 +32,13 @@ Where as before you had profiles, and cameras associated to them, you now have s
 
 #### Third person cameras
 - When moving third person cameras the preview gets bigger to give you an easier time positioning correctly.
+- Movement scripts
+	- The format of movement scripts was changed to more correctly make it represent what it should be - a list of keyframes instead of a list of movements. Camera Plus movement scripts can still be used and will automatically be converted when you try to first use them
+	- Map rotations (360 / Mod maps) are added onto the movement script to result in the combined movement
+	- You can assign multiple movement scripts to a camera, Camera2 will then always pick a different one at random
 
-### Omitted features
-- Movement scripts, because quite honestly its not really used by many at all
+### Omitted features (For now™)
 - Multiplayer related features
-- **Configuration UI** (For now™)
+- **Configuration UI**
 
 You can only move around and resize camera views on the desktop window - thats it. I would've loved to add configuration using a desktop UI like Camera Plus has but quite honestly implementing desktop UI's in this Engine using just code is an even bigger pain than failing a 5 minute map 5 seconds before the end when you're on full combo otherwise. **For now**™ the only way to configure Camera 2 is using the config files, **eventually** I'm hoping to add ingame configuration.

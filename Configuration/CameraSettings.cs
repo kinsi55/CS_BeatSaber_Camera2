@@ -19,9 +19,11 @@ namespace Camera2.Configuration {
 		Hidden
 	}
 	enum WorldCamVisibility {
-		Always,
+		Visible = 0,
+		Always = 0,
 		OnlyInPause,
-		Never
+		Hidden = 2,
+		Never = 2
 	}
 
 	[JsonObject(MemberSerialization.OptIn)]
@@ -225,5 +227,6 @@ namespace Camera2.Configuration {
 		public Vector3 targetPos = new Vector3(0, 0, 0);
 		[JsonConverter(typeof(Vector3Converter))]
 		public Vector3 targetRot = new Vector3(0, 0, 0);
+		public Settings_MovementScript MovementScript { get; private set; } = new Settings_MovementScript();
 	}
 }

@@ -12,9 +12,13 @@ namespace Camera2.Utils {
 		public static bool isProbablyInWallMap { get; private set; } = false;
 
 		public static AudioTimeSyncController audioTimeSyncController { get; private set; }
+
+		public static bool isInSong {
+			get { return audioTimeSyncController != null; }
+		}
 		public static bool isSongPlaying {
 			get {
-				return audioTimeSyncController != null && audioTimeSyncController.state == AudioTimeSyncController.State.Playing;
+				return isInSong && audioTimeSyncController.state == AudioTimeSyncController.State.Playing;
 			}
 		}
 		

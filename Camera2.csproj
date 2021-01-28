@@ -133,6 +133,7 @@
     <Compile Include="Behaviours\PositionableCam.cs" />
     <Compile Include="CamManager.cs" />
     <Compile Include="Configuration\CameraSettings.cs" />
+    <Compile Include="Configuration\MovementScript.cs" />
     <Compile Include="Configuration\SceneSettings.cs" />
     <Compile Include="HarmonyPatches\DisableSmoothCamera.cs" />
     <Compile Include="HarmonyPatches\HookFPFC.cs" />
@@ -144,6 +145,7 @@
     <Compile Include="HarmonyPatches\HookLeveldata.cs" />
     <Compile Include="HarmonyPatches\TransparentWalls.cs" />
     <Compile Include="Interfaces\Middleware.cs" />
+    <Compile Include="Middlewares\MovementScriptProcessor.cs" />
     <Compile Include="ScenesManager.cs" />
     <Compile Include="Middlewares\Follow360.cs" />
     <Compile Include="Middlewares\ModmapExtensions.cs" />
@@ -164,7 +166,6 @@
     <EmbeddedResource Include="manifest.json" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Directory.Build.props" Condition="Exists('Directory.Build.props')" />
     <None Include="Directory.Build.targets" Condition="Exists('Directory.Build.targets')" />
     <None Include="Camera2.csproj.user" Condition="Exists('Camera2.csproj.user')" />
   </ItemGroup>

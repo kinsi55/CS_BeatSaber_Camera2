@@ -17,9 +17,6 @@ namespace Camera2 {
 			if(!settings.enableAutoSwitch)
 				return;
 
-
-			Plugin.Log.Notice($"IS IN MULTI: {sceneName} {SceneUtil.isInMultiplayer}");
-
 			LoadGameScene(sceneName);
 		}
 

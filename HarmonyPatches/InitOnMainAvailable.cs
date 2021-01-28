@@ -11,7 +11,7 @@ namespace Camera2.HarmonyPatches {
 			isInited = true;
 			CamManager.Init();
 
-			new GameObject("Cam2_Pointer").AddComponent<CamPositioner>();
+			new GameObject("Cam2_Positioner").AddComponent<CamPositioner>();
 		}
 
 	}

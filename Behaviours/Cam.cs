@@ -11,7 +11,7 @@ namespace Camera2.Behaviours {
 
 	class Cam2 : MonoBehaviour {
 		internal new string name { get; private set; }
-		internal string configPath { get { return ConfigUtil.getCameraPath(name); } }
+		internal string configPath { get { return ConfigUtil.GetCameraPath(name); } }
 
 		internal Camera UCamera { get; private set; }
 		internal CameraSettings settings { get; private set; }
@@ -21,10 +21,7 @@ namespace Camera2.Behaviours {
 		internal PositionableCam worldCam { get; private set; }
 
 		List<IMHandler> middlewares = new List<IMHandler>();
-
-		/// <summary>
-		/// Only ever called once, mainly used to initialize variables.
-		/// </summary>
+		
 		public void Awake() {
 			DontDestroyOnLoad(this);
 		}
@@ -119,6 +116,7 @@ namespace Camera2.Behaviours {
 			AddTransformer<Smoothfollow>();
 			AddTransformer<ModmapExtensions>();
 			AddTransformer<Follow360>();
+			AddTransformer<MovementScriptProcessor>();
 		}
 
 		private void AddTransformer<T>() where T: CamMiddleware, IMHandler {
