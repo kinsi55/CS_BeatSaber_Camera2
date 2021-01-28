@@ -1,4 +1,5 @@
-﻿using Camera2.Utils;
+﻿using UnityEngine;
+using Camera2.Utils;
 using Camera2.Interfaces;
 using Camera2.Managers;
 
@@ -11,20 +12,25 @@ namespace Camera2.Configuration {
 
 namespace Camera2.Middlewares {
 	class ModmapExtensions : CamMiddleware, IMHandler {
-		private bool didAttach = false;
+		private Transform attachedTo = null;
 		public new bool Pre() {
 			// We wanna parent FP cams as well so that the noodle translations are applied instantly and dont get smoothed out by SmoothFollow
-			if(enabled && settings.ModmapExtensions.moveWithMap && !SceneUtil.isInMenu && cam.settings.type != Configuration.CameraType.Attached) {
+			if(
+				enabled && settings.ModmapExtensions.moveWithMap && 
+				!SceneUtil.isInMenu && 
+				cam.settings.type != Configuration.CameraType.Attached &&
+				SceneUtil.songWorldTransform != null
+			) {
 				// If we are not yet attached, and we dont have a parent thats active yet, try to get one!
-				if(!didAttach && SceneUtil.songWorldTransform != null) {
+				if(attachedTo != SceneUtil.songWorldTransform) {
 #if DEBUG
 					Plugin.Log.Info($"Enabling Modmap parenting for camera {cam.name}");
 #endif
-					didAttach = true;
+					attachedTo = SceneUtil.songWorldTransform;
 					cam.SetParent(SceneUtil.songWorldTransform);
 				}
-			} else {
-				didAttach = false;
+			} else if(attachedTo != null) {
+				attachedTo = null;
 				cam.SetParent(null);
 			}
 			return true;
