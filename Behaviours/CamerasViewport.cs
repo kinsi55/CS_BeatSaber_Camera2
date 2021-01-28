@@ -173,7 +173,12 @@ namespace Camera2.Behaviours {
 
 			if(Input.GetMouseButtonUp(1) && currentAction == CamAction.None) {
 				//currentAction = CamAction.Menu;
+				// For now lets not add this as it can result in unclear circumstances with scenes etc.
+				//if(Input.GetKey(KeyCode.LeftControl)) {
+				//	var newCam = CamManager.AddNewCamera();
 
+				//	newCam.settings.Save();
+				//}
 			}
 
 			if(possibleAction != CamAction.None) {
@@ -186,7 +191,7 @@ namespace Camera2.Behaviours {
 				if(currentAction == CamAction.None)
 					return;
 
-				bool released = !Input.GetMouseButton(0);
+				bool released = !Input.GetMouseButton(0) || !targetCam.isActiveAndEnabled;
 
 				if(currentAction == CamAction.Move) {
 					targetCam.SetPositionClamped(

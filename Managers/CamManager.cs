@@ -98,5 +98,14 @@ namespace Camera2.Managers {
 
 			return cam;
 		}
+
+		public static Cam2 AddNewCamera() {
+			var i = 1;
+
+			while(cams.ContainsKey($"NewCamera{i}"))
+				i++;
+
+			return InitCamera($"NewCamera{i}", false);
+		}
 	}
 }

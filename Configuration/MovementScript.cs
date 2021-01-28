@@ -47,7 +47,7 @@ namespace Camera2.Configuration {
 			public float endTime = 0f;
 		}
 
-		[DefaultValue(null)]
+		[JsonProperty("syncToSong")]
 		public bool syncToSong { get; private set; } = false;
 		public List<Frame> frames { get; private set; } = new List<Frame>();
 
