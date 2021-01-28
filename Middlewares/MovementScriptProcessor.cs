@@ -57,6 +57,7 @@ namespace Camera2.Middlewares {
 			currentAnimationTime = 0f;
 			frameIndex = 0;
 			lastFov = 0f;
+			cam.UCamera.fieldOfView = settings.FOV;
 		}
 
 		new public void CamConfigReloaded() {
