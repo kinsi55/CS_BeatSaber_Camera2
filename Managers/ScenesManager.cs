@@ -9,7 +9,7 @@ namespace Camera2.Managers {
 
 	static class ScenesManager {
 		internal static ScenesSettings settings { get; private set; } = new ScenesSettings();
-		static SceneTypes loadedScene = SceneTypes.Menu;
+		static SceneTypes loadedScene = SceneTypes.MultiplayerMenu;
 
 		public static void ActiveSceneChanged(string sceneName = "MenuCore") {
 			if(!settings.dontAutoswitchFromCustom && (loadedScene == SceneTypes.Custom1 || loadedScene == SceneTypes.Custom2 || loadedScene == SceneTypes.Custom3))
@@ -18,38 +18,45 @@ namespace Camera2.Managers {
 			if(!settings.enableAutoSwitch)
 				return;
 
+#if DEBUG
+			Plugin.Log.Info($"ActiveSceneChanged({sceneName}) - Current loadedScene: {loadedScene}");
+#endif
+
 			LoadGameScene(sceneName);
 		}
 
 		public static void LoadGameScene(string sceneName = "MenuCore") {
-			SceneTypes[] toLookup = null;
+			List<SceneTypes> toLookup = new List<SceneTypes> { SceneTypes.Menu };
 			
-			if(SceneUtil.menuSceneNames.Contains(sceneName) || sceneName == "Credits") {
-				toLookup = new SceneTypes[] { SceneTypes.Menu };
-
+			if(SceneUtil.menuSceneNames.Contains(sceneName)) {
 				if(SceneUtil.isInMultiplayer)
-					toLookup.Prepend(SceneTypes.MultiplayerMenu);
+					toLookup.Insert(0, SceneTypes.MultiplayerMenu);
 			} else if(sceneName == "GameCore") {
-				toLookup = new SceneTypes[] { SceneTypes.Playing };
+				toLookup.Insert(0, SceneTypes.Playing);
 
 				if(ScoresaberUtil.IsInReplay())
-					toLookup.Prepend(SceneTypes.Replay);
+					toLookup.Insert(0, SceneTypes.Replay);
 				else if(SceneUtil.isInMultiplayer)
-					toLookup.Prepend(SceneTypes.MultiplayerPlaying);
+					toLookup.Insert(0, SceneTypes.MultiplayerPlaying);
 			}
 
-			if(toLookup != null) {
-				var targetList = GetPopulatedScene(toLookup);
-				if(targetList != null)
-					SwitchToScene((SceneTypes)targetList);
-			}
+#if DEBUG
+			Plugin.Log.Info($"LoadGameScene -> {String.Join(", ", toLookup)}");
+#endif
+
+			SwitchToScene(FindSceneToUse(toLookup.ToArray()));
 		}
 
 		public static void SwitchToScene(SceneTypes scene) {
+			if(!settings.scenes.ContainsKey(scene))
+				return;
+
 #if DEBUG
 			Plugin.Log.Info($"Switching to scene {scene}");
 			Plugin.Log.Info($"Cameras: {String.Join(", ", settings.scenes[scene])}");
 #endif
+			if(loadedScene == scene)
+				return;
 
 			loadedScene = scene;
 
@@ -70,14 +77,15 @@ namespace Camera2.Managers {
 			GL.Clear(true, true, Color.black);
 		}
 
-		private static SceneTypes? GetPopulatedScene(SceneTypes[] types) {
-			if(settings.scenes.Count == 0) return null;
+		private static SceneTypes FindSceneToUse(SceneTypes[] types) {
+			if(settings.scenes.Count == 0) 
+				return SceneTypes.Menu;
 
 			foreach(var type in types) {
 				if(settings.scenes[type].Count() > 0)
 					return type;
 			}
-			return null;
+			return SceneTypes.Menu;
 		}
 	}
 }
