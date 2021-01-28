@@ -92,6 +92,12 @@ namespace Camera2.Configuration {
 			isLoaded = true;
 		}
 
+		public void Reload() {
+			Load();
+			foreach(var x in cam.middlewares)
+				x.CamConfigReloaded();
+		}
+
 		public void ApplyPositionAndRotation() {
 			if(type == CameraType.Positionable) {
 				cam.transform.position = targetPos;

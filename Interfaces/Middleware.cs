@@ -6,6 +6,7 @@ namespace Camera2.Interfaces {
 	interface IMHandler {
 		bool Pre();
 		void Post();
+		void CamConfigReloaded();
 	}
 
 	abstract class CamMiddleware : MonoBehaviour {
@@ -19,5 +20,6 @@ namespace Camera2.Interfaces {
 		// Prevents the cam from rendering this frame if returned false
 		public bool Pre() { return true; }
 		public void Post() { }
+		public void CamConfigReloaded() { }
 	}
 }

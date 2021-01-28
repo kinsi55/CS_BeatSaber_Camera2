@@ -20,7 +20,7 @@ namespace Camera2.Behaviours {
 		internal LessRawImage screenImage { get; private set; }
 		internal PositionableCam worldCam { get; private set; }
 
-		List<IMHandler> middlewares = new List<IMHandler>();
+		internal List<IMHandler> middlewares { get; private set; } = new List<IMHandler>();
 		
 		public void Awake() {
 			DontDestroyOnLoad(this);

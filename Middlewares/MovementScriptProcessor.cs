@@ -30,8 +30,11 @@ namespace Camera2.Middlewares {
 
 		Frame targetFrame { get { return loadedScript.frames[frameIndex]; } }
 
+		private bool isParented = false;
+		private void DoParent() {
+			if(isParented)
+				return;
 
-		public void Start() {
 			scriptTransform.parent = cam.UCamera.transform.parent;
 
 			var pos = cam.UCamera.transform.localPosition;
@@ -41,10 +44,8 @@ namespace Camera2.Middlewares {
 			scriptTransform.localRotation = rot;
 
 			cam.UCamera.transform.parent = scriptTransform;
-
+			isParented = true;
 		}
-
-
 
 		private void Reset() {
 			if(loadedScript == null)
@@ -54,6 +55,16 @@ namespace Camera2.Middlewares {
 			scriptTransform.localRotation = lastRot = Quaternion.identity;
 			loadedScript = null;
 			currentAnimationTime = 0f;
+			frameIndex = 0;
+			lastFov = 0f;
+		}
+
+		new public void CamConfigReloaded() {
+			if(loadedScript == null)
+				return;
+			// Having a custom position on a camera thats executing a movement script is PROBABLY not what the user wants
+			cam.transform.localPosition = Vector3.zero;
+			cam.transform.localRotation = Quaternion.identity;
 		}
 
 		new public bool Pre() {
@@ -63,16 +74,17 @@ namespace Camera2.Middlewares {
 			}
 
 			if(loadedScript == null) {
-				loadedScript = new MovementScript().LoadScript(settings.MovementScript.scriptList[randomSource.Next(settings.MovementScript.scriptList.Length)]);
+				var scriptName = settings.MovementScript.scriptList[randomSource.Next(settings.MovementScript.scriptList.Length)];
+				loadedScript = new MovementScript().LoadScript(scriptName);
 
 				if(loadedScript == null || loadedScript.frames.Count == 1)
 					return true;
 
 				lastFov = cam.UCamera.fieldOfView;
-				// Having a custom position on a camera thats executing a movement script is PROBABLY not what the user wants
-				cam.transform.localPosition = Vector3.zero;
-				cam.transform.localRotation = Quaternion.identity;
-				Console.WriteLine("Loaded Movementscript! Duration: {0}", loadedScript.scriptDuration);
+				CamConfigReloaded();
+
+				Plugin.Log.Info($"Applying Movementscript {scriptName} for camera {cam.name}");
+				DoParent();
 			}
 
 			if(loadedScript.syncToSong) {

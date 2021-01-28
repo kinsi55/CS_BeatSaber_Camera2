@@ -83,7 +83,7 @@ namespace Camera2 {
 		public static Cam2 InitCamera(string name, bool loadConfig = true, bool reload = false) {
 			if(cams.ContainsKey(name)) {
 				if(reload) {
-					cams[name].settings.Load();
+					cams[name].settings.Reload();
 					return cams[name];
 				}
 
