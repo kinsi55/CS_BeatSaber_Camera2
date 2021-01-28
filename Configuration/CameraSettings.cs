@@ -6,6 +6,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Camera2.Behaviours;
 using Camera2.Utils;
+using Camera2.Managers;
 
 namespace Camera2.Configuration {
 	enum CameraType {

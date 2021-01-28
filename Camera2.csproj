@@ -131,7 +131,7 @@
     <Compile Include="Behaviours\CamerasViewport.cs" />
     <Compile Include="Behaviours\CamPositioner.cs" />
     <Compile Include="Behaviours\PositionableCam.cs" />
-    <Compile Include="CamManager.cs" />
+    <Compile Include="Managers\CamManager.cs" />
     <Compile Include="Configuration\CameraSettings.cs" />
     <Compile Include="Configuration\MovementScript.cs" />
     <Compile Include="Configuration\SceneSettings.cs" />
@@ -145,8 +145,9 @@
     <Compile Include="HarmonyPatches\HookLeveldata.cs" />
     <Compile Include="HarmonyPatches\TransparentWalls.cs" />
     <Compile Include="Interfaces\Middleware.cs" />
+    <Compile Include="Managers\MovementScriptManager.cs" />
     <Compile Include="Middlewares\MovementScriptProcessor.cs" />
-    <Compile Include="ScenesManager.cs" />
+    <Compile Include="Managers\ScenesManager.cs" />
     <Compile Include="Middlewares\Follow360.cs" />
     <Compile Include="Middlewares\ModmapExtensions.cs" />
     <Compile Include="Middlewares\Smoothfollow.cs" />

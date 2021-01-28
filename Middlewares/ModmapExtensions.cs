@@ -1,5 +1,6 @@
 ﻿using Camera2.Utils;
 using Camera2.Interfaces;
+using Camera2.Managers;
 
 namespace Camera2.Configuration {
 	class Settings_ModmapExtensions {
@@ -16,6 +17,9 @@ namespace Camera2.Middlewares {
 			if(enabled && settings.ModmapExtensions.moveWithMap && !SceneUtil.isInMenu && cam.settings.type != Configuration.CameraType.Attached) {
 				// If we are not yet attached, and we dont have a parent thats active yet, try to get one!
 				if(!didAttach && SceneUtil.songWorldTransform != null) {
+#if DEBUG
+					Plugin.Log.Info($"Enabling Modmap parenting for camera {cam.name}");
+#endif
 					didAttach = true;
 					cam.SetParent(SceneUtil.songWorldTransform);
 				}

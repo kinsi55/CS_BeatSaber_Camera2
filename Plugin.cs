@@ -4,7 +4,7 @@ using IPA;
 using IPALogger = IPA.Logging.Logger;
 using HarmonyLib;
 using Camera2.Utils;
-using Camera2.HarmonyPatches;
+using Camera2.Managers;
 
 namespace Camera2 {
 
@@ -50,6 +50,7 @@ namespace Camera2 {
 
 			ScoresaberUtil.Init();
 			ModMapUtil.Init();
+			MovementScriptManager.LoadMovementScripts();
 
 			SceneManager.activeSceneChanged += SceneUtil.OnActiveSceneChanged;
 		}

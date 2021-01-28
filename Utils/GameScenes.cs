@@ -3,6 +3,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using Camera2.HarmonyPatches;
 using Camera2.Middlewares;
+using Camera2.Managers;
 
 namespace Camera2.Utils {
 	static class SceneUtil {
@@ -59,8 +60,9 @@ namespace Camera2.Utils {
 		public static void SongStarted(AudioTimeSyncController controller) {
 			audioTimeSyncController = controller;
 			ScoresaberUtil.UpdateIsInReplay();
-
-			songWorldTransform = GameObject.Find("LocalPlayerGameCore/Origin")?.transform;
+			
+			// FPFCToggle compatible way of retreiving the origin
+			songWorldTransform = GameObject.Find("Origin/VRGameCore")?.transform.parent;
 
 			TransparentWalls.MakeWallsOpaqueForMainCam();
 			CamManager.ApplyCameraValues(worldCam: true);

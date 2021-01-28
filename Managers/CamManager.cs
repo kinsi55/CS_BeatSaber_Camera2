@@ -7,7 +7,7 @@ using UnityEngine.XR;
 using Camera2.Behaviours;
 using Camera2.Utils;
 
-namespace Camera2 {
+namespace Camera2.Managers {
 	static class CamManager {
 		public static Dictionary<string, Cam2> cams { get; private set; } = new Dictionary<string, Cam2>();
 		static CamerasViewport customScreen;
@@ -35,10 +35,7 @@ namespace Camera2 {
 			} else {
 				var loadedNames = new List<string>();
 
-				foreach(var cam in Directory.GetFiles(ConfigUtil.CamsDir)) {
-					if(!cam.ToLower().EndsWith(".json"))
-						continue;
-
+				foreach(var cam in Directory.GetFiles(ConfigUtil.CamsDir, "*.json")) {
 					try {
 						var name = Path.GetFileNameWithoutExtension(cam);
 
@@ -94,7 +91,7 @@ namespace Camera2 {
 
 			cam.Init(name, customScreen.AddNewView(), loadConfig);
 
-			cams.Add(name, cam);
+			cams[name] = cam;
 
 			//Newly added cameras should always be the last child and thus on top
 			//ApplyCameraValues(viewLayer: true);

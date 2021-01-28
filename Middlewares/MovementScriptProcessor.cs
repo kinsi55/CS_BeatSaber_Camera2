@@ -1,14 +1,15 @@
-﻿using System;
+﻿using System.Linq;
 using UnityEngine;
-using Camera2.HarmonyPatches;
 using Camera2.Interfaces;
 using Camera2.Utils;
 using static Camera2.Configuration.MovementScript;
 using Camera2.Configuration;
+using Camera2.Managers;
 
 namespace Camera2.Configuration {
 	class Settings_MovementScript {
 		public string[] scriptList = new string[] { };
+		public bool fromOrigin = true;
 	}
 }
 
@@ -35,6 +36,10 @@ namespace Camera2.Middlewares {
 			if(isParented)
 				return;
 
+#if DEBUG
+			Plugin.Log.Info($"Reparenting camera {cam.name} to allow for Movement scripts");
+#endif
+
 			scriptTransform.parent = cam.UCamera.transform.parent;
 
 			var pos = cam.UCamera.transform.localPosition;
@@ -58,10 +63,13 @@ namespace Camera2.Middlewares {
 			frameIndex = 0;
 			lastFov = 0f;
 			cam.UCamera.fieldOfView = settings.FOV;
+#if DEBUG
+			Plugin.Log.Info($"Resetting MovementScriptProcessor of camera {cam.name}");
+#endif
 		}
 
 		new public void CamConfigReloaded() {
-			if(loadedScript == null)
+			if(loadedScript == null && settings.MovementScript.fromOrigin)
 				return;
 			// Having a custom position on a camera thats executing a movement script is PROBABLY not what the user wants
 			cam.transform.localPosition = Vector3.zero;
@@ -75,16 +83,22 @@ namespace Camera2.Middlewares {
 			}
 
 			if(loadedScript == null) {
-				var scriptName = settings.MovementScript.scriptList[randomSource.Next(settings.MovementScript.scriptList.Length)];
-				loadedScript = new MovementScript().LoadScript(scriptName);
+				var possibleScripts = settings.MovementScript.scriptList.Where(x => MovementScriptManager.movementScripts.ContainsKey(x));
 
-				if(loadedScript == null || loadedScript.frames.Count == 1)
+				if(possibleScripts.Count() == 0)
+					return true;
+
+				var scriptToUse = possibleScripts.ElementAt(randomSource.Next(possibleScripts.Count()));
+
+				loadedScript = MovementScriptManager.movementScripts[scriptToUse];
+
+				if(loadedScript == null)
 					return true;
 
 				lastFov = cam.UCamera.fieldOfView;
 				CamConfigReloaded();
 
-				Plugin.Log.Info($"Applying Movementscript {scriptName} for camera {cam.name}");
+				Plugin.Log.Info($"Applying Movementscript {scriptToUse} for camera {cam.name}");
 				DoParent();
 			}
 

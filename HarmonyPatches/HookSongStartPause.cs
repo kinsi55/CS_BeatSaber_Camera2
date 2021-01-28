@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using HarmonyLib;
 using Camera2.Utils;
+using Camera2.Managers;
 
 namespace Camera2.HarmonyPatches {
 	/*
@@ -14,6 +15,9 @@ namespace Camera2.HarmonyPatches {
 	[HarmonyPatch("StartSong")]
 	class HookAudioTimeSyncController {
 		static void Postfix(AudioTimeSyncController __instance) {
+#if DEBUG
+			Plugin.Log.Info("AudioTimeSyncController.StartSong()");
+#endif
 			SceneUtil.SongStarted(__instance);
 		}
 	}
@@ -21,6 +25,9 @@ namespace Camera2.HarmonyPatches {
 	[HarmonyPatch]
 	class HookAudioTimeSyncController2 {
 		static void Postfix() {
+#if DEBUG
+			Plugin.Log.Info("AudioTimeSyncController.Pause/Resume()");
+#endif
 			CamManager.ApplyCameraValues(worldCam: true);
 		}
 

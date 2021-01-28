@@ -4,7 +4,7 @@ using System.IO;
 using UnityEngine;
 using Newtonsoft.Json;
 using Camera2.Utils;
-using Newtonsoft.Json.Converters;
+using Camera2.Managers;
 
 namespace Camera2.Configuration {
 	public enum SceneTypes {

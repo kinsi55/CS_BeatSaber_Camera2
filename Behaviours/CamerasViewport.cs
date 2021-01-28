@@ -1,7 +1,7 @@
 ﻿using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
-using Camera2.Configuration;
+using Camera2.Managers;
 using Camera2.Utils;
 
 namespace Camera2.Behaviours {
@@ -142,7 +142,9 @@ namespace Camera2.Behaviours {
 			if(Input.anyKeyDown) { //Some custom scenes to do funny stuff with
 				if(Input.GetKeyDown(KeyCode.F1)) {
 					if(Input.GetKey(KeyCode.LeftControl) && Input.GetKey(KeyCode.LeftShift)) {
+						Plugin.Log.Info("Reloading Camera2 Config...");
 						CamManager.Reload();
+						MovementScriptManager.LoadMovementScripts(true);
 					} else {
 						ScenesManager.LoadGameScene(SceneUtil.currentScene.name);
 					}

@@ -3,8 +3,9 @@ using System.Linq;
 using UnityEngine;
 using Camera2.Configuration;
 using Camera2.Utils;
+using System;
 
-namespace Camera2 {
+namespace Camera2.Managers {
 
 	static class ScenesManager {
 		internal static ScenesSettings settings { get; private set; } = new ScenesSettings();
@@ -45,6 +46,11 @@ namespace Camera2 {
 		}
 
 		public static void SwitchToScene(SceneTypes scene) {
+#if DEBUG
+			Plugin.Log.Info($"Switching to scene {scene}");
+			Plugin.Log.Info($"Cameras: {String.Join(", ", settings.scenes[scene])}");
+#endif
+
 			loadedScene = scene;
 
 			SwitchToCamlist(settings.scenes[scene]);

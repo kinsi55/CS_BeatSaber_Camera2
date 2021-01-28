@@ -64,31 +64,31 @@ namespace Camera2.Configuration {
 			scriptDuration = time;
 		}
 
-		public MovementScript LoadScript(string name) {
+		public static MovementScript Load(string name) {
 			var scriptPath = ConfigUtil.GetMovementScriptPath(name);
 			if(!File.Exists(scriptPath))
 				return null;
 
-			frames.Clear();
+			var script = new MovementScript();
 
 			var scriptContent = File.ReadAllText(scriptPath);
 			// Not a Noodle movement script
 			if(!scriptContent.Contains("Movements")) {
-				JsonConvert.PopulateObject(scriptContent, this, JsonHelpers.leanDeserializeSettings);
+				JsonConvert.PopulateObject(scriptContent, script, JsonHelpers.leanDeserializeSettings);
 			} else {
 				// Camera Plus movement script, we need to convert it...
-				dynamic script = JObject.Parse(scriptContent.ToLower());
+				dynamic camPlusScript = JObject.Parse(scriptContent.ToLower());
 
-				syncToSong = script.activeinpausemenu != "true";
+				script.syncToSong = camPlusScript.activeinpausemenu != "true";
 
-				foreach(dynamic movement in script.movements) {
-					frames.Add(new Frame() {
+				foreach(dynamic movement in camPlusScript.movements) {
+					script.frames.Add(new Frame() {
 						position = new Vector3((float)movement.startpos.x, (float)movement.startpos.y, (float)movement.startpos.z),
 						rotationEuler = new Vector3((float)movement.startrot.x, (float)movement.startrot.y, (float)movement.startrot.z),
 						FOV = (float)(movement.startpos.fov ?? 0f)
 					});
 
-					frames.Add(new Frame() {
+					script.frames.Add(new Frame() {
 						position = new Vector3((float)movement.endpos.x, (float)movement.endpos.y, (float)movement.endpos.z),
 						rotationEuler = new Vector3((float)movement.endrot.x, (float)movement.endrot.y, (float)movement.endrot.z),
 						duration = movement.duration,
@@ -99,7 +99,7 @@ namespace Camera2.Configuration {
 				}
 
 				File.Move(scriptPath, $"{scriptPath}.cameraPlusFormat");
-				File.WriteAllText(scriptPath, JsonConvert.SerializeObject(this, Formatting.Indented, new JsonSerializerSettings() {
+				File.WriteAllText(scriptPath, JsonConvert.SerializeObject(script, Formatting.Indented, new JsonSerializerSettings() {
 					DefaultValueHandling = DefaultValueHandling.Ignore
 				}));
 			}
@@ -109,9 +109,9 @@ namespace Camera2.Configuration {
 			//	return null;
 			//}
 
-			PopulateTimes();
+			script.PopulateTimes();
 
-			return this;
+			return script;
 		}
 	}
 }

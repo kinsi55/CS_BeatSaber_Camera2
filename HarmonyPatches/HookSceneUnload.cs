@@ -7,6 +7,9 @@ namespace Camera2.HarmonyPatches {
 	[HarmonyPatch]
 	class HookSceneUnload {
 		static void Prefix() {
+#if DEBUG
+			Plugin.Log.Info("Scene is about to unload!");
+#endif
 			SceneUtil.OnSceneMaybeUnloadPre();
 		}
 

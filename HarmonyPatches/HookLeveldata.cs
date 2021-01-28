@@ -8,6 +8,9 @@ namespace Camera2.HarmonyPatches {
 	class HookLeveldata {
 		public static IDifficultyBeatmap difficultyBeatmap;
 		static void Prefix(IDifficultyBeatmap difficultyBeatmap) {
+#if DEBUG
+			Plugin.Log.Info("Got level data!");
+#endif
 			HookLeveldata.difficultyBeatmap = difficultyBeatmap;
 		}
 
