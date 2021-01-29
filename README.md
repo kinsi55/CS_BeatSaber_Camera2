@@ -11,7 +11,7 @@ Please see [**The Wiki**](https://github.com/kinsi55/CS_BeatSaber_Camera2/wiki) 
 - Decent performance improvements, especially on wall maps
 - FPS cap
 - More options for toggling the visibility of things
-	- Walls can be hidden entirely, not just be made transparent (Useful for Side cams)
+	- Walls can be hidden entirely, not just be made transparent (Useful for side cams)
 	- **Walls can automagically be made visible if you happen to play a modded map**
 	- Hiding Floor(s)
 	- Hiding Notes (Currently incompatible with custom notes)
@@ -30,7 +30,7 @@ Please see [**The Wiki**](https://github.com/kinsi55/CS_BeatSaber_Camera2/wiki) 
 #### General
 - The implementation of profiles has changed
 
-Where as before you had profiles, and cameras associated to them, you now have scenes and can enable or disable any camera on a per-scene basis. Scenes are the menu, when in game, when watching a replay, etc. More details on Scenes can be found [HERE](https://github.com/kinsi55/CS_BeatSaber_Camera2/wiki/Scenes)
+Where as before you had profiles, and cameras associated to them, you now have scenes and can enable or disable any camera on a per-scene basis. Scenes are the menu, when in game, when watching a replay, etc. More details on scenes can be found [HERE](https://github.com/kinsi55/CS_BeatSaber_Camera2/wiki/Scenes)
 
 #### Third person cameras
 - When moving third person cameras the preview gets bigger to give you an easier time positioning correctly.
@@ -43,4 +43,4 @@ Where as before you had profiles, and cameras associated to them, you now have s
 - Multiplayer related features
 - **Configuration UI**
 
-You can only move around and resize camera views on the desktop window - thats it. I would've loved to add configuration using a desktop UI like Camera Plus has but quite honestly implementing desktop UI's in this Engine using just code is an even bigger pain than failing a 5 minute map 5 seconds before the end when you're on full combo otherwise. **For now**™ the only way to configure Camera 2 is using the config files, **eventually** I'm hoping to add ingame configuration.
+You can only move around and resize camera views on the desktop window - thats it. I would've loved to add configuration using a desktop UI like Camera Plus has but quite honestly implementing desktop UI's in this engine using just code is an even bigger pain than failing a 5 minute map 5 seconds before the end when you're on full combo otherwise. **For now**™ the only way to configure Camera2 is using the config files, **eventually** I'm hoping to add ingame configuration.
