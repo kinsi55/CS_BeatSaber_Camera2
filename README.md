@@ -2,6 +2,8 @@
 
 [Camera Plus](https://github.com/Snow1226/CameraPlus) rewritten from scratch with focus on a cleaner, more optimized code base
 
+Please see [**The Wiki**](https://github.com/kinsi55/CS_BeatSaber_Camera2/wiki) for details on how to properly use / configure Camera2
+
 ### New features / improvements (Unless said otherwise, everything configurable per camera)
 
 #### General
@@ -28,7 +30,7 @@
 #### General
 - The implementation of profiles has changed
 
-Where as before you had profiles, and cameras associated to them, you now have scenes and can enable or disable any camera on a per-scene basis. Scenes are the menu, when in game, when watching a replay, etc. More details on Scenes can be found [HERE](#TODO_im_dumb)
+Where as before you had profiles, and cameras associated to them, you now have scenes and can enable or disable any camera on a per-scene basis. Scenes are the menu, when in game, when watching a replay, etc. More details on Scenes can be found [HERE](https://github.com/kinsi55/CS_BeatSaber_Camera2/wiki/Scenes)
 
 #### Third person cameras
 - When moving third person cameras the preview gets bigger to give you an easier time positioning correctly.
