@@ -9,7 +9,9 @@ namespace Camera2.Managers {
 
 	static class ScenesManager {
 		internal static ScenesSettings settings { get; private set; } = new ScenesSettings();
-		static SceneTypes loadedScene = SceneTypes.MultiplayerMenu;
+
+		// Kind of a hack not having it start off Menu but else the first menu load will not apply..
+		internal static SceneTypes loadedScene { get; private set; } = SceneTypes.MultiplayerMenu;
 
 		public static void ActiveSceneChanged(string sceneName = "MenuCore") {
 			if(!settings.dontAutoswitchFromCustom && (loadedScene == SceneTypes.Custom1 || loadedScene == SceneTypes.Custom2 || loadedScene == SceneTypes.Custom3))

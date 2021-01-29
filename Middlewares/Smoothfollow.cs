@@ -36,9 +36,8 @@ namespace Camera2.Middlewares {
 				// If we are not a FP cam we cannot auto-retrieve what we're supposed to be attached to
 				if(settings.type != Configuration.CameraType.FirstPerson)
 					return false;
-
-				// If we are in a Scoresaber replay we wanna attach to that view instead of the HMD (Maybe configurable?)
-				parentToUse = parent = Camera.main?.transform;
+				
+				parentToUse = parent = Camera.main?.transform ?? HookFPFC.cameraInstance?.transform;
 
 				// If our parent doesnt exist we might as well not render
 				if(checkCamDed())
