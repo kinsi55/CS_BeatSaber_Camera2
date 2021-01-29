@@ -17,7 +17,7 @@ namespace Camera2.Middlewares {
 	class MovementScriptProcessor : CamMiddleware, IMHandler {
 		static System.Random randomSource = new System.Random();
 
-		Transform scriptTransform = new GameObject("MovementScriptApplier").transform;
+		Transform scriptTransform;
 
 		MovementScript loadedScript = null;
 		float currentAnimationTime = 0f;
@@ -31,6 +31,13 @@ namespace Camera2.Middlewares {
 
 		Frame targetFrame { get { return loadedScript.frames[frameIndex]; } }
 
+		public void Start() {
+			var scriptTransform = new GameObject($"Cam2_MovementScriptApplier_{cam.name}");
+			DontDestroyOnLoad(scriptTransform);
+
+			this.scriptTransform = scriptTransform.transform;
+		}
+
 		private bool isParented = false;
 		private void DoParent() {
 			if(isParented)
@@ -41,6 +48,7 @@ namespace Camera2.Middlewares {
 #endif
 
 			scriptTransform.parent = cam.UCamera.transform.parent;
+			scriptTransform.gameObject.name = "MovementScriptApplier";
 
 			var pos = cam.UCamera.transform.localPosition;
 			var rot = cam.UCamera.transform.localRotation;

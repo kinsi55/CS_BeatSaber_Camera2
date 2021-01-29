@@ -22,9 +22,13 @@ namespace Camera2.Utils {
 		}
 
 		static bool IsModdedMap(IDifficultyBeatmap map) {
-			return SongCore.Collections.RetrieveDifficultyData(map)
-				.additionalDifficultyData?
-				._requirements?.Any(x => x == "Mapping Extensions" || x == "Noodle Extensions") == true;
+			try {
+				return SongCore.Collections.RetrieveDifficultyData(map)?
+					.additionalDifficultyData?
+					._requirements?.Any(x => x == "Mapping Extensions" || x == "Noodle Extensions") == true;
+			} catch {
+				return false;
+			}
 		}
 	}
 }
