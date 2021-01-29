@@ -60,7 +60,12 @@ namespace Camera2.Managers {
 
 			loadedScene = scene;
 
-			SwitchToCamlist(settings.scenes[scene]);
+			var toLoad = settings.scenes[scene];
+
+			if(scene == SceneTypes.Menu && toLoad.Count == 0)
+				toLoad = CamManager.cams.Keys.ToList();
+
+			SwitchToCamlist(toLoad);
 		}
 
 		private static void SwitchToCamlist(List<string> cams) {
