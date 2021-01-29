@@ -34,6 +34,8 @@
     <DebugType>none</DebugType>
     <DebugSymbols>false</DebugSymbols>
     <DisableZipRelease>True</DisableZipRelease>
+    <DefineConstants>
+    </DefineConstants>
   </PropertyGroup>
   <PropertyGroup Condition="$(DefineConstants.Contains('CIBuild')) OR '$(NCrunch)' == '1'">
     <DisableCopyToPlugins>True</DisableCopyToPlugins>

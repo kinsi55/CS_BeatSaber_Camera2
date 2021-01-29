@@ -11,6 +11,7 @@ namespace Camera2.Configuration {
 		public float rotation = 5f;
 
 		public bool forceUpright = false;
+		public bool replaySupport = true;
 
 		[JsonIgnore]
 		internal Transform parent;
@@ -27,22 +28,19 @@ namespace Camera2.Middlewares {
 			if(settings.type == Configuration.CameraType.Positionable)
 				return true;
 
-			var parentToUse = ScoresaberUtil.replayCamera == null ? parent : ScoresaberUtil.replayCamera.transform;
+			var parentToUse = parent;
 
-			// Need to EXPLICITLY null check before, chaining parent?. breaks if parent is null, idk, unity
-			bool checkCamDed() { return parentToUse == null || parentToUse.gameObject?.activeInHierarchy != true; }
-
-			if(checkCamDed()) {
-				// If we are not a FP cam we cannot auto-retrieve what we're supposed to be attached to
-				if(settings.type != Configuration.CameraType.FirstPerson)
-					return false;
-				
-				parentToUse = parent = Camera.main?.transform ?? HookFPFC.cameraInstance?.transform;
-
-				// If our parent doesnt exist we might as well not render
-				if(checkCamDed())
-					return false;
+			if(settings.Smoothfollow.replaySupport && ScoresaberUtil.isInReplay) {
+				parentToUse = ScoresaberUtil.replayCamera.transform;
+			} else if(parentToUse == null || !parentToUse.gameObject.activeInHierarchy) {
+				parent = parentToUse = (Camera.main ?? HookFPFC.cameraInstance ?? null)?.transform;
 			}
+
+			//System.Console.WriteLine("FP cam is attached to {0}", parentToUse);
+			
+			// If we dont have a parent we should not render.
+			if(parentToUse == null)
+				return false;
 
 			var targetRotation = parentToUse.rotation;
 

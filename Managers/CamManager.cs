@@ -14,7 +14,7 @@ namespace Camera2.Managers {
 		public static int baseCullingMask { get; private set; }
 
 		public static void Init() {
-			baseCullingMask = Camera.main.cullingMask;
+			baseCullingMask = SceneUtil.GetMainCameraButReally().GetComponent<Camera>().cullingMask;
 
 			customScreen = new GameObject("Cam2_Renderer").AddComponent<CamerasViewport>();
 

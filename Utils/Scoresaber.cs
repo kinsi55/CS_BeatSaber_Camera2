@@ -55,6 +55,9 @@ namespace Camera2.Utils {
 
 			if(replayCamera != null)
 				replayCamera.enabled = false;
+#if DEBUG
+			Plugin.Log.Info($"UpdateIsInReplay() -> isInReplay: {isInReplay}, replayCamera: {replayCamera}");
+#endif
 		}
 	}
 }

@@ -78,7 +78,7 @@ namespace Camera2.Behaviours {
 			this.name = name;
 			screenImage = presentor;
 
-			var camClone = Instantiate(Camera.main.gameObject);
+			var camClone = Instantiate(SceneUtil.GetMainCameraButReally());
 			camClone.name = "Cam";
 
 

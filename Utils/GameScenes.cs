@@ -29,6 +29,10 @@ namespace Camera2.Utils {
 			}
 		}
 
+		public static GameObject GetMainCameraButReally() {
+			return Camera.main?.gameObject ?? GameObject.FindGameObjectsWithTag("MainCamera")[0];
+		}
+
 
 		public static readonly string[] menuSceneNames = new string[] { "MenuViewCore", "MenuCore", "MenuViewControllers" };
 
