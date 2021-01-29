@@ -18,7 +18,7 @@ namespace Camera2.Managers {
 			if(sceneName == null)
 				sceneName = SceneUtil.currentScene.name;
 
-			if(!settings.dontAutoswitchFromCustom && (loadedScene == SceneTypes.Custom1 || loadedScene == SceneTypes.Custom2 || loadedScene == SceneTypes.Custom3))
+			if(!settings.autoswitchFromCustom && (loadedScene == SceneTypes.Custom1 || loadedScene == SceneTypes.Custom2 || loadedScene == SceneTypes.Custom3))
 				return;
 
 			if(!settings.enableAutoSwitch)
@@ -89,7 +89,7 @@ namespace Camera2.Managers {
 			 * a non-empty scene we want to hide cams that are not in it
 			 */
 			foreach(var cam in CamManager.cams)
-				cam.Value.gameObject.SetActive(cams?.Contains(cam.Key) != false);
+				if(cam.Value != null) cam.Value.gameObject.SetActive(cams?.Contains(cam.Key) != false);
 
 			GL.Clear(true, true, Color.black);
 		}

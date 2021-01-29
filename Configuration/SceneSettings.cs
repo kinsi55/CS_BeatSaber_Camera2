@@ -31,7 +31,7 @@ namespace Camera2.Configuration {
 		};
 
 		public bool enableAutoSwitch = true;
-		public bool dontAutoswitchFromCustom = false;
+		public bool autoswitchFromCustom = true;
 		private bool wasLoaded = false;
 
 		public void Load() {
