@@ -49,7 +49,7 @@ namespace Camera2.Behaviours {
 			var size = small ? cam.settings.previewScreenSize : Math.Min(cam.settings.previewScreenSize * 1.5f, 4);
 
 			camPreview.transform.localScale = new Vector3(size, size / cam.UCamera.aspect, 0);
-			camPreview.transform.localPosition = new Vector3(0, camPreview.transform.localScale.y, camOrigin.transform.localPosition.z / 2);
+			camPreview.transform.localPosition = new Vector3(0, 0.15f + (camPreview.transform.localScale.y / 2f), camOrigin.transform.localPosition.z / 2);
 		}
 
 		public void OnPointerClick(PointerEventData eventData) {
