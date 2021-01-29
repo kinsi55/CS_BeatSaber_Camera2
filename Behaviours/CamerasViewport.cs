@@ -146,7 +146,7 @@ namespace Camera2.Behaviours {
 						CamManager.Reload();
 						MovementScriptManager.LoadMovementScripts(true);
 					} else {
-						ScenesManager.LoadGameScene(SceneUtil.currentScene.name);
+						ScenesManager.LoadGameScene();
 					}
 				} else {
 					foreach(var k in ScenesManager.settings.sceneBindings) {

@@ -41,28 +41,33 @@ namespace Camera2.Behaviours {
 			}
 		}
 
-		internal void UpdateRenderTexture() {
+		internal void UpdateRenderTextureAndView() {
 			var w = (int)Math.Round(settings.viewRect.width * settings.renderScale);
 			var h = (int)Math.Round(settings.viewRect.height * settings.renderScale);
 
-			if(renderTexture?.width == w && renderTexture?.height == h && renderTexture?.antiAliasing == settings.antiAliasing)
-				return;
+			var sizeChanged = renderTexture?.width != w || renderTexture?.height != h || renderTexture?.antiAliasing != settings.antiAliasing;
 
-			renderTexture?.Release();
-			renderTexture = new RenderTexture(w, h, 24) { //, RenderTextureFormat.ARGB32
-				autoGenerateMips = false,
-				antiAliasing = settings.antiAliasing,
-				anisoLevel = 1,
-				useDynamicScale = false
-			};
+			if(sizeChanged) {
+				renderTexture?.Release();
+				renderTexture = new RenderTexture(w, h, 24) { //, RenderTextureFormat.ARGB32
+					autoGenerateMips = false,
+					antiAliasing = settings.antiAliasing,
+					anisoLevel = 1,
+					useDynamicScale = false
+				};
 
-			UCamera.targetTexture = renderTexture;
+				UCamera.targetTexture = renderTexture;
+				worldCam?.SetSource(this);
+			}
 
-			screenImage?.SetSource(this);
-			worldCam?.SetSource(this);
+			if(sizeChanged || screenImage.position.x != settings.viewRect.x || screenImage.position.y != settings.viewRect.y)
+				screenImage?.SetSource(this);
 		}
 
 		internal void ShowWorldCamIfNecessary() {
+			if(worldCam == null)
+				return;
+
 			bool doShowCam = true;
 
 			if(settings.worldCamVisibility == WorldCamVisibility.OnlyInPause && SceneUtil.isSongPlaying)
@@ -71,7 +76,7 @@ namespace Camera2.Behaviours {
 			if(settings.type != Configuration.CameraType.Positionable || settings.worldCamVisibility == WorldCamVisibility.Never)
 				doShowCam = false;
 
-			worldCam?.gameObject.SetActive(doShowCam);
+			worldCam.gameObject.SetActive(doShowCam);
 		}
 
 		public void Init(string name, LessRawImage presentor, bool loadConfig = false) {
@@ -145,7 +150,7 @@ namespace Camera2.Behaviours {
 		
 		private void OnEnable() {
 			screenImage?.gameObject.SetActive(true);
-			worldCam?.gameObject.SetActive(true);
+			ShowWorldCamIfNecessary();
 		}
 		
 		private void OnDisable() {

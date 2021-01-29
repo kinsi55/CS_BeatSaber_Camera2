@@ -2,6 +2,7 @@
 using System.Reflection;
 using UnityEngine;
 using HarmonyLib;
+using Camera2.Managers;
 
 namespace Camera2.HarmonyPatches {
 	[HarmonyPatch]
@@ -17,6 +18,8 @@ namespace Camera2.HarmonyPatches {
 
 			// Disable the base game camera so that it doesnt cause unnecessary load
 			____camera.enabled = false;
+
+			ScenesManager.ActiveSceneChanged();
 		}
 
 		[HarmonyTargetMethods]
@@ -30,6 +33,8 @@ namespace Camera2.HarmonyPatches {
 			static void Postfix(FirstPersonFlyingController __instance) {
 				instance = null;
 				cameraInstance = null;
+
+				ScenesManager.ActiveSceneChanged();
 #if DEBUG
 				Plugin.Log.Info("FirstPersonFlyingController.OnDisable()");
 #endif

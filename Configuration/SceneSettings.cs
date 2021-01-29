@@ -13,6 +13,7 @@ namespace Camera2.Configuration {
 		MultiplayerMenu,
 		MultiplayerPlaying,
 		Replay,
+		FPFC,
 		Custom1,
 		Custom2,
 		Custom3
@@ -50,7 +51,7 @@ namespace Camera2.Configuration {
 				Save();
 			}
 			
-			ScenesManager.LoadGameScene(SceneUtil.currentScene.name);
+			ScenesManager.LoadGameScene();
 		}
 
 		public void Save() {

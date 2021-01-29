@@ -4,6 +4,7 @@ using UnityEngine;
 using Camera2.Configuration;
 using Camera2.Utils;
 using System;
+using Camera2.HarmonyPatches;
 
 namespace Camera2.Managers {
 
@@ -13,7 +14,10 @@ namespace Camera2.Managers {
 		// Kind of a hack not having it start off Menu but else the first menu load will not apply..
 		internal static SceneTypes loadedScene { get; private set; } = SceneTypes.MultiplayerMenu;
 
-		public static void ActiveSceneChanged(string sceneName = "MenuCore") {
+		public static void ActiveSceneChanged(string sceneName = null) {
+			if(sceneName == null)
+				sceneName = SceneUtil.currentScene.name;
+
 			if(!settings.dontAutoswitchFromCustom && (loadedScene == SceneTypes.Custom1 || loadedScene == SceneTypes.Custom2 || loadedScene == SceneTypes.Custom3))
 				return;
 
@@ -27,7 +31,10 @@ namespace Camera2.Managers {
 			LoadGameScene(sceneName);
 		}
 
-		public static void LoadGameScene(string sceneName = "MenuCore") {
+		public static void LoadGameScene(string sceneName = null) {
+			if(sceneName == null)
+				sceneName = SceneUtil.currentScene.name;
+
 			List<SceneTypes> toLookup = new List<SceneTypes> { SceneTypes.Menu };
 			
 			if(SceneUtil.menuSceneNames.Contains(sceneName)) {
@@ -41,6 +48,9 @@ namespace Camera2.Managers {
 				else if(SceneUtil.isInMultiplayer)
 					toLookup.Insert(0, SceneTypes.MultiplayerPlaying);
 			}
+
+			if(HookFPFC.cameraInstance != null)
+				toLookup.Insert(0, SceneTypes.FPFC);
 
 #if DEBUG
 			Plugin.Log.Info($"LoadGameScene -> {String.Join(", ", toLookup)}");

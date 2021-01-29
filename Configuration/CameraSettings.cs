@@ -89,7 +89,7 @@ namespace Camera2.Configuration {
 			cam.ShowWorldCamIfNecessary();
 			// Trigger setter for cam aspect ratio
 			viewRect = viewRect;
-			cam.UpdateRenderTexture();
+			cam.UpdateRenderTextureAndView();
 			isLoaded = true;
 		}
 
@@ -194,7 +194,7 @@ namespace Camera2.Configuration {
 			set {
 				_antiAliasing = Mathf.Clamp(value, 1, 8);
 				if(isLoaded) 
-					cam.UpdateRenderTexture();
+					cam.UpdateRenderTextureAndView();
 			}
 		}
 
@@ -204,7 +204,7 @@ namespace Camera2.Configuration {
 			set {
 				_renderScale = Mathf.Clamp(value, 1f, 3f);
 				if(isLoaded)
-					cam.UpdateRenderTexture();
+					cam.UpdateRenderTextureAndView();
 			}
 		}
 
@@ -220,7 +220,7 @@ namespace Camera2.Configuration {
 				_viewRect = value;
 				cam.UCamera.aspect = value.width / value.height;
 				if(isLoaded)
-					cam.UpdateRenderTexture();
+					cam.UpdateRenderTextureAndView();
 			}
 		}
 		
