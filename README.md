@@ -9,7 +9,7 @@ You can always find the latest Release and my example configuration in [the rele
 ### New features / improvements (Unless said otherwise, everything configurable per camera)
 
 #### General
-- **Support for Replays and FPFC / FPFC toggle**
+- **Support for Replays and FPFC / FPFC toggle out of the box**
 - Decent performance improvements, especially on wall maps
 - FPS cap
 - More options for toggling the visibility of things
