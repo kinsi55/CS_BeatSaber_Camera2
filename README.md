@@ -20,7 +20,7 @@ You can always find the latest Release and my example configuration in [the rele
 - Every third person camera can follow or ignore the 360 world rotation, its not a special camera type any more
 
 #### First person cameras
-- Position smoothing ignores the rotation applied by mod maps so that [fast map rotations are actually watchable](https://www.youtube.com/watch?v=yjbFchHnZ74)
+- Position smoothing ignores the rotation applied by mod maps so that [fast map rotations are actually watchable](https://www.youtube.com/watch?v=SFAEhKAFn0Q)
 - "Force Upright" respects the map rotation, so if a map rotates you upside down your view will be upright in respect to the world rotation
 
 #### Third person cameras
