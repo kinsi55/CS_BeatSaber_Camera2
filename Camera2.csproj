@@ -133,7 +133,7 @@
     <Compile Include="Behaviours\CamerasViewport.cs" />
     <Compile Include="Behaviours\CamPositioner.cs" />
     <Compile Include="Behaviours\PositionableCam.cs" />
-    <Compile Include="HarmonyPatches\BloomOffFix.cs" />
+    <Compile Include="HarmonyPatches\NoBloomFix.cs" />
     <Compile Include="Managers\CamManager.cs" />
     <Compile Include="Configuration\CameraSettings.cs" />
     <Compile Include="Configuration\MovementScript.cs" />
