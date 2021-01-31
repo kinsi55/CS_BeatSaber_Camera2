@@ -30,16 +30,18 @@ namespace Camera2.HarmonyPatches {
 
 		[HarmonyPatch(typeof(FirstPersonFlyingController), "OnDisable")]
 		class HookFPFCOff {
-			static void Postfix(FirstPersonFlyingController __instance) {
-				instance = null;
-				cameraInstance = null;
-
-				ScenesManager.ActiveSceneChanged();
+			static void Postfix(FirstPersonFlyingController __instance, Camera ____camera) {
 #if DEBUG
 				Plugin.Log.Info("FirstPersonFlyingController.OnDisable()");
 #endif
+				instance = null;
+				cameraInstance = null;
+
+				// When going out of FPFC the camera gets enabled again??
+				____camera.enabled = false;
+
+				ScenesManager.ActiveSceneChanged();
 			}
 		}
 	}
-
 }

@@ -217,10 +217,15 @@ namespace Camera2.Configuration {
 		public Rect viewRect {
 			get { return _viewRect; }
 			set {
+				if(value.width == -1) value.width = Screen.width - value.x;
+				if(value.height == -1) value.height = Screen.height - value.y;
+
 				_viewRect = value;
 				cam.UCamera.aspect = value.width / value.height;
 				if(isLoaded)
 					cam.UpdateRenderTextureAndView();
+				if(!isLoaded)
+					cam.screenImage.SetPositionClamped(Vector3.zero, false);
 			}
 		}
 		

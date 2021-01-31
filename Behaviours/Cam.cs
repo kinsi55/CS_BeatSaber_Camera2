@@ -2,10 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using IPA.Utilities;
 using Camera2.Interfaces;
 using Camera2.Middlewares;
 using Camera2.Configuration;
 using Camera2.Utils;
+using System.Reflection;
 
 namespace Camera2.Behaviours {
 
@@ -108,8 +110,11 @@ namespace Camera2.Behaviours {
 			camClone.transform.localPosition = Vector3.zero;
 
 
-			//TODO: maybe clone the effectcontroller+>_mainEffectContainer+>_mainEffect so we can customize bloom on a per-camera basis
-			
+			//Cloning post process stuff to make it controlable on a per camera basis
+			//BloomShite.InstantiateBloomForCamera(UCamera).tag = null;
+
+
+
 			worldCam = new GameObject("WorldCam").AddComponent<PositionableCam>();
 			worldCam.transform.parent = camClone.transform;
 

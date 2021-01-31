@@ -17,7 +17,7 @@ namespace Camera2.Middlewares {
 	class MovementScriptProcessor : CamMiddleware, IMHandler {
 		static System.Random randomSource = new System.Random();
 
-		Transform scriptTransform;
+		Transform scriptTransform = null;
 
 		MovementScript loadedScript = null;
 		float currentAnimationTime = 0f;
@@ -30,18 +30,15 @@ namespace Camera2.Middlewares {
 		Quaternion lastRot = Quaternion.identity;
 
 		Frame targetFrame { get { return loadedScript.frames[frameIndex]; } }
-
-		public void Start() {
-			var scriptTransform = new GameObject($"Cam2_MovementScriptApplier_{cam.name}");
-			DontDestroyOnLoad(scriptTransform);
-
-			this.scriptTransform = scriptTransform.transform;
-		}
-
-		private bool isParented = false;
+		
 		private void DoParent() {
-			if(isParented)
+			if(scriptTransform != null)
 				return;
+
+			var newScriptTransform = new GameObject($"Cam2_MovementScriptApplier_{cam.name}");
+			DontDestroyOnLoad(newScriptTransform);
+
+			scriptTransform = newScriptTransform.transform;
 
 #if DEBUG
 			Plugin.Log.Info($"Reparenting camera {cam.name} to allow for Movement scripts");
@@ -57,11 +54,10 @@ namespace Camera2.Middlewares {
 			scriptTransform.localRotation = rot;
 
 			cam.UCamera.transform.parent = scriptTransform;
-			isParented = true;
 		}
 
 		private void Reset() {
-			if(loadedScript == null)
+			if(scriptTransform == null && loadedScript == null)
 				return;
 
 			scriptTransform.localPosition = lastPos = Vector3.zero;
