@@ -1,7 +1,7 @@
 {
 	"definitions": {},
 	"$schema": "http://json-schema.org/draft-07/schema#", 
-  "$id": "https://raw.githubusercontent.com/kinsi55/CS_BeatSaber_Camera2/master/Configuration/CameraSettingsSchema.json",
+	"$id": "https://raw.githubusercontent.com/kinsi55/CS_BeatSaber_Camera2/master/Configuration/CameraSettingsSchema.json",
 	"title": "Root", 
 	"type": "object",
 	"required": [
