@@ -1,0 +1,360 @@
+{
+	"definitions": {},
+	"$schema": "http://json-schema.org/draft-07/schema#", 
+  "$id": "https://raw.githubusercontent.com/kinsi55/CS_BeatSaber_Camera2/master/Configuration/CameraSettingsSchema.json",
+	"title": "Root", 
+	"type": "object",
+	"required": [
+		"viewRect",
+		"targetPos",
+		"targetRot",
+		"type",
+		"worldCamVisibility",
+		"previewScreenSize",
+		"FOV",
+		"layer",
+		"antiAliasing",
+		"renderScale",
+		"visibleObjects",
+		"FPSLimiter",
+		"Smoothfollow",
+		"ModmapExtensions",
+		"Follow360",
+		"MovementScript"
+	],
+	"properties": {
+		"viewRect": {
+			"$id": "#root/viewRect", 
+			"title": "Viewrect", 
+			"type": "object",
+			"required": [
+				"x",
+				"y",
+				"width",
+				"height"
+			],
+			"properties": {
+				"x": {
+					"$id": "#root/viewRect/x", 
+					"title": "X", 
+					"type": "integer",
+					"default": 0
+				},
+				"y": {
+					"$id": "#root/viewRect/y", 
+					"title": "Y", 
+					"type": "integer",
+					"default": 0
+				},
+				"width": {
+					"$id": "#root/viewRect/width", 
+					"title": "Width", 
+					"type": "integer",
+					"default": 50
+				},
+				"height": {
+					"$id": "#root/viewRect/height", 
+					"title": "Height", 
+					"type": "integer",
+					"default": 50
+				}
+			}
+		}
+,
+		"targetPos": {
+			"$id": "#root/targetPos", 
+			"title": "Targetpos", 
+			"type": "object",
+			"required": [
+				"x",
+				"y",
+				"z"
+			],
+			"properties": {
+				"x": {
+					"$id": "#root/targetPos/x", 
+					"title": "X", 
+					"type": "number",
+					"default": 0
+				},
+				"y": {
+					"$id": "#root/targetPos/y", 
+					"title": "Y", 
+					"type": "number",
+					"default": 0.0
+				},
+				"z": {
+					"$id": "#root/targetPos/z", 
+					"title": "Z", 
+					"type": "number",
+					"default": 0
+				}
+			}
+		}
+,
+		"targetRot": {
+			"$id": "#root/targetRot", 
+			"title": "Targetrot", 
+			"type": "object",
+			"required": [
+				"x",
+				"y",
+				"z"
+			],
+			"properties": {
+				"x": {
+					"$id": "#root/targetRot/x", 
+					"title": "X", 
+					"type": "number",
+					"default": 0
+				},
+				"y": {
+					"$id": "#root/targetRot/y", 
+					"title": "Y", 
+					"type": "number",
+					"default": 0
+				},
+				"z": {
+					"$id": "#root/targetRot/z", 
+					"title": "Z", 
+					"type": "number",
+					"default": 0
+				}
+			}
+		}
+,
+		"type": {
+			"$id": "#root/type", 
+			"title": "Type", 
+			"type": "string",
+			"enum": ["FirstPerson", "Attached", "Positionable"]
+		},
+		"worldCamVisibility": {
+			"$id": "#root/worldCamVisibility", 
+			"title": "Worldcamvisibility", 
+			"type": "string",
+			"enum": ["Visible", "OnlyInPause", "Hidden"]
+		},
+		"previewScreenSize": {
+			"$id": "#root/previewScreenSize", 
+			"title": "Previewscreensize", 
+			"type": "number",
+			"default": 0.3
+		},
+		"FOV": {
+			"$id": "#root/FOV", 
+			"title": "Fov", 
+			"type": "integer",
+			"default": 90
+		},
+		"layer": {
+			"$id": "#root/layer", 
+			"title": "Layer", 
+			"type": "integer",
+			"default": 0
+		},
+		"antiAliasing": {
+			"$id": "#root/antiAliasing", 
+			"title": "Antialiasing", 
+			"type": "integer",
+			"enum": [1, 2, 4, 8]
+		},
+		"renderScale": {
+			"$id": "#root/renderScale", 
+			"title": "Renderscale", 
+			"type": "number",
+			"default": 1.0,
+            "minimum": 0.1,
+            "maximum": 3.0
+		},
+		"visibleObjects": {
+			"$id": "#root/visibleObjects", 
+			"title": "Visibleobjects", 
+			"type": "object",
+			"required": [
+				"Walls",
+				"Debris",
+				"UI",
+				"Avatar",
+				"Floor",
+				"Notes"
+			],
+			"properties": {
+				"Walls": {
+					"$id": "#root/visibleObjects/Walls", 
+					"title": "Walls", 
+					"type": "string",
+			        "enum": ["Visible", "Transparent", "Hidden"]
+				},
+				"Debris": {
+					"$id": "#root/visibleObjects/Debris", 
+					"title": "Debris", 
+					"type": "boolean",
+					"default": true
+				},
+				"UI": {
+					"$id": "#root/visibleObjects/UI", 
+					"title": "Ui", 
+					"type": "boolean",
+					"default": true
+				},
+				"Avatar": {
+					"$id": "#root/visibleObjects/Avatar", 
+					"title": "Avatar", 
+					"type": "boolean",
+					"default": true
+				},
+				"Floor": {
+					"$id": "#root/visibleObjects/Floor", 
+					"title": "Floor", 
+					"type": "boolean",
+					"default": true
+				},
+				"Notes": {
+					"$id": "#root/visibleObjects/Notes", 
+					"title": "Notes", 
+					"type": "boolean",
+					"default": true
+				}
+			}
+		}
+,
+		"FPSLimiter": {
+			"$id": "#root/FPSLimiter", 
+			"title": "Fpslimiter", 
+			"type": "object",
+			"required": [
+				"limit"
+			],
+			"properties": {
+				"limit": {
+					"$id": "#root/FPSLimiter/limit", 
+					"title": "Limit", 
+					"type": "integer",
+					"default": 60,
+                    "minimum": 1
+				}
+			}
+		}
+,
+		"Smoothfollow": {
+			"$id": "#root/Smoothfollow", 
+			"title": "Smoothfollow", 
+			"type": "object",
+			"required": [
+				"position",
+				"rotation",
+				"forceUpright",
+				"replaySupport"
+			],
+			"properties": {
+				"position": {
+					"$id": "#root/Smoothfollow/position", 
+					"title": "Position", 
+					"type": "number",
+					"default": 10
+				},
+				"rotation": {
+					"$id": "#root/Smoothfollow/rotation", 
+					"title": "Rotation", 
+					"type": "number",
+					"default": 5
+				},
+				"forceUpright": {
+					"$id": "#root/Smoothfollow/forceUpright", 
+					"title": "Forceupright", 
+					"type": "boolean",
+					"default": false
+				},
+				"replaySupport": {
+					"$id": "#root/Smoothfollow/replaySupport", 
+					"title": "Replaysupport", 
+					"type": "boolean",
+					"default": true
+				}
+			}
+		}
+,
+		"ModmapExtensions": {
+			"$id": "#root/ModmapExtensions", 
+			"title": "Modmapextensions", 
+			"type": "object",
+			"required": [
+				"moveWithMap",
+				"autoOpaqueWalls"
+			],
+			"properties": {
+				"moveWithMap": {
+					"$id": "#root/ModmapExtensions/moveWithMap", 
+					"title": "Movewithmap", 
+					"type": "boolean",
+					"default": true
+				},
+				"autoOpaqueWalls": {
+					"$id": "#root/ModmapExtensions/autoOpaqueWalls", 
+					"title": "Autoopaquewalls", 
+					"type": "boolean",
+					"default": true
+				}
+			}
+		}
+,
+		"Follow360": {
+			"$id": "#root/Follow360", 
+			"title": "Follow360", 
+			"type": "object",
+			"required": [
+				"enabled",
+				"smoothing"
+			],
+			"properties": {
+				"enabled": {
+					"$id": "#root/Follow360/enabled", 
+					"title": "Enabled", 
+					"type": "boolean",
+					"default": true
+				},
+				"smoothing": {
+					"$id": "#root/Follow360/smoothing", 
+					"title": "Smoothing", 
+					"type": "number",
+					"default": 10
+				}
+			}
+		}
+,
+		"MovementScript": {
+			"$id": "#root/MovementScript", 
+			"title": "Movementscript", 
+			"type": "object",
+			"required": [
+				"scriptList",
+				"fromOrigin"
+			],
+			"properties": {
+				"scriptList": {
+					"$id": "#root/MovementScript/scriptList", 
+					"title": "Scriptlist", 
+					"type": "array",
+					"default": [],
+					"items":{
+						"$id": "#root/MovementScript/scriptList/items", 
+						"title": "Items", 
+						"type": "string",
+						"examples": [
+							"RotateScript"
+						],
+						"pattern": ".+"
+					}
+				},
+				"fromOrigin": {
+					"$id": "#root/MovementScript/fromOrigin", 
+					"title": "Fromorigin", 
+					"type": "boolean",
+					"default": true
+				}
+			}
+		}
+
+	}
+}
