@@ -13,7 +13,7 @@ namespace Camera2.Utils {
 	 * This works fine for Cloning / recreating everything related to the bloom effect but honestly I CBA to implement
 	 * it rn
 	 */
-	public class BloomShite {
+	class BloomShite {
 		public static MainEffectController InstantiateBloomForCamera(Camera cam) {
 			var camClone = cam.gameObject;
 

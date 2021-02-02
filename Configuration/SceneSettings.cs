@@ -7,7 +7,7 @@ using Camera2.Utils;
 using Camera2.Managers;
 
 namespace Camera2.Configuration {
-	public enum SceneTypes {
+	enum SceneTypes {
 		Menu,
 		Playing,
 		MultiplayerMenu,

@@ -7,7 +7,6 @@ using Camera2.Utils;
 using Camera2.Managers;
 
 namespace Camera2 {
-
 	[Plugin(RuntimeOptions.SingleStartInit)]
 	public class Plugin {
 		internal static Plugin Instance { get; private set; }

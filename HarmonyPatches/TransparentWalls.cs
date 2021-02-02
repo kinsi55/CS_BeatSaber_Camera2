@@ -4,7 +4,7 @@ using Camera2.Utils;
 
 namespace Camera2.HarmonyPatches {
 	[HarmonyPatch(typeof(StretchableObstacle), "SetSizeAndColor")]
-	public class TransparentWalls {
+	class TransparentWalls {
 		static void Postfix(Transform ____obstacleCore) {
 			if(____obstacleCore != null)
 				____obstacleCore.gameObject.layer = (int)VisibilityLayers.WallTextures;

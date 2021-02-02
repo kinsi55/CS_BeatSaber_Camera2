@@ -43,7 +43,7 @@ namespace Camera2.Utils {
 		}
 	}
 
-	public class DictionaryConverter<K, V> : JsonConverter<Dictionary<K, V>> where K: IConvertible where V : IConvertible {
+	class DictionaryConverter<K, V> : JsonConverter<Dictionary<K, V>> where K: IConvertible where V : IConvertible {
 		public override void WriteJson(JsonWriter writer, Dictionary<K, V> value, JsonSerializer serializer) {
 			writer.WriteStartObject();
 

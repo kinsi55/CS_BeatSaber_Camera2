@@ -1,7 +1,7 @@
 ﻿using System;
 
 namespace Camera2.Utils {
-	public enum VisibilityLayers : int {
+	enum VisibilityLayers : int {
 		ThirdPerson = 3,
 		Floor = 4, // Called "Water" ingame
 		FirstPerson = 6,
@@ -14,7 +14,7 @@ namespace Camera2.Utils {
 	}
 
 	[Flags]
-	public enum VisibilityMasks : int {
+	enum VisibilityMasks : int {
 		ThirdPerson = 1 << VisibilityLayers.ThirdPerson,
 		FirstPerson = 1 << VisibilityLayers.FirstPerson,
 		Floor = 1 << VisibilityLayers.Floor, // Called "Water" ingame
