@@ -19,10 +19,6 @@ namespace Camera2.Managers {
 			customScreen = new GameObject("Cam2_Renderer").AddComponent<CamerasViewport>();
 
 			LoadCameras();
-
-			if(cams.Count() == 0) {
-				var cam = InitCamera("Main", false);
-			}
 			
 			ScenesManager.settings.Load();
 
@@ -51,6 +47,10 @@ namespace Camera2.Managers {
 				if(reload) foreach(var deletedCam in cams.Where(x => !loadedNames.Contains(x.Key))) {
 					GameObject.Destroy(deletedCam.Value);
 					cams.Remove(deletedCam.Key);
+				}
+
+				if(cams.Count() == 0) {
+					var cam = InitCamera("Main", false);
 				}
 
 				ApplyCameraValues(viewLayer: true);
