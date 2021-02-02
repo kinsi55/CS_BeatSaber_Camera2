@@ -135,6 +135,9 @@ namespace Camera2.Behaviours {
 
 		internal float timeSinceLastRender { get; private set; } = 0f;
 
+		//int renderedFrames = 0;
+		//System.Diagnostics.Stopwatch sw = null;
+
 		private void Update() {
 			if(UCamera != null && renderTexture != null) {
 				timeSinceLastRender += Time.deltaTime;
@@ -144,12 +147,24 @@ namespace Camera2.Behaviours {
 						return;
 				}
 
+				//if(sw == null) {
+				//	sw = new System.Diagnostics.Stopwatch();
+				//	sw.Start();
+				//}
+
 				UCamera.Render();
+				//renderedFrames++;
 
 				foreach(var t in middlewares)
 					t.Post();
 
 				timeSinceLastRender = 0f;
+
+				//if(sw.ElapsedMilliseconds > 1000) {
+				//	Console.WriteLine("Rendered FPS for {1}: {0}", renderedFrames, name);
+				//	renderedFrames = 0;
+				//	sw.Restart();
+				//}
 			}
 		}
 		
@@ -164,8 +179,15 @@ namespace Camera2.Behaviours {
 		}
 		
 		private void OnDestroy() {
+			gameObject.SetActive(false);
+
+			foreach(var component in UCamera.gameObject.GetComponents<Behaviour>())
+				if(component.GetType() != typeof(Camera))
+					Destroy(component);
+
 			Destroy(UCamera);
 			Destroy(screenImage);
+			Destroy(gameObject);
 		}
 	}
 }
