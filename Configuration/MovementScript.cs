@@ -49,6 +49,10 @@ namespace Camera2.Configuration {
 
 		[JsonProperty("syncToSong")]
 		public bool syncToSong { get; private set; } = false;
+
+		[JsonProperty("loop")]
+		public bool loop { get; private set; } = true;
+
 		public List<Frame> frames { get; private set; } = new List<Frame>();
 
 		[JsonIgnore]

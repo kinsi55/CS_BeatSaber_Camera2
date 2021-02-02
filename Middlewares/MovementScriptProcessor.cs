@@ -113,6 +113,9 @@ namespace Camera2.Middlewares {
 			}
 
 			if(currentAnimationTime > loadedScript.scriptDuration) {
+				if(!loadedScript.loop)
+					return true;
+
 				currentAnimationTime %= loadedScript.scriptDuration;
 				frameIndex = 0;
 			}
