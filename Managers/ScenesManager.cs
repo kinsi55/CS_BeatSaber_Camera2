@@ -92,6 +92,8 @@ namespace Camera2.Managers {
 				if(cam.Value != null) cam.Value.gameObject.SetActive(cams?.Contains(cam.Key) != false);
 
 			GL.Clear(true, true, Color.black);
+
+			GlobalFPSCap.Postfix();
 		}
 
 		private static SceneTypes FindSceneToUse(SceneTypes[] types) {
