@@ -121,7 +121,9 @@ namespace Camera2.Middlewares {
 			}
 
 			for(;;) {
-				if(targetFrame.endTime <= currentAnimationTime) {
+				if(targetFrame.startTime > currentAnimationTime) {
+					break;
+				} else if(targetFrame.endTime <= currentAnimationTime) {
 					lastPos = scriptTransform.localPosition = targetFrame.position;
 					lastRot = scriptTransform.localRotation = targetFrame.rotation;
 					if(targetFrame.FOV > 0)
@@ -144,12 +146,12 @@ namespace Camera2.Middlewares {
 							cam.UCamera.fieldOfView = Mathf.SmoothStep(lastFov, targetFrame.FOV, frameProgress);
 					}
 					break;
-				} else if(targetFrame.startTime > currentAnimationTime) {
-					break;
 				}
 
-				if(frameIndex++ >= loadedScript.frames.Count)
+				if(++frameIndex >= loadedScript.frames.Count) {
 					frameIndex = 0;
+					break;
+				}
 			}
 
 			return true;

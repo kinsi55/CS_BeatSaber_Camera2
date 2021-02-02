@@ -44,6 +44,8 @@ namespace Camera2.Configuration {
 			[JsonIgnore]
 			public float startTime = 0f;
 			[JsonIgnore]
+			public float transitionEndTime = 0f;
+			[JsonIgnore]
 			public float endTime = 0f;
 		}
 
@@ -62,8 +64,11 @@ namespace Camera2.Configuration {
 			var time = 0f;
 			foreach(var frame in frames) {
 				frame.startTime = time;
-				time = frame.endTime = time + frame.duration;
-				time += frame.holdTime;
+				time = frame.transitionEndTime = 
+					time + frame.duration;
+
+				time = frame.endTime = 
+					time + frame.holdTime;
 			}
 			scriptDuration = time;
 		}
