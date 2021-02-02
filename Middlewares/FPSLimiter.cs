@@ -1,5 +1,7 @@
-﻿using Camera2.Interfaces;
+﻿using Camera2.HarmonyPatches;
+using Camera2.Interfaces;
 using Newtonsoft.Json;
+using UnityEngine;
 
 namespace Camera2.Configuration {
 	class Settings_FPSLimiter {
@@ -10,8 +12,10 @@ namespace Camera2.Configuration {
 		public int limit {
 			get { return _limit; }
 			set {
-				frameTime = 1f / value;
 				_limit = value;
+				frameTime = value != 0f ? 1f / value : 0f;
+
+				GlobalFPSCap.Postfix();
 			}
 		}
 	}
@@ -22,7 +26,7 @@ namespace Camera2.Middlewares {
 		float renderTimeRollAccu = 0f;
 		
 		new public bool Pre() {
-			if(!enabled) return true;
+			if(!enabled || Application.targetFrameRate == settings.FPSLimiter.limit) return true;
 
 			if(cam.timeSinceLastRender + renderTimeRollAccu < settings.FPSLimiter.frameTime) return false;
 			renderTimeRollAccu = (cam.timeSinceLastRender + renderTimeRollAccu) % settings.FPSLimiter.frameTime;
