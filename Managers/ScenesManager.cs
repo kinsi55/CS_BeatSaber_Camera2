@@ -31,7 +31,7 @@ namespace Camera2.Managers {
 			LoadGameScene(sceneName);
 		}
 
-		public static void LoadGameScene(string sceneName = null) {
+		public static void LoadGameScene(string sceneName = null, bool forceReload = false) {
 			if(sceneName == null)
 				sceneName = SceneUtil.currentScene.name;
 
@@ -56,10 +56,10 @@ namespace Camera2.Managers {
 			Plugin.Log.Info($"LoadGameScene -> {String.Join(", ", toLookup)}");
 #endif
 
-			SwitchToScene(FindSceneToUse(toLookup.ToArray()));
+			SwitchToScene(FindSceneToUse(toLookup.ToArray()), forceReload);
 		}
 
-		public static void SwitchToScene(SceneTypes scene) {
+		public static void SwitchToScene(SceneTypes scene, bool forceReload = false) {
 			if(!settings.scenes.ContainsKey(scene))
 				return;
 
@@ -67,7 +67,7 @@ namespace Camera2.Managers {
 			Plugin.Log.Info($"Switching to scene {scene}");
 			Plugin.Log.Info($"Cameras: {String.Join(", ", settings.scenes[scene])}");
 #endif
-			if(loadedScene == scene)
+			if(loadedScene == scene && !forceReload)
 				return;
 
 			loadedScene = scene;

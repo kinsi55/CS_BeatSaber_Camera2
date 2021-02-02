@@ -51,7 +51,7 @@ namespace Camera2.Configuration {
 				Save();
 			}
 			
-			ScenesManager.LoadGameScene();
+			ScenesManager.LoadGameScene(forceReload: true);
 		}
 
 		public void Save() {
