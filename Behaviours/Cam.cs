@@ -138,7 +138,7 @@ namespace Camera2.Behaviours {
 		//int renderedFrames = 0;
 		//System.Diagnostics.Stopwatch sw = null;
 
-		private void Update() {
+		private void LateUpdate() {
 			if(UCamera != null && renderTexture != null) {
 				timeSinceLastRender += Time.deltaTime;
 
