@@ -1,7 +1,7 @@
 ﻿using HarmonyLib;
 
 namespace Camera2.HarmonyPatches {
-	[HarmonyPatch(typeof(EnvironmentSpawnRotation), "BeatmapEventAtNoteSpawnCallback")]
+	[HarmonyPatch(typeof(EnvironmentSpawnRotation), "OnEnable")]
 	class HookLevelRotation {
 		public static EnvironmentSpawnRotation Instance { get; private set; }
 		static void Postfix(EnvironmentSpawnRotation __instance) {

@@ -57,11 +57,13 @@ namespace Camera2.Middlewares {
 		}
 
 		private void Reset() {
-			if(scriptTransform == null && loadedScript == null)
+			if(loadedScript == null)
 				return;
 
-			scriptTransform.localPosition = lastPos = Vector3.zero;
-			scriptTransform.localRotation = lastRot = Quaternion.identity;
+			if(scriptTransform != null) {
+				scriptTransform.localPosition = lastPos = Vector3.zero;
+				scriptTransform.localRotation = lastRot = Quaternion.identity;
+			}
 			loadedScript = null;
 			currentAnimationTime = 0f;
 			frameIndex = 0;
