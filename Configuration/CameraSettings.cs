@@ -21,10 +21,10 @@ namespace Camera2.Configuration {
 	}
 	enum WorldCamVisibility {
 		Visible = 0,
-		Always = 0,
+		//Always = 0,
 		OnlyInPause,
 		Hidden = 2,
-		Never = 2
+		//Never = 2
 	}
 
 	[JsonObject(MemberSerialization.OptIn)]

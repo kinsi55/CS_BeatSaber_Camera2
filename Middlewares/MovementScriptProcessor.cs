@@ -87,7 +87,7 @@ namespace Camera2.Middlewares {
 			}
 
 			if(loadedScript == null) {
-				var possibleScripts = settings.MovementScript.scriptList.Where(x => MovementScriptManager.movementScripts.ContainsKey(x));
+				var possibleScripts = settings.MovementScript.scriptList.Where(MovementScriptManager.movementScripts.ContainsKey);
 
 				if(possibleScripts.Count() == 0)
 					return true;

@@ -75,7 +75,7 @@ namespace Camera2.Behaviours {
 			if(settings.worldCamVisibility == WorldCamVisibility.OnlyInPause && SceneUtil.isSongPlaying)
 				doShowCam = false;
 
-			if(settings.type != Configuration.CameraType.Positionable || settings.worldCamVisibility == WorldCamVisibility.Never)
+			if(settings.type != Configuration.CameraType.Positionable || settings.worldCamVisibility == WorldCamVisibility.Hidden)
 				doShowCam = false;
 
 			worldCam.gameObject.SetActive(doShowCam);
