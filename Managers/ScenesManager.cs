@@ -83,6 +83,7 @@ namespace Camera2.Managers {
 		private static void SwitchToCamlist(List<string> cams) {
 			if(cams?.Count == 0)
 				cams = null;
+
 			/*
 			 * Intentionally checking != false, this way if cams is null OR
 			 * it contains it, the cam will be activated, only if its
@@ -101,7 +102,7 @@ namespace Camera2.Managers {
 				return SceneTypes.Menu;
 
 			foreach(var type in types) {
-				if(settings.scenes[type].Count() > 0)
+				if(settings.scenes[type].Count() > 0 && settings.scenes[type].Any(CamManager.cams.ContainsKey))
 					return type;
 			}
 			return SceneTypes.Menu;
