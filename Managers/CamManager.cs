@@ -44,7 +44,7 @@ namespace Camera2.Managers {
 						Plugin.Log.Error(ex);
 					}
 				}
-				if(reload) foreach(var deletedCam in cams.Where(x => !loadedNames.Contains(x.Key))) {
+				if(reload) foreach(var deletedCam in cams.Where(x => !loadedNames.Contains(x.Key)).ToList()) {
 					GameObject.Destroy(deletedCam.Value);
 					cams.Remove(deletedCam.Key);
 				}
