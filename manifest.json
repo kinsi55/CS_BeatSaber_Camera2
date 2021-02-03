@@ -3,7 +3,7 @@
 	"id": "Camera2",
 	"name": "Camera2",
 	"author": "Kinsi55",
-	"version": "0.1.3",
+	"version": "0.1.4",
 	"description": "If Camera Plus is so good, why is there no Camera Plus 2?",
 	"gameVersion": "1.13",
 	"dependsOn": {

@@ -145,7 +145,7 @@ namespace Camera2.Behaviours {
 		}
 
 		private void OnGUI() {
-			if((UCamera != null && renderTexture != null) || !hadUpdate) {
+			if(UCamera != null && renderTexture != null && hadUpdate) {
 				//if(sw == null) {
 				//	sw = new System.Diagnostics.Stopwatch();
 				//	sw.Start();
