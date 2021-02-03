@@ -55,10 +55,11 @@ namespace Camera2.Utils {
 
 			if(replayCamera != null) {
 				replayCamera.enabled = false;
-
-				// Why theres a clone (Making it two cameras) that actually renders shit? Idk lol
-				var x = GameObject.Find("RecorderCamera(Clone)")?.GetComponent<Camera>();
-				if(x != null) x.enabled = false;
+				
+				if(!UnityEngine.XR.XRDevice.isPresent) {
+					var x = GameObject.Find("RecorderCamera(Clone)")?.GetComponent<Camera>();
+					if(x != null) x.enabled = false;
+				}
 			}
 #if DEBUG
 			Plugin.Log.Info($"UpdateIsInReplay() -> isInReplay: {isInReplay}, replayCamera: {replayCamera}");

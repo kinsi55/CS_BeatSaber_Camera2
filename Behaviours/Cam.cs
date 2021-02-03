@@ -138,20 +138,25 @@ namespace Camera2.Behaviours {
 		//int renderedFrames = 0;
 		//System.Diagnostics.Stopwatch sw = null;
 
-		private void LateUpdate() {
-			if(UCamera != null && renderTexture != null) {
-				timeSinceLastRender += Time.deltaTime;
+		private bool hadUpdate = false;
+		private void Update() {
+			timeSinceLastRender += Time.deltaTime;
+			hadUpdate = true;
+		}
+
+		private void OnGUI() {
+			if((UCamera != null && renderTexture != null) || !hadUpdate) {
+				//if(sw == null) {
+				//	sw = new System.Diagnostics.Stopwatch();
+				//	sw.Start();
+				//}
 
 				foreach(var t in middlewares) {
 					if(!t.Pre())
 						return;
 				}
 
-				//if(sw == null) {
-				//	sw = new System.Diagnostics.Stopwatch();
-				//	sw.Start();
-				//}
-
+				hadUpdate = false;
 				UCamera.Render();
 				//renderedFrames++;
 
@@ -160,8 +165,8 @@ namespace Camera2.Behaviours {
 
 				timeSinceLastRender = 0f;
 
-				//if(sw.ElapsedMilliseconds > 1000) {
-				//	Console.WriteLine("Rendered FPS for {1}: {0}", renderedFrames, name);
+				//if(sw.ElapsedMilliseconds > 500) {
+				//	Console.WriteLine("Rendered FPS for {1}: {0}", renderedFrames * 2, name);
 				//	renderedFrames = 0;
 				//	sw.Restart();
 				//}
