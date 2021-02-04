@@ -232,7 +232,13 @@
 					"title": "Limit", 
 					"type": "integer",
 					"default": 60,
-                    "minimum": 1
+					"minimum": 1
+				},
+				"improveFrametimes": {
+					"$id": "#root/FPSLimiter/improveFrametimes", 
+					"title": "ImproveFrametimes", 
+					"type": "boolean",
+					"default": true
 				}
 			}
 		}
