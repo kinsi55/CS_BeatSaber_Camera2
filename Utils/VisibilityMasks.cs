@@ -15,8 +15,8 @@ namespace Camera2.Utils {
 
 	[Flags]
 	enum VisibilityMasks : int {
-		ThirdPerson = 1 << VisibilityLayers.ThirdPerson,
-		FirstPerson = 1 << VisibilityLayers.FirstPerson,
+		ThirdPersonAvatar = 1 << VisibilityLayers.ThirdPerson,
+		FirstPersonAvatar = 1 << VisibilityLayers.FirstPerson,
 		Floor = 1 << VisibilityLayers.Floor, // Called "Water" ingame
 		UI = 1 << VisibilityLayers.UI,
 		Notes = 1 << VisibilityLayers.Notes,

@@ -133,9 +133,11 @@ namespace Camera2.Configuration {
 			if(visibleObjects.Notes) maskBuilder |= (int)VisibilityMasks.Notes;
 			if(visibleObjects.Debris) maskBuilder |= (int)VisibilityMasks.Debris;
 			if(visibleObjects.UI) maskBuilder |= (int)VisibilityMasks.UI;
-			if(visibleObjects.Avatar) maskBuilder |= (int)VisibilityMasks.Avatar;
+			if(visibleObjects.Avatar) {
+				maskBuilder |= (int)VisibilityMasks.Avatar;
 
-			maskBuilder |= (int)(type == CameraType.FirstPerson ? VisibilityMasks.FirstPerson : VisibilityMasks.ThirdPerson);
+				maskBuilder |= (int)(type == CameraType.FirstPerson ? VisibilityMasks.FirstPersonAvatar : VisibilityMasks.ThirdPersonAvatar);
+			}
 
 			if(cam.UCamera.cullingMask != maskBuilder)
 				cam.UCamera.cullingMask = maskBuilder;
