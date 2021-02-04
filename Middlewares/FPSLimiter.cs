@@ -57,7 +57,7 @@ namespace Camera2.Configuration {
 				targetFrameTime = 1f / (n - 1);
 			}
 
-			targetFrameTime = Math.Min(targetFps / 4, targetFrameTime * 0.95f);
+			targetFrameTime = Math.Min(1f / (targetFps / 4), targetFrameTime * 0.95f);
 		}
 	}
 }
