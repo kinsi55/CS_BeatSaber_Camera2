@@ -14,15 +14,17 @@ namespace Camera2.HarmonyPatches {
 		public static void Postfix() {
 			if(UnityEngine.XR.XRDevice.isPresent) {
 				Application.targetFrameRate = -1;
-				return;
+			} else {
+				var Kapp = Math.Max(Screen.currentResolution.refreshRate, 120);
+
+				if(CamManager.cams?.Count > 0)
+					Kapp = CamManager.cams.Values.Where(x => x.gameObject.activeInHierarchy).Max(x => x.settings.FPSLimiter.limit);
+
+				Application.targetFrameRate = Kapp;
 			}
 
-			var Kapp = Math.Max(Screen.currentResolution.refreshRate, 120);
-
-			if(CamManager.cams?.Count > 0)
-				Kapp = CamManager.cams.Values.Where(x => x.gameObject.activeInHierarchy).Max(x => x.settings.FPSLimiter.limit);
-			
-			Application.targetFrameRate = Kapp;
+			foreach(var cam in CamManager.cams.Values)
+				cam.settings.FPSLimiter.CalculateIdealFrametime();
 		}
 	}
 }
