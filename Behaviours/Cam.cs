@@ -15,12 +15,12 @@ namespace Camera2.Behaviours {
 		internal new string name { get; private set; }
 		internal string configPath { get { return ConfigUtil.GetCameraPath(name); } }
 
-		internal Camera UCamera { get; private set; }
-		internal CameraSettings settings { get; private set; }
-		internal RenderTexture renderTexture { get; private set; }
+		internal Camera UCamera { get; private set; } = null;
+		internal CameraSettings settings { get; private set; } = null;
+		internal RenderTexture renderTexture { get; private set; } = null;
 
-		internal LessRawImage screenImage { get; private set; }
-		internal PositionableCam worldCam { get; private set; }
+		internal LessRawImage screenImage { get; private set; } = null;
+		internal PositionableCam worldCam { get; private set; } = null;
 
 		internal List<IMHandler> middlewares { get; private set; } = new List<IMHandler>();
 		
@@ -135,15 +135,14 @@ namespace Camera2.Behaviours {
 
 		internal float timeSinceLastRender { get; private set; } = 0f;
 
-		//int renderedFrames = 0;
-		//System.Diagnostics.Stopwatch sw = null;
-
 		private bool hadUpdate = false;
 		private void Update() {
 			timeSinceLastRender += Time.deltaTime;
 			hadUpdate = true;
 		}
 
+		//int renderedFrames = 0;
+		//System.Diagnostics.Stopwatch sw = null;
 		private void OnGUI() {
 			if(UCamera != null && renderTexture != null && hadUpdate) {
 				//if(sw == null) {
@@ -158,13 +157,13 @@ namespace Camera2.Behaviours {
 
 				hadUpdate = false;
 				UCamera.Render();
-				//renderedFrames++;
 
 				foreach(var t in middlewares)
 					t.Post();
 
 				timeSinceLastRender = 0f;
 
+				//renderedFrames++;
 				//if(sw.ElapsedMilliseconds > 500) {
 				//	Console.WriteLine("Rendered FPS for {1}: {0}", renderedFrames * 2, name);
 				//	renderedFrames = 0;
@@ -174,12 +173,12 @@ namespace Camera2.Behaviours {
 		}
 		
 		private void OnEnable() {
-			screenImage?.gameObject.SetActive(true);
+			if(screenImage != null) screenImage.gameObject?.SetActive(true);
 			ShowWorldCamIfNecessary();
 		}
 		
 		private void OnDisable() {
-			screenImage?.gameObject.SetActive(false);
+			if(screenImage != null) screenImage.gameObject?.SetActive(false);
 			ShowWorldCamIfNecessary();
 		}
 		
@@ -190,8 +189,8 @@ namespace Camera2.Behaviours {
 				if(component.GetType() != typeof(Camera))
 					Destroy(component);
 
-			Destroy(UCamera);
-			Destroy(screenImage);
+			if(UCamera != null) Destroy(UCamera);
+			if(screenImage != null) Destroy(screenImage);
 			Destroy(gameObject);
 		}
 	}
