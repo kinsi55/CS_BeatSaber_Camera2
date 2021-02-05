@@ -49,6 +49,7 @@ namespace Camera2 {
 
 			ScoresaberUtil.Init();
 			ModMapUtil.Init();
+			CustomNotesUtil.Init();
 			MovementScriptManager.LoadMovementScripts();
 
 			SceneManager.activeSceneChanged += SceneUtil.OnActiveSceneChanged;

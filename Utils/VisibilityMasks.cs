@@ -10,6 +10,7 @@ namespace Camera2.Utils {
 		Debris = 9,
 		Avatar = 10,
 		Walls = 11,
+		CustomNotes = 24,
 		WallTextures = 25
 	}
 
@@ -23,6 +24,7 @@ namespace Camera2.Utils {
 		Debris = 1 << VisibilityLayers.Debris,
 		Avatar = 1 << VisibilityLayers.Avatar,
 		Walls = 1 << VisibilityLayers.Walls,
+		CustomNotes = 1 << VisibilityLayers.CustomNotes,
 		WallTextures = 1 << VisibilityLayers.WallTextures
 	}
 }

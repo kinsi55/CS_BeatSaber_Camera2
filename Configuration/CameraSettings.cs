@@ -26,6 +26,11 @@ namespace Camera2.Configuration {
 		Hidden = 2,
 		//Never = 2
 	}
+	enum NoteVisibility {
+		Hidden,
+		Visible,
+		ForceCustomNotes
+	}
 
 	[JsonObject(MemberSerialization.OptIn)]
 	class GameObjects {
@@ -44,8 +49,8 @@ namespace Camera2.Configuration {
 		private bool _Avatar = true;
 		[JsonProperty("Floor")]
 		private bool _Floor = true;
-		[JsonProperty("Notes")]
-		private bool _Notes = true;
+		[JsonConverter(typeof(StringEnumConverterMigrateFromBool)), JsonProperty("Notes")]
+		private NoteVisibility _Notes = NoteVisibility.Visible;
 		//[JsonProperty("EverythingElse")]
 		//private bool _EverythingElse = true;
 
@@ -55,7 +60,7 @@ namespace Camera2.Configuration {
 		public bool UI { get { return _UI; } set { _UI = value; parentSetting.ApplyLayerBitmask(); } }
 		public bool Avatar { get { return _Avatar; } set { _Avatar = value; parentSetting.ApplyLayerBitmask(); } }
 		public bool Floor { get { return _Floor; } set { _Floor = value; parentSetting.ApplyLayerBitmask(); } }
-		public bool Notes { get { return _Notes; } set { _Notes = value; parentSetting.ApplyLayerBitmask(); } }
+		public NoteVisibility Notes { get { return _Notes; } set { _Notes = value; parentSetting.ApplyLayerBitmask(); } }
 		// Wouldnt be very useful since I havent figured out yet how to make cams have transparency
 		//public bool EverythingElse { get { return _EverythingElse; } set { _EverythingElse = value; parentSetting.ApplyLayerBitmask(); } }
 	}
@@ -117,7 +122,6 @@ namespace Camera2.Configuration {
 		}
 
 		public void ApplyLayerBitmask() {
-			//var maskBuilder = visibleObjects.EverythingElse ? CamManager.baseCullingMask : 0;
 			var maskBuilder = CamManager.baseCullingMask;
 
 			foreach(int mask in Enum.GetValues(typeof(VisibilityMasks)))
@@ -129,15 +133,23 @@ namespace Camera2.Configuration {
 				maskBuilder |= (int)VisibilityMasks.Walls;
 			}
 
-			if(visibleObjects.Floor) maskBuilder |= (int)VisibilityMasks.Floor;
-			if(visibleObjects.Notes) maskBuilder |= (int)VisibilityMasks.Notes;
-			if(visibleObjects.Debris) maskBuilder |= (int)VisibilityMasks.Debris;
-			if(visibleObjects.UI) maskBuilder |= (int)VisibilityMasks.UI;
+			if(visibleObjects.Notes != NoteVisibility.Hidden) {
+				if(visibleObjects.Notes == NoteVisibility.ForceCustomNotes && CustomNotesUtil.HasHMDOnlyEnabled()) {
+					maskBuilder |= (int)VisibilityMasks.CustomNotes;
+				} else {
+					maskBuilder |= (int)VisibilityMasks.Notes;
+				}
+			}
+
 			if(visibleObjects.Avatar) {
 				maskBuilder |= (int)VisibilityMasks.Avatar;
 
 				maskBuilder |= (int)(type == CameraType.FirstPerson ? VisibilityMasks.FirstPersonAvatar : VisibilityMasks.ThirdPersonAvatar);
 			}
+
+			if(visibleObjects.Floor) maskBuilder |= (int)VisibilityMasks.Floor;
+			if(visibleObjects.Debris) maskBuilder |= (int)VisibilityMasks.Debris;
+			if(visibleObjects.UI) maskBuilder |= (int)VisibilityMasks.UI;
 
 			if(cam.UCamera.cullingMask != maskBuilder)
 				cam.UCamera.cullingMask = maskBuilder;

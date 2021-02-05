@@ -173,6 +173,7 @@
     <Compile Include="Utils\BloomShite.cs" />
     <Compile Include="Utils\Configs.cs" />
     <Compile Include="Utils\Cursor.cs" />
+    <Compile Include="Utils\CustomNotes.cs" />
     <Compile Include="Utils\JsonConverters.cs" />
     <Compile Include="Utils\ModMaps.cs" />
     <Compile Include="Utils\GameScenes.cs" />

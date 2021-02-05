@@ -4,6 +4,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Globalization;
 using System.Collections.Generic;
+using Newtonsoft.Json.Converters;
 
 namespace Camera2.Utils {
 	class RectConverter : JsonConverter<Rect> {
@@ -40,6 +41,14 @@ namespace Camera2.Utils {
 			dynamic o = JObject.Load(reader);
 
 			return new Vector3((float)o.x, (float)o.y, (float)o.z);
+		}
+	}
+
+	class StringEnumConverterMigrateFromBool : StringEnumConverter {
+		public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer) {
+			if(reader.TokenType == JsonToken.Boolean)
+				return (bool)reader.Value ? 1 : 0;
+			return base.ReadJson(reader, objectType, existingValue, serializer);
 		}
 	}
 

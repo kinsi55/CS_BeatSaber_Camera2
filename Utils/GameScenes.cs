@@ -52,7 +52,7 @@ namespace Camera2.Utils {
 
 			ScenesManager.ActiveSceneChanged();
 
-			// Updating the bitmask on scene change to allow for the auto wall toggle
+			// Updating the bitmask on scene change to allow for things like the auto wall toggle
 			CamManager.ApplyCameraValues(bitMask: true, worldCam: true);
 		}
 
