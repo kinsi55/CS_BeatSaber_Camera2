@@ -16,7 +16,8 @@ namespace Camera2.Middlewares {
 		public new bool Pre() {
 			// We wanna parent FP cams as well so that the noodle translations are applied instantly and dont get smoothed out by SmoothFollow
 			if(
-				enabled && settings.ModmapExtensions.moveWithMap && 
+				enabled && 
+				(settings.ModmapExtensions.moveWithMap || settings.type == Configuration.CameraType.FirstPerson) && 
 				!SceneUtil.isInMenu && 
 				cam.settings.type != Configuration.CameraType.Attached &&
 				SceneUtil.songWorldTransform != null
