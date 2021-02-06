@@ -159,12 +159,16 @@ namespace Camera2.Configuration {
 			System.IO.File.WriteAllText(cam.configPath, JsonConvert.SerializeObject(this, Formatting.Indented));
 		}
 		
-		private CameraType _type = CameraType.Attached;
+		private CameraType _type = CameraType.FirstPerson;
 		[JsonConverter(typeof(StringEnumConverter))]
 		public CameraType type {
 			get { return _type; }
 			set {
 				_type = value;
+				//TODO: Temporary implementation to migrate Attached to FirstPerson as I had Attached as the default before accidently
+				if(_type == CameraType.Attached)
+					_type = CameraType.FirstPerson;
+
 				if(!isLoaded)
 					return;
 				cam.ShowWorldCamIfNecessary();

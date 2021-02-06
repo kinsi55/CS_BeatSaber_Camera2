@@ -27,7 +27,9 @@ namespace Camera2.HarmonyPatches {
 	[HarmonyPatch(typeof(MainEffectSO), "Render")]
 	class BloomRendererInstantiateFix3 {
 		static bool Prefix(RenderTexture src, RenderTexture dest, MainEffectSO __instance) {
+			var x = RenderTexture.active;
 			Graphics.Blit(src, dest);
+			RenderTexture.active = x;
 			return false;
 		}
 	}

@@ -5,6 +5,8 @@ using IPALogger = IPA.Logging.Logger;
 using HarmonyLib;
 using Camera2.Utils;
 using Camera2.Managers;
+using UnityEngine;
+using System.IO;
 
 namespace Camera2 {
 	[Plugin(RuntimeOptions.SingleStartInit)]
@@ -13,6 +15,10 @@ namespace Camera2 {
 		internal static IPALogger Log { get; private set; }
 
 		internal static Harmony harmony { get; private set; }
+
+		public static Shader PostShader;
+		public static Material PostMaterial;
+		public static AssetBundle bundle;
 
 		[Init]
 		/// <summary>
@@ -28,6 +34,15 @@ namespace Camera2 {
 
 			harmony = new Harmony("Kinsi55.BeatSaber.Cam2");
 			harmony.PatchAll(Assembly.GetExecutingAssembly());
+
+			//Stream stream = Assembly.GetExecutingAssembly().GetManifestResourceStream("Camera2.PostProcessingShaders.chromaticab");
+			//byte[] buffer = new byte[stream.Length];
+			//stream.Read(buffer, 0, (int)stream.Length);
+			//stream.Close();
+			//bundle = AssetBundle.LoadFromMemory(buffer);
+			
+			//PostShader = bundle.LoadAsset<Shader>("chromaticaberration.shader");
+			//PostMaterial = new Material(PostShader);
 		}
 
 

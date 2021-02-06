@@ -107,6 +107,9 @@
       <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\UnityEngine.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="UnityEngine.AssetBundleModule">
+      <HintPath>E:\SteamLibrary\steamapps\common\Beat Saber\Beat Saber_Data\Managed\UnityEngine.AssetBundleModule.dll</HintPath>
+    </Reference>
     <Reference Include="UnityEngine.CoreModule">
       <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\UnityEngine.CoreModule.dll</HintPath>
       <Private>False</Private>
@@ -165,6 +168,7 @@
     <Compile Include="Managers\ScenesManager.cs" />
     <Compile Include="Middlewares\Follow360.cs" />
     <Compile Include="Middlewares\ModmapExtensions.cs" />
+    <Compile Include="Middlewares\PostProcessingEffects.cs" />
     <Compile Include="Middlewares\Smoothfollow.cs" />
     <Compile Include="Middlewares\FPSLimiter.cs" />
     <Compile Include="Plugin.cs" />
@@ -186,6 +190,7 @@
   <ItemGroup>
     <None Include="Directory.Build.targets" Condition="Exists('Directory.Build.targets')" />
     <None Include="Camera2.csproj.user" Condition="Exists('Camera2.csproj.user')" />
+    <EmbeddedResource Include="PostProcessingShaders\chromaticab" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="BeatSaberModdingTools.Tasks">

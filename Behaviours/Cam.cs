@@ -127,6 +127,8 @@ namespace Camera2.Behaviours {
 			AddTransformer<ModmapExtensions>();
 			AddTransformer<Follow360>();
 			AddTransformer<MovementScriptProcessor>();
+
+			//AddTransformer<PostProcessingEffects>();
 		}
 
 		private void AddTransformer<T>() where T: CamMiddleware, IMHandler {
