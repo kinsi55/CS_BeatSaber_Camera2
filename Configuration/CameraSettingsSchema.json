@@ -1,8 +1,8 @@
 {
 	"definitions": {},
-	"$schema": "http://json-schema.org/draft-07/schema#", 
+	"$schema": "http://json-schema.org/draft-07/schema#",
 	"$id": "https://raw.githubusercontent.com/kinsi55/CS_BeatSaber_Camera2/master/Configuration/CameraSettingsSchema.json",
-	"title": "Root", 
+	"title": "Root",
 	"type": "object",
 	"required": [
 		"viewRect",
@@ -24,8 +24,8 @@
 	],
 	"properties": {
 		"viewRect": {
-			"$id": "#root/viewRect", 
-			"title": "Viewrect", 
+			"$id": "#root/viewRect",
+			"title": "Viewrect",
 			"type": "object",
 			"required": [
 				"x",
@@ -35,26 +35,26 @@
 			],
 			"properties": {
 				"x": {
-					"$id": "#root/viewRect/x", 
-					"title": "X", 
+					"$id": "#root/viewRect/x",
+					"title": "X",
 					"type": "integer",
 					"default": 0
 				},
 				"y": {
-					"$id": "#root/viewRect/y", 
-					"title": "Y", 
+					"$id": "#root/viewRect/y",
+					"title": "Y",
 					"type": "integer",
 					"default": 0
 				},
 				"width": {
-					"$id": "#root/viewRect/width", 
-					"title": "Width", 
+					"$id": "#root/viewRect/width",
+					"title": "Width",
 					"type": "integer",
 					"default": 50
 				},
 				"height": {
-					"$id": "#root/viewRect/height", 
-					"title": "Height", 
+					"$id": "#root/viewRect/height",
+					"title": "Height",
 					"type": "integer",
 					"default": 50
 				}
@@ -62,8 +62,8 @@
 		}
 ,
 		"targetPos": {
-			"$id": "#root/targetPos", 
-			"title": "Targetpos", 
+			"$id": "#root/targetPos",
+			"title": "Targetpos",
 			"type": "object",
 			"required": [
 				"x",
@@ -72,20 +72,20 @@
 			],
 			"properties": {
 				"x": {
-					"$id": "#root/targetPos/x", 
-					"title": "X", 
+					"$id": "#root/targetPos/x",
+					"title": "X",
 					"type": "number",
 					"default": 0
 				},
 				"y": {
-					"$id": "#root/targetPos/y", 
-					"title": "Y", 
+					"$id": "#root/targetPos/y",
+					"title": "Y",
 					"type": "number",
 					"default": 0.0
 				},
 				"z": {
-					"$id": "#root/targetPos/z", 
-					"title": "Z", 
+					"$id": "#root/targetPos/z",
+					"title": "Z",
 					"type": "number",
 					"default": 0
 				}
@@ -93,8 +93,8 @@
 		}
 ,
 		"targetRot": {
-			"$id": "#root/targetRot", 
-			"title": "Targetrot", 
+			"$id": "#root/targetRot",
+			"title": "Targetrot",
 			"type": "object",
 			"required": [
 				"x",
@@ -103,20 +103,20 @@
 			],
 			"properties": {
 				"x": {
-					"$id": "#root/targetRot/x", 
-					"title": "X", 
+					"$id": "#root/targetRot/x",
+					"title": "X",
 					"type": "number",
 					"default": 0
 				},
 				"y": {
-					"$id": "#root/targetRot/y", 
-					"title": "Y", 
+					"$id": "#root/targetRot/y",
+					"title": "Y",
 					"type": "number",
 					"default": 0
 				},
 				"z": {
-					"$id": "#root/targetRot/z", 
-					"title": "Z", 
+					"$id": "#root/targetRot/z",
+					"title": "Z",
 					"type": "number",
 					"default": 0
 				}
@@ -124,52 +124,52 @@
 		}
 ,
 		"type": {
-			"$id": "#root/type", 
-			"title": "Type", 
+			"$id": "#root/type",
+			"title": "Type",
 			"type": "string",
 			"enum": ["FirstPerson", "Attached", "Positionable"]
 		},
 		"worldCamVisibility": {
-			"$id": "#root/worldCamVisibility", 
-			"title": "Worldcamvisibility", 
+			"$id": "#root/worldCamVisibility",
+			"title": "Worldcamvisibility",
 			"type": "string",
 			"enum": ["Visible", "OnlyInPause", "Hidden"]
 		},
 		"previewScreenSize": {
-			"$id": "#root/previewScreenSize", 
-			"title": "Previewscreensize", 
+			"$id": "#root/previewScreenSize",
+			"title": "Previewscreensize",
 			"type": "number",
 			"default": 0.3
 		},
 		"FOV": {
-			"$id": "#root/FOV", 
-			"title": "Fov", 
+			"$id": "#root/FOV",
+			"title": "Fov",
 			"type": "integer",
 			"default": 90
 		},
 		"layer": {
-			"$id": "#root/layer", 
-			"title": "Layer", 
+			"$id": "#root/layer",
+			"title": "Layer",
 			"type": "integer",
 			"default": 0
 		},
 		"antiAliasing": {
-			"$id": "#root/antiAliasing", 
-			"title": "Antialiasing", 
+			"$id": "#root/antiAliasing",
+			"title": "Antialiasing",
 			"type": "integer",
 			"enum": [1, 2, 4, 8]
 		},
 		"renderScale": {
-			"$id": "#root/renderScale", 
-			"title": "Renderscale", 
+			"$id": "#root/renderScale",
+			"title": "Renderscale",
 			"type": "number",
 			"default": 1.0,
             "minimum": 0.1,
             "maximum": 3.0
 		},
 		"visibleObjects": {
-			"$id": "#root/visibleObjects", 
-			"title": "Visibleobjects", 
+			"$id": "#root/visibleObjects",
+			"title": "Visibleobjects",
 			"type": "object",
 			"required": [
 				"Walls",
@@ -181,62 +181,62 @@
 			],
 			"properties": {
 				"Walls": {
-					"$id": "#root/visibleObjects/Walls", 
-					"title": "Walls", 
+					"$id": "#root/visibleObjects/Walls",
+					"title": "Walls",
 					"type": "string",
-			        "enum": ["Visible", "Transparent", "Hidden"]
+					"enum": ["Visible", "Transparent", "Hidden"]
 				},
 				"Debris": {
-					"$id": "#root/visibleObjects/Debris", 
-					"title": "Debris", 
+					"$id": "#root/visibleObjects/Debris",
+					"title": "Debris",
 					"type": "boolean",
 					"default": true
 				},
 				"UI": {
-					"$id": "#root/visibleObjects/UI", 
-					"title": "Ui", 
+					"$id": "#root/visibleObjects/UI",
+					"title": "Ui",
 					"type": "boolean",
 					"default": true
 				},
 				"Avatar": {
-					"$id": "#root/visibleObjects/Avatar", 
-					"title": "Avatar", 
+					"$id": "#root/visibleObjects/Avatar",
+					"title": "Avatar",
 					"type": "boolean",
 					"default": true
 				},
 				"Floor": {
-					"$id": "#root/visibleObjects/Floor", 
-					"title": "Floor", 
+					"$id": "#root/visibleObjects/Floor",
+					"title": "Floor",
 					"type": "boolean",
 					"default": true
 				},
 				"Notes": {
-					"$id": "#root/visibleObjects/Notes", 
-					"title": "Notes", 
-					"type": "boolean",
-					"default": true
+					"$id": "#root/visibleObjects/Notes",
+					"title": "Notes",
+					"type": "string",
+					"enum": ["Hidden", "Visible", "ForceCustomNotes"]
 				}
 			}
 		}
 ,
 		"FPSLimiter": {
-			"$id": "#root/FPSLimiter", 
-			"title": "Fpslimiter", 
+			"$id": "#root/FPSLimiter",
+			"title": "Fpslimiter",
 			"type": "object",
 			"required": [
 				"limit"
 			],
 			"properties": {
 				"limit": {
-					"$id": "#root/FPSLimiter/limit", 
-					"title": "Limit", 
+					"$id": "#root/FPSLimiter/limit",
+					"title": "Limit",
 					"type": "integer",
 					"default": 60,
 					"minimum": 1
 				},
 				"improveFrametimes": {
-					"$id": "#root/FPSLimiter/improveFrametimes", 
-					"title": "ImproveFrametimes", 
+					"$id": "#root/FPSLimiter/improveFrametimes",
+					"title": "ImproveFrametimes",
 					"type": "boolean",
 					"default": true
 				}
@@ -244,8 +244,8 @@
 		}
 ,
 		"Smoothfollow": {
-			"$id": "#root/Smoothfollow", 
-			"title": "Smoothfollow", 
+			"$id": "#root/Smoothfollow",
+			"title": "Smoothfollow",
 			"type": "object",
 			"required": [
 				"position",
@@ -255,26 +255,26 @@
 			],
 			"properties": {
 				"position": {
-					"$id": "#root/Smoothfollow/position", 
-					"title": "Position", 
+					"$id": "#root/Smoothfollow/position",
+					"title": "Position",
 					"type": "number",
 					"default": 10
 				},
 				"rotation": {
-					"$id": "#root/Smoothfollow/rotation", 
-					"title": "Rotation", 
+					"$id": "#root/Smoothfollow/rotation",
+					"title": "Rotation",
 					"type": "number",
 					"default": 5
 				},
 				"forceUpright": {
-					"$id": "#root/Smoothfollow/forceUpright", 
-					"title": "Forceupright", 
+					"$id": "#root/Smoothfollow/forceUpright",
+					"title": "Forceupright",
 					"type": "boolean",
 					"default": false
 				},
 				"replaySupport": {
-					"$id": "#root/Smoothfollow/replaySupport", 
-					"title": "Replaysupport", 
+					"$id": "#root/Smoothfollow/replaySupport",
+					"title": "Replaysupport",
 					"type": "boolean",
 					"default": true
 				}
@@ -282,8 +282,8 @@
 		}
 ,
 		"ModmapExtensions": {
-			"$id": "#root/ModmapExtensions", 
-			"title": "Modmapextensions", 
+			"$id": "#root/ModmapExtensions",
+			"title": "Modmapextensions",
 			"type": "object",
 			"required": [
 				"moveWithMap",
@@ -291,14 +291,14 @@
 			],
 			"properties": {
 				"moveWithMap": {
-					"$id": "#root/ModmapExtensions/moveWithMap", 
-					"title": "Movewithmap", 
+					"$id": "#root/ModmapExtensions/moveWithMap",
+					"title": "Movewithmap",
 					"type": "boolean",
 					"default": true
 				},
 				"autoOpaqueWalls": {
-					"$id": "#root/ModmapExtensions/autoOpaqueWalls", 
-					"title": "Autoopaquewalls", 
+					"$id": "#root/ModmapExtensions/autoOpaqueWalls",
+					"title": "Autoopaquewalls",
 					"type": "boolean",
 					"default": true
 				}
@@ -306,8 +306,8 @@
 		}
 ,
 		"Follow360": {
-			"$id": "#root/Follow360", 
-			"title": "Follow360", 
+			"$id": "#root/Follow360",
+			"title": "Follow360",
 			"type": "object",
 			"required": [
 				"enabled",
@@ -315,14 +315,14 @@
 			],
 			"properties": {
 				"enabled": {
-					"$id": "#root/Follow360/enabled", 
-					"title": "Enabled", 
+					"$id": "#root/Follow360/enabled",
+					"title": "Enabled",
 					"type": "boolean",
 					"default": true
 				},
 				"smoothing": {
-					"$id": "#root/Follow360/smoothing", 
-					"title": "Smoothing", 
+					"$id": "#root/Follow360/smoothing",
+					"title": "Smoothing",
 					"type": "number",
 					"default": 10
 				}
@@ -330,8 +330,8 @@
 		}
 ,
 		"MovementScript": {
-			"$id": "#root/MovementScript", 
-			"title": "Movementscript", 
+			"$id": "#root/MovementScript",
+			"title": "Movementscript",
 			"type": "object",
 			"required": [
 				"scriptList",
@@ -339,13 +339,13 @@
 			],
 			"properties": {
 				"scriptList": {
-					"$id": "#root/MovementScript/scriptList", 
-					"title": "Scriptlist", 
+					"$id": "#root/MovementScript/scriptList",
+					"title": "Scriptlist",
 					"type": "array",
 					"default": [],
 					"items":{
-						"$id": "#root/MovementScript/scriptList/items", 
-						"title": "Items", 
+						"$id": "#root/MovementScript/scriptList/items",
+						"title": "Items",
 						"type": "string",
 						"examples": [
 							"RotateScript"
@@ -354,8 +354,8 @@
 					}
 				},
 				"fromOrigin": {
-					"$id": "#root/MovementScript/fromOrigin", 
-					"title": "Fromorigin", 
+					"$id": "#root/MovementScript/fromOrigin",
+					"title": "Fromorigin",
 					"type": "boolean",
 					"default": true
 				}
