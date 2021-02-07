@@ -55,7 +55,7 @@
       <Private>False</Private>
     </Reference>
     <Reference Include="BGNet">
-      <HintPath>E:\SteamLibrary\steamapps\common\Beat Saber\Beat Saber_Data\Managed\BGNet.dll</HintPath>
+      <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\BGNet.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="BSML">
@@ -76,7 +76,7 @@
       <Private>False</Private>
     </Reference>
     <Reference Include="SongCore">
-      <HintPath>E:\SteamLibrary\steamapps\common\Beat Saber\Plugins\SongCore.dll</HintPath>
+      <HintPath>$(BeatSaberDir)\Plugins\SongCore.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="System" />
@@ -108,7 +108,7 @@
       <Private>False</Private>
     </Reference>
     <Reference Include="UnityEngine.AssetBundleModule">
-      <HintPath>E:\SteamLibrary\steamapps\common\Beat Saber\Beat Saber_Data\Managed\UnityEngine.AssetBundleModule.dll</HintPath>
+      <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\UnityEngine.AssetBundleModule.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.CoreModule">
       <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\UnityEngine.CoreModule.dll</HintPath>
@@ -119,7 +119,7 @@
       <Private>False</Private>
     </Reference>
     <Reference Include="UnityEngine.PhysicsModule">
-      <HintPath>E:\SteamLibrary\steamapps\common\Beat Saber\Beat Saber_Data\Managed\UnityEngine.PhysicsModule.dll</HintPath>
+      <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\UnityEngine.PhysicsModule.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="UnityEngine.UI">
@@ -139,7 +139,7 @@
       <Private>False</Private>
     </Reference>
     <Reference Include="VRUI">
-      <HintPath>E:\SteamLibrary\steamapps\common\Beat Saber\Beat Saber_Data\Managed\VRUI.dll</HintPath>
+      <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\VRUI.dll</HintPath>
       <Private>False</Private>
     </Reference>
   </ItemGroup>
