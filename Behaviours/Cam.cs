@@ -1,4 +1,6 @@
-﻿using System;
+﻿//#define FPSCOUNT
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -92,17 +94,21 @@ namespace Camera2.Behaviours {
 			UCamera = camClone.GetComponent<Camera>();
 			UCamera.enabled = false;
 			UCamera.clearFlags = CameraClearFlags.SolidColor;
-			//UCamera.backgroundColor = new Color(0, 0, 0, 0);
 			UCamera.stereoTargetEye = StereoTargetEyeMask.None;
+			//UCamera.depthTextureMode = DepthTextureMode.None;
+			//UCamera.renderingPath = RenderingPath.DeferredLighting;
 
 
 			foreach(var child in camClone.transform.Cast<Transform>())
 				Destroy(child.gameObject);
-
-			//TODO: Not sure if VisualEffectsController is really unnecessary, doesnt seem to do anything currently?
-			var trash = new string[] { "AudioListener", "LIV", "MainCamera", "MeshCollider", "VisualEffectsController" };
+			
+			var trash = new string[] { "AudioListener", "LIV", "MainCamera", "MeshCollider" };
 			foreach(var component in camClone.GetComponents<Behaviour>())
 				if(trash.Contains(component.GetType().Name)) Destroy(component);
+
+			typeof(VisualEffectsController)
+			.GetField("_depthTextureEnabled", BindingFlags.Instance | BindingFlags.NonPublic)
+			.SetValue(camClone.GetComponent<VisualEffectsController>(), new BoolSO() { value = UCamera.depthTextureMode != DepthTextureMode.None });
 
 
 			camClone.transform.parent = transform;
@@ -128,7 +134,9 @@ namespace Camera2.Behaviours {
 			AddTransformer<Follow360>();
 			AddTransformer<MovementScriptProcessor>();
 
-			//AddTransformer<PostProcessingEffects>();
+#if DEV
+			AddTransformer<PostProcessor>();
+#endif
 		}
 
 		private void AddTransformer<T>() where T: CamMiddleware, IMHandler {
@@ -143,14 +151,18 @@ namespace Camera2.Behaviours {
 			hadUpdate = true;
 		}
 
-		//int renderedFrames = 0;
-		//System.Diagnostics.Stopwatch sw = null;
+#if FPSCOUNT
+		int renderedFrames = 0;
+		System.Diagnostics.Stopwatch sw = null;
+#endif
 		private void OnGUI() {
 			if(UCamera != null && renderTexture != null && hadUpdate) {
-				//if(sw == null) {
-				//	sw = new System.Diagnostics.Stopwatch();
-				//	sw.Start();
-				//}
+#if FPSCOUNT
+				if(sw == null) {
+					sw = new System.Diagnostics.Stopwatch();
+					sw.Start();
+				}
+#endif
 
 				foreach(var t in middlewares) {
 					if(!t.Pre())
@@ -164,13 +176,14 @@ namespace Camera2.Behaviours {
 					t.Post();
 
 				timeSinceLastRender = 0f;
-
-				//renderedFrames++;
-				//if(sw.ElapsedMilliseconds > 500) {
-				//	Console.WriteLine("Rendered FPS for {1}: {0}", renderedFrames * 2, name);
-				//	renderedFrames = 0;
-				//	sw.Restart();
-				//}
+#if FPSCOUNT
+				renderedFrames++;
+				if(sw.ElapsedMilliseconds > 500) {
+					Console.WriteLine("Rendered FPS for {1}: {0}", renderedFrames * 2, name);
+					renderedFrames = 0;
+					sw.Restart();
+				}
+#endif
 			}
 		}
 		

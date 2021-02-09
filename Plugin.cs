@@ -16,9 +16,10 @@ namespace Camera2 {
 
 		internal static Harmony harmony { get; private set; }
 
+#if DEV
 		public static Shader PostShader;
 		public static Material PostMaterial;
-		public static AssetBundle bundle;
+#endif
 
 		[Init]
 		/// <summary>
@@ -35,28 +36,20 @@ namespace Camera2 {
 			harmony = new Harmony("Kinsi55.BeatSaber.Cam2");
 			harmony.PatchAll(Assembly.GetExecutingAssembly());
 
-			//Stream stream = Assembly.GetExecutingAssembly().GetManifestResourceStream("Camera2.PostProcessingShaders.chromaticab");
-			//byte[] buffer = new byte[stream.Length];
-			//stream.Read(buffer, 0, (int)stream.Length);
-			//stream.Close();
-			//bundle = AssetBundle.LoadFromMemory(buffer);
-			
-			//PostShader = bundle.LoadAsset<Shader>("chromaticaberration.shader");
-			//PostMaterial = new Material(PostShader);
-		}
+#if DEV
+			//using(var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream("Camera2.PostProcessingShaders.chromaticaberration")) {
+			//	var bundle = AssetBundle.LoadFromStream(stream);
 
+			//	PostShader = bundle.LoadAsset<Shader>("chromaticaberration.shader");
+			//	bundle.Unload(false);
+			//}
+			var bundle = AssetBundle.LoadFromFile(@"D:\Unity Shit\Projects\AssetBundlePacker\Assets\StreamingAssets\postprocessing");
 
-		#region BSIPA Config
-		//Uncomment to use BSIPA's config
-		/*
-		[Init]
-		public void InitWithConfig(Config conf)
-		{
-			Configuration.PluginConfig.Instance = conf.Generated<Configuration.PluginConfig>();
-			Log.Debug("Config loaded");
+			PostShader = bundle.LoadAsset<Shader>("MotionBlur.shader");
+
+			PostMaterial = new Material(PostShader);
+#endif
 		}
-		*/
-		#endregion
 
 		[OnStart]
 		public void OnApplicationStart() {

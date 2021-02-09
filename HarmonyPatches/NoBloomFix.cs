@@ -26,7 +26,7 @@ namespace Camera2.HarmonyPatches {
 	 */
 	[HarmonyPatch(typeof(MainEffectSO), "Render")]
 	class BloomRendererInstantiateFix3 {
-		static bool Prefix(RenderTexture src, RenderTexture dest, MainEffectSO __instance) {
+		static bool Prefix(RenderTexture src, RenderTexture dest) {
 			var x = RenderTexture.active;
 			Graphics.Blit(src, dest);
 			RenderTexture.active = x;
@@ -36,7 +36,7 @@ namespace Camera2.HarmonyPatches {
 
 	[HarmonyPatch(typeof(MainEffectController), "OnPostRender")]
 	class BloomRendererInstantiateFix4 {
-		static void Postfix(ImageEffectController ____imageEffectController, MainEffectContainerSO ____mainEffectContainer) {
+		static void Postfix(ImageEffectController ____imageEffectController) {
 			____imageEffectController.enabled = true;
 		}
 	}

@@ -14,8 +14,6 @@ namespace Camera2.HarmonyPatches {
 			Plugin.Log.Notice("Game is ready, Initializing...");
 
 			CamManager.Init();
-
-			new GameObject("Cam2_Positioner").AddComponent<CamPositioner>();
 		}
 
 	}

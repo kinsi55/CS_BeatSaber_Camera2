@@ -44,6 +44,15 @@
     <DisableCopyToPlugins>True</DisableCopyToPlugins>
     <DisableZipRelease>True</DisableZipRelease>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)' == 'Dev'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\Dev\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;DEV</DefineConstants>
+    <DebugType>portable</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="0Harmony">
       <HintPath>$(BeatSaberDir)\Libs\0Harmony.dll</HintPath>
@@ -168,7 +177,7 @@
     <Compile Include="Managers\ScenesManager.cs" />
     <Compile Include="Middlewares\Follow360.cs" />
     <Compile Include="Middlewares\ModmapExtensions.cs" />
-    <Compile Include="Middlewares\PostProcessingEffects.cs" />
+    <Compile Include="Middlewares\PostProcessor.cs" />
     <Compile Include="Middlewares\Smoothfollow.cs" />
     <Compile Include="Middlewares\FPSLimiter.cs" />
     <Compile Include="Plugin.cs" />
@@ -190,7 +199,7 @@
   <ItemGroup>
     <None Include="Directory.Build.targets" Condition="Exists('Directory.Build.targets')" />
     <None Include="Camera2.csproj.user" Condition="Exists('Camera2.csproj.user')" />
-    <EmbeddedResource Include="PostProcessingShaders\chromaticab" />
+    <None Include="PostProcessingShaders\chromaticaberration" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="BeatSaberModdingTools.Tasks">
