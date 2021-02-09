@@ -224,7 +224,7 @@ namespace Camera2.Configuration {
 		public float renderScale {
 			get { return _renderScale; }
 			set {
-				_renderScale = Mathf.Clamp(value, 1f, 3f);
+				_renderScale = Mathf.Clamp(value, 0.2f, 3f);
 				if(isLoaded)
 					cam.UpdateRenderTextureAndView();
 			}
