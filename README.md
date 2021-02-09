@@ -16,7 +16,8 @@ Please see [**The Wiki**](https://github.com/kinsi55/CS_BeatSaber_Camera2/wiki) 
 	- Walls can be hidden entirely, not just be made transparent (Useful for side cams)
 	- **Walls can automagically be made visible if you happen to play a modded map**
 	- Hiding Floor(s)
-	- Hiding Notes (Currently incompatible with custom notes)
+	- Hiding Notes
+	- Hiding Cut particles
 - Every third person camera can follow or ignore the 360 world rotation, its not a special camera type any more
 
 #### First person cameras
