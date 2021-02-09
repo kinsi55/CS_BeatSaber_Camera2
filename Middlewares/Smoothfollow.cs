@@ -11,7 +11,7 @@ namespace Camera2.Configuration {
 		public float rotation = 5f;
 
 		public bool forceUpright = false;
-		public bool replaySupport = true;
+		public bool followReplayPosition = true;
 
 		[JsonIgnore]
 		internal Transform parent;
@@ -30,7 +30,7 @@ namespace Camera2.Middlewares {
 
 			var parentToUse = parent;
 
-			if(settings.Smoothfollow.replaySupport && ScoresaberUtil.isInReplay) {
+			if(settings.Smoothfollow.followReplayPosition && ScoresaberUtil.isInReplay) {
 				parentToUse = ScoresaberUtil.replayCamera.transform;
 			} else if(parentToUse == null || !parentToUse.gameObject.activeInHierarchy) {
 				parent = parentToUse = (Camera.main ?? HookFPFC.cameraInstance ?? null)?.transform;
