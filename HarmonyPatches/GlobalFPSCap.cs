@@ -12,19 +12,24 @@ namespace Camera2.HarmonyPatches {
 	[HarmonyPatch(typeof(MainSystemInit), "Init")]
 	class GlobalFPSCap {
 		public static void Postfix() {
-			if(UnityEngine.XR.XRDevice.isPresent) {
+			if(UnityEngine.XR.XRDevice.isPresent || UnityEngine.XR.XRDevice.refreshRate != 0) {
 				Application.targetFrameRate = -1;
 			} else {
-				var Kapp = Math.Max(Screen.currentResolution.refreshRate, 120);
+				var Kapp = 30;
 
-				if(CamManager.cams?.Count > 0)
-					Kapp = CamManager.cams.Values.Where(x => x.gameObject.activeInHierarchy).Max(x => x.settings.FPSLimiter.limit);
+				if(CamManager.cams?.Count > 0) {
+					foreach(var cam in CamManager.cams.Values.Where(x => x.gameObject.activeInHierarchy)) {
+						if(cam.settings.FPSLimiter.fpsLimit <= 0) {
+							Kapp = Screen.currentResolution.refreshRate;
+							break;
+						} else if(Kapp < cam.settings.FPSLimiter.fpsLimit) {
+							Kapp = cam.settings.FPSLimiter.fpsLimit;
+						}
+					}
+				}
 
 				Application.targetFrameRate = Kapp;
 			}
-
-			foreach(var cam in CamManager.cams.Values)
-				cam.settings.FPSLimiter.CalculateIdealFrametime();
 		}
 	}
 }
