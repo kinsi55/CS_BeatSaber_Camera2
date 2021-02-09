@@ -7,6 +7,7 @@ namespace Camera2.Configuration {
 	class Settings_ModmapExtensions {
 		public bool moveWithMap = true;
 		public bool autoOpaqueWalls = false;
+		public bool autoHideHUD = false;
 	}
 }
 

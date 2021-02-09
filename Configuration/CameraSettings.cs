@@ -152,8 +152,9 @@ namespace Camera2.Configuration {
 
 			if(visibleObjects.Floor) maskBuilder |= (int)VisibilityMasks.Floor;
 			if(visibleObjects.Debris) maskBuilder |= (int)VisibilityMasks.Debris;
-			if(visibleObjects.UI) maskBuilder |= (int)VisibilityMasks.UI;
 			if(visibleObjects.CutParticles) maskBuilder |= (int)VisibilityMasks.CutParticles;
+			if(visibleObjects.UI && (!ModmapExtensions.autoHideHUD || !SceneUtil.isProbablyInWallMap))
+				maskBuilder |= (int)VisibilityMasks.UI;
 
 			if(cam.UCamera.cullingMask != maskBuilder)
 				cam.UCamera.cullingMask = maskBuilder;
