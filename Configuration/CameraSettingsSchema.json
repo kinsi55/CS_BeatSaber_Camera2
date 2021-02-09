@@ -227,18 +227,12 @@
 				"limit"
 			],
 			"properties": {
-				"limit": {
-					"$id": "#root/FPSLimiter/limit",
+				"fpsLimit": {
+					"$id": "#root/FPSLimiter/fpsLimit",
 					"title": "Limit",
 					"type": "integer",
-					"default": 60,
-					"minimum": 1
-				},
-				"improveFrametimes": {
-					"$id": "#root/FPSLimiter/improveFrametimes",
-					"title": "ImproveFrametimes",
-					"type": "boolean",
-					"default": true
+					"default": 0,
+					"minimum": -1
 				}
 			}
 		}
@@ -272,9 +266,9 @@
 					"type": "boolean",
 					"default": false
 				},
-				"replaySupport": {
-					"$id": "#root/Smoothfollow/replaySupport",
-					"title": "Replaysupport",
+				"followReplayPosition": {
+					"$id": "#root/Smoothfollow/followReplayPosition",
+					"title": "FollowReplayPosition",
 					"type": "boolean",
 					"default": true
 				}
@@ -300,7 +294,13 @@
 					"$id": "#root/ModmapExtensions/autoOpaqueWalls",
 					"title": "Autoopaquewalls",
 					"type": "boolean",
-					"default": true
+					"default": false
+				},
+				"autoHideHUD": {
+					"$id": "#root/ModmapExtensions/autoHideHUD",
+					"title": "AutoHideHUD",
+					"type": "boolean",
+					"default": false
 				}
 			}
 		}
