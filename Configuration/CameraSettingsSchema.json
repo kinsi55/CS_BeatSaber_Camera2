@@ -133,7 +133,7 @@
 			"$id": "#root/worldCamVisibility",
 			"title": "Worldcamvisibility",
 			"type": "string",
-			"enum": ["Visible", "OnlyInPause", "Hidden"]
+			"enum": ["Visible", "HiddenWhilePlaying", "Hidden"]
 		},
 		"previewScreenSize": {
 			"$id": "#root/previewScreenSize",
