@@ -126,7 +126,7 @@ namespace Camera2.Middlewares {
 				frameIndex = 0;
 			}
 
-			for(;;frameIndex++) {
+			for(;;) {
 				if(targetFrame.startTime > currentAnimationTime) {
 					break;
 				} else if(targetFrame.endTime <= currentAnimationTime) {
@@ -151,6 +151,11 @@ namespace Camera2.Middlewares {
 						if(targetFrame.FOV > 0f)
 							cam.UCamera.fieldOfView = Mathf.SmoothStep(lastFov, targetFrame.FOV, frameProgress);
 					}
+					break;
+				}
+
+				if(++frameIndex >= loadedScript.frames.Count) {
+					frameIndex = 0;
 					break;
 				}
 			}
