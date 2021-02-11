@@ -22,7 +22,7 @@ namespace Camera2.Configuration {
 	enum WorldCamVisibility {
 		Visible = 0,
 		//Always = 0,
-		OnlyInPause,
+		HiddenWhilePlaying,
 		Hidden = 2,
 		//Never = 2
 	}
@@ -181,7 +181,7 @@ namespace Camera2.Configuration {
 			}
 		}
 		
-		private WorldCamVisibility _worldCamVisibility = WorldCamVisibility.OnlyInPause;
+		private WorldCamVisibility _worldCamVisibility = WorldCamVisibility.HiddenWhilePlaying;
 		[JsonConverter(typeof(StringEnumConverter))]
 		public WorldCamVisibility worldCamVisibility {
 			get { return _worldCamVisibility; }
