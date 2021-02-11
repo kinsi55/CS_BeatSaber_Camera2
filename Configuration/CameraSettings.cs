@@ -62,7 +62,7 @@ namespace Camera2.Configuration {
 		public bool UI { get { return _UI; } set { _UI = value; parentSetting.ApplyLayerBitmask(); } }
 		public bool Avatar { get { return _Avatar; } set { _Avatar = value; parentSetting.ApplyLayerBitmask(); } }
 		public bool Floor { get { return _Floor; } set { _Floor = value; parentSetting.ApplyLayerBitmask(); } }
-		public bool CutParticles { get { return _Floor; } set { _CutParticles = value; parentSetting.ApplyLayerBitmask(); } }
+		public bool CutParticles { get { return _CutParticles; } set { _CutParticles = value; parentSetting.ApplyLayerBitmask(); } }
 		public NoteVisibility Notes { get { return _Notes; } set { _Notes = value; parentSetting.ApplyLayerBitmask(); } }
 		// Wouldnt be very useful since I havent figured out yet how to make cams have transparency
 		//public bool EverythingElse { get { return _EverythingElse; } set { _EverythingElse = value; parentSetting.ApplyLayerBitmask(); } }
