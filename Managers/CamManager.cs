@@ -12,9 +12,13 @@ namespace Camera2.Managers {
 		public static Dictionary<string, Cam2> cams { get; private set; } = new Dictionary<string, Cam2>();
 		static CamerasViewport customScreen;
 		public static int baseCullingMask { get; private set; }
+		public static int clearedBaseCullingMask { get; private set; }
 
 		public static void Init() {
-			baseCullingMask = SceneUtil.GetMainCameraButReally().GetComponent<Camera>().cullingMask;
+			clearedBaseCullingMask = baseCullingMask = SceneUtil.GetMainCameraButReally().GetComponent<Camera>().cullingMask;
+
+			foreach(int mask in Enum.GetValues(typeof(VisibilityMasks)))
+				clearedBaseCullingMask &= ~mask;
 
 			customScreen = new GameObject("Cam2_Renderer").AddComponent<CamerasViewport>();
 

@@ -88,9 +88,9 @@ namespace Camera2.Configuration {
 				JsonConvert.PopulateObject(System.IO.File.ReadAllText(cam.configPath), this, JsonHelpers.leanDeserializeSettings);
 			} else {
 				layer = CamManager.cams.Count == 0 ? -1000 : CamManager.cams.Max(x => x.Value.settings.layer) - 1;
-
-				Save();
 			}
+			// We always save after loading, even if its a fresh load. This will make sure to migrate configs after updates.
+			Save();
 
 			ApplyPositionAndRotation();
 			ApplyLayerBitmask();
@@ -99,6 +99,10 @@ namespace Camera2.Configuration {
 			viewRect = viewRect;
 			cam.UpdateRenderTextureAndView();
 			isLoaded = true;
+		}
+
+		public void Save() {
+			System.IO.File.WriteAllText(cam.configPath, JsonConvert.SerializeObject(this, Formatting.Indented));
 		}
 
 		public void Reload() {
@@ -121,47 +125,39 @@ namespace Camera2.Configuration {
 				cam.UCamera.transform.localPosition = targetPos;
 				cam.UCamera.transform.localEulerAngles = targetRot;
 			}
-
 		}
 
 		public void ApplyLayerBitmask() {
-			var maskBuilder = CamManager.baseCullingMask;
-
-			foreach(int mask in Enum.GetValues(typeof(VisibilityMasks)))
-				maskBuilder &= ~mask;
+			VisibilityMasks maskBuilder = (VisibilityMasks)CamManager.clearedBaseCullingMask;
 
 			if(visibleObjects.Walls == WallVisiblity.Visible || (ModmapExtensions.autoOpaqueWalls && SceneUtil.isProbablyInWallMap)) {
-				maskBuilder |= (int)VisibilityMasks.Walls | (int)VisibilityMasks.WallTextures;
+				maskBuilder |= VisibilityMasks.Walls | VisibilityMasks.WallTextures;
 			} else if(visibleObjects.Walls == WallVisiblity.Transparent) {
-				maskBuilder |= (int)VisibilityMasks.Walls;
+				maskBuilder |= VisibilityMasks.Walls;
 			}
 
 			if(visibleObjects.Notes != NoteVisibility.Hidden) {
 				if(visibleObjects.Notes == NoteVisibility.ForceCustomNotes && CustomNotesUtil.HasHMDOnlyEnabled()) {
-					maskBuilder |= (int)VisibilityMasks.CustomNotes;
+					maskBuilder |= VisibilityMasks.CustomNotes;
 				} else {
-					maskBuilder |= (int)VisibilityMasks.Notes;
+					maskBuilder |= VisibilityMasks.Notes;
 				}
 			}
 
 			if(visibleObjects.Avatar) {
-				maskBuilder |= (int)VisibilityMasks.Avatar;
+				maskBuilder |= VisibilityMasks.Avatar;
 
-				maskBuilder |= (int)(type == CameraType.FirstPerson ? VisibilityMasks.FirstPersonAvatar : VisibilityMasks.ThirdPersonAvatar);
+				maskBuilder |= type == CameraType.FirstPerson ? VisibilityMasks.FirstPersonAvatar : VisibilityMasks.ThirdPersonAvatar;
 			}
 
-			if(visibleObjects.Floor) maskBuilder |= (int)VisibilityMasks.Floor;
-			if(visibleObjects.Debris) maskBuilder |= (int)VisibilityMasks.Debris;
-			if(visibleObjects.CutParticles) maskBuilder |= (int)VisibilityMasks.CutParticles;
+			if(visibleObjects.Floor) maskBuilder |= VisibilityMasks.Floor;
+			if(visibleObjects.Debris) maskBuilder |= VisibilityMasks.Debris;
+			if(visibleObjects.CutParticles) maskBuilder |= VisibilityMasks.CutParticles;
 			if(visibleObjects.UI && (!ModmapExtensions.autoHideHUD || !SceneUtil.isProbablyInWallMap))
-				maskBuilder |= (int)VisibilityMasks.UI;
+				maskBuilder |= VisibilityMasks.UI;
 
-			if(cam.UCamera.cullingMask != maskBuilder)
-				cam.UCamera.cullingMask = maskBuilder;
-		}
-
-		public void Save() {
-			System.IO.File.WriteAllText(cam.configPath, JsonConvert.SerializeObject(this, Formatting.Indented));
+			if(cam.UCamera.cullingMask != (int)maskBuilder)
+				cam.UCamera.cullingMask = (int)maskBuilder;
 		}
 		
 		private CameraType _type = CameraType.FirstPerson;
