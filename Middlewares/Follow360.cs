@@ -5,7 +5,7 @@ using Camera2.Interfaces;
 using Camera2.Utils;
 
 namespace Camera2.Configuration {
-	class Settings_Follow360 {
+	class Settings_Follow360 : CameraSubSettings {
 		public bool enabled = true;
 		public float smoothing = 10f;
 	}

@@ -6,7 +6,7 @@ using Camera2.Utils;
 using Camera2.HarmonyPatches;
 
 namespace Camera2.Configuration {
-	class Settings_Smoothfollow {
+	class Settings_Smoothfollow : CameraSubSettings {
 		public float position = 10f;
 		public float rotation = 5f;
 

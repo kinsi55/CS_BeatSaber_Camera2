@@ -7,7 +7,7 @@ using Camera2.Configuration;
 using Camera2.Managers;
 
 namespace Camera2.Configuration {
-	class Settings_MovementScript {
+	class Settings_MovementScript : CameraSubSettings {
 		public string[] scriptList = new string[] { };
 		public bool fromOrigin = true;
 	}

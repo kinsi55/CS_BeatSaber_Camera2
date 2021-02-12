@@ -158,6 +158,7 @@
     <Compile Include="Behaviours\PositionableCam.cs" />
     <Compile Include="HarmonyPatches\GlobalFPSCap.cs" />
     <Compile Include="HarmonyPatches\NoBloomFix.cs" />
+    <Compile Include="Interfaces\CameraSubSettings.cs" />
     <Compile Include="Managers\CamManager.cs" />
     <Compile Include="Configuration\CameraSettings.cs" />
     <Compile Include="Configuration\MovementScript.cs" />

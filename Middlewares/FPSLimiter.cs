@@ -6,7 +6,7 @@ using Camera2.Interfaces;
 
 
 namespace Camera2.Configuration {
-	class Settings_FPSLimiter {
+	class Settings_FPSLimiter : CameraSubSettings {
 		private int _limit = 0;
 		[JsonIgnore]
 		public float targetFrameTime { get; private set; } = 1f / 60f;

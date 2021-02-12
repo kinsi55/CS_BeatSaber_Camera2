@@ -4,7 +4,7 @@ using Camera2.Interfaces;
 using Camera2.Managers;
 
 namespace Camera2.Configuration {
-	class Settings_ModmapExtensions {
+	class Settings_ModmapExtensions : CameraSubSettings {
 		public bool moveWithMap = true;
 		public bool autoOpaqueWalls = false;
 		public bool autoHideHUD = false;

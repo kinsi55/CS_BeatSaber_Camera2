@@ -7,6 +7,7 @@ using Newtonsoft.Json.Converters;
 using Camera2.Behaviours;
 using Camera2.Utils;
 using Camera2.Managers;
+using Camera2.Interfaces;
 
 namespace Camera2.Configuration {
 	enum CameraType {
@@ -70,12 +71,17 @@ namespace Camera2.Configuration {
 	
 	class CameraSettings {
 		private Cam2 cam;
-		private bool isLoaded = false;
+		internal bool isLoaded { get; private set; } = false;
 
 		public CameraSettings(Cam2 cam) {
 			this.cam = cam;
 
 			visibleObjects = new GameObjects(this);
+
+			FPSLimiter = CameraSubSettings.GetFor<Settings_FPSLimiter>(this);
+			Smoothfollow = CameraSubSettings.GetFor<Settings_Smoothfollow>(this);
+			ModmapExtensions = CameraSubSettings.GetFor<Settings_ModmapExtensions>(this);
+			Follow360 = CameraSubSettings.GetFor<Settings_Follow360>(this);
 		}
 
 		public void Load(bool loadConfig = true) {
@@ -248,10 +254,10 @@ namespace Camera2.Configuration {
 			}
 		}
 		
-		public Settings_FPSLimiter FPSLimiter { get; private set; } = new Settings_FPSLimiter();
-		public Settings_Smoothfollow Smoothfollow { get; private set; } = new Settings_Smoothfollow();
-		public Settings_ModmapExtensions ModmapExtensions { get; private set; } = new Settings_ModmapExtensions();
-		public Settings_Follow360 Follow360 { get; private set; } = new Settings_Follow360();
+		public Settings_FPSLimiter FPSLimiter { get; private set; }
+		public Settings_Smoothfollow Smoothfollow { get; private set; }
+		public Settings_ModmapExtensions ModmapExtensions { get; private set; }
+		public Settings_Follow360 Follow360 { get; private set; }
 
 
 		[JsonConverter(typeof(Vector3Converter))]
