@@ -11,13 +11,11 @@ Please see [**The Wiki**](https://github.com/kinsi55/CS_BeatSaber_Camera2/wiki) 
 #### General
 - **Support for Replays and FPFC / FPFC toggle out of the box**
 - Decent performance improvements, especially on wall maps
-- FPS cap
+- FPS cap (And Global FPS limit when you dont have an HMD connected)
 - More options for toggling the visibility of things
 	- Walls can be hidden entirely, not just be made transparent (Useful for side cams)
 	- **Walls can automagically be made visible if you happen to play a modded map**
-	- Hiding Floor(s)
-	- Hiding Notes
-	- Hiding Cut particles
+	- Hiding Floor(s), Notes, Particles and more
 - Every third person camera can follow or ignore the 360 world rotation, its not a special camera type any more
 
 #### First person cameras
