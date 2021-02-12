@@ -104,11 +104,6 @@ namespace Camera2.Behaviours {
 			foreach(var component in camClone.GetComponents<Behaviour>())
 				if(trash.Contains(component.GetType().Name)) Destroy(component);
 
-			typeof(VisualEffectsController)
-			.GetField("_depthTextureEnabled", BindingFlags.Instance | BindingFlags.NonPublic)
-			.SetValue(camClone.GetComponent<VisualEffectsController>(), new BoolSO() { value = UCamera.depthTextureMode != DepthTextureMode.None });
-
-
 			camClone.transform.parent = transform;
 			camClone.transform.localRotation = Quaternion.identity;
 			camClone.transform.localPosition = Vector3.zero;
@@ -116,6 +111,9 @@ namespace Camera2.Behaviours {
 
 			//Cloning post process stuff to make it controlable on a per camera basis
 			//BloomShite.InstantiateBloomForCamera(UCamera).tag = null;
+			//typeof(VisualEffectsController)
+			//.GetField("_depthTextureEnabled", BindingFlags.Instance | BindingFlags.NonPublic)
+			//.SetValue(camClone.GetComponent<VisualEffectsController>(), new BoolSO() { value = UCamera.depthTextureMode != DepthTextureMode.None });
 
 
 
