@@ -209,7 +209,7 @@ namespace Camera2.Configuration {
 			get { return (int)cam.UCamera.depth; }
 			set {
 				cam.UCamera.depth = value;
-				CamManager.ApplyCameraValues();
+				CamManager.ApplyCameraValues(viewLayer: true);
 			}
 		}
 
