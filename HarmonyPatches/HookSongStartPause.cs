@@ -11,8 +11,7 @@ namespace Camera2.HarmonyPatches {
 	 */
 	//[HarmonyPatch(typeof(PauseMenuManager))]
 	//[HarmonyPatch("Awake")]
-	[HarmonyPatch(typeof(AudioTimeSyncController))]
-	[HarmonyPatch("StartSong")]
+	[HarmonyPatch(typeof(AudioTimeSyncController), nameof(AudioTimeSyncController.StartSong))]
 	class HookAudioTimeSyncController {
 		static void Postfix(AudioTimeSyncController __instance) {
 #if DEBUG
@@ -33,8 +32,8 @@ namespace Camera2.HarmonyPatches {
 
 		[HarmonyTargetMethods]
 		static IEnumerable<MethodBase> TargetMethods() {
-			yield return AccessTools.Method(typeof(AudioTimeSyncController), "Pause");
-			yield return AccessTools.Method(typeof(AudioTimeSyncController), "Resume");
+			yield return AccessTools.Method(typeof(AudioTimeSyncController), nameof(AudioTimeSyncController.Pause));
+			yield return AccessTools.Method(typeof(AudioTimeSyncController), nameof(AudioTimeSyncController.Resume));
 		}
 	}
 }

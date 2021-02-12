@@ -24,7 +24,7 @@ namespace Camera2.HarmonyPatches {
 	 * - Using XRSettings.gameViewRenderMode to mirror the VR view to the Desktop (Ends up behind the camera canvas, but still kinda bad)
 	 * - This. I am not sure why this works, I gave up trying to understand whatever Beat Games cooked up with their effect rendering pipeline
 	 */
-	[HarmonyPatch(typeof(MainEffectSO), "Render")]
+	[HarmonyPatch(typeof(MainEffectSO), nameof(MainEffectSO.Render))]
 	class BloomRendererInstantiateFix3 {
 		static bool Prefix(RenderTexture src, RenderTexture dest) {
 			var x = RenderTexture.active;

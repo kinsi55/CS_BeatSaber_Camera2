@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 using UnityEngine;
 
 namespace Camera2.HarmonyPatches {
-	[HarmonyPatch(typeof(MainSystemInit), "Init")]
+	[HarmonyPatch(typeof(MainSystemInit), nameof(MainSystemInit.Init))]
 	class GlobalFPSCap {
 		public static void Postfix() {
 			if(UnityEngine.XR.XRDevice.isPresent || UnityEngine.XR.XRDevice.refreshRate != 0) {

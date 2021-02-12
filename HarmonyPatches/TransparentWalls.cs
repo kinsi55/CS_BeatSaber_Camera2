@@ -3,7 +3,7 @@ using HarmonyLib;
 using Camera2.Utils;
 
 namespace Camera2.HarmonyPatches {
-	[HarmonyPatch(typeof(StretchableObstacle), "SetSizeAndColor")]
+	[HarmonyPatch(typeof(StretchableObstacle), nameof(StretchableObstacle.SetSizeAndColor))]
 	class TransparentWalls {
 		static void Postfix(Transform ____obstacleCore) {
 			if(____obstacleCore != null)

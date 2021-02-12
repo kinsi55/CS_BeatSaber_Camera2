@@ -15,8 +15,8 @@ namespace Camera2.HarmonyPatches {
 
 		[HarmonyTargetMethods]
 		static IEnumerable<MethodBase> TargetMethods() {
-			yield return AccessTools.Method(typeof(GameScenesManager), "PopScenes");
-			yield return AccessTools.Method(typeof(GameScenesManager), "ReplaceScenes");
+			yield return AccessTools.Method(typeof(GameScenesManager), nameof(GameScenesManager.PopScenes));
+			yield return AccessTools.Method(typeof(GameScenesManager), nameof(GameScenesManager.ReplaceScenes));
 		}
 	}
 }
