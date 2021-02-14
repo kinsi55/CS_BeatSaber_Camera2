@@ -17,15 +17,14 @@ namespace Camera2.Behaviours {
 			pos.y = Mathf.Clamp(pos.y, 0, Screen.height - rekt.rect.height);
 
 			position = pos;
-			if(!writeToConfig)
-				return;
 
-			var rect = cam.settings.viewRect;
-			rect.position = pos;
-			cam.settings.viewRect = rect;
+			if(writeToConfig) {
+				cam.settings.viewRect = new Rect(cam.settings.viewRect) { position = position };
+				cam.settings.Save();
+			}
 		}
 
-		const int MIN_SIZE = 50;
+		public const int MIN_SIZE = 50;
 
 		public void ModifySizeClamped(Vector2 diff, bool writeToConfig = false) {
 			/*
@@ -44,13 +43,10 @@ namespace Camera2.Behaviours {
 
 			size = new Vector2(sizex, sizey);
 			
-			if(!writeToConfig)
-				return;
-
-			var rect = cam.settings.viewRect;
-			rect.position = position;
-			rect.size = size;
-			cam.settings.viewRect = rect;
+			if(writeToConfig) {
+				cam.settings.viewRect = new Rect(position, size);
+				cam.settings.Save();
+			}
 		}
 
 		new public void Awake() {
@@ -86,7 +82,7 @@ namespace Camera2.Behaviours {
 			DontDestroyOnLoad(this);
 
 			canvas = gameObject.AddComponent<Canvas>();
-			// I know this throws a stupid warning because VR is active, no way to fix that it seems.
+			// I know this logs a stupid warning because VR is active, no way to fix that it seems.
 			canvas.renderMode = RenderMode.ScreenSpaceOverlay;
 		}
 
@@ -138,7 +134,19 @@ namespace Camera2.Behaviours {
 
 		private Vector3 lastMousePos;
 
+		private Vector2 lastScreenSize = new Vector2(Screen.width, Screen.height);
+
 		void Update() {
+			if(lastScreenSize.x != Screen.width || lastScreenSize.y != Screen.height) {
+				lastScreenSize.x = Screen.width;
+				lastScreenSize.y = Screen.height;
+
+				foreach(var cam in CamManager.cams.Values) {
+					cam.settings.UpdateViewRect();
+					cam.UpdateRenderTextureAndView();
+				}
+			}
+
 			if(Input.anyKeyDown) { //Some custom scenes to do funny stuff with
 				if(Input.GetKeyDown(KeyCode.F1)) {
 					if(Input.GetKey(KeyCode.LeftControl) && Input.GetKey(KeyCode.LeftShift)) {

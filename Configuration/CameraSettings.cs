@@ -96,14 +96,14 @@ namespace Camera2.Configuration {
 				layer = CamManager.cams.Count == 0 ? -1000 : CamManager.cams.Max(x => x.Value.settings.layer) - 1;
 			}
 			// We always save after loading, even if its a fresh load. This will make sure to migrate configs after updates.
+#if !DEV
 			Save();
+#endif
 
 			ApplyPositionAndRotation();
 			ApplyLayerBitmask();
-			cam.ShowWorldCamIfNecessary();
-			// Trigger setter for cam aspect ratio
-			viewRect = viewRect;
 			cam.UpdateRenderTextureAndView();
+			cam.ShowWorldCamIfNecessary();
 			isLoaded = true;
 		}
 
@@ -167,6 +167,8 @@ namespace Camera2.Configuration {
 				cam.UCamera.cullingMask = (int)maskBuilder;
 		}
 		
+
+
 		private CameraType _type = CameraType.FirstPerson;
 		[JsonConverter(typeof(StringEnumConverter))]
 		public CameraType type {
@@ -237,21 +239,54 @@ namespace Camera2.Configuration {
 
 		public GameObjects visibleObjects { get; private set; }
 
+
+		Rect GetClampedViewRect(Rect input) {
+			Rect p = new Rect();
+
+			p.x = Mathf.Clamp(input.x, 0, Screen.width - LessRawImage.MIN_SIZE);
+			p.y = Mathf.Clamp(input.y, 0, Screen.height - LessRawImage.MIN_SIZE);
+
+			p.width = Mathf.Clamp(input.width, LessRawImage.MIN_SIZE, Screen.width - p.x);
+			p.height = Mathf.Clamp(input.height, LessRawImage.MIN_SIZE, Screen.height - p.y);
+
+			return p;
+		}
+
+		public Rect UpdateViewRect() {
+			viewRect = _viewRectCfg;
+			return _viewRect;
+		}
+
+
 		[JsonConverter(typeof(RectConverter)), JsonProperty("viewRect")]
+		private Rect iCant {
+			get { return _viewRectCfg; }
+			set { viewRect = value; }
+		}
+
+		private Rect _viewRectCfg = Rect.zero;
 		private Rect _viewRect = Rect.zero;
+
 		[JsonIgnore]
 		public Rect viewRect {
 			get { return _viewRect; }
 			set {
-				if(value.width <= 0f) value.width = Screen.width - value.x;
-				if(value.height <= 0f) value.height = Screen.height - value.y;
+				if(value.width <= 0) value.width = Screen.width;
+				if(value.height <= 0) value.height = Screen.height;
 
-				_viewRect = value;
-				cam.UCamera.aspect = value.width / value.height;
+				var x = GetClampedViewRect(value);
+
+				_viewRect = new Rect(x);
+
+				if(x.width >= Screen.width/* && _viewRectCfg.width <= 0*/)
+					x.width = -1;
+				if(x.height >= Screen.height/* && _viewRectCfg.height <= 0 */)
+					x.height = -1;
+
+				_viewRectCfg = x;
+
 				if(isLoaded)
 					cam.UpdateRenderTextureAndView();
-				if(!isLoaded)
-					cam.screenImage.SetPositionClamped(Vector3.zero, false);
 			}
 		}
 		

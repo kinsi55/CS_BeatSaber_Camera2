@@ -60,6 +60,7 @@ namespace Camera2.Behaviours {
 					useDynamicScale = false
 				};
 
+				UCamera.aspect = (float)w / (float)h;
 				UCamera.targetTexture = renderTexture;
 				worldCam?.SetSource(this);
 			}
