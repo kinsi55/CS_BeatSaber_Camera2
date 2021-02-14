@@ -12,6 +12,13 @@ namespace Camera2.Configuration {
 
 		public bool forceUpright = false;
 		public bool followReplayPosition = true;
+		
+		private bool _pivotingOffset = true;
+		[JsonProperty("pivotingOffset")]
+		public bool pivotingOffset {
+			get { return _pivotingOffset; }
+			set { _pivotingOffset = value; if(settings.isLoaded) settings.ApplyPositionAndRotation(); }
+		}
 
 		[JsonIgnore]
 		internal Transform parent;
@@ -43,6 +50,7 @@ namespace Camera2.Middlewares {
 				return false;
 
 			var targetRotation = parentToUse.rotation;
+			var targetPosition = parentToUse.position;
 
 			if(settings.Smoothfollow.forceUpright) {
 				float zVal;
@@ -60,14 +68,21 @@ namespace Camera2.Middlewares {
 				targetRotation *= Quaternion.Euler(0, 0, -zVal);
 			}
 
+			if(!settings.Smoothfollow.pivotingOffset) {
+				targetRotation *= Quaternion.Euler(settings.targetRot);
+				targetPosition += settings.targetPos;
+			}
+
+			var theTransform = cam.UCamera.transform;// settings.Smoothfollow.pivotingOffset ? cam.transform : cam.UCamera.transform;
+
 			// If we switched scenes (E.g. left / entered a song) we want to snap to the correct position before smoothing again
 			if(lastScene != SceneUtil.currentScene || (HookFPFC.instance?.enabled == true && !ScoresaberUtil.isInReplay)) {
-				cam.transform.SetPositionAndRotation(parentToUse.position, targetRotation);
+				theTransform.SetPositionAndRotation(targetPosition, targetRotation);
 
 				lastScene = SceneUtil.currentScene;
 			} else {
-				cam.transform.position = Vector3.Lerp(cam.transform.position, parentToUse.position, cam.timeSinceLastRender * settings.Smoothfollow.position);
-				cam.transform.rotation = Quaternion.Slerp(cam.transform.rotation, targetRotation, cam.timeSinceLastRender * settings.Smoothfollow.rotation);
+				theTransform.position = Vector3.Lerp(theTransform.position, targetPosition, cam.timeSinceLastRender * settings.Smoothfollow.position);
+				theTransform.rotation = Quaternion.Slerp(theTransform.rotation, targetRotation, cam.timeSinceLastRender * settings.Smoothfollow.rotation);
 			}
 			return true;
 		}

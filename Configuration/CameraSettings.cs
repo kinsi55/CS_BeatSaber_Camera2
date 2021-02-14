@@ -121,16 +121,17 @@ namespace Camera2.Configuration {
 			if(type == CameraType.Positionable) {
 				cam.transform.position = targetPos;
 				cam.transform.eulerAngles = targetRot;
-				cam.UCamera.transform.localPosition = Vector3.zero;
-				cam.UCamera.transform.localEulerAngles = Vector3.zero;
-			} else {
+			} else if(Smoothfollow.pivotingOffset) {
 				/*
 				 * The cam game object is what is parented, so I'm using the Cameras 
 				 * position (Which is nested / parented) to apply an offset
 				 */
 				cam.UCamera.transform.localPosition = targetPos;
 				cam.UCamera.transform.localEulerAngles = targetRot;
+				return;
 			}
+			cam.UCamera.transform.localPosition = Vector3.zero;
+			cam.UCamera.transform.localEulerAngles = Vector3.zero;
 		}
 
 		public void ApplyLayerBitmask() {
