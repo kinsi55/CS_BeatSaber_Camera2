@@ -14,6 +14,11 @@ namespace Camera2.Configuration {
 namespace Camera2.Middlewares {
 	class Follow360 : CamMiddleware, IMHandler {
 		float currentRotateAmount = 0f;
+		public void OnDisable() {
+			currentRotateAmount = 0f;
+			cam.settings.ApplyPositionAndRotation();
+		}
+
 		new public bool Pre() {
 			if(!enabled || !settings.Follow360.enabled || SceneUtil.isInMenu || HookLevelRotation.Instance == null || settings.type != Configuration.CameraType.Positionable) {
 				currentRotateAmount = 0f;
