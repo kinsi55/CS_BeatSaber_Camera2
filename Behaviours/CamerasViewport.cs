@@ -63,10 +63,8 @@ namespace Camera2.Behaviours {
 		public void SetSource(Cam2 cam) {
 			this.cam = cam;
 			
-			//if(material != null) Destroy(material);
-			// Cannot reuse the material, else the preview will just stay black.
-			material = new Material(CamerasViewport.blitCopyShader);
 			material.SetTexture("_MainTex", cam.renderTexture);
+			SetMaterialDirty();
 			rekt.sizeDelta = cam.settings.viewRect.size;
 			position = cam.settings.viewRect.position;
 			gameObject.name = cam.name;
@@ -89,6 +87,7 @@ namespace Camera2.Behaviours {
 		public LessRawImage AddNewView() {
 			var img = new GameObject().AddComponent<LessRawImage>();
 
+			img.material = new Material(blitCopyShader);
 			img.transform.SetParent(gameObject.transform, true); //.parent = gameObject.transform;
 
 			return img;
