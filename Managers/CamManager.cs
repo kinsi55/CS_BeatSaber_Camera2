@@ -76,7 +76,7 @@ namespace Camera2.Managers {
 			var collection = viewLayer ? cams.Values.OrderBy(x => x.settings.layer).AsEnumerable() : cams.Values;
 			
 			foreach(var cam in collection) {
-				if(viewLayer) cam.screenImage.transform.SetAsLastSibling();
+				if(viewLayer) cam.previewImage.transform.SetAsLastSibling();
 				if(bitMask) cam.settings.ApplyLayerBitmask();
 				if(worldCam) cam.ShowWorldCamIfNecessary();
 				if(posRot) cam.settings.ApplyPositionAndRotation();

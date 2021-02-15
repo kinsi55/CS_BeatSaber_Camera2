@@ -21,7 +21,7 @@ namespace Camera2.Behaviours {
 		internal CameraSettings settings { get; private set; } = null;
 		internal RenderTexture renderTexture { get; private set; } = null;
 
-		internal LessRawImage screenImage { get; private set; } = null;
+		internal LessRawImage previewImage { get; private set; } = null;
 		internal PositionableCam worldCam { get; private set; } = null;
 
 		internal List<IMHandler> middlewares { get; private set; } = new List<IMHandler>();
@@ -65,8 +65,8 @@ namespace Camera2.Behaviours {
 				worldCam?.SetSource(this);
 			}
 
-			if(sizeChanged || screenImage.position.x != settings.viewRect.x || screenImage.position.y != settings.viewRect.y)
-				screenImage?.SetSource(this);
+			if(sizeChanged || previewImage.position.x != settings.viewRect.x || previewImage.position.y != settings.viewRect.y)
+				previewImage?.SetSource(this);
 		}
 
 		internal void ShowWorldCamIfNecessary() {
@@ -74,7 +74,6 @@ namespace Camera2.Behaviours {
 				return;
 
 			bool doShowCam = 
-				gameObject.activeInHierarchy && 
 				settings.type == Configuration.CameraType.Positionable &&
 				settings.worldCamVisibility != WorldCamVisibility.Hidden &&
 				(settings.worldCamVisibility != WorldCamVisibility.HiddenWhilePlaying || !SceneUtil.isSongPlaying);
@@ -84,7 +83,7 @@ namespace Camera2.Behaviours {
 
 		public void Init(string name, LessRawImage presentor, bool loadConfig = false) {
 			this.name = name;
-			screenImage = presentor;
+			previewImage = presentor;
 
 			var camClone = Instantiate(SceneUtil.GetMainCameraButReally());
 			camClone.name = "Cam";
@@ -185,12 +184,12 @@ namespace Camera2.Behaviours {
 		}
 		
 		private void OnEnable() {
-			if(screenImage != null) screenImage.gameObject?.SetActive(true);
+			if(previewImage != null) previewImage.gameObject?.SetActive(true);
 			ShowWorldCamIfNecessary();
 		}
 		
 		private void OnDisable() {
-			if(screenImage != null) screenImage.gameObject?.SetActive(false);
+			if(previewImage != null) previewImage.gameObject?.SetActive(false);
 			ShowWorldCamIfNecessary();
 		}
 		
@@ -202,7 +201,7 @@ namespace Camera2.Behaviours {
 					Destroy(component);
 
 			if(UCamera != null) Destroy(UCamera);
-			if(screenImage != null) Destroy(screenImage);
+			if(previewImage != null) Destroy(previewImage);
 			Destroy(gameObject);
 		}
 	}
