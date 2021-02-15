@@ -92,14 +92,21 @@ namespace Camera2.Configuration {
 
 			if(loadConfig && System.IO.File.Exists(cam.configPath)) {
 				JsonConvert.PopulateObject(System.IO.File.ReadAllText(cam.configPath), this, JsonHelpers.leanDeserializeSettings);
+
+				/*
+				 * Layers used to start at -1000 (Legacy from Cam Plus where cameras were rendered to the screen instead of textures)
+				 * This is kinda confusing for usage, so I decided to convert old values like this
+				 */
+				if(layer < 0)
+					layer += 1000;
 			} else {
-				layer = CamManager.cams.Count == 0 ? -1000 : CamManager.cams.Max(x => x.Value.settings.layer) - 1;
+				layer = CamManager.cams.Count == 0 ? 1 : CamManager.cams.Max(x => x.Value.settings.layer) + 1;
 			}
 			// We always save after loading, even if its a fresh load. This will make sure to migrate configs after updates.
 #if !DEV
 			Save();
 #endif
-
+			
 			ApplyPositionAndRotation();
 			ApplyLayerBitmask();
 			cam.UpdateRenderTextureAndView();
@@ -212,7 +219,8 @@ namespace Camera2.Configuration {
 			get { return (int)cam.UCamera.depth; }
 			set {
 				cam.UCamera.depth = value;
-				CamManager.ApplyCameraValues(viewLayer: true);
+				if(isLoaded)
+					CamManager.ApplyCameraValues(viewLayer: true);
 			}
 		}
 
