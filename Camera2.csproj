@@ -184,6 +184,7 @@
     <Compile Include="Plugin.cs" />
     <Compile Include="Behaviours\Cam.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="UI\SpaghettiUI.cs" />
     <Compile Include="Utils\BloomShite.cs" />
     <Compile Include="Utils\Configs.cs" />
     <Compile Include="Utils\Cursor.cs" />
@@ -201,6 +202,11 @@
     <None Include="Directory.Build.targets" Condition="Exists('Directory.Build.targets')" />
     <None Include="Camera2.csproj.user" Condition="Exists('Camera2.csproj.user')" />
     <None Include="PostProcessingShaders\chromaticaberration" />
+    <EmbeddedResource Include="UI\Views\camSettings.bsml" />
+    <EmbeddedResource Include="UI\Views\camList.bsml" />
+    <None Include="UI\Views\camPreview.bsml">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="BeatSaberModdingTools.Tasks">
@@ -209,5 +215,6 @@
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -1,0 +1,27 @@
+﻿<vertical xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:schemaLocation='https://monkeymanboy.github.io/BSML-Docs/ https://raw.githubusercontent.com/monkeymanboy/BSML-Docs/gh-pages/BSMLSchema.xsd'>
+	<horizontal bg='panel-top-gradient'>
+		<text text='Cameras' align='Center'></text>
+	</horizontal>
+	<horizontal>
+		<vertical preferred-width='20'>
+			<page-button event-click='camList#PageUp' direction='Up'></page-button>
+			<page-button event-click='camList#PageDown' direction='Down'></page-button>
+		</vertical>
+		<vertical>
+			<list id='camList' expand-cell='true' select-cell='SelectCamera'></list>
+			<horizontal>
+				<button on-click='AddCam' text='Add Camera'></button>
+				<button id='deleteButton' click-event='showDelConf' text='Delete Camera'></button>
+			</horizontal>
+		</vertical>
+	</horizontal>
+	<modal clickerino-offerino-closerino='true' move-to-center='true' id='deleteConfirmModal' size-delta-x='40' size-delta-y='30' hide-event='closeDelConf' show-event='showDelConf'>
+		<vertical bg='round-rect-panel' horizontal-fit='PreferredSize' vertical-fit='PreferredSize' pad='8'>
+			<text text='Do you really want to delete this Camera?'></text>
+			<horizontal spacing='10' pad-top='4'>
+				<primary-button on-click='DeleteCam' text='Yes' click-event='closeDelConf'></primary-button>
+				<button text='Cancel' click-event='closeDelConf'></button>
+			</horizontal>
+		</vertical>
+	</modal>
+</vertical>
