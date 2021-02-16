@@ -20,7 +20,15 @@ namespace Camera2.Middlewares {
 		}
 
 		new public bool Pre() {
-			if(!enabled || !settings.Follow360.enabled || SceneUtil.isInMenu || HookLevelRotation.Instance == null || settings.type != Configuration.CameraType.Positionable) {
+			if(
+				!enabled || 
+				!settings.Follow360.enabled || 
+				SceneUtil.isInMenu || 
+				HookLevelRotation.Instance == null ||
+				settings.type != Configuration.CameraType.Positionable
+				// CBA to deal with 360 support for absolute offsets for now
+				//(settings.type != Configuration.CameraType.Positionable && settings.Smoothfollow.pivotingOffset)
+			) {
 				currentRotateAmount = 0f;
 				return true;
 			}

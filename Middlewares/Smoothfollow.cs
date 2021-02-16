@@ -73,7 +73,7 @@ namespace Camera2.Middlewares {
 				targetPosition += settings.targetPos;
 			}
 
-			var theTransform = cam.UCamera.transform;// settings.Smoothfollow.pivotingOffset ? cam.transform : cam.UCamera.transform;
+			var theTransform = cam.transform;// settings.Smoothfollow.pivotingOffset ? cam.transform : cam.UCamera.transform;
 
 			// If we switched scenes (E.g. left / entered a song) we want to snap to the correct position before smoothing again
 			if(lastScene != SceneUtil.currentScene || (HookFPFC.instance?.enabled == true && !ScoresaberUtil.isInReplay)) {

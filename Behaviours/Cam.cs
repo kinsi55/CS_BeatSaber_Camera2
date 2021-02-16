@@ -192,7 +192,10 @@ namespace Camera2.Behaviours {
 		}
 		
 		private void OnEnable() {
-			if(previewImage != null) previewImage.gameObject?.SetActive(true);
+			// Force a render here so we dont end up with a stale image after having just enabled this camera
+			UCamera?.Render();
+			if(previewImage != null)
+				previewImage.gameObject?.SetActive(true);
 			ShowWorldCamIfNecessary();
 		}
 		
