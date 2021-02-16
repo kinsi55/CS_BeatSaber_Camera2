@@ -6,7 +6,7 @@
 			<string-setting text='Camera Name' value='camName' bind-value='true' apply-on-change='true'/>
 			<dropdown-list-setting text='Camera Type' value='type' choices='types' bind-value='true' apply-on-change='true'/>
 			<slider-setting text='Field of View' min='1' max='140' increment='0.5' value='FOV' bind-value='true' apply-on-change='true'/>
-			<slider-setting text='FPS Limit' min='-1' max='240' increment='1' integer-only='true' value='fpsLimit' bind-value='true' apply-on-change='true'/>
+			<slider-setting text='FPS Limit (0 = off)' min='0' max='240' increment='1' integer-only='true' value='fpsLimit' bind-value='true' apply-on-change='true'/>
 			<slider-setting text='Render Scale' min='0.2' max='3' increment='0.1' value='renderScale' bind-value='true' apply-on-change='true'/>
 			<list-setting text='Anti Aliasing' value='antiAliasing' choices='antiAliasingLevels' bind-value='true' apply-on-change='true'/>
 			
@@ -21,14 +21,18 @@
 			<checkbox text='UI' value='visibility_UI' bind-value='true' apply-on-change='true'/>
 			<checkbox text='Avatar' value='visibility_Avatar' bind-value='true' apply-on-change='true'/>
 			<checkbox text='Floor' value='visibility_Floor' bind-value='true' apply-on-change='true'/>
-			<checkbox text='CutParticles' value='visibility_CutParticles' bind-value='true' apply-on-change='true'/>
+			<checkbox text='Cut Particles' value='visibility_CutParticles' bind-value='true' apply-on-change='true'/>
 		</modifier-container>
 	</tab>
 	<tab tags='tabs' tab-name='Smoothfollow' id='smoothfollowTab'>
 		<vertical horizontal-fit='PreferredSize' vertical-fit='PreferredSize'>
 			<modifier-container child-expand-width='true'>
-				<checkbox text='Force Upright' value='smoothFollow_forceUpright' bind-value='true' apply-on-change='true'/>
-				<checkbox text='Follow Replay Position' value='smoothFollow_followReplayPosition' bind-value='true' apply-on-change='true'/>
+				<checkbox text='Force Upright' value='smoothFollow_forceUpright' bind-value='true' apply-on-change='true' 
+						  hover-hint='Ignores / prevents sideways rotation of the camera'
+				/>
+				<checkbox text='Follow Replay Position' value='smoothFollow_followReplayPosition' bind-value='true' apply-on-change='true'
+						  hover-hint='When watching a replay follow the Replay head position instead of the current HMD one'
+				/>
 				<slider-setting text='Position Smoothing *' min='0.1' max='50' increment='0.1' value='smoothFollow_position' bind-value='true' apply-on-change='true'/>
 				<slider-setting text='Rotation Smoothing *' min='0.1' max='50' increment='0.1' value='smoothFollow_rotation' bind-value='true' apply-on-change='true'/>
 			</modifier-container>
@@ -37,16 +41,22 @@
 	</tab>
 	<tab tags='tabs' tab-name='ModmapExt'>
 		<modifier-container child-expand-width='true' horizontal-fit='PreferredSize'>
-			<checkbox id='modmapExt_moveWithMap' text='Move with Map' value='modmapExt_moveWithMap' bind-value='true' apply-on-change='true'/>
-			<checkbox text='Auto-Visible Walls' value='modmapExt_autoOpaqueWalls' bind-value='true' apply-on-change='true'/>
-			<checkbox text='Auto-Hide HUD' value='modmapExt_autoHideHUD' bind-value='true' apply-on-change='true'/>
+			<checkbox id='modmapExt_moveWithMap' text='Move with Map' value='modmapExt_moveWithMap' bind-value='true' apply-on-change='true'
+					  hover-hint='Make the camera follow the map movement / rotation'
+			/>
+			<checkbox text='Auto-Visible Walls' value='modmapExt_autoOpaqueWalls' bind-value='true' apply-on-change='true'
+					  hover-hint='When playing a Modded map automatically make the walls opaque'
+			/>
+			<checkbox text='Auto-Hide HUD' value='modmapExt_autoHideHUD' bind-value='true' apply-on-change='true'
+					  hover-hint='When playing a Modded map automatically hide the HUD'
+			/>
 		</modifier-container>
 	</tab>
-	<tab tags='tabs' tab-name='Scenes'>
+	<!--<tab tags='tabs' tab-name='Scenes'>
 		<modifier-container child-expand-width='true' horizontal-fit='PreferredSize'>
 			<macro.for-each items='scenes'>
 				<checkbox text='~name'/>
 			</macro.for-each>
 		</modifier-container>
-	</tab>
+	</tab>-->
 </vertical>
