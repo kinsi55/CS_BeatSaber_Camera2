@@ -14,7 +14,7 @@ using System.Reflection;
 namespace Camera2.Behaviours {
 
 	class Cam2 : MonoBehaviour {
-		internal new string name { get; private set; }
+		internal new string name { get; private set; } = null;
 		internal string configPath { get { return ConfigUtil.GetCameraPath(name); } }
 
 		internal Camera UCamera { get; private set; } = null;
@@ -81,7 +81,15 @@ namespace Camera2.Behaviours {
 			worldCam.gameObject.SetActive(doShowCam);
 		}
 
-		public void Init(string name, LessRawImage presentor, bool loadConfig = false) {
+		public void Init(string name, LessRawImage presentor = null, bool loadConfig = false, bool rename = false) {
+			if(this.name != null) {
+				if(rename) {
+					this.name = name;
+					if(loadConfig) settings.Load(true);
+				}
+				return;
+			}
+
 			this.name = name;
 			previewImage = presentor;
 

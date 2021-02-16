@@ -6,6 +6,7 @@ using UnityEngine;
 using UnityEngine.XR;
 using Camera2.Behaviours;
 using Camera2.Utils;
+using Camera2.Configuration;
 
 namespace Camera2.Managers {
 	static class CamManager {
@@ -112,6 +113,52 @@ namespace Camera2.Managers {
 				i++;
 
 			return InitCamera($"NewCamera{i}", false);
+		}
+
+		public static void DeleteCamera(Cam2 cam) {
+			if(!cams.Values.Contains(cam))
+				return;
+
+			if(cams[cam.name] != cam)
+				return;
+
+			cams.Remove(cam.name);
+
+			var cfgPath = ConfigUtil.GetCameraPath(cam.name);
+
+			GameObject.DestroyImmediate(cam);
+
+			if(File.Exists(cfgPath))
+				File.Delete(cfgPath);
+		}
+
+		public static bool RenameCamera(Cam2 cam, string newName) {
+			if(cams.ContainsKey(newName))
+				return false;
+
+			if(!cams.ContainsValue(cam))
+				return false;
+
+			var oldName = cam.name;
+
+			cams[newName] = cam;
+			cams.Remove(oldName);
+
+			foreach(SceneTypes sceneT in Enum.GetValues(typeof(SceneTypes))) {
+				var scene = ScenesManager.settings.scenes[sceneT];
+
+				if(!scene.Contains(oldName))
+					continue;
+
+				scene.Add(newName);
+				scene.Remove(oldName);
+			}
+
+			cam.settings.Save();
+			File.Move(cam.configPath, ConfigUtil.GetCameraPath(newName));
+			cam.Init(newName, rename: true);
+
+			return true;
 		}
 	}
 }

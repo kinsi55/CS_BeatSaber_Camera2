@@ -88,17 +88,19 @@ namespace Camera2.Configuration {
 			// Set default values incase they're removed from the JSON because of user stoopid
 			isLoaded = false;
 			FOV = 90;
-			viewRect = new Rect(0, 0, Screen.width, Screen.height);
+			viewRect = new Rect(0, 0, -1, -1);
 
-			if(loadConfig && System.IO.File.Exists(cam.configPath)) {
-				JsonConvert.PopulateObject(System.IO.File.ReadAllText(cam.configPath), this, JsonHelpers.leanDeserializeSettings);
+			if(System.IO.File.Exists(cam.configPath)) {
+				if(loadConfig) {
+					JsonConvert.PopulateObject(System.IO.File.ReadAllText(cam.configPath), this, JsonHelpers.leanDeserializeSettings);
 
-				/*
-				 * Layers used to start at -1000 (Legacy from Cam Plus where cameras were rendered to the screen instead of textures)
-				 * This is kinda confusing for usage, so I decided to convert old values like this
-				 */
-				if(layer < 0)
-					layer += 1000;
+					/*
+					 * Layers used to start at -1000 (Legacy from Cam Plus where cameras were rendered to the screen instead of textures)
+					 * This is kinda confusing for usage, so I decided to convert old values like this
+					 */
+					if(layer < 0)
+						layer += 1000;
+				}
 			} else {
 				layer = CamManager.cams.Count == 0 ? 1 : CamManager.cams.Max(x => x.Value.settings.layer) + 1;
 			}
@@ -115,7 +117,8 @@ namespace Camera2.Configuration {
 		}
 
 		public void Save() {
-			System.IO.File.WriteAllText(cam.configPath, JsonConvert.SerializeObject(this, Formatting.Indented));
+			if(cam != null && cam.gameObject != null)
+				System.IO.File.WriteAllText(cam.configPath, JsonConvert.SerializeObject(this, Formatting.Indented));
 		}
 
 		public void Reload() {
