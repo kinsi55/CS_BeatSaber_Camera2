@@ -42,6 +42,3 @@ Where as before you had profiles, and cameras associated to them, you now have s
 
 ### Omitted features (For now™)
 - Multiplayer related features
-- **Configuration UI**
-
-You can only move around and resize camera views on the desktop window - thats it. I would've loved to add configuration using a desktop UI like Camera Plus has but quite honestly implementing desktop UI's in this engine using just code is an even bigger pain than failing a 5 minute map 5 seconds before the end when you're on full combo otherwise. **For now**™ the only way to configure Camera2 is using the config files, **eventually** I'm hoping to add ingame configuration.
