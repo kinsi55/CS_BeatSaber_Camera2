@@ -146,9 +146,7 @@ namespace Camera2.Managers {
 			cams[newName] = cam;
 			cams.Remove(oldName);
 
-			foreach(SceneTypes sceneT in Enum.GetValues(typeof(SceneTypes))) {
-				var scene = ScenesManager.settings.scenes[sceneT];
-
+			foreach(var scene in ScenesManager.settings.scenes.Values) {
 				if(!scene.Contains(oldName))
 					continue;
 
@@ -159,6 +157,7 @@ namespace Camera2.Managers {
 			cam.settings.Save();
 			File.Move(cam.configPath, ConfigUtil.GetCameraPath(newName));
 			cam.Init(newName, rename: true);
+			ScenesManager.settings.Save();
 
 			return true;
 		}
