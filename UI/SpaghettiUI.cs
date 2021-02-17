@@ -56,9 +56,11 @@ namespace Camera2.Settings {
 		public override string ResourceName => "Camera2.UI.Views.camSettings.bsml";
 #pragma warning disable 649
 		[UIComponent("zOffsetSlider")] SliderSetting zOffsetSlider;
-		[UIComponent("modmapExt_moveWithMap")] ToggleSetting modmapExt_moveWithMapSlider;
+		[UIComponent("previewSizeSlider")] SliderSetting previewSizeSlider;
+		[UIComponent("modmapExt_moveWithMapCheckbox")] ToggleSetting modmapExt_moveWithMapSlider;
 		[UIComponent("worldcamVisibilityInput")] LayoutElement worldcamVisibilityObj;
 		[UIComponent("smoothfollowTab")] Tab smoothfollowTab;
+		[UIComponent("follow360Tab")] Tab follow360Tab;
 		[UIComponent("tabSelector")] TabSelector tabSelector;
 #pragma warning restore 649
 
@@ -75,21 +77,35 @@ namespace Camera2.Settings {
 			).Select(x => x.Name).ToList();
 		}
 #region variables
-		internal string camName { get { return cam.name; }
+		internal string camName {
+			get { return cam.name; }
 			set {
 				if(CamManager.RenameCamera(cam, value)) {
-					Coordinator.instance.currentTableCell.text = value;
+					Coordinator.instance.currentTableCell.text = camName;
 					Coordinator.instance.camList.list.tableView.ReloadData();
 				}
 				NotifyPropertyChanged("camName");
 			}
 		}
-		internal CameraType type { get { return cam.settings.type; } set { cam.settings.type = value; } }
+		internal CameraType type {
+			get { return cam.settings.type; }
+			set {
+				cam.settings.type = value;
+				// When switching to FP reset Rot / Pos so that the previous TP values arent used as the FP offset
+				if(value == CameraType.FirstPerson) {
+					cam.settings.targetRot = UnityEngine.Vector3.zero;
+					cam.settings.targetPos = new UnityEngine.Vector3(0, 0, zOffset);
+					cam.settings.ApplyPositionAndRotation();
+					NotifyPropertyChanged("zOffset");
+				}
+			}
+		}
 		internal WorldCamVisibility worldCamVisibility { get { return cam.settings.worldCamVisibility; } set { cam.settings.worldCamVisibility = value; } }
 		internal float FOV { get { return cam.settings.FOV; } set { cam.settings.FOV = value; } }
 		internal int fpsLimit { get { return cam.settings.FPSLimiter.fpsLimit; } set { cam.settings.FPSLimiter.fpsLimit = value; } }
 		internal float renderScale { get { return cam.settings.renderScale; } set { cam.settings.renderScale = value; } }
 		internal int antiAliasing { get { return cam.settings.antiAliasing; } set { cam.settings.antiAliasing = value; } }
+		internal float previewSize { get { return cam.settings.previewScreenSize; } set { cam.settings.previewScreenSize = value; } }
 
 		internal float zOffset {
 			get { return cam.settings.targetPos.z; } set { cam.settings.targetPos.z = value; cam.settings.ApplyPositionAndRotation(); }
@@ -136,7 +152,16 @@ namespace Camera2.Settings {
 		internal bool modmapExt_autoHideHUD {
 			get { return cam.settings.ModmapExtensions.autoHideHUD; } set { cam.settings.ModmapExtensions.autoHideHUD = value; }
 		}
-#endregion
+
+		internal bool follow360_moveWithMap {
+			get { return cam.settings.Follow360.enabled; }
+			set { cam.settings.Follow360.enabled = value; }
+		}
+		internal float follow360_smoothing {
+			get { return cam.settings.Follow360.smoothing; }
+			set { cam.settings.Follow360.smoothing = value; }
+		}
+		#endregion
 
 
 
@@ -199,9 +224,11 @@ namespace Camera2.Settings {
 			if(zOffsetSlider == null) return;
 
 			zOffsetSlider.gameObject.SetActive(type == CameraType.FirstPerson);
+			previewSizeSlider.gameObject.SetActive(type == CameraType.Positionable);
 			modmapExt_moveWithMapSlider.gameObject.SetActive(type == CameraType.Positionable);
 			worldcamVisibilityObj.gameObject.SetActive(type == CameraType.Positionable);
 			smoothfollowTab.IsVisible = type == CameraType.FirstPerson;
+			follow360Tab.IsVisible = type == CameraType.Positionable;
 
 			// Apparently this is the best possible way to programmatically switch the selected tab
 			tabSelector.textSegmentedControl.SelectCellWithNumber(0);
@@ -227,7 +254,9 @@ namespace Camera2.Settings {
 		}
 
 		[UIAction("#post-parse")]
-		void Init() {
+		internal void Init() {
+			list.data.Clear();
+
 			foreach(var cam in CamManager.cams.Values)
 				AddCamToList(cam);
 
@@ -292,8 +321,11 @@ namespace Camera2.Settings {
 
 		protected override void DidActivate(bool firstActivation, bool addedToHierarchy, bool screenSystemEnabling) {
 			try {
-				if(!firstActivation)
+				if(!firstActivation) {
+					camList?.Init();
+					ShowSettingsForCam(CamManager.cams.Values.First());
 					return;
+				}
 				
 				showBackButton = true;
 

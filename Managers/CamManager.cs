@@ -148,6 +148,9 @@ namespace Camera2.Managers {
 
 			var oldName = cam.name;
 
+			if(newName == oldName)
+				return true;
+
 			cams[newName] = cam;
 			cams.Remove(oldName);
 

@@ -12,6 +12,7 @@
 			
 			<dropdown-list-setting id='worldcamVisibilityInput' text='Worldcam Visibility' value='worldCamVisibility' choices='worldCamVisibilities' bind-value='true' apply-on-change='true'/>
 			<slider-setting id='zOffsetSlider' text='Z-Offset' min='-2' max='0.5' increment='0.1' value='zOffset' bind-value='true' apply-on-change='true'/>
+			<slider-setting id='previewSizeSlider' text='Preview Size' min='0.3' max='3' increment='0.1' value='previewSize' bind-value='true' apply-on-change='true'/>
 		</modifier-container>
 	</tab>
 	<tab tags='tabs' tab-name='Visibility'>
@@ -41,7 +42,7 @@
 	</tab>
 	<tab tags='tabs' tab-name='ModmapExt'>
 		<modifier-container child-expand-width='true' horizontal-fit='PreferredSize'>
-			<checkbox id='modmapExt_moveWithMap' text='Move with Map' value='modmapExt_moveWithMap' bind-value='true' apply-on-change='true'
+			<checkbox id='modmapExt_moveWithMapCheckbox' text='Move with Map' value='modmapExt_moveWithMap' bind-value='true' apply-on-change='true'
 					  hover-hint='Make the camera follow the map movement / rotation'
 			/>
 			<checkbox text='Auto-Visible Walls' value='modmapExt_autoOpaqueWalls' bind-value='true' apply-on-change='true'
@@ -52,10 +53,21 @@
 			/>
 		</modifier-container>
 	</tab>
+	<tab tags='tabs' tab-name='Follow360' id='follow360Tab'>
+		<vertical horizontal-fit='PreferredSize' vertical-fit='PreferredSize'>
+			<modifier-container child-expand-width='true' horizontal-fit='PreferredSize'>
+				<checkbox text='Enabled' value='follow360_moveWithMap' bind-value='true' apply-on-change='true'
+						  hover-hint='Should the Camera follow the rotation on 360 Maps?'
+				/>
+				<slider-setting text='Rotation Smoothing *' min='0.1' max='50' increment='0.1' value='follow360_smoothing' bind-value='true' apply-on-change='true'/>
+			</modifier-container>
+			<text text="* Lower value = More smoothing" color="#CCC" font-size="3" align="Center"></text>
+		</vertical>
+	</tab>
 	<!--<tab tags='tabs' tab-name='Scenes'>
 		<modifier-container child-expand-width='true' horizontal-fit='PreferredSize'>
 			<macro.for-each items='scenes'>
-				<checkbox text='~name'/>
+				<checkbox text='~name' on-change='sceneCheckSet' get-event='sceneCheckGet'/>
 			</macro.for-each>
 		</modifier-container>
 	</tab>-->
