@@ -31,7 +31,7 @@ Please see [**The Wiki**](https://github.com/kinsi55/CS_BeatSaber_Camera2/wiki) 
 #### General
 - The implementation of profiles has changed
 
-Where as before you had profiles, and cameras associated to them, you now have scenes and can enable or disable any camera on a per-scene basis. Scenes are the menu, when in game, when watching a replay, etc. More details on scenes can be found [HERE](https://github.com/kinsi55/CS_BeatSaber_Camera2/wiki/Scenes)
+Where as with Camera Plus you have profiles, and cameras associated to them, you now have scenes and can enable or disable any camera on a per-scene basis. Scenes are the menu, when in game, when watching a replay, etc. More details on scenes can be found [HERE](https://github.com/kinsi55/CS_BeatSaber_Camera2/wiki/Scenes)
 
 #### Third person cameras
 - When moving third person cameras the preview gets bigger to give you an easier time positioning correctly.
