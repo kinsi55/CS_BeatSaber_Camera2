@@ -14,7 +14,7 @@ namespace Camera2.HarmonyPatches {
 					____obstacleCore.GetChild(0).gameObject.layer = (int)VisibilityLayers.WallTextures;
 			}
 
-			____obstacleFakeGlow.enabled = false;
+			//____obstacleFakeGlow.enabled = false;
 		}
 
 		public static void MakeWallsOpaqueForMainCam() {
