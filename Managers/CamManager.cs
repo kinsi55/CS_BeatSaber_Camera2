@@ -141,6 +141,11 @@ namespace Camera2.Managers {
 			if(!cams.ContainsValue(cam))
 				return false;
 
+			newName = string.Concat(newName.Split(Path.GetInvalidFileNameChars())).Trim();
+
+			if(newName.Length == 0)
+				return false;
+
 			var oldName = cam.name;
 
 			cams[newName] = cam;
