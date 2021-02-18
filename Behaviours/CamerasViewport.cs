@@ -9,8 +9,8 @@ namespace Camera2.Behaviours {
 		public Cam2 cam { get; private set; }
 		public RectTransform rekt { get; private set; }
 
-		public Vector2 position { get { return rekt.position; } set { rekt.position = value; } }
-		public Vector2 size { get { return rekt.sizeDelta; } set { rekt.sizeDelta = value; } }
+		public Vector2 position { get => rekt.position; set { rekt.position = value; } }
+		public Vector2 size { get => rekt.sizeDelta; set { rekt.sizeDelta = value; } }
 
 		public void SetPositionClamped(Vector2 pos, bool writeToConfig = false) {
 			pos.x = Mathf.Clamp(pos.x, 0, Screen.width - rekt.rect.width);

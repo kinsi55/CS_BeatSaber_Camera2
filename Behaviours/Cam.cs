@@ -15,7 +15,7 @@ namespace Camera2.Behaviours {
 
 	class Cam2 : MonoBehaviour {
 		internal new string name { get; private set; } = null;
-		internal string configPath { get { return ConfigUtil.GetCameraPath(name); } }
+		internal string configPath { get => ConfigUtil.GetCameraPath(name); }
 
 		internal Camera UCamera { get; private set; } = null;
 		internal CameraSettings settings { get; private set; } = null;

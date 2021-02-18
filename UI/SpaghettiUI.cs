@@ -78,7 +78,7 @@ namespace Camera2.Settings {
 		}
 #region variables
 		internal string camName {
-			get { return cam.name; }
+			get => cam.name;
 			set {
 				if(CamManager.RenameCamera(cam, value)) {
 					Coordinator.instance.currentTableCell.text = camName;
@@ -88,7 +88,7 @@ namespace Camera2.Settings {
 			}
 		}
 		internal CameraType type {
-			get { return cam.settings.type; }
+			get => cam.settings.type;
 			set {
 				cam.settings.type = value;
 				// When switching to FP reset Rot / Pos so that the previous TP values arent used as the FP offset
@@ -100,65 +100,65 @@ namespace Camera2.Settings {
 				}
 			}
 		}
-		internal WorldCamVisibility worldCamVisibility { get { return cam.settings.worldCamVisibility; } set { cam.settings.worldCamVisibility = value; } }
-		internal float FOV { get { return cam.settings.FOV; } set { cam.settings.FOV = value; } }
-		internal int fpsLimit { get { return cam.settings.FPSLimiter.fpsLimit; } set { cam.settings.FPSLimiter.fpsLimit = value; } }
-		internal float renderScale { get { return cam.settings.renderScale; } set { cam.settings.renderScale = value; } }
-		internal int antiAliasing { get { return cam.settings.antiAliasing; } set { cam.settings.antiAliasing = value; } }
-		internal float previewSize { get { return cam.settings.previewScreenSize; } set { cam.settings.previewScreenSize = value; } }
+		internal WorldCamVisibility worldCamVisibility { get => cam.settings.worldCamVisibility; set { cam.settings.worldCamVisibility = value; } }
+		internal float FOV { get => cam.settings.FOV; set { cam.settings.FOV = value; } }
+		internal int fpsLimit { get => cam.settings.FPSLimiter.fpsLimit; set { cam.settings.FPSLimiter.fpsLimit = value; } }
+		internal float renderScale { get => cam.settings.renderScale; set { cam.settings.renderScale = value; } }
+		internal int antiAliasing { get => cam.settings.antiAliasing; set { cam.settings.antiAliasing = value; } }
+		internal float previewSize { get => cam.settings.previewScreenSize; set { cam.settings.previewScreenSize = value; } }
 
 		internal float zOffset {
-			get { return cam.settings.targetPos.z; } set { cam.settings.targetPos.z = value; cam.settings.ApplyPositionAndRotation(); }
+			get => cam.settings.targetPos.z; set { cam.settings.targetPos.z = value; cam.settings.ApplyPositionAndRotation(); }
 		}
 
 		internal WallVisiblity visibility_Walls {
-			get { return cam.settings.visibleObjects.Walls; } set { cam.settings.visibleObjects.Walls = value; }
+			get => cam.settings.visibleObjects.Walls; set { cam.settings.visibleObjects.Walls = value; }
 		}
 		internal NoteVisibility visibility_Notes {
-			get { return cam.settings.visibleObjects.Notes; } set { cam.settings.visibleObjects.Notes = value; }
+			get => cam.settings.visibleObjects.Notes; set { cam.settings.visibleObjects.Notes = value; }
 		}
 		internal bool visibility_UI {
-			get { return cam.settings.visibleObjects.UI; } set { cam.settings.visibleObjects.UI = value; }
+			get => cam.settings.visibleObjects.UI; set { cam.settings.visibleObjects.UI = value; }
 		}
 		internal bool visibility_Avatar {
-			get { return cam.settings.visibleObjects.Avatar; } set { cam.settings.visibleObjects.Avatar = value; }
+			get => cam.settings.visibleObjects.Avatar; set { cam.settings.visibleObjects.Avatar = value; }
 		}
 		internal bool visibility_Floor {
-			get { return cam.settings.visibleObjects.Floor; } set { cam.settings.visibleObjects.Floor = value; }
+			get => cam.settings.visibleObjects.Floor; set { cam.settings.visibleObjects.Floor = value; }
 		}
 		internal bool visibility_CutParticles {
-			get { return cam.settings.visibleObjects.CutParticles; } set { cam.settings.visibleObjects.CutParticles = value; }
+			get => cam.settings.visibleObjects.CutParticles; set { cam.settings.visibleObjects.CutParticles = value; }
 		}
 
 		internal bool smoothFollow_forceUpright {
-			get { return cam.settings.Smoothfollow.forceUpright; } set { cam.settings.Smoothfollow.forceUpright = value; }
+			get => cam.settings.Smoothfollow.forceUpright; set { cam.settings.Smoothfollow.forceUpright = value; }
 		}
 		internal bool smoothFollow_followReplayPosition {
-			get { return cam.settings.Smoothfollow.followReplayPosition; } set { cam.settings.Smoothfollow.followReplayPosition = value; }
+			get => cam.settings.Smoothfollow.followReplayPosition; set { cam.settings.Smoothfollow.followReplayPosition = value; }
 		}
 		internal float smoothFollow_position {
-			get { return cam.settings.Smoothfollow.position; } set { cam.settings.Smoothfollow.position = value; }
+			get => cam.settings.Smoothfollow.position; set { cam.settings.Smoothfollow.position = value; }
 		}
 		internal float smoothFollow_rotation {
-			get { return cam.settings.Smoothfollow.rotation; } set { cam.settings.Smoothfollow.rotation = value; }
+			get => cam.settings.Smoothfollow.rotation; set { cam.settings.Smoothfollow.rotation = value; }
 		}
 
 		internal bool modmapExt_moveWithMap {
-			get { return cam.settings.ModmapExtensions.moveWithMap; } set { cam.settings.ModmapExtensions.moveWithMap = value; }
+			get => cam.settings.ModmapExtensions.moveWithMap; set { cam.settings.ModmapExtensions.moveWithMap = value; }
 		}
 		internal bool modmapExt_autoOpaqueWalls {
-			get { return cam.settings.ModmapExtensions.autoOpaqueWalls; } set { cam.settings.ModmapExtensions.autoOpaqueWalls = value; }
+			get => cam.settings.ModmapExtensions.autoOpaqueWalls; set { cam.settings.ModmapExtensions.autoOpaqueWalls = value; }
 		}
 		internal bool modmapExt_autoHideHUD {
-			get { return cam.settings.ModmapExtensions.autoHideHUD; } set { cam.settings.ModmapExtensions.autoHideHUD = value; }
+			get => cam.settings.ModmapExtensions.autoHideHUD; set { cam.settings.ModmapExtensions.autoHideHUD = value; }
 		}
 
 		internal bool follow360_moveWithMap {
-			get { return cam.settings.Follow360.enabled; }
+			get => cam.settings.Follow360.enabled;
 			set { cam.settings.Follow360.enabled = value; }
 		}
 		internal float follow360_smoothing {
-			get { return cam.settings.Follow360.smoothing; }
+			get => cam.settings.Follow360.smoothing;
 			set { cam.settings.Follow360.smoothing = value; }
 		}
 		#endregion

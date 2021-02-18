@@ -58,13 +58,13 @@ namespace Camera2.Configuration {
 		//private bool _EverythingElse = true;
 
 
-		public WallVisiblity Walls { get { return _Walls; } set { _Walls = value; parentSetting.ApplyLayerBitmask(); } }
-		public bool Debris { get { return _Debris; } set { _Debris = value; parentSetting.ApplyLayerBitmask(); } }
-		public bool UI { get { return _UI; } set { _UI = value; parentSetting.ApplyLayerBitmask(); } }
-		public bool Avatar { get { return _Avatar; } set { _Avatar = value; parentSetting.ApplyLayerBitmask(); } }
-		public bool Floor { get { return _Floor; } set { _Floor = value; parentSetting.ApplyLayerBitmask(); } }
-		public bool CutParticles { get { return _CutParticles; } set { _CutParticles = value; parentSetting.ApplyLayerBitmask(); } }
-		public NoteVisibility Notes { get { return _Notes; } set { _Notes = value; parentSetting.ApplyLayerBitmask(); } }
+		public WallVisiblity Walls { get => _Walls; set { _Walls = value; parentSetting.ApplyLayerBitmask(); } }
+		public bool Debris { get => _Debris; set { _Debris = value; parentSetting.ApplyLayerBitmask(); } }
+		public bool UI { get => _UI; set { _UI = value; parentSetting.ApplyLayerBitmask(); } }
+		public bool Avatar { get => _Avatar; set { _Avatar = value; parentSetting.ApplyLayerBitmask(); } }
+		public bool Floor { get => _Floor; set { _Floor = value; parentSetting.ApplyLayerBitmask(); } }
+		public bool CutParticles { get => _CutParticles; set { _CutParticles = value; parentSetting.ApplyLayerBitmask(); } }
+		public NoteVisibility Notes { get => _Notes; set { _Notes = value; parentSetting.ApplyLayerBitmask(); } }
 		// Wouldnt be very useful since I havent figured out yet how to make cams have transparency
 		//public bool EverythingElse { get { return _EverythingElse; } set { _EverythingElse = value; parentSetting.ApplyLayerBitmask(); } }
 	}
@@ -182,7 +182,7 @@ namespace Camera2.Configuration {
 		private CameraType _type = CameraType.FirstPerson;
 		[JsonConverter(typeof(StringEnumConverter))]
 		public CameraType type {
-			get { return _type; }
+			get => _type;
 			set {
 				_type = value;
 				//TODO: Temporary implementation to migrate Attached to FirstPerson as I had Attached as the default before accidently
@@ -199,7 +199,7 @@ namespace Camera2.Configuration {
 		private WorldCamVisibility _worldCamVisibility = WorldCamVisibility.HiddenWhilePlaying;
 		[JsonConverter(typeof(StringEnumConverter))]
 		public WorldCamVisibility worldCamVisibility {
-			get { return _worldCamVisibility; }
+			get => _worldCamVisibility;
 			set {
 				_worldCamVisibility = value;
 				if(isLoaded)
@@ -209,7 +209,7 @@ namespace Camera2.Configuration {
 
 		private float _previewScreenSize = 0.3f;
 		public float previewScreenSize {
-			get { return _previewScreenSize; }
+			get => _previewScreenSize;
 			set {
 				_previewScreenSize = Mathf.Clamp(value, 0.3f, 3f);
 				if(isLoaded)
@@ -219,7 +219,7 @@ namespace Camera2.Configuration {
 
 		public float FOV { get { return cam.UCamera.fieldOfView; } set { cam.UCamera.fieldOfView = value; } }
 		public int layer {
-			get { return (int)cam.UCamera.depth; }
+			get => (int)cam.UCamera.depth;
 			set {
 				cam.UCamera.depth = value;
 				if(isLoaded)
@@ -229,7 +229,7 @@ namespace Camera2.Configuration {
 
 		private int _antiAliasing = 1;
 		public int antiAliasing {
-			get { return _antiAliasing; }
+			get => _antiAliasing;
 			set {
 				_antiAliasing = Mathf.Clamp(value, 1, 8);
 				if(isLoaded) 
@@ -239,7 +239,7 @@ namespace Camera2.Configuration {
 
 		private float _renderScale = 1;
 		public float renderScale {
-			get { return _renderScale; }
+			get => _renderScale;
 			set {
 				_renderScale = Mathf.Clamp(value, 0.2f, 3f);
 				if(isLoaded)
@@ -271,7 +271,7 @@ namespace Camera2.Configuration {
 
 		[JsonConverter(typeof(RectConverter)), JsonProperty("viewRect")]
 		private Rect iCant {
-			get { return _viewRectCfg; }
+			get => _viewRectCfg;
 			set { viewRect = value; }
 		}
 
@@ -280,7 +280,7 @@ namespace Camera2.Configuration {
 
 		[JsonIgnore]
 		public Rect viewRect {
-			get { return _viewRect; }
+			get => _viewRect;
 			set {
 				if(value.width <= 0) value.width = Screen.width;
 				if(value.height <= 0) value.height = Screen.height;
