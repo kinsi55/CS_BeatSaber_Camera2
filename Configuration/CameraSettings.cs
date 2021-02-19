@@ -193,6 +193,8 @@ namespace Camera2.Configuration {
 					return;
 				cam.ShowWorldCamIfNecessary();
 				ApplyLayerBitmask();
+				// Pos / Rot is applied differently depending on if its a FP or TP cam
+				ApplyPositionAndRotation();
 			}
 		}
 		

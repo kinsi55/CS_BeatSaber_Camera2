@@ -90,14 +90,13 @@ namespace Camera2.Settings {
 		internal CameraType type {
 			get => cam.settings.type;
 			set {
-				cam.settings.type = value;
 				// When switching to FP reset Rot / Pos so that the previous TP values arent used as the FP offset
 				if(value == CameraType.FirstPerson) {
 					cam.settings.targetRot = UnityEngine.Vector3.zero;
 					cam.settings.targetPos = new UnityEngine.Vector3(0, 0, zOffset);
-					cam.settings.ApplyPositionAndRotation();
 					NotifyPropertyChanged("zOffset");
 				}
+				cam.settings.type = value;
 				ToggleSettingVisibility();
 			}
 		}

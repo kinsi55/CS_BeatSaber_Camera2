@@ -28,8 +28,9 @@ namespace Camera2.Behaviours {
 
 			grabbedCamera = camera;
 
-			grabbedCamera.transform.position = grabbedCamera.UCamera.transform.position;
-			grabbedCamera.transform.rotation = grabbedCamera.UCamera.transform.rotation;
+			//TODO: Is this necessary?? I can only see it break stuff
+			//grabbedCamera.transform.position = grabbedCamera.UCamera.transform.position;
+			//grabbedCamera.transform.rotation = grabbedCamera.UCamera.transform.rotation;
 
 			grabStartPos = controller.transform.InverseTransformPoint(grabbedCamera.transform.position);
 			grabStartRot = Quaternion.Inverse(controller.rotation) * grabbedCamera.transform.rotation;
