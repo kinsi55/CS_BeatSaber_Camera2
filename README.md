@@ -4,7 +4,7 @@
 
 Please see [**The Wiki**](https://github.com/kinsi55/CS_BeatSaber_Camera2/wiki) for details on how to properly use / configure Camera2
 
-#### You can always find the latest Release and my example configuration in [the releases](https://github.com/kinsi55/CS_BeatSaber_Camera2/releases)
+#### You can always find the latest Download and my example configuration in [the releases](https://github.com/kinsi55/CS_BeatSaber_Camera2/releases)
 
 ### New features / improvements (Unless said otherwise, everything configurable per camera)
 
