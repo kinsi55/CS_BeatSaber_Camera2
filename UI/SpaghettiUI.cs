@@ -98,6 +98,7 @@ namespace Camera2.Settings {
 					cam.settings.ApplyPositionAndRotation();
 					NotifyPropertyChanged("zOffset");
 				}
+				ToggleSettingVisibility();
 			}
 		}
 		internal WorldCamVisibility worldCamVisibility { get => cam.settings.worldCamVisibility; set { cam.settings.worldCamVisibility = value; } }
