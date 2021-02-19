@@ -23,7 +23,7 @@ Please see [**The Wiki**](https://github.com/kinsi55/CS_BeatSaber_Camera2/wiki) 
 - "Force Upright" respects the map rotation, so if a map rotates you upside down your view will be upright in respect to the world rotation
 
 #### Third person cameras
-- Can either always be visible / hidden or hidden just while playing
+- Can either be always visible / hidden or hidden just while playing
 - Ingame preview size customizable
 
 ### Changes
