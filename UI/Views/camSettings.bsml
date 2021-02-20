@@ -61,14 +61,22 @@
 				/>
 				<slider-setting text='Rotation Smoothing *' min='0.1' max='50' increment='0.1' value='follow360_smoothing' bind-value='true' apply-on-change='true'/>
 			</modifier-container>
-			<text text="* Lower value = More smoothing" color="#CCC" font-size="3" align="Center"></text>
+			<text text="* Lower value = More smoothing" color="#CCC" font-size="3" align="Center"/>
 		</vertical>
 	</tab>
-	<!--<tab tags='tabs' tab-name='Scenes'>
-		<modifier-container child-expand-width='true' horizontal-fit='PreferredSize'>
-			<macro.for-each items='scenes'>
-				<checkbox text='~name' on-change='sceneCheckSet' get-event='sceneCheckGet'/>
-			</macro.for-each>
-		</modifier-container>
-	</tab>-->
+	<tab tags='tabs' tab-name='Scenes' horizontal-fit='PreferredSize'>
+		<vertical horizontal-fit='PreferredSize' vertical-fit='PreferredSize' spacing='5'>
+			<horizontal preferred-width="90">
+				<text color="#CCC" font-size="3" align="Center" word-wrapping="true"
+					text="(i) To get a detailed explanation of how Scenes work and how to use them please check out the Scenes Wiki of Camera2 at
+github.com/kinsi55/CS_BeatSaber_Camera2/wiki/Scenes"
+				/>
+			</horizontal>
+			<grid cell-size-x='46' cell-size-y='8' spacing-x='6' spacing-y='3' child-align='MiddleCenter' horizontal-fit='PreferredSize'>
+				<macro.for-each items='scenes'>
+					<checkbox text='~type' value='val' bind-value='true' apply-on-change='true'/>
+				</macro.for-each>
+			</grid>
+		</vertical>
+	</tab>
 </vertical>

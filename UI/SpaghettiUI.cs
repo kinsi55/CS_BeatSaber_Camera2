@@ -18,6 +18,7 @@ using System.ComponentModel;
 using HarmonyLib;
 using UnityEngine.UI;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 
 namespace Camera2.Settings {
 	class SpaghettiUI {
@@ -75,6 +76,9 @@ namespace Camera2.Settings {
 			if(props == null) props = typeof(SettingsView).GetProperties(
 				BindingFlags.Instance | BindingFlags.NonPublic
 			).Select(x => x.Name).ToList();
+
+			if(scenes == null)
+				scenes = Enum.GetValues(typeof(SceneTypes)).Cast<SceneTypes>().Select(x => new SceneToggle() { type = x, host = this }).ToList();
 		}
 #region variables
 		internal string camName {
@@ -154,15 +158,12 @@ namespace Camera2.Settings {
 		}
 
 		internal bool follow360_moveWithMap {
-			get => cam.settings.Follow360.enabled;
-			set { cam.settings.Follow360.enabled = value; }
+			get => cam.settings.Follow360.enabled; set { cam.settings.Follow360.enabled = value; }
 		}
 		internal float follow360_smoothing {
-			get => cam.settings.Follow360.smoothing;
-			set { cam.settings.Follow360.smoothing = value; }
+			get => cam.settings.Follow360.smoothing; set { cam.settings.Follow360.smoothing = value; }
 		}
-		#endregion
-
+#endregion
 
 
 		private static readonly List<object> types = new object[] { CameraType.FirstPerson, CameraType.Positionable }.ToList();
@@ -170,7 +171,26 @@ namespace Camera2.Settings {
 		private static readonly List<object> worldCamVisibilities = Enum.GetValues(typeof(WorldCamVisibility)).Cast<object>().ToList();
 		private static readonly List<object> visibilities_Walls = Enum.GetValues(typeof(WallVisiblity)).Cast<object>().ToList();
 		private static readonly List<object> visibilities_Notes = Enum.GetValues(typeof(NoteVisibility)).Cast<object>().ToList();
-		private static readonly List<object> scenes = Enum.GetValues(typeof(SceneTypes)).Cast<object>().Select(x => new { name = x }).Cast<object>().ToList();
+		private List<SceneToggle> scenes;
+
+		class SceneToggle : NotifiableSettingsObj {
+			internal SettingsView host;
+			internal SceneTypes type;
+
+			internal bool val {
+				get => ScenesManager.settings.scenes[type].Contains(host.camName);
+				set {
+					var x = ScenesManager.settings.scenes[type];
+
+					if(!value) {
+						x.RemoveAll(c => c == host.camName);
+					} else if(!x.Contains(host.camName)) {
+						x.Add(host.camName);
+					}
+				}
+			}
+		}
+
 
 		internal bool SetCam(Cam2 newCam) {
 			if(cam == newCam)
@@ -197,11 +217,15 @@ namespace Camera2.Settings {
 			foreach(var prop in props)
 				NotifyPropertyChanged(prop);
 
+			foreach(var x in scenes)
+				x.NotifyPropertyChanged("val");
+
 			return true;
 		}
 
 		internal void SaveSettings() {
 			cam?.settings.Save();
+			ScenesManager.settings.Save();
 		}
 		
 		[UIAction("#post-parse")]
@@ -339,6 +363,23 @@ namespace Camera2.Settings {
 			settingsView.SetCam(null);
 			ScenesManager.LoadGameScene(forceReload: true);
 			BeatSaberUI.MainFlowCoordinator.DismissFlowCoordinator(this, null, ViewController.AnimationDirection.Horizontal);
+		}
+	}
+
+	public class NotifiableSettingsObj : INotifyPropertyChanged {
+		public event PropertyChangedEventHandler PropertyChanged;
+		internal void NotifyPropertyChanged([CallerMemberName] string propertyName = "") {
+			try {
+				PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+			} catch(Exception ex) {
+				Plugin.Log?.Error($"Error Invoking PropertyChanged: {ex.Message}");
+				Plugin.Log?.Error(ex);
+			}
+		}
+
+		internal void NotifyPropertiesChanged() {
+			foreach(var x in GetType().GetFields(BindingFlags.Public | BindingFlags.Instance))
+				NotifyPropertyChanged(x.Name);
 		}
 	}
 }
