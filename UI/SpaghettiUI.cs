@@ -53,7 +53,7 @@ namespace Camera2.Settings {
 //		}
 //	}
 
-	public class SettingsView : BSMLResourceViewController, INotifyPropertyChanged {
+	class SettingsView : BSMLResourceViewController, INotifyPropertyChanged {
 		public override string ResourceName => "Camera2.UI.Views.camSettings.bsml";
 #pragma warning disable 649
 		[UIComponent("zOffsetSlider")] SliderSetting zOffsetSlider;
@@ -112,7 +112,20 @@ namespace Camera2.Settings {
 		internal float previewSize { get => cam.settings.previewScreenSize; set { cam.settings.previewScreenSize = value; } }
 
 		internal float zOffset {
-			get => cam.settings.targetPos.z; set { cam.settings.targetPos.z = value; cam.settings.ApplyPositionAndRotation(); }
+			get {
+				float ret = 0f;
+				cam.settings.Unoverriden(delegate () {
+					ret = cam.settings.targetPos.z;
+				});
+				return ret;
+			}
+			set {
+				cam.settings.Unoverriden(delegate () {
+					var x = cam.settings.targetPos;
+					x.z = value;
+				});
+				cam.settings.ApplyPositionAndRotation();
+			}
 		}
 
 		internal WallVisiblity visibility_Walls {
@@ -260,11 +273,13 @@ namespace Camera2.Settings {
 		}
 	}
 
-	public class CamList : BSMLResourceViewController {
+	class CamList : BSMLResourceViewController {
 		public override string ResourceName => "Camera2.UI.Views.camList.bsml";
 
+#pragma warning disable 649
 		[UIComponent("deleteButton")] public NoTransitionsButton deleteButton;
 		[UIComponent("camList")] public CustomListTableData list;
+#pragma warning restore 649
 
 		internal void AddCamToList(Cam2 cam) {
 			//var x = Sprite.Create(cam.screenImage.material, new Rect(0, 0, cam.renderTexture.width, cam.renderTexture.width), new Vector2(0.5f, 0.5f));
@@ -366,7 +381,7 @@ namespace Camera2.Settings {
 		}
 	}
 
-	public class NotifiableSettingsObj : INotifyPropertyChanged {
+	class NotifiableSettingsObj : INotifyPropertyChanged {
 		public event PropertyChangedEventHandler PropertyChanged;
 		internal void NotifyPropertyChanged([CallerMemberName] string propertyName = "") {
 			try {

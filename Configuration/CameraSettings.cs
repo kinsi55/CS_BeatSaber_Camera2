@@ -9,14 +9,15 @@ using Camera2.Utils;
 using Camera2.Managers;
 using Camera2.Interfaces;
 using Camera2.HarmonyPatches;
+using Camera2.SDK;
 
 namespace Camera2.Configuration {
-	enum CameraType {
+	public enum CameraType {
 		FirstPerson,
 		Attached, //Unused for now, but mostly implemented - For parenting to arbitrary things like possibly to a saber, etc.
 		Positionable
 	}
-	enum WallVisiblity {
+	public enum WallVisiblity {
 		Visible,
 		Transparent,
 		Hidden
@@ -28,17 +29,29 @@ namespace Camera2.Configuration {
 		Hidden = 2,
 		//Never = 2
 	}
-	enum NoteVisibility {
+	public enum NoteVisibility {
 		Hidden,
 		Visible,
 		ForceCustomNotes
 	}
 
 	[JsonObject(MemberSerialization.OptIn)]
-	class GameObjects {
+	public class GameObjects {
 		private CameraSettings parentSetting;
-		public GameObjects(CameraSettings parentSetting) {
+		internal GameObjects(CameraSettings parentSetting) {
 			this.parentSetting = parentSetting;
+		}
+
+		public GameObjects GetCopy() {
+			var x = new GameObjects(null);
+			x._Walls = _Walls;
+			x._Debris = _Debris;
+			x._UI = _UI;
+			x._Avatar = _Avatar;
+			x._Floor = _Floor;
+			x._CutParticles = _CutParticles;
+			x._Notes = _Notes;
+			return x;
 		}
 
 		[JsonConverter(typeof(StringEnumConverter)), JsonProperty("Walls")]
@@ -59,13 +72,13 @@ namespace Camera2.Configuration {
 		//private bool _EverythingElse = true;
 
 
-		public WallVisiblity Walls { get => _Walls; set { _Walls = value; parentSetting.ApplyLayerBitmask(); } }
-		public bool Debris { get => _Debris; set { _Debris = value; parentSetting.ApplyLayerBitmask(); } }
-		public bool UI { get => _UI; set { _UI = value; parentSetting.ApplyLayerBitmask(); } }
-		public bool Avatar { get => _Avatar; set { _Avatar = value; parentSetting.ApplyLayerBitmask(); } }
-		public bool Floor { get => _Floor; set { _Floor = value; parentSetting.ApplyLayerBitmask(); } }
-		public bool CutParticles { get => _CutParticles; set { _CutParticles = value; parentSetting.ApplyLayerBitmask(); } }
-		public NoteVisibility Notes { get => _Notes; set { _Notes = value; parentSetting.ApplyLayerBitmask(); } }
+		public WallVisiblity Walls { get => _Walls; set { _Walls = value; parentSetting?.ApplyLayerBitmask(); } }
+		public bool Debris { get => _Debris; set { _Debris = value; parentSetting?.ApplyLayerBitmask(); } }
+		public bool UI { get => _UI; set { _UI = value; parentSetting?.ApplyLayerBitmask(); } }
+		public bool Avatar { get => _Avatar; set { _Avatar = value; parentSetting?.ApplyLayerBitmask(); } }
+		public bool Floor { get => _Floor; set { _Floor = value; parentSetting?.ApplyLayerBitmask(); } }
+		public bool CutParticles { get => _CutParticles; set { _CutParticles = value; parentSetting?.ApplyLayerBitmask(); } }
+		public NoteVisibility Notes { get => _Notes; set { _Notes = value; parentSetting?.ApplyLayerBitmask(); } }
 		// Wouldnt be very useful since I havent figured out yet how to make cams have transparency
 		//public bool EverythingElse { get { return _EverythingElse; } set { _EverythingElse = value; parentSetting.ApplyLayerBitmask(); } }
 	}
@@ -74,10 +87,12 @@ namespace Camera2.Configuration {
 		private Cam2 cam;
 		internal bool isLoaded { get; private set; } = false;
 
+		internal OverrideToken overrideToken = null;
+
 		public CameraSettings(Cam2 cam) {
 			this.cam = cam;
 
-			visibleObjects = new GameObjects(this);
+			_visibleObjects = new GameObjects(this);
 
 			FPSLimiter = CameraSubSettings.GetFor<Settings_FPSLimiter>(this);
 			Smoothfollow = CameraSubSettings.GetFor<Settings_Smoothfollow>(this);
@@ -86,10 +101,10 @@ namespace Camera2.Configuration {
 		}
 
 		public void Load(bool loadConfig = true) {
-			// Set default values incase they're removed from the JSON because of user stoopid
 			isLoaded = false;
-			FOV = 90;
+			// Set default value incase they're not loaded from JSON
 			viewRect = new Rect(0, 0, -1, -1);
+			FOV = 90f;
 
 			if(System.IO.File.Exists(cam.configPath)) {
 				if(loadConfig) {
@@ -118,8 +133,16 @@ namespace Camera2.Configuration {
 		}
 
 		public void Save() {
-			if(cam != null && cam.gameObject != null)
-				System.IO.File.WriteAllText(cam.configPath, JsonConvert.SerializeObject(this, Formatting.Indented));
+			if(cam != null && cam.gameObject != null) {
+				var x = overrideToken; overrideToken = null;
+				try {
+					System.IO.File.WriteAllText(cam.configPath, JsonConvert.SerializeObject(this, Formatting.Indented));
+				} catch(Exception ex) {
+					Plugin.Log.Error($"Failed to save Config for Camera {cam.name}:");
+					Plugin.Log.Error(ex);
+				}
+				overrideToken = x;
+			}
 		}
 
 		public void Reload() {
@@ -177,6 +200,17 @@ namespace Camera2.Configuration {
 			if(cam.UCamera.cullingMask != (int)maskBuilder)
 				cam.UCamera.cullingMask = (int)maskBuilder;
 		}
+
+		public void Unoverriden(Action accessor) {
+			var x = overrideToken; overrideToken = null;
+			try {
+				accessor();
+			} catch(Exception ex) {
+				throw ex;
+			} finally {
+				overrideToken = x;
+			}
+		}
 		
 
 
@@ -220,7 +254,12 @@ namespace Camera2.Configuration {
 			}
 		}
 
-		public float FOV { get { return cam.UCamera.fieldOfView; } set { cam.UCamera.fieldOfView = value; } }
+		[JsonProperty("FOV")]
+		private float _FOV;
+
+		[JsonIgnore]
+		public float FOV { get => overrideToken?.FOV ?? _FOV; set { _FOV = cam.UCamera.fieldOfView = value; } }
+
 		public int layer {
 			get => (int)cam.UCamera.depth;
 			set {
@@ -250,8 +289,10 @@ namespace Camera2.Configuration {
 			}
 		}
 
-
-		public GameObjects visibleObjects { get; private set; }
+		[JsonProperty("visibleObjects")]
+		private GameObjects _visibleObjects;
+		[JsonIgnore]
+		public GameObjects visibleObjects => overrideToken?.visibleObjects ?? _visibleObjects;
 
 
 		Rect GetClampedViewRect(Rect input) {
@@ -310,10 +351,16 @@ namespace Camera2.Configuration {
 		public Settings_Follow360 Follow360 { get; private set; }
 
 
-		[JsonConverter(typeof(Vector3Converter))]
-		public Vector3 targetPos = new Vector3(0, 0, 0);
-		[JsonConverter(typeof(Vector3Converter))]
-		public Vector3 targetRot = new Vector3(0, 0, 0);
+		[JsonConverter(typeof(Vector3Converter)), JsonProperty("targetPos")]
+		private Vector3 _targetPos = Vector3.zero;
+		[JsonConverter(typeof(Vector3Converter)), JsonProperty("targetRot")]
+		private Vector3 _targetRot = Vector3.zero;
+
+		[JsonIgnore]
+		public Vector3 targetPos { get => overrideToken?.position ?? _targetPos; set { _targetPos = value; } }
+		[JsonIgnore]
+		public Vector3 targetRot { get => overrideToken?.rotation ?? _targetRot; set { _targetRot = value; } }
+
 		public Settings_MovementScript MovementScript { get; private set; } = new Settings_MovementScript();
 	}
 }

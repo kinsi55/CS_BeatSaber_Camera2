@@ -187,6 +187,9 @@
     <Compile Include="Plugin.cs" />
     <Compile Include="Behaviours\Cam.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SDK\Cameras.cs" />
+    <Compile Include="SDK\OverrideToken.cs" />
+    <Compile Include="SDK\Scenes.cs" />
     <Compile Include="UI\SpaghettiUI.cs" />
     <Compile Include="Utils\BloomShite.cs" />
     <Compile Include="Utils\Configs.cs" />
