@@ -10,28 +10,16 @@ namespace Camera2.Utils {
 		public static Scene currentScene { get; private set; }
 		public static bool isInMenu { get; private set; } = true;
 		public static Transform songWorldTransform { get; private set; }
-		public static bool isProbablyInWallMap { get; private set; } = false;
 
 		public static AudioTimeSyncController audioTimeSyncController { get; private set; }
 
-		public static bool isInSong {
-			get { return audioTimeSyncController != null; }
-		}
-		public static bool isSongPlaying {
-			get {
-				return isInSong && audioTimeSyncController.state == AudioTimeSyncController.State.Playing;
-			}
-		}
-		
-		public static bool isInMultiplayer {
-			get {
-				return HookMultiplayer.instance != null && HookMultiplayer.instance.isConnected;
-			}
-		}
+		public static bool isInSong => audioTimeSyncController != null;
+		public static bool isSongPlaying => isInSong && audioTimeSyncController.state == AudioTimeSyncController.State.Playing;
 
-		public static GameObject GetMainCameraButReally() {
-			return Camera.main?.gameObject ?? GameObject.FindGameObjectsWithTag("MainCamera")[0];
-		}
+
+		public static bool isInMultiplayer => HookMultiplayer.instance != null && HookMultiplayer.instance.isConnected;
+
+		public static GameObject GetMainCameraButReally() => Camera.main?.gameObject ?? GameObject.FindGameObjectsWithTag("MainCamera")[0];
 
 
 		public static readonly string[] menuSceneNames = new string[] { "MenuViewCore", "MenuCore", "MenuViewControllers" };
@@ -40,14 +28,14 @@ namespace Camera2.Utils {
 			currentScene = newScene;
 			isInMenu = menuSceneNames.Contains(newScene.name);
 
-			if(oldScene.name == "GameCore" && ScoresaberUtil.isInReplay)
-				ScoresaberUtil.isInReplay = false;
+			if(oldScene.name == "GameCore") {
+#if DEBUG
+				Plugin.Log.Info("oldScene = GameCore, resetting stuffs in SceneUtil");
+#endif
 
-			if(newScene.name != "GameCore") {
-				isProbablyInWallMap = false;
+				ScoresaberUtil.isInReplay = false;
+				HookLeveldata.Reset();
 				audioTimeSyncController = null;
-			} else {
-				isProbablyInWallMap = ModMapUtil.IsProbablyWallmap(HookLeveldata.difficultyBeatmap);
 			}
 
 			ScenesManager.ActiveSceneChanged();

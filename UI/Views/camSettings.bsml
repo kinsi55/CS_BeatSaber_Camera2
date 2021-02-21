@@ -15,6 +15,7 @@
 			<slider-setting id='previewSizeSlider' text='Preview Size' min='0.3' max='3' increment='0.1' value='previewSize' bind-value='true' apply-on-change='true'/>
 		</modifier-container>
 	</tab>
+	
 	<tab tags='tabs' tab-name='Visibility'>
 		<modifier-container child-expand-width='true' horizontal-fit='PreferredSize'>
 			<dropdown-list-setting text='Walls' value="visibility_Walls" choices='visibilities_Walls' bind-value='true' apply-on-change='true'/>
@@ -25,6 +26,7 @@
 			<checkbox text='Cut Particles' value='visibility_CutParticles' bind-value='true' apply-on-change='true'/>
 		</modifier-container>
 	</tab>
+	
 	<tab tags='tabs' tab-name='Smoothfollow' id='smoothfollowTab'>
 		<vertical horizontal-fit='PreferredSize' vertical-fit='PreferredSize'>
 			<modifier-container child-expand-width='true'>
@@ -40,6 +42,7 @@
 			<text text="* Lower value = More smoothing" color="#CCC" font-size="3" align="Center"></text>
 		</vertical>
 	</tab>
+	
 	<tab tags='tabs' tab-name='ModmapExt'>
 		<modifier-container child-expand-width='true' horizontal-fit='PreferredSize'>
 			<checkbox id='modmapExt_moveWithMapCheckbox' text='Move with Map' value='modmapExt_moveWithMap' bind-value='true' apply-on-change='true'
@@ -53,6 +56,7 @@
 			/>
 		</modifier-container>
 	</tab>
+	
 	<tab tags='tabs' tab-name='Follow360' id='follow360Tab'>
 		<vertical horizontal-fit='PreferredSize' vertical-fit='PreferredSize'>
 			<modifier-container child-expand-width='true' horizontal-fit='PreferredSize'>
@@ -64,19 +68,21 @@
 			<text text="* Lower value = More smoothing" color="#CCC" font-size="3" align="Center"/>
 		</vertical>
 	</tab>
+	
 	<tab tags='tabs' tab-name='Scenes' horizontal-fit='PreferredSize'>
-		<vertical horizontal-fit='PreferredSize' vertical-fit='PreferredSize' spacing='5'>
+		<vertical horizontal-fit='PreferredSize' vertical-fit='PreferredSize' spacing='5' >
 			<horizontal preferred-width="90">
-				<text color="#CCC" font-size="3" align="Center" word-wrapping="true"
-					text="(i) To get a detailed explanation of how Scenes work and how to use them please check out the Scenes Wiki of Camera2 at
-github.com/kinsi55/CS_BeatSaber_Camera2/wiki/Scenes"
+				<text color="#CCC" font-size="4" align="Center" word-wrapping="true"
+					text="(i) To get a detailed explanation of how Scenes work and how to use them correctly please check out the Scenes Wiki page of Camera2 at github.com/kinsi55/CS_BeatSaber_Camera2/wiki/Scenes"
 				/>
 			</horizontal>
-			<grid cell-size-x='46' cell-size-y='8' spacing-x='6' spacing-y='3' child-align='MiddleCenter' horizontal-fit='PreferredSize'>
-				<macro.for-each items='scenes'>
-					<checkbox text='~type' value='val' bind-value='true' apply-on-change='true'/>
-				</macro.for-each>
-			</grid>
+			<horizontal preferred-width="110" child-expand-width='true'>
+				<grid cell-size-x='46' cell-size-y='6' spacing-x='7' spacing-y='2' child-align='MiddleCenter'>
+					<macro.for-each items='scenes'>
+						<checkbox text='~type' value='val' bind-value='true' apply-on-change='true' font-align='MidlineRight'/>
+					</macro.for-each>
+				</grid>
+			</horizontal>
 		</vertical>
 	</tab>
 </vertical>

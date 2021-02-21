@@ -8,6 +8,7 @@ using Camera2.Behaviours;
 using Camera2.Utils;
 using Camera2.Managers;
 using Camera2.Interfaces;
+using Camera2.HarmonyPatches;
 
 namespace Camera2.Configuration {
 	enum CameraType {
@@ -147,7 +148,7 @@ namespace Camera2.Configuration {
 		public void ApplyLayerBitmask() {
 			VisibilityMasks maskBuilder = (VisibilityMasks)CamManager.clearedBaseCullingMask;
 
-			if(visibleObjects.Walls == WallVisiblity.Visible || (ModmapExtensions.autoOpaqueWalls && SceneUtil.isProbablyInWallMap)) {
+			if(visibleObjects.Walls == WallVisiblity.Visible || (ModmapExtensions.autoOpaqueWalls && HookLeveldata.isWallMap)) {
 				maskBuilder |= VisibilityMasks.Walls | VisibilityMasks.WallTextures;
 			} else if(visibleObjects.Walls == WallVisiblity.Transparent) {
 				maskBuilder |= VisibilityMasks.Walls;
@@ -170,7 +171,7 @@ namespace Camera2.Configuration {
 			if(visibleObjects.Floor) maskBuilder |= VisibilityMasks.Floor;
 			if(visibleObjects.Debris) maskBuilder |= VisibilityMasks.Debris;
 			if(visibleObjects.CutParticles) maskBuilder |= VisibilityMasks.CutParticles;
-			if(visibleObjects.UI && (!ModmapExtensions.autoHideHUD || !SceneUtil.isProbablyInWallMap))
+			if(visibleObjects.UI && (!ModmapExtensions.autoHideHUD || !HookLeveldata.isWallMap))
 				maskBuilder |= VisibilityMasks.UI;
 
 			if(cam.UCamera.cullingMask != (int)maskBuilder)

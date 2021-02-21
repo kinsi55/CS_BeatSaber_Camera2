@@ -42,11 +42,18 @@ namespace Camera2.Managers {
 					toLookup.Insert(0, SceneTypes.MultiplayerMenu);
 			} else if(sceneName == "GameCore") {
 				toLookup.Insert(0, SceneTypes.Playing);
+				
+				if(HookLeveldata.isModdedMap) {
+					toLookup.Insert(0, SceneTypes.PlayingModmap);
+				} else if(HookLeveldata.is360Level) {
+					toLookup.Insert(0, SceneTypes.Playing360);
+				}
 
-				if(ScoresaberUtil.IsInReplay())
+				if(ScoresaberUtil.IsInReplay()) {
 					toLookup.Insert(0, SceneTypes.Replay);
-				else if(SceneUtil.isInMultiplayer)
-					toLookup.Insert(0, SceneTypes.MultiplayerPlaying);
+				} else if(SceneUtil.isInMultiplayer) {
+					toLookup.Insert(0, SceneTypes.PlayingMulti);
+				}
 			}
 
 			if(HookFPFC.cameraInstance != null)

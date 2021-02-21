@@ -14,8 +14,6 @@ namespace Camera2.Utils {
 			LayerUtils_HMDOnly = LayerUtils?.GetProperty("HMDOnly", BindingFlags.Public | BindingFlags.Static);
 		}
 
-		public static bool HasHMDOnlyEnabled() {
-			return LayerUtils_HMDOnly != null && (bool)LayerUtils_HMDOnly.GetValue(null);
-		}
+		public static bool HasHMDOnlyEnabled() => (bool)LayerUtils_HMDOnly?.GetValue(null);
 	}
 }

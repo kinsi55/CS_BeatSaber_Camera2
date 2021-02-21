@@ -21,7 +21,7 @@ namespace Camera2.Utils {
 			return IsModdedMap(map);
 		}
 
-		static bool IsModdedMap(IDifficultyBeatmap map) {
+		public static bool IsModdedMap(IDifficultyBeatmap map) {
 			try {
 				return SongCore.Collections.RetrieveDifficultyData(map)?
 					.additionalDifficultyData?

@@ -9,9 +9,11 @@ using Camera2.Managers;
 namespace Camera2.Configuration {
 	enum SceneTypes {
 		Menu,
-		Playing,
 		MultiplayerMenu,
-		MultiplayerPlaying,
+		Playing,
+		Playing360,
+		PlayingModmap,
+		PlayingMulti,
 		Replay,
 		FPFC,
 		Custom1,
