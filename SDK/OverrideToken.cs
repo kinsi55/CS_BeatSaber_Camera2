@@ -52,10 +52,6 @@ namespace Camera2.SDK {
 			visibleObjects = cam.settings.visibleObjects.GetCopy();
 		}
 
-		~OverrideToken() {
-			Close();
-		}
-
 		/// <summary>
 		/// Returns if the Camera instance that this OverrideToken was created for still exists
 		/// </summary>
