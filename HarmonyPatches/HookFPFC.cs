@@ -9,6 +9,8 @@ namespace Camera2.HarmonyPatches {
 	class HookFPFC {
 		public static FirstPersonFlyingController instance { get; private set; }
 		public static Camera cameraInstance { get; private set; }
+		public static bool isInFPFC => instance != null;
+
 		static void Postfix(FirstPersonFlyingController __instance, Camera ____camera) {
 #if DEBUG
 			Plugin.Log.Info("FPFC was activated, disabling its camera");

@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using UnityEngine;
 using VRUIControls;
+using Camera2.HarmonyPatches;
 
 namespace Camera2.Behaviours {
 	class CamPositioner : MonoBehaviour {
@@ -44,7 +45,7 @@ namespace Camera2.Behaviours {
 					grabbedCamera.transform.position = controller.transform.TransformPoint(grabStartPos);
 					grabbedCamera.transform.rotation = controller.rotation * grabStartRot;
 
-					if(controller.triggerValue > 0.5f)
+					if(controller.triggerValue > 0.5f || (HookFPFC.isInFPFC && Input.GetMouseButton(0)))
 						return;
 				}
 
