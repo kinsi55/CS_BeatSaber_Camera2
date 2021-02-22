@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace Camera2.SDK {
 	public static class Cameras {
 		/// <summary>
-		/// names of all aameras available
+		/// names of all cameras available
 		/// </summary>
 		public static IEnumerable<string> available => CamManager.cams.Keys.AsEnumerable();
 

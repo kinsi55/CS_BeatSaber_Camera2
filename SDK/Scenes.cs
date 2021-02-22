@@ -26,7 +26,8 @@ namespace Camera2.SDK {
 		public static SceneTypes current => ScenesManager.loadedScene;
 
 		/// <summary>
-		/// Switches to the passed scene
+		/// Switches to the requested scene. If the scene you try to switch to does not have
+		/// any cameras assigned no action will be taken.
 		/// </summary>
 		/// <param name="scene">Scene to switch to</param>
 		public static void SwitchToScene(SceneTypes scene) {

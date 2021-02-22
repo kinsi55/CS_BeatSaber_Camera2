@@ -12,12 +12,15 @@ using Camera2.Configuration;
 using Camera2.Managers;
 
 namespace Camera2.SDK {
+	/// <summary>
+	/// Used to temporarily override certain camera settings
+	/// </summary>
 	public class OverrideToken {
 		static internal Dictionary<string, OverrideToken> tokens = new Dictionary<string, OverrideToken>();
 
 		/// <summary>
-		/// Request an OverrideToken for the Camera with the given name.
-		/// If there is no Camera with the passed name, or there is already
+		/// Request an OverrideToken for the camera with the given name.
+		/// If there is no camera with the passed name, or there is already
 		/// an active OverrideToken for this camera null will be returned
 		/// </summary>
 		/// <param name="camName">the name of the Camera</param>
@@ -53,12 +56,12 @@ namespace Camera2.SDK {
 		}
 
 		/// <summary>
-		/// Returns if the Camera instance that this OverrideToken was created for still exists
+		/// Returns if the camera instance that this OverrideToken was created for still exists
 		/// </summary>
 		public bool isValid => cam != null && cam.gameObject != null && CamManager.cams.ContainsKey(camName);
 	
 		/// <summary>
-		/// Closes this OverrideToken and returns the Camera's values back to their default
+		/// Closes this OverrideToken and returns the camera's values back to their default
 		/// </summary>
 		public void Close() {
 			tokens.Remove(camName);
