@@ -53,6 +53,8 @@ namespace Camera2.SDK {
 			rotation = new Vector3(cam.settings.targetRot.x, cam.settings.targetRot.y, cam.settings.targetRot.z);
 			_FOV = cam.settings.FOV;
 			visibleObjects = cam.settings.visibleObjects.GetCopy();
+
+			cam.settings.overrideToken = this;
 		}
 
 		/// <summary>
