@@ -63,15 +63,15 @@ namespace Camera2.SDK {
 		public void Close() {
 			tokens.Remove(camName);
 
-			if(!isValid)
-				return;
+			if(isValid) {
+				cam.settings.overrideToken = null;
 
-			cam.settings.overrideToken = null;
-
-			// Trigger setter for update
-			cam.settings.FOV = cam.settings.FOV;
-			cam.settings.ApplyPositionAndRotation();
-			cam.settings.ApplyLayerBitmask();
+				// Trigger setter for update
+				cam.settings.FOV = cam.settings.FOV;
+				cam.settings.ApplyPositionAndRotation();
+				cam.settings.ApplyLayerBitmask();
+			}
+			cam = null;
 		}
 
 		public Vector3 position;
