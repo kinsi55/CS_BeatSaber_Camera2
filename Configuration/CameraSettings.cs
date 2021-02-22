@@ -253,11 +253,8 @@ namespace Camera2.Configuration {
 					cam.worldCam?.SetPreviewPositionAndSize();
 			}
 		}
-
-		[JsonProperty("FOV")]
+		
 		private float _FOV;
-
-		[JsonIgnore]
 		public float FOV { get => overrideToken?.FOV ?? _FOV; set { _FOV = cam.UCamera.fieldOfView = value; } }
 
 		public int layer {
@@ -350,15 +347,13 @@ namespace Camera2.Configuration {
 		public Settings_ModmapExtensions ModmapExtensions { get; private set; }
 		public Settings_Follow360 Follow360 { get; private set; }
 
-
-		[JsonConverter(typeof(Vector3Converter)), JsonProperty("targetPos")]
+		
 		private Vector3 _targetPos = Vector3.zero;
-		[JsonConverter(typeof(Vector3Converter)), JsonProperty("targetRot")]
 		private Vector3 _targetRot = Vector3.zero;
 
-		[JsonIgnore]
+		[JsonConverter(typeof(Vector3Converter))]
 		public Vector3 targetPos { get => overrideToken?.position ?? _targetPos; set { _targetPos = value; } }
-		[JsonIgnore]
+		[JsonConverter(typeof(Vector3Converter))]
 		public Vector3 targetRot { get => overrideToken?.rotation ?? _targetRot; set { _targetRot = value; } }
 
 		public Settings_MovementScript MovementScript { get; private set; } = new Settings_MovementScript();
