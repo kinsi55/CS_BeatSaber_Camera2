@@ -102,7 +102,7 @@ namespace Camera2.SDK {
 			}
 		}
 
-		public GameObjects visibleObjects;
+		public GameObjects visibleObjects { get; private set; }
 
 		/// <summary>
 		/// Applies the currently configured object visibilities,
