@@ -15,8 +15,15 @@ namespace Camera2.Middlewares {
 	class Follow360 : CamMiddleware, IMHandler {
 		float currentRotateAmount = 0f;
 		public void OnDisable() {
-			currentRotateAmount = 0f;
-			cam.settings.ApplyPositionAndRotation();
+			Reset();
+		}
+
+		private void Reset() {
+			if(currentRotateAmount != 0f) {
+				cam.settings.ApplyPositionAndRotation();
+
+				currentRotateAmount = 0f;
+			}
 		}
 
 		new public bool Pre() {
@@ -29,7 +36,8 @@ namespace Camera2.Middlewares {
 				// CBA to deal with 360 support for absolute offsets for now
 				//(settings.type != Configuration.CameraType.Positionable && settings.Smoothfollow.pivotingOffset)
 			) {
-				currentRotateAmount = 0f;
+				Reset();
+
 				return true;
 			}
 
