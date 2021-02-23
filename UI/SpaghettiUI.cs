@@ -134,6 +134,9 @@ namespace Camera2.Settings {
 		internal NoteVisibility visibility_Notes {
 			get => cam.settings.visibleObjects.Notes; set { cam.settings.visibleObjects.Notes = value; }
 		}
+		internal bool visibility_Debris {
+			get => cam.settings.visibleObjects.Debris; set { cam.settings.visibleObjects.Debris = value; }
+		}
 		internal bool visibility_UI {
 			get => cam.settings.visibleObjects.UI; set { cam.settings.visibleObjects.UI = value; }
 		}
