@@ -43,8 +43,8 @@ namespace Camera2.HarmonyPatches {
 				Plugin.Log.Info("FirstPersonFlyingController.OnDisable()");
 #endif
 				instance = null;
-				cameraInstance = null;
-
+				// Not null-ing this as its probably still a valid handle and can be useful in places
+				//cameraInstance = null;
 
 				ScenesManager.ActiveSceneChanged();
 			}
