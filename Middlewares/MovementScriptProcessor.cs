@@ -10,6 +10,7 @@ namespace Camera2.Configuration {
 	class Settings_MovementScript : CameraSubSettings {
 		public string[] scriptList = new string[] { };
 		public bool fromOrigin = true;
+		public bool enableInMenu = false;
 	}
 }
 
@@ -87,7 +88,10 @@ namespace Camera2.Middlewares {
 		}
 
 		new public bool Pre() {
-			if(settings.MovementScript.scriptList.Length == 0 || !SceneUtil.isInSong || cam.settings.type != Configuration.CameraType.Positionable) {
+			if(settings.MovementScript.scriptList.Length == 0 || 
+				(!SceneUtil.isInSong && !settings.MovementScript.enableInMenu) || 
+				cam.settings.type != Configuration.CameraType.Positionable
+			) {
 				Reset();
 				return true;
 			}
@@ -112,7 +116,7 @@ namespace Camera2.Middlewares {
 				DoParent();
 			}
 
-			if(loadedScript.syncToSong) {
+			if(loadedScript.syncToSong && SceneUtil.isInSong) {
 				currentAnimationTime = SceneUtil.audioTimeSyncController.songTime;
 			} else {
 				currentAnimationTime += cam.timeSinceLastRender;
