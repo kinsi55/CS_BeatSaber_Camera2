@@ -18,8 +18,14 @@ namespace Camera2.HarmonyPatches {
 			instance = __instance;
 			cameraInstance = ____camera;
 
-			// Disable the base game camera so that it doesnt cause unnecessary load
-			____camera.enabled = false;
+			/*
+			 * If I straight up disable the Camera, and theres only the FPFC camera, Camera.main
+			 * becomes null (Since Cam2 cameras are also disabled) and this will cause all sorts
+			 * of funny issues with some other plugins, so I'll just make it so the cam has to
+			 * pretty much render nothing
+			 */
+			____camera.farClipPlane = 1f;
+			____camera.cullingMask = 0;
 
 			ScenesManager.ActiveSceneChanged();
 		}
@@ -39,8 +45,6 @@ namespace Camera2.HarmonyPatches {
 				instance = null;
 				cameraInstance = null;
 
-				// When going out of FPFC the camera gets enabled again??
-				____camera.enabled = false;
 
 				ScenesManager.ActiveSceneChanged();
 			}
