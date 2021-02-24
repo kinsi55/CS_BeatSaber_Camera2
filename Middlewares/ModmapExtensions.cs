@@ -2,6 +2,7 @@
 using Camera2.Utils;
 using Camera2.Interfaces;
 using Camera2.Managers;
+using Camera2.HarmonyPatches;
 
 namespace Camera2.Configuration {
 	class Settings_ModmapExtensions : CameraSubSettings {
@@ -21,7 +22,8 @@ namespace Camera2.Middlewares {
 				(settings.ModmapExtensions.moveWithMap || settings.type == Configuration.CameraType.FirstPerson) && 
 				!SceneUtil.isInMenu && 
 				cam.settings.type != Configuration.CameraType.Attached &&
-				SceneUtil.songWorldTransform != null
+				SceneUtil.songWorldTransform != null &&
+				SceneUtil.songWorldTransform.gameObject.activeInHierarchy
 			) {
 				// If we are not yet attached, and we dont have a parent thats active yet, try to get one!
 				if(attachedTo != SceneUtil.songWorldTransform) {
@@ -32,6 +34,9 @@ namespace Camera2.Middlewares {
 					cam.SetParent(SceneUtil.songWorldTransform);
 				}
 			} else if(attachedTo != null) {
+#if DEBUG
+				Plugin.Log.Info($"Disabling Modmap parenting for camera {cam.name}");
+#endif
 				attachedTo = null;
 				cam.SetParent(null);
 			}
@@ -47,6 +52,9 @@ namespace Camera2.Middlewares {
 				if(cam.settings.type == Configuration.CameraType.Attached)
 					continue;
 
+#if DEBUG
+				Plugin.Log.Info($"Detaching Modmap parenting for camera {cam.name}");
+#endif
 				cam.SetParent(null);
 			}
 		}
