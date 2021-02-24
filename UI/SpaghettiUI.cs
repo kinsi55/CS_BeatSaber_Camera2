@@ -222,11 +222,13 @@ namespace Camera2.Settings {
 			//	Coordinator.instance.previewView.dd.SetMaterialDirty();
 			//}
 
+
+			CamManager.ApplyCameraValues(worldCam: true);
+
 			if(cam == null)
 				return true;
 
 			cam.gameObject.SetActive(true);
-			cam.ShowWorldCamIfNecessary();
 
 			ToggleSettingVisibility();
 
