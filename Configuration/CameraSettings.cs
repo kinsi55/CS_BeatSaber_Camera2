@@ -107,16 +107,8 @@ namespace Camera2.Configuration {
 			FOV = 90f;
 
 			if(System.IO.File.Exists(cam.configPath)) {
-				if(loadConfig) {
+				if(loadConfig)
 					JsonConvert.PopulateObject(System.IO.File.ReadAllText(cam.configPath), this, JsonHelpers.leanDeserializeSettings);
-
-					/*
-					 * Layers used to start at -1000 (Legacy from Cam Plus where cameras were rendered to the screen instead of textures)
-					 * This is kinda confusing for usage, so I decided to convert old values like this
-					 */
-					if(layer < 0)
-						layer += 1000;
-				}
 			} else {
 				layer = CamManager.cams.Count == 0 ? 1 : CamManager.cams.Max(x => x.Value.settings.layer) + 1;
 			}
@@ -220,9 +212,6 @@ namespace Camera2.Configuration {
 			get => _type;
 			set {
 				_type = value;
-				//TODO: Temporary implementation to migrate Attached to FirstPerson as I had Attached as the default before accidently
-				if(_type == CameraType.Attached)
-					_type = CameraType.FirstPerson;
 
 				if(!isLoaded)
 					return;

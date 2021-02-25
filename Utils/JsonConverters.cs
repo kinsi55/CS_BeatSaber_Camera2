@@ -88,7 +88,13 @@ namespace Camera2.Utils {
 
 		public static readonly JsonSerializerSettings leanDeserializeSettings = new JsonSerializerSettings {
 			NullValueHandling = NullValueHandling.Ignore,
-			Error = (se, ev) => { ev.ErrorContext.Handled = true; }
+			Error = (se, ev) => {
+#if DEBUG
+				Plugin.Log.Warn("Failed JSON deserialize:");
+				Plugin.Log.Warn(ev.ErrorContext.Error);
+#endif
+				ev.ErrorContext.Handled = true;
+			}
 		};
 	}
 }
