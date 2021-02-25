@@ -18,7 +18,7 @@ namespace Camera2.Behaviours {
 
 			position = pos;
 
-			if(writeToConfig) {
+			if(writeToConfig && cam.settings.viewRect.position != position) {
 				cam.settings.viewRect = new Rect(cam.settings.viewRect) { position = position };
 				cam.settings.Save();
 			}
