@@ -266,7 +266,7 @@ namespace Camera2.Configuration {
 			}
 		}
 
-		private int _antiAliasing = 1;
+		private int _antiAliasing = 2;
 		public int antiAliasing {
 			get => _antiAliasing;
 			set {
@@ -276,7 +276,7 @@ namespace Camera2.Configuration {
 			}
 		}
 
-		private float _renderScale = 1;
+		private float _renderScale = 1.3f;
 		public float renderScale {
 			get => _renderScale;
 			set {
