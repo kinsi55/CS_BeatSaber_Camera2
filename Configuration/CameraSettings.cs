@@ -284,8 +284,8 @@ namespace Camera2.Configuration {
 		Rect GetClampedViewRect(Rect input) {
 			Rect p = new Rect();
 
-			p.x = Mathf.Clamp(input.x, 0, Screen.width - LessRawImage.MIN_SIZE);
-			p.y = Mathf.Clamp(input.y, 0, Screen.height - LessRawImage.MIN_SIZE);
+			p.x = Math.Max(0, Math.Min(input.x, Screen.width - Math.Max(input.width, LessRawImage.MIN_SIZE)));
+			p.y = Math.Max(0, Math.Min(input.y, Screen.height - Math.Max(input.height, LessRawImage.MIN_SIZE)));
 
 			p.width = Mathf.Clamp(input.width, LessRawImage.MIN_SIZE, Screen.width - p.x);
 			p.height = Mathf.Clamp(input.height, LessRawImage.MIN_SIZE, Screen.height - p.y);
