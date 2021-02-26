@@ -22,6 +22,10 @@ namespace Camera2.Configuration {
 
 		[JsonIgnore]
 		internal Transform parent;
+
+		public string targetParent = "";
+
+		public bool ShouldSerializetargetParent() => settings.type == CameraType.Attached;
 	}
 }
 
@@ -40,7 +44,11 @@ namespace Camera2.Middlewares {
 			if(settings.Smoothfollow.followReplayPosition && ScoresaberUtil.isInReplay) {
 				parentToUse = ScoresaberUtil.replayCamera.transform;
 			} else if(parentToUse == null || !parentToUse.gameObject.activeInHierarchy) {
-				parent = parentToUse = (Camera.main ?? HookFPFC.cameraInstance ?? null)?.transform;
+				if(settings.type == Configuration.CameraType.FirstPerson) {
+					parent = parentToUse = (Camera.main ?? HookFPFC.cameraInstance ?? null)?.transform;
+				} else if(settings.type == Configuration.CameraType.Attached) {
+					parent = parentToUse = GameObject.Find(settings.Smoothfollow.targetParent)?.transform;
+				}
 			}
 
 			//System.Console.WriteLine("FP cam is attached to {0}", parentToUse);
