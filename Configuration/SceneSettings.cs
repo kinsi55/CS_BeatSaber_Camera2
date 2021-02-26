@@ -37,22 +37,19 @@ namespace Camera2.Configuration {
 		private bool wasLoaded = false;
 
 		public void Load() {
-			void populateMissing() {
-				foreach(SceneTypes foo in Enum.GetValues(typeof(SceneTypes)))
-					if(!scenes.ContainsKey(foo))
-						scenes.Add(foo, new List<string>());
-
-				wasLoaded = true;
-			}
-
-			if(File.Exists(ConfigUtil.ScenesCfg)) {
+			if(File.Exists(ConfigUtil.ScenesCfg))
 				JsonConvert.PopulateObject(File.ReadAllText(ConfigUtil.ScenesCfg), this, JsonHelpers.leanDeserializeSettings);
-				populateMissing();
-			} else {
-				populateMissing();
-				Save();
-			}
-			
+
+			// Populate missing Scenes if the Scenes cfg was outdated
+			foreach(SceneTypes foo in Enum.GetValues(typeof(SceneTypes)))
+				if(!scenes.ContainsKey(foo))
+					scenes.Add(foo, new List<string>());
+
+			wasLoaded = true;
+#if !DEV
+			Save();
+#endif
+
 			ScenesManager.LoadGameScene(forceReload: true);
 		}
 
