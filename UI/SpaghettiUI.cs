@@ -123,6 +123,8 @@ namespace Camera2.Settings {
 				cam.settings.Unoverriden(delegate () {
 					var x = cam.settings.targetPos;
 					x.z = value;
+
+					cam.settings.targetPos = x;
 				});
 				cam.settings.ApplyPositionAndRotation();
 			}
