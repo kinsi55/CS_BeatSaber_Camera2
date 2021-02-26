@@ -9,6 +9,8 @@ namespace Camera2.Configuration {
 		public bool moveWithMap = true;
 		public bool autoOpaqueWalls = false;
 		public bool autoHideHUD = false;
+
+		public bool ShouldSerializemoveWithMap() => settings.type == CameraType.Positionable;
 	}
 }
 

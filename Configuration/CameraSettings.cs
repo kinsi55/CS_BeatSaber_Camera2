@@ -233,6 +233,8 @@ namespace Camera2.Configuration {
 			}
 		}
 
+		public bool ShouldSerializeworldCamVisibility() => type == CameraType.Positionable;
+
 		private float _previewScreenSize = 0.3f;
 		public float previewScreenSize {
 			get => _previewScreenSize;
@@ -242,7 +244,9 @@ namespace Camera2.Configuration {
 					cam.worldCam?.SetPreviewPositionAndSize();
 			}
 		}
-		
+
+		public bool ShouldSerializepreviewScreenSize() => type == CameraType.Positionable;
+
 		private float _FOV;
 		public float FOV { get => overrideToken?.FOV ?? _FOV; set { _FOV = cam.UCamera.fieldOfView = value; } }
 
@@ -336,7 +340,9 @@ namespace Camera2.Configuration {
 		public Settings_ModmapExtensions ModmapExtensions { get; private set; }
 		public Settings_Follow360 Follow360 { get; private set; }
 
-		
+		public bool ShouldSerializeFollow360() => type == CameraType.Positionable;
+		public bool ShouldSerializeSmoothfollow() => type != CameraType.Positionable;
+
 		private Vector3 _targetPos = Vector3.zero;
 		private Vector3 _targetRot = Vector3.zero;
 
@@ -346,5 +352,7 @@ namespace Camera2.Configuration {
 		public Vector3 targetRot { get => overrideToken?.rotation ?? _targetRot; set { _targetRot = value; } }
 
 		public Settings_MovementScript MovementScript { get; private set; } = new Settings_MovementScript();
+
+		public bool ShouldSerializeMovementScript() => type == CameraType.Positionable;
 	}
 }
