@@ -24,6 +24,9 @@ namespace Camera2.HarmonyPatches {
 			 * of funny issues with some other plugins, so I'll just make it so the cam has to
 			 * pretty much render nothing
 			 */
+			if(CamManager.baseCullingMask == 0)
+				CamManager.baseCullingMask = ____camera.cullingMask;
+
 			____camera.cullingMask = 0;
 
 			ScenesManager.ActiveSceneChanged();
