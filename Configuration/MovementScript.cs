@@ -9,6 +9,10 @@ using Newtonsoft.Json.Converters;
 using System.ComponentModel;
 
 namespace Camera2.Configuration {
+
+#if DEBUG
+	public
+#endif
 	class MovementScript {
 		//public enum PositionType {
 		//	Absolute,

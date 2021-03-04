@@ -6,6 +6,10 @@ using Camera2.Configuration;
 using Camera2.Utils;
 
 namespace Camera2.Managers {
+
+#if DEBUG
+	public
+#endif
 	static class MovementScriptManager {
 		public static Dictionary<string, MovementScript> movementScripts { get; private set; }  = new Dictionary<string, MovementScript>();
 

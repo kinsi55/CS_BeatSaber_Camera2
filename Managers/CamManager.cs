@@ -9,6 +9,10 @@ using Camera2.Utils;
 using Camera2.Configuration;
 
 namespace Camera2.Managers {
+
+#if DEBUG
+	public
+#endif
 	static class CamManager {
 		public static Dictionary<string, Cam2> cams { get; private set; } = new Dictionary<string, Cam2>();
 		static CamerasViewport customScreen;

@@ -5,6 +5,10 @@ using Camera2.Managers;
 using Camera2.Utils;
 
 namespace Camera2.Behaviours {
+
+#if DEBUG
+	public
+#endif
 	class LessRawImage : RawImage {
 		public Cam2 cam { get; private set; }
 		public RectTransform rekt { get; private set; }

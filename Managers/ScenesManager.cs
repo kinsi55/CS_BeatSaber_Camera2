@@ -8,6 +8,9 @@ using Camera2.HarmonyPatches;
 
 namespace Camera2.Managers {
 
+#if DEBUG
+	public
+#endif
 	static class ScenesManager {
 		internal static ScenesSettings settings { get; private set; } = new ScenesSettings();
 

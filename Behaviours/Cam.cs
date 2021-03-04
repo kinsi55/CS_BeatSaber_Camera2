@@ -13,6 +13,9 @@ using System.Reflection;
 
 namespace Camera2.Behaviours {
 
+#if DEBUG
+	public
+#endif
 	class Cam2 : MonoBehaviour {
 		internal new string name { get; private set; } = null;
 		internal string configPath { get => ConfigUtil.GetCameraPath(name); }
