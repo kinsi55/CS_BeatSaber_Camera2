@@ -45,7 +45,6 @@ namespace Camera2.Utils {
 		}
 
 		public static void OnSceneMaybeUnloadPre() {
-			ModmapExtensions.ForceDetachTracks();
 			songWorldTransform = null;
 		}
 

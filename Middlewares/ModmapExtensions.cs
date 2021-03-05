@@ -33,32 +33,15 @@ namespace Camera2.Middlewares {
 					Plugin.Log.Info($"Enabling Modmap parenting for camera {cam.name}");
 #endif
 					attachedTo = SceneUtil.songWorldTransform;
-					cam.SetParent(SceneUtil.songWorldTransform);
+					cam.SetOrigin(SceneUtil.songWorldTransform);
 				}
 			} else if(attachedTo != null) {
 #if DEBUG
 				Plugin.Log.Info($"Disabling Modmap parenting for camera {cam.name}");
 #endif
 				attachedTo = null;
-				cam.SetParent(null);
 			}
 			return true;
-		}
-
-		/*
-		 * This gets called when we are leaving a song because otherwise any game object attached
-		 * to the origin would get destroyed in the process of the origin being destroyed
-		 */
-		public static void ForceDetachTracks() {
-			foreach(var cam in CamManager.cams.Values) {
-				if(cam.settings.type == Configuration.CameraType.Attached)
-					continue;
-
-#if DEBUG
-				Plugin.Log.Info($"Detaching Modmap parenting for camera {cam.name}");
-#endif
-				cam.SetParent(null);
-			}
 		}
 	}
 }
