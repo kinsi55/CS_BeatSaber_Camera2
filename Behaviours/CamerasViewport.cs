@@ -3,6 +3,8 @@ using UnityEngine;
 using UnityEngine.UI;
 using Camera2.Managers;
 using Camera2.Utils;
+using System.Runtime.InteropServices;
+using System;
 
 namespace Camera2.Behaviours {
 
@@ -179,10 +181,11 @@ namespace Camera2.Behaviours {
 
 				targetCam = GetViewAtPoint(lastMousePos, ref possibleAction);
 
-				CursorUtil.SetCursor(possibleAction == CamAction.Resize_BR ? CursorUtil.WindowsCursor.IDC_SIZENWSE : CursorUtil.WindowsCursor.IDC_ARROW);
+				WinAPI.SetCursor(possibleAction == CamAction.Resize_BR ? WinAPI.WindowsCursor.IDC_SIZENWSE : WinAPI.WindowsCursor.IDC_ARROW);
 			}
 
 			if(Input.GetMouseButtonUp(1) && currentAction == CamAction.None) {
+				System.Threading.Tasks.Task.Run(() => WinAPI.MessageBox(IntPtr.Zero, "There is no desktop settings for Camera2, everything is done ingame!", "FYI", 0));
 				//currentAction = CamAction.Menu;
 				// For now lets not add this as it can result in unclear circumstances with scenes etc.
 				//if(Input.GetKey(KeyCode.LeftControl)) {

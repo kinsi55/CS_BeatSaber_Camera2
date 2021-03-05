@@ -2,7 +2,7 @@
 using System.Runtime.InteropServices;
 
 namespace Camera2.Utils {
-	class CursorUtil {
+	class WinAPI {
 		public enum WindowsCursor {
 			IDC_APPSTARTING = 32650,
 			IDC_ARROW = 32512,
@@ -29,5 +29,10 @@ namespace Camera2.Utils {
 
 		[DllImport("user32.dll", EntryPoint = "LoadCursor")]
 		private static extern IntPtr LoadCursor(IntPtr hInstance, int lpCursorName);
+
+
+
+		[DllImport("user32.dll")]
+		public static extern int MessageBox(IntPtr hWnd, String text, String caption, int options);
 	}
 }
