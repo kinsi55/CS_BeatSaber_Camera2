@@ -81,7 +81,7 @@ namespace Camera2.Behaviours {
 		internal static Shader blitCopyShader = Shader.Find("Hidden/BlitCopy");
 
 		public void Awake() {
-			DontDestroyOnLoad(this);
+			DontDestroyOnLoad(gameObject);
 
 			canvas = gameObject.AddComponent<Canvas>();
 			// I know this logs a stupid warning because VR is active, no way to fix that it seems.

@@ -13,7 +13,7 @@ namespace Camera2.Behaviours {
 		private static Quaternion grabStartRot;
 
 		public void Awake() {
-			DontDestroyOnLoad(this);
+			DontDestroyOnLoad(gameObject);
 		}
 
 		public static void BeingDragCamera(Cam2 camera) {

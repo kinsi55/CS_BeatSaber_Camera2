@@ -16,7 +16,7 @@ namespace Camera2.Behaviours {
 		private MeshRenderer renderer;
 
 		public void Awake() {
-			DontDestroyOnLoad(this);
+			DontDestroyOnLoad(gameObject);
 
 			camOrigin = GameObject.CreatePrimitive(PrimitiveType.Cylinder);
 			camOrigin.transform.parent = transform;

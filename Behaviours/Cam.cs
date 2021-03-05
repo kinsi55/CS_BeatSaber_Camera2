@@ -30,22 +30,31 @@ namespace Camera2.Behaviours {
 		internal List<IMHandler> middlewares { get; private set; } = new List<IMHandler>();
 		
 		public void Awake() {
-			DontDestroyOnLoad(this);
+			DontDestroyOnLoad(gameObject);
 		}
 
-		public void SetParent(Transform parent) {
+
+		DestroyShield shield;
+		public void SetOrigin(Transform parent) {
 			if(transform.parent == parent)
 				return;
 
-			transform.parent = parent;
-			//transform.SetParent(parent, true);
-
 			if(parent == null) {
-				DontDestroyOnLoad(this);
+				transform.parent = null;
 
-				// Previous parent might've messed up the rot/pos, so lets fix it.
-				settings.ApplyPositionAndRotation();
+				DontDestroyOnLoad(gameObject);
+			} else {
+				if(shield == null)
+					shield = new GameObject($"Parented_Cam2_{name}").AddComponent<DestroyShield>();
+
+				shield.Init(this, parent);
+
+				transform.SetParent(shield.transform, false);
 			}
+
+			// Previous parent might've messed up the rot/pos, so lets fix it.
+			settings.ApplyPositionAndRotation();
+
 		}
 
 		internal void UpdateRenderTextureAndView() {
