@@ -34,6 +34,10 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <Compile Remove="HarmonyPatches\HookSceneUnload.cs" />
+    </ItemGroup>
+
+    <ItemGroup>
         <Reference Include="0Harmony">
           <HintPath>$(BeatSaberDir)\Libs\0Harmony.dll</HintPath>
           <Private>False</Private>
@@ -151,7 +155,6 @@
     <ItemGroup>
         <EmbeddedResource Include="manifest.json" />
         <EmbeddedResource Include="UI\Views\camList.bsml" />
-        <EmbeddedResource Include="UI\Views\camPreview.bsml" />
         <EmbeddedResource Include="UI\Views\camSettings.bsml" />
     </ItemGroup>
 

@@ -33,12 +33,14 @@ namespace Camera2.Middlewares {
 					Plugin.Log.Info($"Enabling Modmap parenting for camera {cam.name}");
 #endif
 					attachedTo = SceneUtil.songWorldTransform;
+					
 					cam.SetOrigin(SceneUtil.songWorldTransform);
 				}
 			} else if(attachedTo != null) {
 #if DEBUG
 				Plugin.Log.Info($"Disabling Modmap parenting for camera {cam.name}");
 #endif
+				cam.SetOrigin(null);
 				attachedTo = null;
 			}
 			return true;

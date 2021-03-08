@@ -42,8 +42,8 @@ namespace Camera2.Middlewares {
 			var parentToUse = parent;
 
 			if(settings.Smoothfollow.followReplayPosition && ScoresaberUtil.isInReplay) {
-				parentToUse = ScoresaberUtil.replayCamera.transform;
-			} else if(parentToUse == null || !parentToUse.gameObject.activeInHierarchy) {
+				parentToUse = ScoresaberUtil.replayCamera?.transform;
+			} else if(parentToUse == null || parentToUse.gameObject?.activeInHierarchy != true) {
 				if(settings.type == Configuration.CameraType.FirstPerson) {
 					parent = parentToUse = (Camera.main ?? HookFPFC.cameraInstance ?? null)?.transform;
 				} else if(settings.type == Configuration.CameraType.Attached) {
@@ -83,8 +83,10 @@ namespace Camera2.Middlewares {
 
 			var theTransform = cam.transform;// settings.Smoothfollow.pivotingOffset ? cam.transform : cam.UCamera.transform;
 
+			var isInReplayFpfc = (HookFPFC.cameraInstance != null && parent == HookFPFC.cameraInstance.transform && (!ScoresaberUtil.isInReplay || !settings.Smoothfollow.followReplayPosition));
+
 			// If we switched scenes (E.g. left / entered a song) we want to snap to the correct position before smoothing again
-			if(lastScene != SceneUtil.currentScene || (parent == HookFPFC.cameraInstance?.transform && (!ScoresaberUtil.isInReplay || !settings.Smoothfollow.followReplayPosition))) {
+			if(lastScene != SceneUtil.currentScene || isInReplayFpfc) {
 				theTransform.SetPositionAndRotation(targetPosition, targetRotation);
 
 				lastScene = SceneUtil.currentScene;

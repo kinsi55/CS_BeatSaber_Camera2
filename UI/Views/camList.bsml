@@ -4,15 +4,15 @@
 	</horizontal>
 	<horizontal>
 		<vertical preferred-width='20'>
-			<page-button event-click='camList#PageUp' direction='Up'></page-button>
-			<page-button event-click='camList#PageDown' direction='Down'></page-button>
+			<button on-click='AddCam' text='Add Camera'></button>
+			<button id='deleteButton' click-event='showDelConf' text='Delete Camera' hover-hint='You will FC your next Song and get a PB OkayChamp'></button>
+			
+			<!--<button on-click='AddCam' text='Up Layer'></button>-->
 		</vertical>
-		<vertical>
-			<list id='camList' expand-cell='true' select-cell='SelectCamera'></list>
-			<horizontal>
-				<button on-click='AddCam' text='Add Camera'></button>
-				<button id='deleteButton' click-event='showDelConf' text='Delete Camera' hover-hint='You will FC your next Song and get a PB OkayChamp'></button>
-			</horizontal>
+		<list id='camList' expand-cell='true' select-cell='SelectCamera'></list>
+		<vertical preferred-width='4'>
+			<page-button event-click='camList#PageUp' direction='Up' pref-height='3' pref-width='4'></page-button>
+			<page-button event-click='camList#PageDown' direction='Down' pref-height='3' pref-width='4'></page-button>
 		</vertical>
 	</horizontal>
 	<modal clickerino-offerino-closerino='true' move-to-center='true' id='deleteConfirmModal' size-delta-x='40' size-delta-y='30' hide-event='closeDelConf' show-event='showDelConf'>

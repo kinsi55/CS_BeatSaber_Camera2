@@ -34,8 +34,8 @@ namespace Camera2.Behaviours {
 		}
 
 
-		DestroyShield shield;
-		public void SetOrigin(Transform parent) {
+		ParentShield shield;
+		public void SetOrigin(Transform parent, bool unparentOnDisable = true) {
 			if(transform.parent == parent)
 				return;
 
@@ -45,16 +45,15 @@ namespace Camera2.Behaviours {
 				DontDestroyOnLoad(gameObject);
 			} else {
 				if(shield == null)
-					shield = new GameObject($"Parented_Cam2_{name}").AddComponent<DestroyShield>();
+					shield = new GameObject($"Cam2_{name}_Parenter").AddComponent<ParentShield>();
 
-				shield.Init(this, parent);
+				shield.Init(this, parent, false);
 
 				transform.SetParent(shield.transform, false);
 			}
 
 			// Previous parent might've messed up the rot/pos, so lets fix it.
 			settings.ApplyPositionAndRotation();
-
 		}
 
 		internal void UpdateRenderTextureAndView() {

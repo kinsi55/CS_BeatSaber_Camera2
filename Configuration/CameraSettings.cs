@@ -145,8 +145,8 @@ namespace Camera2.Configuration {
 
 		public void ApplyPositionAndRotation() {
 			if(type == CameraType.Positionable) {
-				cam.transform.position = targetPos;
-				cam.transform.eulerAngles = targetRot;
+				cam.transform.localPosition = targetPos;
+				cam.transform.localEulerAngles = targetRot;
 			} else if(Smoothfollow.pivotingOffset) {
 				/*
 				 * The cam game object is what is parented, so I'm using the Cameras 
