@@ -54,8 +54,9 @@ namespace Camera2.Utils {
 				replayCamera = GameObject.Find("LocalPlayerGameCore/Recorder/RecorderCamera")?.GetComponent<Camera>();
 
 			if(replayCamera != null) {
-				replayCamera.enabled = false;
-				
+				// Cant disable this one as otherwise SS' ReplayFrameRenderer stuff "breaks"
+				//replayCamera.enabled = false;
+
 				if(!UnityEngine.XR.XRDevice.isPresent) {
 					var x = GameObject.Find("RecorderCamera(Clone)")?.GetComponent<Camera>();
 					if(x != null) x.enabled = false;
