@@ -10,6 +10,13 @@
         <BeatSaberDir>$(LocalRefsDir)</BeatSaberDir>
         <AppOutputBase>$(MSBuildProjectDirectory)\</AppOutputBase>
         <Nullable>disable</Nullable>
+        <Product>Camera2</Product>
+        <Company />
+        <Authors>Kinsi55</Authors>
+        <Copyright>Kinsi55</Copyright>
+        <RepositoryType></RepositoryType>
+        <RepositoryUrl>https://github.com/kinsi55/CS_BeatSaber_Camera2</RepositoryUrl>
+        <Description></Description>
     </PropertyGroup>
 
     <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
