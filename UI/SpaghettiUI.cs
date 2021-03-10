@@ -31,7 +31,7 @@ namespace Camera2.Settings {
 		private static void ShowFlow() {
 			if(_flow == null)
 				_flow = BeatSaberUI.CreateFlowCoordinator<Coordinator>();
-			BeatSaberUI.MainFlowCoordinator.PresentFlowCoordinatorOrAskForTutorial(_flow);
+			BeatSaberUI.MainFlowCoordinator.PresentFlowCoordinator(_flow);
 		}
 	}
 
@@ -361,7 +361,8 @@ namespace Camera2.Settings {
 			var cellIndex = camList.list.data.FindIndex(el => el.text == cam.name);
 			currentTableCell = camList.list.data[cellIndex];
 
-			camList.list.tableView.ScrollToCellWithIdx(cellIndex, TableViewScroller.ScrollPositionType.Center, false);
+			//camList.list.tableView.ScrollToCellWithIdx(cellIndex, TableViewScroller.ScrollPositionType.Center, false);
+			camList.list.tableView.ScrollToCellWithIdx(cellIndex, TableView.ScrollPositionType.Center, false);
 			camList.list.tableView.SelectCellWithIdx(cellIndex);
 		}
 

@@ -28,9 +28,10 @@ namespace Camera2.Middlewares {
 
 		new public bool Pre() {
 			if(
-				!enabled || 
-				!settings.Follow360.enabled || 
-				SceneUtil.isInMenu || 
+				!enabled ||
+				!settings.Follow360.enabled ||
+				SceneUtil.isInMenu ||
+				!HookLeveldata.is360Level ||
 				HookLevelRotation.Instance == null ||
 				settings.type != Configuration.CameraType.Positionable
 				// CBA to deal with 360 support for absolute offsets for now
