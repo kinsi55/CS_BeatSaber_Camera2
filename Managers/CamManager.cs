@@ -39,35 +39,34 @@ namespace Camera2.Managers {
 		}
 
 		private static void LoadCameras(bool reload = false) {
-			if(!Directory.Exists(ConfigUtil.CamsDir)) {
+			if(!Directory.Exists(ConfigUtil.CamsDir))
 				Directory.CreateDirectory(ConfigUtil.CamsDir);
-			} else {
-				var loadedNames = new List<string>();
 
-				foreach(var cam in Directory.GetFiles(ConfigUtil.CamsDir, "*.json")) {
-					try {
-						var name = Path.GetFileNameWithoutExtension(cam);
+			var loadedNames = new List<string>();
 
-						InitCamera(name, true, reload);
+			foreach(var cam in Directory.GetFiles(ConfigUtil.CamsDir, "*.json")) {
+				try {
+					var name = Path.GetFileNameWithoutExtension(cam);
 
-						if(reload)
-							loadedNames.Add(name);
-					} catch(Exception ex) {
-						Plugin.Log.Error($"Failed to load Camera {Path.GetFileName(cam)}");
-						Plugin.Log.Error(ex);
-					}
+					InitCamera(name, true, reload);
+
+					if(reload)
+						loadedNames.Add(name);
+				} catch(Exception ex) {
+					Plugin.Log.Error($"Failed to load Camera {Path.GetFileName(cam)}");
+					Plugin.Log.Error(ex);
 				}
-				if(reload) foreach(var deletedCam in cams.Where(x => !loadedNames.Contains(x.Key)).ToList()) {
-					GameObject.Destroy(deletedCam.Value);
-					cams.Remove(deletedCam.Key);
-				}
-
-				if(cams.Count() == 0) {
-					var cam = InitCamera("Main", false);
-				}
-
-				ApplyCameraValues(viewLayer: true);
 			}
+			if(reload) foreach(var deletedCam in cams.Where(x => !loadedNames.Contains(x.Key)).ToList()) {
+				GameObject.Destroy(deletedCam.Value);
+				cams.Remove(deletedCam.Key);
+			}
+
+			if(cams.Count() == 0) {
+				var cam = InitCamera("Main", false);
+			}
+
+			ApplyCameraValues(viewLayer: true);
 		}
 
 		public static void Reload() {

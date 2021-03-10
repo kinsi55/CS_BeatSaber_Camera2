@@ -10,7 +10,6 @@
 		"BSIPA": "^4.1.4",
 		"BeatSaberMarkupLanguage": "^1.5.1"
 	},
-	"features": [],
 	"loadAfter": [
 		"ScoreSaber",
 		"SongCore",
