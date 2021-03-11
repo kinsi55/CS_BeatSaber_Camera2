@@ -41,10 +41,6 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <Compile Remove="HarmonyPatches\HookSceneUnload.cs" />
-    </ItemGroup>
-
-    <ItemGroup>
         <Reference Include="0Harmony">
           <HintPath>$(BeatSaberDir)\Libs\0Harmony.dll</HintPath>
           <Private>False</Private>
@@ -156,7 +152,6 @@
 
     <ItemGroup>
         <None Include="Directory.Build.targets" Condition="Exists('Directory.Build.targets')" />
-        <None Include="SongBrowser.csproj.user" Condition="Exists('Camera2.csproj.user')" />
     </ItemGroup>
 
     <ItemGroup>

@@ -15,7 +15,7 @@ namespace Camera2.Managers {
 #endif
 	static class CamManager {
 		public static Dictionary<string, Cam2> cams { get; private set; } = new Dictionary<string, Cam2>();
-		static CamerasViewport customScreen;
+		internal static CamerasViewport customScreen { get; private set; }
 		public static int baseCullingMask { get; internal set; }
 		public static int clearedBaseCullingMask { get; private set; }
 
