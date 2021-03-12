@@ -18,10 +18,16 @@ namespace Camera2.Managers {
 		internal static SceneTypes loadedScene { get; private set; } = SceneTypes.MultiplayerMenu;
 
 		public static void ActiveSceneChanged(string sceneName = null) {
+			if(SceneUtil.currentScene == null)
+				return;
+
 			if(sceneName == null)
 				sceneName = SceneUtil.currentScene.name;
 
-			CamManager.customScreen?.gameObject.SetActive(sceneName != "BeatmapEditor");
+			if(CamManager.customScreen == null || CamManager.customScreen.gameObject == null)
+				return;
+
+			CamManager.customScreen.gameObject.SetActive(sceneName != "BeatmapEditor");
 
 			if(!settings.autoswitchFromCustom && (loadedScene == SceneTypes.Custom1 || loadedScene == SceneTypes.Custom2 || loadedScene == SceneTypes.Custom3))
 				return;
