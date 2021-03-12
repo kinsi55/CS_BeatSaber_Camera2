@@ -30,8 +30,8 @@ namespace Camera2.Middlewares {
 		Vector3 lastPos = Vector3.zero;
 		Quaternion lastRot = Quaternion.identity;
 
-		Frame targetFrame { get { return loadedScript.frames[frameIndex]; } }
-		
+		Frame targetFrame => loadedScript.frames[frameIndex];
+
 		private void DoParent() {
 			if(scriptTransform != null)
 				return;
@@ -83,9 +83,7 @@ namespace Camera2.Middlewares {
 			cam.transform.localRotation = Quaternion.identity;
 		}
 
-		public void OnDisable() {
-			Reset();
-		}
+		public void OnDisable() => Reset();
 
 		new public bool Pre() {
 			if(settings.MovementScript.scriptList.Length == 0 || 

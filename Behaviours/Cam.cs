@@ -105,6 +105,7 @@ namespace Camera2.Behaviours {
 			previewImage = presentor;
 
 			var camClone = Instantiate(SceneUtil.GetMainCameraButReally(), transform);
+			var camClone = Instantiate(SceneUtil.GetMainCameraButReally(), Vector3.zero, Quaternion.identity, transform);
 			camClone.name = "Cam";
 
 
@@ -167,35 +168,35 @@ namespace Camera2.Behaviours {
 		System.Diagnostics.Stopwatch sw = null;
 #endif
 		private void OnGUI() {
-			if(UCamera != null && renderTexture != null && hadUpdate) {
+			if(UCamera == null || renderTexture == null || !hadUpdate)
+				return;
 #if FPSCOUNT
-				if(sw == null) {
-					sw = new System.Diagnostics.Stopwatch();
-					sw.Start();
-				}
-#endif
-
-				foreach(var t in middlewares) {
-					if(!t.Pre())
-						return;
-				}
-
-				hadUpdate = false;
-				UCamera.Render();
-
-				foreach(var t in middlewares)
-					t.Post();
-
-				timeSinceLastRender = 0f;
-#if FPSCOUNT
-				renderedFrames++;
-				if(sw.ElapsedMilliseconds > 500) {
-					Console.WriteLine("Rendered FPS for {1}: {0}", renderedFrames * 2, name);
-					renderedFrames = 0;
-					sw.Restart();
-				}
-#endif
+			if(sw == null) {
+				sw = new System.Diagnostics.Stopwatch();
+				sw.Start();
 			}
+#endif
+
+			foreach(var t in middlewares) {
+				if(!t.Pre())
+					return;
+			}
+
+			hadUpdate = false;
+			UCamera.Render();
+
+			foreach(var t in middlewares)
+				t.Post();
+
+			timeSinceLastRender = 0f;
+#if FPSCOUNT
+			renderedFrames++;
+			if(sw.ElapsedMilliseconds > 500) {
+				Console.WriteLine("Rendered FPS for {1}: {0}", renderedFrames * 2, name);
+				renderedFrames = 0;
+				sw.Restart();
+			}
+#endif
 		}
 		
 		private void OnEnable() {
