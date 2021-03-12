@@ -104,7 +104,7 @@ namespace Camera2.Behaviours {
 			this.name = name;
 			previewImage = presentor;
 
-			var camClone = Instantiate(SceneUtil.GetMainCameraButReally());
+			var camClone = Instantiate(SceneUtil.GetMainCameraButReally(), transform);
 			camClone.name = "Cam";
 
 
@@ -123,10 +123,6 @@ namespace Camera2.Behaviours {
 			foreach(var component in camClone.GetComponents<Behaviour>())
 				if(trash.Contains(component.GetType().Name)) Destroy(component);
 
-			camClone.transform.parent = transform;
-			camClone.transform.localRotation = Quaternion.identity;
-			camClone.transform.localPosition = Vector3.zero;
-
 
 			//Cloning post process stuff to make it controlable on a per camera basis
 			//BloomShite.InstantiateBloomForCamera(UCamera).tag = null;
@@ -143,18 +139,18 @@ namespace Camera2.Behaviours {
 			settings.Load(loadConfig);
 
 
-			AddTransformer<FPSLimiter>();
-			AddTransformer<Smoothfollow>();
-			AddTransformer<ModmapExtensions>();
-			AddTransformer<Follow360>();
-			AddTransformer<MovementScriptProcessor>();
+			AddMiddleware<FPSLimiter>();
+			AddMiddleware<Smoothfollow>();
+			AddMiddleware<ModmapExtensions>();
+			AddMiddleware<Follow360>();
+			AddMiddleware<MovementScriptProcessor>();
 
 #if DEV
 			AddTransformer<PostProcessor>();
 #endif
 		}
 
-		private void AddTransformer<T>() where T: CamMiddleware, IMHandler {
+		private void AddMiddleware<T>() where T: CamMiddleware, IMHandler {
 			middlewares.Add(gameObject.AddComponent<T>().Init(this));
 		}
 

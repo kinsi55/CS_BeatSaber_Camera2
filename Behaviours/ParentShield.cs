@@ -12,6 +12,8 @@ namespace Camera2.Behaviours {
 		Cam2 cam;
 		bool unparentOnDisable;
 
+		void Awake() => enabled = false;
+
 		public void Init(Cam2 cam, Transform parent, bool worldPositionStays, bool unparentOnDisable = false) {
 			this.cam = cam;
 			this.unparentOnDisable = unparentOnDisable;

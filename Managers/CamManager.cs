@@ -25,7 +25,7 @@ namespace Camera2.Managers {
 			foreach(int mask in Enum.GetValues(typeof(VisibilityMasks)))
 				clearedBaseCullingMask &= ~mask;
 
-			customScreen = new GameObject("Cam2_Renderer").AddComponent<CamerasViewport>();
+			customScreen = new GameObject("Cam2_Viewport").AddComponent<CamerasViewport>();
 
 			LoadCameras();
 			
