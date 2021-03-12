@@ -96,10 +96,12 @@ namespace Camera2.Settings {
 			set {
 				// When switching to FP reset Rot / Pos so that the previous TP values arent used as the FP offset
 				if(value == CameraType.FirstPerson) {
-					cam.settings.targetRot = UnityEngine.Vector3.zero;
 					cam.settings.targetPos = new UnityEngine.Vector3(0, 0, zOffset);
 					NotifyPropertyChanged("zOffset");
+				} else if(value == CameraType.Positionable) {
+					cam.settings.targetPos = new UnityEngine.Vector3(0, 1.5f, 1f);
 				}
+				cam.settings.targetRot = UnityEngine.Vector3.zero;
 				cam.settings.type = value;
 				ToggleSettingVisibility();
 			}
@@ -320,6 +322,8 @@ namespace Camera2.Settings {
 
 			AddCamToList(cam);
 			Coordinator.instance.ShowSettingsForCam(cam);
+
+			cam.settings.viewRect = new UnityEngine.Rect(50, 50, UnityEngine.Screen.width / 2, UnityEngine.Screen.height / 2);
 		}
 
 		[UIAction("DeleteCam")]
