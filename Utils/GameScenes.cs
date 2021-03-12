@@ -25,6 +25,9 @@ namespace Camera2.Utils {
 		public static readonly string[] menuSceneNames = new string[] { "MenuViewCore", "MenuCore", "MenuViewControllers" };
 
 		public static void OnActiveSceneChanged(Scene oldScene, Scene newScene) {
+			if(newScene == null)
+				return;
+
 			currentScene = newScene;
 			isInMenu = menuSceneNames.Contains(newScene.name);
 
