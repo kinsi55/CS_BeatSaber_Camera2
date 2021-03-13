@@ -4,6 +4,7 @@ using Newtonsoft.Json;
 using Camera2.Interfaces;
 using Camera2.Utils;
 using Camera2.HarmonyPatches;
+using Camera2.Behaviours;
 
 namespace Camera2.Configuration {
 	class Settings_Smoothfollow : CameraSubSettings {
@@ -17,11 +18,23 @@ namespace Camera2.Configuration {
 		[JsonProperty("pivotingOffset")]
 		public bool pivotingOffset {
 			get { return _pivotingOffset; }
-			set { _pivotingOffset = value; if(settings.isLoaded) settings.ApplyPositionAndRotation(); }
+			set {
+				if(value == _pivotingOffset)
+					return;
+
+				_pivotingOffset = value;
+
+				// Destroying it here will cause it to get re-created in the correct hierarchy-position next frame
+				if(transformer != null)
+					GameObject.Destroy(transformer);
+			}
 		}
 
 		[JsonIgnore]
 		internal Transform parent;
+
+		[JsonIgnore]
+		internal Transformer transformer;
 
 		public string targetParent = "";
 
@@ -36,16 +49,24 @@ namespace Camera2.Middlewares {
 		Transform parent { get { return settings.Smoothfollow.parent; } set { settings.Smoothfollow.parent = value; } }
 
 		new public bool Pre() {
-			if(settings.type == Configuration.CameraType.Positionable)
+			if(settings.type == Configuration.CameraType.Positionable) {
+				if(settings.Smoothfollow.transformer != null)
+					Destroy(settings.Smoothfollow.transformer);
+
 				return true;
+			}
 
 			var parentToUse = parent;
+			var useLocalPosition = true;
 
-			if(settings.Smoothfollow.followReplayPosition && ScoresaberUtil.isInReplay) {
+			if(ScoresaberUtil.isInReplay && settings.Smoothfollow.followReplayPosition) {
 				parentToUse = ScoresaberUtil.replayCamera?.transform;
+			} if(HookFPFC.isInFPFC && settings.type == Configuration.CameraType.FirstPerson && HookFPFC.cameraInstance != null) {
+				parentToUse = HookFPFC.cameraInstance?.transform;
+				useLocalPosition = false;
 			} else if(parentToUse == null || parentToUse.gameObject?.activeInHierarchy != true) {
 				if(settings.type == Configuration.CameraType.FirstPerson) {
-					parent = parentToUse = (Camera.main ?? HookFPFC.cameraInstance ?? null)?.transform;
+					parent = parentToUse = Camera.main?.transform;
 				} else if(settings.type == Configuration.CameraType.Attached) {
 					parent = parentToUse = GameObject.Find(settings.Smoothfollow.targetParent)?.transform;
 				}
@@ -57,42 +78,35 @@ namespace Camera2.Middlewares {
 			if(parentToUse == null)
 				return false;
 
-			var targetRotation = parentToUse.rotation;
-			var targetPosition = parentToUse.position;
+			var targetRotation = useLocalPosition ? parentToUse.localRotation : parentToUse.rotation;
+			var targetPosition = useLocalPosition ? parentToUse.localPosition : parentToUse.position;
 
-			if(settings.Smoothfollow.forceUpright) {
-				float zVal;
-				if(SceneUtil.songWorldTransform != null) {
-					/*
-					 * Substract the world rotation so that the only thing we "correct" for being upright is the HMD
-					 * E.g. Map turns you upside down - The view should still be upside down, but "upright" (No rotation other than the maps one)
-					 */
-					var isolatedHmdRotation = targetRotation * Quaternion.Inverse(SceneUtil.songWorldTransform.rotation);
-					zVal = isolatedHmdRotation.eulerAngles.z;
-				} else {
-					zVal = targetRotation.eulerAngles.z;
-				}
+			if(settings.Smoothfollow.forceUpright)
+				targetRotation *= Quaternion.Euler(0, 0, -parentToUse.transform.localEulerAngles.z);
 
-				targetRotation *= Quaternion.Euler(0, 0, -zVal);
+			bool teleport =
+				lastScene != SceneUtil.currentScene ||
+				(HookFPFC.isInFPFC && (!settings.Smoothfollow.followReplayPosition || !ScoresaberUtil.isInReplay));
+
+			if(settings.Smoothfollow.transformer == null) {
+				settings.Smoothfollow.transformer = cam.GetOrCreateTransformer(
+					"SmoothFollow",
+						settings.Smoothfollow.pivotingOffset ? TransformerOrders.SmoothFollowPivoting : TransformerOrders.SmoothFollowAbsolute
+				);
+
+				teleport = true;
 			}
 
-			if(!settings.Smoothfollow.pivotingOffset) {
-				targetRotation *= Quaternion.Euler(settings.targetRot);
-				targetPosition += settings.targetPos;
-			}
-
-			var theTransform = cam.transform;// settings.Smoothfollow.pivotingOffset ? cam.transform : cam.UCamera.transform;
-
-			var isInReplayFpfc = (HookFPFC.cameraInstance != null && parent == HookFPFC.cameraInstance.transform && (!ScoresaberUtil.isInReplay || !settings.Smoothfollow.followReplayPosition));
+			var theTransform = settings.Smoothfollow.transformer.transform;
 
 			// If we switched scenes (E.g. left / entered a song) we want to snap to the correct position before smoothing again
-			if(lastScene != SceneUtil.currentScene || isInReplayFpfc) {
-				theTransform.SetPositionAndRotation(targetPosition, targetRotation);
+			if(teleport) {
+				theTransform.SetLocalPositionAndRotation(targetPosition, targetRotation);
 
 				lastScene = SceneUtil.currentScene;
 			} else {
-				theTransform.position = Vector3.Lerp(theTransform.position, targetPosition, cam.timeSinceLastRender * settings.Smoothfollow.position);
-				theTransform.rotation = Quaternion.Slerp(theTransform.rotation, targetRotation, cam.timeSinceLastRender * settings.Smoothfollow.rotation);
+				theTransform.localPosition = Vector3.Lerp(theTransform.localPosition, targetPosition, cam.timeSinceLastRender * settings.Smoothfollow.position);
+				theTransform.localRotation = Quaternion.Slerp(theTransform.localRotation, targetRotation, cam.timeSinceLastRender * settings.Smoothfollow.rotation);
 			}
 			return true;
 		}
