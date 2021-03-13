@@ -28,6 +28,8 @@ namespace Camera2.Behaviours {
 		internal PositionableCam worldCam { get; private set; } = null;
 
 		internal List<IMHandler> middlewares { get; private set; } = new List<IMHandler>();
+
+		internal Transform transformer;
 		
 		public void Awake() {
 			DontDestroyOnLoad(gameObject);
@@ -55,6 +57,46 @@ namespace Camera2.Behaviours {
 			// Previous parent might've messed up the rot/pos, so lets fix it.
 			settings.ApplyPositionAndRotation();
 		}
+
+		List<KeyValuePair<string, Transformer>> transformers = new List<KeyValuePair<string, Transformer>>();
+		public Transformer GetTransformer(string type) {
+			foreach(var x in transformers)
+				if(x.Key == type) return x.Value;
+
+			return null;
+		}
+		public Transformer GetOrCreateTransformer(string type, TransformerOrders order = TransformerOrders.Default) {
+			foreach(var x in transformers)
+				if(x.Key == type) return x.Value;
+
+			Transform parent = transform;
+			Transform child = UCamera.transform;
+			int index = transformers.FindIndex(x => x.Value.order >= (int)order);
+
+			if(index == -1)
+				index = transformers.Count();
+
+			if(transformers.Count() > 0) {
+				if(index > 0)
+					parent = transformers[index - 1].Value.transform;
+
+				if(transformers.Count() > index)
+					child = transformers[index].Value.transform;
+			}
+
+
+			var n = Transformer.Get(type, (int)order, this, transformers);
+			
+			n.transform.SetParent(parent, false);
+			child.SetParent(n.transform, false);
+
+			transformers.Insert(index, new KeyValuePair<string, Transformer>(type, n));
+
+
+			return n;
+		}
+
+
 
 		internal void UpdateRenderTextureAndView() {
 			var w = (int)Math.Round(settings.viewRect.width * settings.renderScale);
@@ -104,7 +146,6 @@ namespace Camera2.Behaviours {
 			this.name = name;
 			previewImage = presentor;
 
-			var camClone = Instantiate(SceneUtil.GetMainCameraButReally(), transform);
 			var camClone = Instantiate(SceneUtil.GetMainCameraButReally(), Vector3.zero, Quaternion.identity, transform);
 			camClone.name = "Cam";
 
@@ -115,6 +156,8 @@ namespace Camera2.Behaviours {
 			UCamera.stereoTargetEye = StereoTargetEyeMask.None;
 			//UCamera.depthTextureMode = DepthTextureMode.None;
 			//UCamera.renderingPath = RenderingPath.DeferredLighting;
+
+			transformer = GetOrCreateTransformer("position", TransformerOrders.PositionOffset).transform;
 
 
 			foreach(var child in camClone.transform.Cast<Transform>())
@@ -211,15 +254,17 @@ namespace Camera2.Behaviours {
 			if(previewImage != null) previewImage.gameObject?.SetActive(false);
 			ShowWorldCamIfNecessary();
 		}
-		
+
+		internal bool destroying { get; private set; } = false;
 		private void OnDestroy() {
+			destroying = true;
 			gameObject.SetActive(false);
 
 			foreach(var component in UCamera.gameObject.GetComponents<Behaviour>())
 				if(component.GetType() != typeof(Camera))
 					Destroy(component);
 
-			if(UCamera != null) Destroy(UCamera);
+			//if(UCamera != null) Destroy(UCamera);
 			if(previewImage != null) Destroy(previewImage);
 			Destroy(gameObject);
 		}

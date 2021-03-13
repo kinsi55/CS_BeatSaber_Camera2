@@ -8,6 +8,7 @@ namespace Camera2.Behaviours {
 		//private static VRPointer pointer;
 		private static VRController controller;
 		private static Cam2 grabbedCamera = null;
+		private static Transform camTransform;
 
 		private static Vector3 grabStartPos;
 		private static Quaternion grabStartRot;
@@ -27,14 +28,12 @@ namespace Camera2.Behaviours {
 			if(controller == null)
 				return;
 
+			//TODO: I should probably move this to use a Transformer...
 			grabbedCamera = camera;
+			camTransform = camera.UCamera.transform;
 
-			//TODO: Is this necessary?? I can only see it break stuff
-			//grabbedCamera.transform.position = grabbedCamera.UCamera.transform.position;
-			//grabbedCamera.transform.rotation = grabbedCamera.UCamera.transform.rotation;
-
-			grabStartPos = controller.transform.InverseTransformPoint(grabbedCamera.transform.position);
-			grabStartRot = Quaternion.Inverse(controller.rotation) * grabbedCamera.transform.rotation;
+			grabStartPos = controller.transform.InverseTransformPoint(camTransform.position);
+			grabStartRot = Quaternion.Inverse(controller.rotation) * camTransform.rotation;
 
 			grabbedCamera.worldCam.SetPreviewPositionAndSize(false);
 		}
@@ -42,8 +41,8 @@ namespace Camera2.Behaviours {
 		public void Update() {
 			if(grabbedCamera != null) {
 				if(controller != null && grabbedCamera.worldCam.isActiveAndEnabled) {
-					grabbedCamera.transform.position = controller.transform.TransformPoint(grabStartPos);
-					grabbedCamera.transform.rotation = controller.rotation * grabStartRot;
+					camTransform.position = controller.transform.TransformPoint(grabStartPos);
+					camTransform.rotation = controller.rotation * grabStartRot;
 
 					if(controller.triggerValue > 0.5f || (HookFPFC.isInFPFC && Input.GetMouseButton(0)))
 						return;
@@ -56,8 +55,13 @@ namespace Camera2.Behaviours {
 		private static void FinishCameraMove() {
 			if(grabbedCamera == null) return;
 
-			grabbedCamera.settings.targetPos = grabbedCamera.transform.position;
-			grabbedCamera.settings.targetRot = grabbedCamera.transform.rotation.eulerAngles;
+			grabbedCamera.settings.targetPos = camTransform.position;
+			grabbedCamera.settings.targetRot =  camTransform.eulerAngles;
+
+			camTransform.localPosition = Vector3.zero;
+			camTransform.localRotation = Quaternion.identity;
+
+			grabbedCamera.settings.ApplyPositionAndRotation();
 
 			grabbedCamera.worldCam.SetPreviewPositionAndSize(true);
 
