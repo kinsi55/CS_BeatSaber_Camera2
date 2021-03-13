@@ -5,6 +5,8 @@ using Camera2.Utils;
 using static Camera2.Configuration.MovementScript;
 using Camera2.Configuration;
 using Camera2.Managers;
+using Camera2.Behaviours;
+using System;
 
 namespace Camera2.Configuration {
 	class Settings_MovementScript : CameraSubSettings {
@@ -18,7 +20,7 @@ namespace Camera2.Middlewares {
 	class MovementScriptProcessor : CamMiddleware, IMHandler {
 		static System.Random randomSource = new System.Random();
 
-		Transform scriptTransform = null;
+		Transformer scriptTransformer = null;
 
 		MovementScript loadedScript = null;
 		float currentAnimationTime = 0f;
@@ -33,38 +35,19 @@ namespace Camera2.Middlewares {
 		Frame targetFrame => loadedScript.frames[frameIndex];
 
 		private void DoParent() {
-			if(scriptTransform != null)
+			if(scriptTransformer != null)
 				return;
 
-			var newScriptTransform = new GameObject($"Cam2_MovementScriptApplier_{cam.name}");
-			DontDestroyOnLoad(newScriptTransform);
-
-			scriptTransform = newScriptTransform.transform;
-
-#if DEBUG
-			Plugin.Log.Info($"Reparenting camera {cam.name} to allow for Movement scripts");
-#endif
-
-			scriptTransform.parent = cam.UCamera.transform.parent;
-			scriptTransform.gameObject.name = "MovementScriptApplier";
-
-			var pos = cam.UCamera.transform.localPosition;
-			var rot = cam.UCamera.transform.localRotation;
-
-			scriptTransform.localPosition = pos;
-			scriptTransform.localRotation = rot;
-
-			cam.UCamera.transform.parent = scriptTransform;
+			scriptTransformer = cam.GetOrCreateTransformer("MovementScript", TransformerOrders.MovementScriptProcessor);
 		}
 
 		private void Reset() {
 			if(loadedScript == null)
 				return;
 
-			if(scriptTransform != null) {
-				scriptTransform.localPosition = lastPos = Vector3.zero;
-				scriptTransform.localRotation = lastRot = Quaternion.identity;
-			}
+			if(scriptTransformer != null)
+				GameObject.Destroy(scriptTransformer);
+
 			loadedScript = null;
 			currentAnimationTime = 0f;
 			frameIndex = 0;
@@ -78,9 +61,15 @@ namespace Camera2.Middlewares {
 		new public void CamConfigReloaded() {
 			if(loadedScript == null && settings.MovementScript.fromOrigin)
 				return;
+
+			var x = cam.GetTransformer("Position");
+
+			if(x == null)
+				return;
+
 			// Having a custom position on a camera thats executing a movement script is PROBABLY not what the user wants
-			cam.transform.localPosition = Vector3.zero;
-			cam.transform.localRotation = Quaternion.identity;
+			x.transform.localPosition = Vector3.zero;
+			x.transform.localRotation = Quaternion.identity;
 		}
 
 		public void OnDisable() => Reset();
@@ -129,30 +118,26 @@ namespace Camera2.Middlewares {
 			}
 
 			for(;;) {
-				if(targetFrame.startTime > currentAnimationTime) {
+				if(targetFrame.startTime > currentAnimationTime)
 					break;
-				} else if(targetFrame.endTime <= currentAnimationTime) {
-					lastPos = scriptTransform.localPosition = targetFrame.position;
-					lastRot = scriptTransform.localRotation = targetFrame.rotation;
+				
+				if(targetFrame.endTime <= currentAnimationTime) {
+					lastPos = scriptTransformer.transform.localPosition = targetFrame.position;
+					lastRot = scriptTransformer.transform.localRotation = targetFrame.rotation;
 					if(targetFrame.FOV > 0)
 						lastFov = cam.UCamera.fieldOfView = targetFrame.FOV;
 				} else if(targetFrame.startTime <= currentAnimationTime) {
 					var frameProgress = (currentAnimationTime - targetFrame.startTime) / targetFrame.duration;
 
-					// I wish this was possible in a more DRY code fashion
-					if(targetFrame.transition == MoveType.Linear) {
-						scriptTransform.localPosition = Vector3.Lerp(lastPos, targetFrame.position, frameProgress);
-						scriptTransform.localRotation = Quaternion.Lerp(lastRot, targetFrame.rotation, frameProgress);
+					if(targetFrame.transition == MoveType.Eased)
+						frameProgress = Easings.EaseInOutCubic01(frameProgress);
 
-						if(targetFrame.FOV > 0f)
-							cam.UCamera.fieldOfView = Mathf.Lerp(lastFov, targetFrame.FOV, frameProgress);
-					} else {
-						scriptTransform.localPosition = Vector3.Slerp(lastPos, targetFrame.position, frameProgress);
-						scriptTransform.localRotation = Quaternion.Slerp(lastRot, targetFrame.rotation, frameProgress);
+					scriptTransformer.transform.localPosition = Vector3.LerpUnclamped(lastPos, targetFrame.position, frameProgress);
+					scriptTransformer.transform.localRotation = Quaternion.LerpUnclamped(lastRot, targetFrame.rotation, frameProgress);
 
-						if(targetFrame.FOV > 0f)
-							cam.UCamera.fieldOfView = Mathf.SmoothStep(lastFov, targetFrame.FOV, frameProgress);
-					}
+					if(targetFrame.FOV > 0f)
+						cam.UCamera.fieldOfView = Mathf.LerpUnclamped(lastFov, targetFrame.FOV, frameProgress);
+
 					break;
 				}
 
