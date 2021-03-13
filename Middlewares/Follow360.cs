@@ -34,9 +34,7 @@ namespace Camera2.Middlewares {
 				SceneUtil.isInMenu ||
 				!HookLeveldata.is360Level ||
 				HookLevelRotation.Instance == null ||
-				settings.type != Configuration.CameraType.Positionable
-				// CBA to deal with 360 support for absolute offsets for now
-				//(settings.type != Configuration.CameraType.Positionable && settings.Smoothfollow.pivotingOffset)
+				(settings.type != Configuration.CameraType.Positionable && settings.Smoothfollow.pivotingOffset)
 			) {
 				Reset();
 
