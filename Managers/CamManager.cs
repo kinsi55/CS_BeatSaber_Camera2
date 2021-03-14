@@ -115,7 +115,7 @@ namespace Camera2.Managers {
 			var nameToUse = namePrefix;
 			var i = 2;
 
-			for(cams.ContainsKey(nameToUse))
+			while(cams.ContainsKey(nameToUse))
 				nameToUse = $"{namePrefix}{i++}";
 
 			return InitCamera(nameToUse, false);
