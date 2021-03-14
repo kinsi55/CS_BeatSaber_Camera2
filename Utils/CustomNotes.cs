@@ -6,13 +6,8 @@ using HarmonyLib;
 
 namespace Camera2.Utils {
 	class CustomNotesUtil {
-		static Type LayerUtils;
-		static PropertyInfo LayerUtils_HMDOnly;
-
-		public static void Init() {
-			LayerUtils = AccessTools.TypeByName("CustomNotes.Utilities.LayerUtils");
-			LayerUtils_HMDOnly = LayerUtils?.GetProperty("HMDOnly", BindingFlags.Public | BindingFlags.Static);
-		}
+		static Type LayerUtils = AccessTools.TypeByName("CustomNotes.Utilities.LayerUtils");
+		static PropertyInfo LayerUtils_HMDOnly = LayerUtils?.GetProperty("HMDOnly", BindingFlags.Public | BindingFlags.Static);
 
 		public static bool HasHMDOnlyEnabled() => (bool)LayerUtils_HMDOnly?.GetValue(null);
 	}

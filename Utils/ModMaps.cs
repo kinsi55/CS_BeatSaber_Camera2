@@ -3,12 +3,9 @@ using IPA.Loader;
 
 namespace Camera2.Utils {
 	static class ModMapUtil {
-		static bool isModCapable = false;
-		public static void Init() {
-			isModCapable =
-				PluginManager.EnabledPlugins.Any(x => x.Name == "MappingExtensions" || x.Name == "NoodleExtensions") &&
-				PluginManager.EnabledPlugins.Any(x => x.Name == "SongCore"); // failsafe, Noodle / MapEx do require it themselves technically
-		}
+		static bool isModCapable = 
+			PluginManager.EnabledPlugins.Any(x => x.Name == "MappingExtensions" || x.Name == "NoodleExtensions") &&
+			PluginManager.EnabledPlugins.Any(x => x.Name == "SongCore"); // failsafe, Noodle / MapEx do require it themselves technically
 
 		public static bool IsProbablyWallmap(IDifficultyBeatmap map) {
 			if(!isModCapable)
