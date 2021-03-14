@@ -112,12 +112,13 @@ namespace Camera2.Managers {
 		}
 
 		public static Cam2 AddNewCamera(string namePrefix = "Unnamed Camera") {
+			var nameToUse = namePrefix;
 			var i = 2;
 
-			while(cams.ContainsKey(namePrefix))
-				namePrefix = $"{namePrefix}{i++}";
+			for(cams.ContainsKey(nameToUse))
+				nameToUse = $"{namePrefix}{i++}";
 
-			return InitCamera(namePrefix, false);
+			return InitCamera(nameToUse, false);
 		}
 
 		public static void DeleteCamera(Cam2 cam) {
