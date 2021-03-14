@@ -1,27 +1,42 @@
 ﻿<vertical xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:schemaLocation='https://monkeymanboy.github.io/BSML-Docs/ https://raw.githubusercontent.com/monkeymanboy/BSML-Docs/gh-pages/BSMLSchema.xsd'>
-	<horizontal bg='panel-top-gradient'>
+	<horizontal bg='panel-top-gradient' anchor-min-y='-1'>
 		<text text='Cameras' align='Center'></text>
 	</horizontal>
 	<horizontal>
-		<vertical preferred-width='25'>
-			<button click-event='addCamModal' text='Add Camera'></button>
-			<button id='deleteButton' click-event='showDelConf' text='Delete Camera' hover-hint='You will FC your next Song and get a PB OkayChamp'></button>
-			<button text='Camera2 Wiki' on-click='ShowWiki' click-event='showLinkInfoModal' pad-top='10'></button>
-			<button text='Camera2 Github' on-click='ShowGithub' click-event='showLinkInfoModal'></button>
+		<vertical preferred-width='27'>
+			<button click-event='addCamModal' text='Add Camera' horizontal-fit='Unconstrained'></button>
+			<button id='deleteButton' click-event='showDelConf' text='Delete Camera' hover-hint='You will FC your next Song and get a PB OkayChamp' horizontal-fit='Unconstrained'></button>
+			<button click-event='showViewrectModal' on-click='UnlockCamPosTab' text='Move Display' horizontal-fit='Unconstrained'></button>
+			<button text='Camera2 Wiki' on-click='ShowWiki' click-event='showLinkInfoModal' pad-top='13' horizontal-fit='Unconstrained'></button>
+			<button text='Github' on-click='ShowGithub' click-event='showLinkInfoModal' horizontal-fit='Unconstrained'></button>
 			<text text="~cam2Version" align="Center" font-size="3" font-color="#CC6E3B"></text>
 			
 			<!--<button on-click='AddCam' text='Up Layer'></button>-->
 		</vertical>
-		<vertical pad-left="2" child-control-width="false" child-expand-width="false">
-			<list id='camList' expand-cell='true' select-cell='SelectCamera' anchor-min-x="-0.16"></list>
+		<vertical pad-left="3" pad-right="2">
+			<custom-list id='camList' select-cell='SelectCamera' contents='cams' visible-cells='8'>
+				<vertical id='bgContainer' bg='round-rect-panel' pad='1' horizontal-fit='Unconstrained'>
+					<horizontal>
+						<text text='~name' align='MidlineLeft' font-size='3'/>
+						<text text='~layerUIText' align='TopRight' font-size='2.4'/>
+					</horizontal>
+					<horizontal><text text='~details' align='MidlineLeft' font-size='2.3'/></horizontal>
+				</vertical>
+			</custom-list>
 		</vertical>
 		<vertical preferred-width='4'>
-			<page-button event-click='camList#PageUp' direction='Up' pref-height='3' pref-width='4'></page-button>
-			<page-button event-click='camList#PageDown' direction='Down' pref-height='3' pref-width='4'></page-button>
+			<page-button event-click='camList#PageUp' direction='Up' pref-height='3'></page-button>
+			<horizontal child-control-height='false' child-align='MiddleCenter'>
+				<vertical preferred-height='20' vertical-fit='PreferredSize'>
+					<button text='+' on-click='LayerIncrease' hover-hint='Increase the Layer the selected Camera is on'/>
+					<button text='-' on-click='LayerDecrease' hover-hint='Decrease the Layer the selected Camera is on'/>
+				</vertical>
+			</horizontal>
+			<page-button event-click='camList#PageDown' direction='Down' pref-height='3'></page-button>
 		</vertical>
 	</horizontal>
 	
-	<modal clickerino-offerino-closerino='true' move-to-center='true' size-delta-x='40' size-delta-y='30' hide-event='closeDelConf' show-event='showDelConf'>
+	<modal clickerino-offerino-closerino='true' move-to-center='true' hide-event='closeDelConf' show-event='showDelConf' size-delta-x='45' size-delta-y='40'>
 		<vertical bg='round-rect-panel' horizontal-fit='PreferredSize' vertical-fit='PreferredSize' pad='8'>
 			<text text='Do you really want to delete this Camera?'></text>
 			<horizontal spacing='10' pad-top='4'>
@@ -31,22 +46,29 @@
 		</vertical>
 	</modal>
 	
-	<modal clickerino-offerino-closerino='true' move-to-center='true' size-delta-x='40' size-delta-y='30' hide-event='closeAddModal' show-event='addCamModal'>
-		<vertical bg='round-rect-panel' horizontal-fit='PreferredSize' vertical-fit='PreferredSize' pad='8'>
+	<modal clickerino-offerino-closerino='true' move-to-center='true' hide-event='closeAddModal' show-event='addCamModal' size-delta-x='50' size-delta-y='45'>
+		<vertical bg='round-rect-panel' preferred-width='80' vertical-fit='PreferredSize' pad='8'>
 			<text text='Add camera from template' align='Center'></text>
-			<vertical spacing='2' pad-top='6' pad-bottom='6'>
-				<primary-button on-click='AddCamDefault' text='Default / Unconfigured' click-event='closeAddModal' preferred-width='50'></primary-button>
-				<primary-button on-click='AddCamSideview' text='Sideview / Swing cam' click-event='closeAddModal' preferred-width='50'></primary-button>
-				<primary-button on-click='AddCamThirdperson' text='Static Thirdperson' click-event='closeAddModal' preferred-width='50'></primary-button>
+			<vertical spacing='2' pad-top='6' preferred-width='60'>
+				<primary-button on-click='AddCamDefault' text='Default / Unconfigured' click-event='closeAddModal' horizontal-fit='Unconstrained'></primary-button>
+				<primary-button on-click='AddCamSideview' text='Sideview / Swing cam' click-event='closeAddModal' horizontal-fit='Unconstrained'></primary-button>
+				<primary-button on-click='AddCamThirdperson' text='Static Thirdperson' click-event='closeAddModal' horizontal-fit='Unconstrained'></primary-button>
 			</vertical>
 			<button text='Cancel' click-event='closeAddModal'></button>
 		</vertical>
 	</modal>
 	
-	<modal clickerino-offerino-closerino='true' move-to-center='true' size-delta-x='40' size-delta-y='30' hide-event='closeLinkInfoModal' show-event='showLinkInfoModal'>
+	<modal clickerino-offerino-closerino='true' move-to-center='true' hide-event='closeLinkInfoModal' show-event='showLinkInfoModal' size-delta-x='30' size-delta-y='45'>
 		<vertical bg='round-rect-panel' horizontal-fit='PreferredSize' vertical-fit='PreferredSize' pad='8'>
-			<text text='A Link has been opened on your Desktop' align='Center'></text>
+			<text text='A link has been opened on your desktop' align='Center'></text>
 			<primary-button text='OK' click-event='closeLinkInfoModal' pad-top='4'></primary-button>
+		</vertical>
+	</modal>
+
+	<modal clickerino-offerino-closerino='true' move-to-center='true' hide-event='closeViewrectModal' show-event='showViewrectModal' size-delta-x='30' size-delta-y='45'>
+		<vertical bg='round-rect-panel' preferred-width='90' vertical-fit='PreferredSize' pad='8'>
+			<text align='Center' word-wrapping="true" text='Changing the size / position of a camera screen is done on the desktop window. If you *really* want to do it from ingame however, clicking this button unlocked a secret settings tab where you can do that in a crude way'></text>
+			<primary-button text='OK' click-event='closeViewrectModal' pad-top='4'></primary-button>
 		</vertical>
 	</modal>
 </vertical>

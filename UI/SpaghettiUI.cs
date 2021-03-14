@@ -22,6 +22,8 @@ using System.Runtime.CompilerServices;
 using System.Diagnostics;
 
 namespace Camera2.Settings {
+	// Theres a reason this is called Spaghetti UI, I will definitely maybe possibly make this not spaghetti one day.
+
 	class SpaghettiUI {
 		private static Coordinator _flow;
 
@@ -56,15 +58,15 @@ namespace Camera2.Settings {
 
 	class SettingsView : BSMLResourceViewController, INotifyPropertyChanged {
 		public override string ResourceName => "Camera2.UI.Views.camSettings.bsml";
-#pragma warning disable 649
-		[UIComponent("zOffsetSlider")] SliderSetting zOffsetSlider;
-		[UIComponent("previewSizeSlider")] SliderSetting previewSizeSlider;
-		[UIComponent("modmapExt_moveWithMapCheckbox")] ToggleSetting modmapExt_moveWithMapSlider;
-		[UIComponent("worldcamVisibilityInput")] LayoutElement worldcamVisibilityObj;
-		[UIComponent("smoothfollowTab")] Tab smoothfollowTab;
-		[UIComponent("follow360Tab")] Tab follow360Tab;
-		[UIComponent("tabSelector")] TabSelector tabSelector;
-#pragma warning restore 649
+
+		[UIComponent("zOffsetSlider")] SliderSetting zOffsetSlider = null;
+		[UIComponent("previewSizeSlider")] SliderSetting previewSizeSlider = null;
+		[UIComponent("modmapExt_moveWithMapCheckbox")] ToggleSetting modmapExt_moveWithMapSlider = null;
+		[UIComponent("worldcamVisibilityInput")] LayoutElement worldcamVisibilityObj = null;
+		[UIComponent("smoothfollowTab")] Tab smoothfollowTab = null;
+		[UIComponent("follow360Tab")] Tab follow360Tab = null;
+		[UIComponent("viewRectTab")] internal Tab viewRectTab = null;
+		[UIComponent("tabSelector")] TabSelector tabSelector = null;
 
 		internal static Cam2 cam { get; private set; }
 
@@ -85,10 +87,8 @@ namespace Camera2.Settings {
 		internal string camName {
 			get => cam.name;
 			set {
-				if(CamManager.RenameCamera(cam, value)) {
-					Coordinator.instance.currentTableCell.text = camName;
+				if(CamManager.RenameCamera(cam, value))
 					Coordinator.instance.camList.list.tableView.ReloadData();
-				}
 				NotifyPropertyChanged("camName");
 			}
 		}
@@ -184,7 +184,20 @@ namespace Camera2.Settings {
 		internal float follow360_smoothing {
 			get => cam.settings.Follow360.smoothing; set { cam.settings.Follow360.smoothing = value; }
 		}
-#endregion
+
+		internal int viewRect_x {
+			get => (int)cam.settings.viewRect.x; set { var n = cam.settings.viewRect; n.x = value; cam.settings.viewRect = n; }
+		}
+		internal int viewRect_y {
+			get => (int)cam.settings.viewRect.y; set { var n = cam.settings.viewRect; n.y = value; cam.settings.viewRect = n; }
+		}
+		internal int viewRect_width {
+			get => (int)cam.settings.viewRect.width; set { var n = cam.settings.viewRect; n.width = value; cam.settings.viewRect = n; }
+		}
+		internal int viewRect_height {
+			get => (int)cam.settings.viewRect.height; set { var n = cam.settings.viewRect; n.height = value; cam.settings.viewRect = n; }
+		}
+		#endregion
 
 
 		private static readonly List<object> types = new object[] { CameraType.FirstPerson, CameraType.Positionable }.ToList();
@@ -264,6 +277,8 @@ namespace Camera2.Settings {
 			foreach(var x in GetComponentsInChildren<DropDownListSetting>(true))
 				x.transform.localScale = new UnityEngine.Vector3(1.09f, 1f, 1f);
 
+			viewRectTab.IsVisible = false;
+
 			Coordinator.instance.ShowSettingsForCam(CamManager.cams.Values.First());
 		}
 
@@ -288,57 +303,71 @@ namespace Camera2.Settings {
 
 		private readonly string cam2Version = $"v{Assembly.GetExecutingAssembly().GetName().Version.ToString(3)} by Kinsi55";
 
-#pragma warning disable 649
-		[UIComponent("deleteButton")] public NoTransitionsButton deleteButton;
-		[UIComponent("camList")] public CustomListTableData list;
-#pragma warning restore 649
+		[UIComponent("deleteButton")] public NoTransitionsButton deleteButton = null;
+		[UIComponent("camList")] public CustomCellListTableData list = null;
+		[UIValue("cams")] public List<object> listData = new List<object>();
 
-		internal void AddCamToList(Cam2 cam) {
+		public class CamListCellWrapper {
+			public Cam2 cam { get; private set; }
+
+			public CamListCellWrapper(Cam2 cam) => this.cam = cam;
+
+			public string name => cam.name;
+
+			int sceneCount => ScenesManager.settings.scenes.Values.Count(x => x.Contains(name)) + ScenesManager.settings.customScenes.Values.Count(x => x.Contains(name));
+
+			string details => $"{cam.settings.type}, assigned to {sceneCount} {(sceneCount == 1 ? "Scene" : "Scenes")}";
+			string layerUIText => $"Layer {cam.settings.layer}{(CamManager.cams.Values.Count(x => x.settings.layer == cam.settings.layer) > 1 ? " <color=yellow>(!)</color>" : "")}";
+
+			[UIComponent("bgContainer")] ImageView bg = null;
+
+			[UIAction("refresh-visuals")]
+			public void Refresh(bool selected, bool highlighted) {
+				var x = new UnityEngine.Color(0, 0, 0, 0.45f);
+
+				if(selected || highlighted)
+					x.a = selected ? 0.9f : 0.6f;
+
+				bg.color = x;
+			}
+		}
+
+		internal void UpdateCamListUI() {
 			//var x = Sprite.Create(cam.screenImage.material, new Rect(0, 0, cam.renderTexture.width, cam.renderTexture.width), new Vector2(0.5f, 0.5f));
-			list.data.Add(new CustomListTableData.CustomCellInfo(
-				cam.name, 
-				$"{cam.settings.type.ToString()}, Layer {cam.settings.layer}"
-			));
-
+			listData.Sort((a, b) => ((CamListCellWrapper)b).cam.settings.layer - ((CamListCellWrapper)a).cam.settings.layer);
 			list.tableView.ReloadData();
-			deleteButton.interactable = list.data.Count > 1;
+			deleteButton.interactable = listData.Count > 1;
 		}
 
 		[UIAction("#post-parse")]
 		internal void Init() {
-			list.data.Clear();
+			listData.Clear();
 
-			foreach(var cam in CamManager.cams.Values)
-				AddCamToList(cam);
-
-			list.tableView.ReloadData();
+			listData.AddRange(CamManager.cams.Values.Select(x => new CamListCellWrapper(x)));
+			UpdateCamListUI();
 		}
 
 		[UIAction("SelectCamera")]
-		void SelectCamera(TableView tableView, int row) {
-			Coordinator.instance.ShowSettingsForCam(CamManager.cams[list.data[row].text]);
-		}
+		void SelectCamera(TableView tableView, CamListCellWrapper row) => Coordinator.instance.ShowSettingsForCam(row.cam);
 
 		Cam2 GetCam(string name) {
 			var cam = CamManager.AddNewCamera(name);
-			cam.settings.viewRect = new UnityEngine.Rect(50, 50, UnityEngine.Screen.width / 2, UnityEngine.Screen.height / 2);
+			cam.settings.viewRect = new UnityEngine.Rect(UnityEngine.Random.Range(0, 200), UnityEngine.Random.Range(0, 200), UnityEngine.Screen.width / 3, UnityEngine.Screen.height / 3);
 
 			return cam;
 		}
 
-		void AddCam(Cam2 cam = null) {
-			if(cam == null)
-				cam = GetCam("Unnamed Camera");
-
+		void AddCam(Cam2 cam) {
 			cam.settings.ApplyPositionAndRotation();
 			cam.settings.ApplyLayerBitmask();
 			cam.UpdateRenderTextureAndView();
 
-			AddCamToList(cam);
+			listData.Insert(0, new CamListCellWrapper(cam));
+			UpdateCamListUI();
 			Coordinator.instance.ShowSettingsForCam(cam);
 		}
 
-		void AddCamDefault() => AddCam();
+		void AddCamDefault() => AddCam(GetCam("Unnamed Camera"));
 
 		void AddCamSideview() {
 			var cam = CamManager.AddNewCamera("Side View");
@@ -370,12 +399,23 @@ namespace Camera2.Settings {
 
 
 		void DeleteCam() {
-			list.data.RemoveAll(x => x.text == SettingsView.cam.name);
+			listData.Remove(listData.Find(x => ((CamListCellWrapper)x).cam == SettingsView.cam));
 			CamManager.DeleteCamera(SettingsView.cam);
 			list.tableView.ReloadData();
 			Coordinator.instance.ShowSettingsForCam(CamManager.cams.Values.First());
-			deleteButton.interactable = list.data.Count > 1;
+			deleteButton.interactable = listData.Count > 1;
 		}
+
+		void ChangeLayer(int diff) {
+			SettingsView.cam.settings.layer += diff;
+			Coordinator.instance.camList.UpdateCamListUI();
+			Coordinator.instance.ShowSettingsForCam(SettingsView.cam, true);
+		}
+
+		void LayerIncrease() => ChangeLayer(1);
+		void LayerDecrease() => ChangeLayer(-1);
+
+		void UnlockCamPosTab() => Coordinator.instance.settingsView.viewRectTab.IsVisible = true;
 
 		void ShowGithub() => Process.Start("https://github.com/kinsi55/CS_BeatSaber_Camera2");
 		void ShowWiki() => Process.Start("https://github.com/kinsi55/CS_BeatSaber_Camera2/wiki");
@@ -386,7 +426,6 @@ namespace Camera2.Settings {
 
 		internal SettingsView settingsView;
 		internal CamList camList;
-		internal CustomListTableData.CustomCellInfo currentTableCell;
 
 		public void Awake() {
 			instance = this;
@@ -401,14 +440,13 @@ namespace Camera2.Settings {
 			//	previewView = BeatSaberUI.CreateViewController<PreviewView>();
 		}
 
-		public void ShowSettingsForCam(Cam2 cam) {
+		public void ShowSettingsForCam(Cam2 cam, bool reselect = false) {
 			SetTitle($"Camera2 | {cam.name}");
 
-			if(!settingsView.SetCam(cam))
+			if(!settingsView.SetCam(cam) && !reselect)
 				return;
 
-			var cellIndex = camList.list.data.FindIndex(el => el.text == cam.name);
-			currentTableCell = camList.list.data[cellIndex];
+			var cellIndex = camList.listData.FindIndex(x => ((CamList.CamListCellWrapper)x).cam == cam);
 
 			camList.list.tableView.SelectCellWithIdx(cellIndex);
 			// This is literally the only thing making the Cam2 incompatible between 1.13.2 and 1.13.4, so it works like this now.
