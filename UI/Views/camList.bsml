@@ -4,7 +4,7 @@
 	</horizontal>
 	<horizontal>
 		<vertical preferred-width='20'>
-			<button on-click='AddCam' text='Add Camera'></button>
+			<button click-event='addCamModal' text='Add Camera'></button>
 			<button id='deleteButton' click-event='showDelConf' text='Delete Camera' hover-hint='You will FC your next Song and get a PB OkayChamp'></button>
 			
 			<!--<button on-click='AddCam' text='Up Layer'></button>-->
@@ -15,13 +15,24 @@
 			<page-button event-click='camList#PageDown' direction='Down' pref-height='3' pref-width='4'></page-button>
 		</vertical>
 	</horizontal>
-	<modal clickerino-offerino-closerino='true' move-to-center='true' id='deleteConfirmModal' size-delta-x='40' size-delta-y='30' hide-event='closeDelConf' show-event='showDelConf'>
+	<modal clickerino-offerino-closerino='true' move-to-center='true' size-delta-x='40' size-delta-y='30' hide-event='closeDelConf' show-event='showDelConf'>
 		<vertical bg='round-rect-panel' horizontal-fit='PreferredSize' vertical-fit='PreferredSize' pad='8'>
 			<text text='Do you really want to delete this Camera?'></text>
 			<horizontal spacing='10' pad-top='4'>
 				<primary-button on-click='DeleteCam' text='Yes' click-event='closeDelConf'></primary-button>
 				<button text='Cancel' click-event='closeDelConf'></button>
 			</horizontal>
+		</vertical>
+	</modal>
+	<modal clickerino-offerino-closerino='true' move-to-center='true' size-delta-x='40' size-delta-y='30' hide-event='closedAddModal' show-event='addCamModal'>
+		<vertical bg='round-rect-panel' horizontal-fit='PreferredSize' vertical-fit='PreferredSize' pad='8'>
+			<text text='Add camera from template' align='Center'></text>
+			<vertical spacing='2' pad-top='6' pad-bottom='6'>
+				<primary-button on-click='AddCamDefault' text='Default / Unconfigured' click-event='closedAddModal' preferred-width='50'></primary-button>
+				<primary-button on-click='AddCamSideview' text='Sideview / Swing cam' click-event='closedAddModal' preferred-width='50'></primary-button>
+				<primary-button on-click='AddCamThirdperson' text='Static Thirdperson' click-event='closedAddModal' preferred-width='50'></primary-button>
+			</vertical>
+			<button text='Cancel' click-event='closedAddModal'></button>
 		</vertical>
 	</modal>
 </vertical>

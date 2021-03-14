@@ -316,17 +316,56 @@ namespace Camera2.Settings {
 			Coordinator.instance.ShowSettingsForCam(CamManager.cams[list.data[row].text]);
 		}
 
-		[UIAction("AddCam")]
-		void AddCam() {
-			var cam = CamManager.AddNewCamera();
+		Cam2 GetCam(string name) {
+			var cam = CamManager.AddNewCamera(name);
+			cam.settings.viewRect = new UnityEngine.Rect(50, 50, UnityEngine.Screen.width / 2, UnityEngine.Screen.height / 2);
+
+			return cam;
+		}
+
+		void AddCam(Cam2 cam = null) {
+			if(cam == null)
+				cam = GetCam("Unnamed Camera");
+
+			cam.settings.ApplyPositionAndRotation();
+			cam.settings.ApplyLayerBitmask();
+			cam.UpdateRenderTextureAndView();
 
 			AddCamToList(cam);
 			Coordinator.instance.ShowSettingsForCam(cam);
-
-			cam.settings.viewRect = new UnityEngine.Rect(50, 50, UnityEngine.Screen.width / 2, UnityEngine.Screen.height / 2);
 		}
 
-		[UIAction("DeleteCam")]
+		void AddCamDefault() => AddCam();
+
+		void AddCamSideview() {
+			var cam = CamManager.AddNewCamera("Side View");
+
+			cam.settings.type = CameraType.Positionable;
+			cam.settings.FOV = 75;
+			cam.settings.viewRect = new UnityEngine.Rect(0, 0, UnityEngine.Screen.width * .195f, UnityEngine.Screen.height * .395f);
+			cam.settings.targetPos = new UnityEngine.Vector3(-3, 1.2f, 0);
+			cam.settings.targetRot = new UnityEngine.Vector3(0, 90f, 0);
+			cam.settings.visibleObjects.Walls = WallVisiblity.Hidden;
+			cam.settings.visibleObjects.Debris = false;
+			cam.settings.visibleObjects.UI = false;
+			cam.settings.visibleObjects.Floor = false;
+			cam.settings.visibleObjects.CutParticles = false;
+
+			AddCam(cam);
+		}
+
+		void AddCamThirdperson() {
+			var cam = GetCam("Static Thirdperson");
+
+			cam.settings.type = CameraType.Positionable;
+			cam.settings.FOV = 75;
+			cam.settings.targetPos = new UnityEngine.Vector3(0.62f, 0.56f, -1.81f);
+			cam.settings.targetRot = new UnityEngine.Vector3(348.1f, 348.1f, 1.1f);
+
+			AddCam(cam);
+		}
+
+
 		void DeleteCam() {
 			list.data.RemoveAll(x => x.text == SettingsView.cam.name);
 			CamManager.DeleteCamera(SettingsView.cam);
