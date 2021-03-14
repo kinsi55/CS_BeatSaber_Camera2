@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 using UnityEngine;
 
 namespace Camera2.Behaviours {
+#if DEBUG
+	public
+#endif
 	enum TransformerOrders : int {
 		SmoothFollowPivoting = -500,
 		PositionOffset = -400,

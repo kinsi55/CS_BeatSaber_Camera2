@@ -19,6 +19,7 @@ using HarmonyLib;
 using UnityEngine.UI;
 using System.Reflection;
 using System.Runtime.CompilerServices;
+using System.Diagnostics;
 
 namespace Camera2.Settings {
 	class SpaghettiUI {
@@ -285,6 +286,8 @@ namespace Camera2.Settings {
 	class CamList : BSMLResourceViewController {
 		public override string ResourceName => "Camera2.UI.Views.camList.bsml";
 
+		private readonly string cam2Version = $"v{Assembly.GetExecutingAssembly().GetName().Version.ToString(3)} by Kinsi55";
+
 #pragma warning disable 649
 		[UIComponent("deleteButton")] public NoTransitionsButton deleteButton;
 		[UIComponent("camList")] public CustomListTableData list;
@@ -373,6 +376,9 @@ namespace Camera2.Settings {
 			Coordinator.instance.ShowSettingsForCam(CamManager.cams.Values.First());
 			deleteButton.interactable = list.data.Count > 1;
 		}
+
+		void ShowGithub() => Process.Start("https://github.com/kinsi55/CS_BeatSaber_Camera2");
+		void ShowWiki() => Process.Start("https://github.com/kinsi55/CS_BeatSaber_Camera2/wiki");
 	}
 
 	class Coordinator : FlowCoordinator {
@@ -404,9 +410,9 @@ namespace Camera2.Settings {
 			var cellIndex = camList.list.data.FindIndex(el => el.text == cam.name);
 			currentTableCell = camList.list.data[cellIndex];
 
-			//camList.list.tableView.ScrollToCellWithIdx(cellIndex, TableViewScroller.ScrollPositionType.Center, false);
-			camList.list.tableView.ScrollToCellWithIdx(cellIndex, TableView.ScrollPositionType.Center, false);
 			camList.list.tableView.SelectCellWithIdx(cellIndex);
+			// This is literally the only thing making the Cam2 incompatible between 1.13.2 and 1.13.4, so it works like this now.
+			AccessTools.Method(typeof(TableView), nameof(TableView.ScrollToCellWithIdx)).Invoke(camList.list.tableView, new object[] { cellIndex, 1, false });
 		}
 
 		protected override void DidActivate(bool firstActivation, bool addedToHierarchy, bool screenSystemEnabling) {

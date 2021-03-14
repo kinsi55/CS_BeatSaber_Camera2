@@ -74,7 +74,7 @@
 		<vertical horizontal-fit='PreferredSize' vertical-fit='PreferredSize' spacing='5' >
 			<horizontal preferred-width="90">
 				<text color="#CCC" font-size="4" align="Center" word-wrapping="true"
-					text="(i) To get a detailed explanation of how Scenes work and how to use them correctly please check out the Scenes Wiki page of Camera2 at github.com/kinsi55/CS_BeatSaber_Camera2/wiki/Scenes"
+					text="(i) To get a detailed explanation of how Scenes work and how to use them correctly please check out the Wiki linked in the left panel"
 				/>
 			</horizontal>
 			<horizontal preferred-width="110" child-expand-width='true'>

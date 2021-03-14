@@ -3,18 +3,24 @@
 		<text text='Cameras' align='Center'></text>
 	</horizontal>
 	<horizontal>
-		<vertical preferred-width='20'>
+		<vertical preferred-width='25'>
 			<button click-event='addCamModal' text='Add Camera'></button>
 			<button id='deleteButton' click-event='showDelConf' text='Delete Camera' hover-hint='You will FC your next Song and get a PB OkayChamp'></button>
+			<button text='Camera2 Wiki' on-click='ShowWiki' click-event='showLinkInfoModal' pad-top='10'></button>
+			<button text='Camera2 Github' on-click='ShowGithub' click-event='showLinkInfoModal'></button>
+			<text text="~cam2Version" align="Center" font-size="3" font-color="#CC6E3B"></text>
 			
 			<!--<button on-click='AddCam' text='Up Layer'></button>-->
 		</vertical>
-		<list id='camList' expand-cell='true' select-cell='SelectCamera'></list>
+		<vertical pad-left="2" child-control-width="false" child-expand-width="false">
+			<list id='camList' expand-cell='true' select-cell='SelectCamera' anchor-min-x="-0.16"></list>
+		</vertical>
 		<vertical preferred-width='4'>
 			<page-button event-click='camList#PageUp' direction='Up' pref-height='3' pref-width='4'></page-button>
 			<page-button event-click='camList#PageDown' direction='Down' pref-height='3' pref-width='4'></page-button>
 		</vertical>
 	</horizontal>
+	
 	<modal clickerino-offerino-closerino='true' move-to-center='true' size-delta-x='40' size-delta-y='30' hide-event='closeDelConf' show-event='showDelConf'>
 		<vertical bg='round-rect-panel' horizontal-fit='PreferredSize' vertical-fit='PreferredSize' pad='8'>
 			<text text='Do you really want to delete this Camera?'></text>
@@ -24,15 +30,23 @@
 			</horizontal>
 		</vertical>
 	</modal>
-	<modal clickerino-offerino-closerino='true' move-to-center='true' size-delta-x='40' size-delta-y='30' hide-event='closedAddModal' show-event='addCamModal'>
+	
+	<modal clickerino-offerino-closerino='true' move-to-center='true' size-delta-x='40' size-delta-y='30' hide-event='closeAddModal' show-event='addCamModal'>
 		<vertical bg='round-rect-panel' horizontal-fit='PreferredSize' vertical-fit='PreferredSize' pad='8'>
 			<text text='Add camera from template' align='Center'></text>
 			<vertical spacing='2' pad-top='6' pad-bottom='6'>
-				<primary-button on-click='AddCamDefault' text='Default / Unconfigured' click-event='closedAddModal' preferred-width='50'></primary-button>
-				<primary-button on-click='AddCamSideview' text='Sideview / Swing cam' click-event='closedAddModal' preferred-width='50'></primary-button>
-				<primary-button on-click='AddCamThirdperson' text='Static Thirdperson' click-event='closedAddModal' preferred-width='50'></primary-button>
+				<primary-button on-click='AddCamDefault' text='Default / Unconfigured' click-event='closeAddModal' preferred-width='50'></primary-button>
+				<primary-button on-click='AddCamSideview' text='Sideview / Swing cam' click-event='closeAddModal' preferred-width='50'></primary-button>
+				<primary-button on-click='AddCamThirdperson' text='Static Thirdperson' click-event='closeAddModal' preferred-width='50'></primary-button>
 			</vertical>
-			<button text='Cancel' click-event='closedAddModal'></button>
+			<button text='Cancel' click-event='closeAddModal'></button>
+		</vertical>
+	</modal>
+	
+	<modal clickerino-offerino-closerino='true' move-to-center='true' size-delta-x='40' size-delta-y='30' hide-event='closeLinkInfoModal' show-event='showLinkInfoModal'>
+		<vertical bg='round-rect-panel' horizontal-fit='PreferredSize' vertical-fit='PreferredSize' pad='8'>
+			<text text='A Link has been opened on your Desktop' align='Center'></text>
+			<primary-button text='OK' click-event='closeLinkInfoModal' pad-top='4'></primary-button>
 		</vertical>
 	</modal>
 </vertical>
