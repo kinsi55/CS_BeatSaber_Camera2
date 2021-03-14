@@ -265,7 +265,8 @@ namespace Camera2.Behaviours {
 					Destroy(component);
 
 			//if(UCamera != null) Destroy(UCamera);
-			if(previewImage != null) Destroy(previewImage);
+			if(previewImage != null) Destroy(previewImage.gameObject);
+			if(shield != null) Destroy(shield.gameObject);
 			Destroy(gameObject);
 		}
 	}
