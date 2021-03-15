@@ -11,12 +11,16 @@ namespace Camera2.SDK {
 		/// <summary>
 		/// List of Scenes and what cameras belong to them
 		/// </summary>
-		public static IReadOnlyDictionary<SceneTypes, IReadOnlyList<string>> scenes {
-			get {
-				return (IReadOnlyDictionary<SceneTypes, IReadOnlyList<string>>)ScenesManager.settings.scenes
-					.ToDictionary(pair => pair.Key, pair => pair.Value.AsReadOnly());
-			}
-		}
+		public static IReadOnlyDictionary<SceneTypes, IReadOnlyList<string>> scenes =>
+			(IReadOnlyDictionary<SceneTypes, IReadOnlyList<string>>)ScenesManager.settings.scenes
+			.ToDictionary(pair => pair.Key, pair => pair.Value.AsReadOnly());
+
+		/// <summary>
+		/// List of Scenes and what cameras belong to them
+		/// </summary>
+		public static IReadOnlyDictionary<string, IReadOnlyList<string>> customScenes =>
+			(IReadOnlyDictionary<string, IReadOnlyList<string>>)ScenesManager.settings.customScenes
+			.ToDictionary(pair => pair.Key, pair => pair.Value.AsReadOnly());
 
 		/// <summary>
 		/// The currently loaded scene. Must not necessarily represent the targeted scene
@@ -33,6 +37,15 @@ namespace Camera2.SDK {
 		public static void SwitchToScene(SceneTypes scene) {
 			if(ScenesManager.settings.scenes[scene].Count > 0)
 				ScenesManager.SwitchToScene(scene, true);
+		}
+
+		/// <summary>
+		/// Switches to the requested custom scene. If the scene you try to switch to does not have
+		/// any cameras assigned no action will be taken.
+		/// </summary>
+		/// <param name="scene">Scene to switch to</param>
+		public static void SwitchToCustomScene(string sceneName) {
+			ScenesManager.SwitchToCustomScene(sceneName);
 		}
 
 		/// <summary>

@@ -10,9 +10,9 @@
 			<slider-setting text='Render Scale' min='0.2' max='3' increment='0.1' value='renderScale' bind-value='true' apply-on-change='true'/>
 			<list-setting text='Anti Aliasing' value='antiAliasing' choices='antiAliasingLevels' bind-value='true' apply-on-change='true'/>
 			
-			<dropdown-list-setting id='worldcamVisibilityInput' text='Worldcam Visibility' value='worldCamVisibility' choices='worldCamVisibilities' bind-value='true' apply-on-change='true'/>
+			<dropdown-list-setting id='worldcamVisibilityInput' text='Ingame Cam Visibility' value='worldCamVisibility' choices='worldCamVisibilities' bind-value='true' apply-on-change='true'/>
 			<slider-setting id='zOffsetSlider' text='Z-Offset' min='-2' max='0.5' increment='0.1' value='zOffset' bind-value='true' apply-on-change='true'/>
-			<slider-setting id='previewSizeSlider' text='Preview Size' min='0.3' max='3' increment='0.1' value='previewSize' bind-value='true' apply-on-change='true'/>
+			<slider-setting id='previewSizeSlider' text='Ingame preview size' min='0.3' max='3' increment='0.1' value='previewSize' bind-value='true' apply-on-change='true'/>
 		</modifier-container>
 	</tab>
 	
@@ -46,14 +46,14 @@
 	
 	<tab tags='tabs' tab-name='ModmapExt'>
 		<modifier-container child-expand-width='true' horizontal-fit='PreferredSize'>
-			<checkbox id='modmapExt_moveWithMapCheckbox' text='Move with Map' value='modmapExt_moveWithMap' bind-value='true' apply-on-change='true'
+			<checkbox id='modmapExt_moveWithMapCheckbox' text='Follow Map movement' value='modmapExt_moveWithMap' bind-value='true' apply-on-change='true'
 					  hover-hint='Make the camera follow the map movement / rotation'
 			/>
 			<checkbox text='Auto-Visible Walls' value='modmapExt_autoOpaqueWalls' bind-value='true' apply-on-change='true'
-					  hover-hint='When playing a Modded map automatically make the walls opaque'
+					  hover-hint='When playing a modded map automatically make the walls opaque for this Camera'
 			/>
 			<checkbox text='Auto-Hide HUD' value='modmapExt_autoHideHUD' bind-value='true' apply-on-change='true'
-					  hover-hint='When playing a Modded map automatically hide the HUD'
+					  hover-hint='When playing a modded map automatically hide the hud for this Camera'
 			/>
 		</modifier-container>
 	</tab>
@@ -62,7 +62,7 @@
 		<vertical horizontal-fit='PreferredSize' vertical-fit='PreferredSize'>
 			<modifier-container child-expand-width='true' horizontal-fit='PreferredSize'>
 				<checkbox text='Enabled' value='follow360_moveWithMap' bind-value='true' apply-on-change='true'
-						  hover-hint='Should the Camera follow the rotation on 360 Maps?'
+						  hover-hint='Makes it so the camera follows the map rotation in 90/360 levels'
 				/>
 				<slider-setting text='Rotation Smoothing *' min='0.1' max='50' increment='0.1' value='follow360_smoothing' bind-value='true' apply-on-change='true'/>
 			</modifier-container>
