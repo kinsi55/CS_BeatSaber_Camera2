@@ -59,10 +59,10 @@ namespace Camera2.Middlewares {
 		}
 
 		new public void CamConfigReloaded() {
-			if(loadedScript == null && settings.MovementScript.fromOrigin)
+			if(loadedScript == null || !settings.MovementScript.fromOrigin)
 				return;
 
-			var x = cam.GetTransformer("Position");
+			var x = cam.transformer;
 
 			if(x == null)
 				return;

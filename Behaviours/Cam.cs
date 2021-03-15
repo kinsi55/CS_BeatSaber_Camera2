@@ -157,7 +157,7 @@ namespace Camera2.Behaviours {
 			//UCamera.depthTextureMode = DepthTextureMode.None;
 			//UCamera.renderingPath = RenderingPath.DeferredLighting;
 
-			transformer = GetOrCreateTransformer("position", TransformerOrders.PositionOffset).transform;
+			transformer = GetOrCreateTransformer("Position", TransformerOrders.PositionOffset).transform;
 
 
 			foreach(var child in camClone.transform.Cast<Transform>())
