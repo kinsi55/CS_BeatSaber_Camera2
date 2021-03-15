@@ -14,7 +14,7 @@ namespace Camera2.Utils {
 		public static Camera replayCamera { get; private set; }
 
 		public static bool IsInReplay() {
-			if(ReplayPlayer_playbackEnabled == null)
+			if(ReplayPlayer_playbackEnabled == null || ReplayPlayer_instance == null)
 				return false;
 
 			var x = (MonoBehaviour)ReplayPlayer_instance.GetValue(null);
