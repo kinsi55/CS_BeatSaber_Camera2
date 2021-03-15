@@ -83,7 +83,7 @@ namespace Camera2.Settings {
 			if(scenes == null)
 				scenes = Enum.GetValues(typeof(SceneTypes)).Cast<SceneTypes>().Select(x => new SceneToggle() { type = x, host = this }).ToList();
 		}
-#region variables
+ #region variables
 		internal string camName {
 			get => cam.name;
 			set {
@@ -301,7 +301,7 @@ namespace Camera2.Settings {
 	class CamList : BSMLResourceViewController {
 		public override string ResourceName => "Camera2.UI.Views.camList.bsml";
 
-		private readonly string cam2Version = $"v{Assembly.GetExecutingAssembly().GetName().Version.ToString(3)} by Kinsi55";
+		private readonly string cam2Version = $"Version {Assembly.GetExecutingAssembly().GetName().Version.ToString(3)} by Kinsi55";
 
 		[UIComponent("deleteButton")] public NoTransitionsButton deleteButton = null;
 		[UIComponent("camList")] public CustomCellListTableData list = null;
@@ -317,7 +317,7 @@ namespace Camera2.Settings {
 			int sceneCount => ScenesManager.settings.scenes.Values.Count(x => x.Contains(name)) + ScenesManager.settings.customScenes.Values.Count(x => x.Contains(name));
 
 			string details => $"{cam.settings.type}, assigned to {sceneCount} {(sceneCount == 1 ? "Scene" : "Scenes")}";
-			string layerUIText => $"Layer {cam.settings.layer}{(CamManager.cams.Values.Count(x => x.settings.layer == cam.settings.layer) > 1 ? " <color=yellow>(!)</color>" : "")}";
+			string layerUIText => $"Layer {cam.settings.layer}{(CamManager.cams.Values.Count(x => x.settings.layer == cam.settings.layer) > 1 ? " <color=#d5a145>⚠</color>" : "")}";
 
 			[UIComponent("bgContainer")] ImageView bg = null;
 
