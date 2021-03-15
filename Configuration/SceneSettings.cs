@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
@@ -24,13 +25,15 @@ namespace Camera2.Configuration {
 		public Dictionary<SceneTypes, List<string>> scenes = new Dictionary<SceneTypes, List<string>>();
 
 		[JsonProperty(DefaultValueHandling = DefaultValueHandling.Ignore)]
-		public Dictionary<string, List<string>> customScenes = new Dictionary<string, List<string>>();
+		public Dictionary<string, List<string>> customScenes = new Dictionary<string, List<string>>() {
+			{"Custom1", new string[] { "ExampleCamera1", "ExampleCamera2" }.ToList() },
+			{"AnotherCustomScene", new string[] { "ExampleCamera3", "ExampleCamera4" }.ToList() }
+		};
 
 		[JsonProperty(DefaultValueHandling = DefaultValueHandling.Ignore)]
 		public Dictionary<KeyCode, string> customSceneBindings = new Dictionary<KeyCode, string> {
 			{KeyCode.F2, "Custom1"},
-			{KeyCode.F3, "Custom2"},
-			{KeyCode.F4, "Custom3"}
+			{KeyCode.F3, "AnotherCustomScene"}
 		};
 
 		public bool enableAutoSwitch = true;
