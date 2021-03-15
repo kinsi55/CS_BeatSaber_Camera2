@@ -5,6 +5,7 @@ using Camera2.Managers;
 using Camera2.Utils;
 using System.Runtime.InteropServices;
 using System;
+using Camera2.HarmonyPatches;
 
 namespace Camera2.Behaviours {
 
@@ -162,11 +163,11 @@ namespace Camera2.Behaviours {
 						ScenesManager.LoadGameScene();
 					}
 				} else {
-					foreach(var k in ScenesManager.settings.sceneBindings) {
+					foreach(var k in ScenesManager.settings.customSceneBindings) {
 						if(!Input.GetKeyDown(k.Key))
 							continue;
 
-						ScenesManager.SwitchToScene(k.Value);
+						ScenesManager.SwitchToCustomScene(k.Value);
 						break;
 					}
 				}

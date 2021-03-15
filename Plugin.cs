@@ -55,9 +55,6 @@ namespace Camera2 {
 		public void OnApplicationStart() {
 			Log.Debug("OnApplicationStart");
 
-			ScoresaberUtil.Init();
-			ModMapUtil.Init();
-			CustomNotesUtil.Init();
 			MovementScriptManager.LoadMovementScripts();
 
 			SceneManager.activeSceneChanged += SceneUtil.OnActiveSceneChanged;

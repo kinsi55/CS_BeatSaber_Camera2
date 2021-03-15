@@ -5,6 +5,7 @@ using UnityEngine;
 using Newtonsoft.Json;
 using Camera2.Utils;
 using Camera2.Managers;
+using System.Runtime.Serialization;
 
 namespace Camera2.Configuration {
 	public enum SceneTypes {
@@ -15,21 +16,21 @@ namespace Camera2.Configuration {
 		PlayingModmap,
 		PlayingMulti,
 		Replay,
-		FPFC,
-		Custom1,
-		Custom2,
-		Custom3
+		FPFC
 	}
 
 	class ScenesSettings {
 		[JsonProperty(DefaultValueHandling = DefaultValueHandling.Ignore)]
 		public Dictionary<SceneTypes, List<string>> scenes = new Dictionary<SceneTypes, List<string>>();
 
-		[JsonProperty(DefaultValueHandling = DefaultValueHandling.Ignore), JsonConverter(typeof(DictionaryConverter<KeyCode, SceneTypes>))]
-		public Dictionary<KeyCode, SceneTypes> sceneBindings = new Dictionary<KeyCode, SceneTypes> {
-			{KeyCode.F2, SceneTypes.Custom1},
-			{KeyCode.F3, SceneTypes.Custom2},
-			{KeyCode.F4, SceneTypes.Custom3}
+		[JsonProperty(DefaultValueHandling = DefaultValueHandling.Ignore)]
+		public Dictionary<string, List<string>> customScenes = new Dictionary<string, List<string>>();
+
+		[JsonProperty(DefaultValueHandling = DefaultValueHandling.Ignore)]
+		public Dictionary<KeyCode, string> customSceneBindings = new Dictionary<KeyCode, string> {
+			{KeyCode.F2, "Custom1"},
+			{KeyCode.F3, "Custom2"},
+			{KeyCode.F4, "Custom3"}
 		};
 
 		public bool enableAutoSwitch = true;

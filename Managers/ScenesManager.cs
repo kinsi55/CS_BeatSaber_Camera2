@@ -16,6 +16,7 @@ namespace Camera2.Managers {
 
 		// Kind of a hack not having it start off Menu but else the first menu load will not apply..
 		internal static SceneTypes loadedScene { get; private set; } = SceneTypes.MultiplayerMenu;
+		internal static bool isOnCustomScene = false;
 
 		public static void ActiveSceneChanged(string sceneName = null) {
 			if(SceneUtil.currentScene == null)
@@ -29,7 +30,7 @@ namespace Camera2.Managers {
 
 			CamManager.customScreen.gameObject.SetActive(sceneName != "BeatmapEditor");
 
-			if(!settings.autoswitchFromCustom && (loadedScene == SceneTypes.Custom1 || loadedScene == SceneTypes.Custom2 || loadedScene == SceneTypes.Custom3))
+			if(!settings.autoswitchFromCustom && isOnCustomScene)
 				return;
 
 			if(!settings.enableAutoSwitch)
@@ -73,7 +74,6 @@ namespace Camera2.Managers {
 #if DEBUG
 			Plugin.Log.Info($"LoadGameScene -> {String.Join(", ", toLookup)}");
 #endif
-
 			SwitchToScene(FindSceneToUse(toLookup.ToArray()), forceReload);
 		}
 
@@ -85,7 +85,7 @@ namespace Camera2.Managers {
 			Plugin.Log.Info($"Switching to scene {scene}");
 			Plugin.Log.Info($"Cameras: {String.Join(", ", settings.scenes[scene])}");
 #endif
-			if(loadedScene == scene && !forceReload)
+			if(loadedScene == scene && !forceReload && !isOnCustomScene)
 				return;
 
 			loadedScene = scene;
@@ -96,6 +96,19 @@ namespace Camera2.Managers {
 				toLoad = CamManager.cams.Keys.ToList();
 
 			SwitchToCamlist(toLoad);
+			isOnCustomScene = false;
+		}
+
+		public static void SwitchToCustomScene(string name) {
+			if(!settings.customScenes.ContainsKey(name))
+				return;
+
+			if(settings.customScenes[name].Count() == 0)
+				return;
+
+			isOnCustomScene = true;
+
+			SwitchToCamlist(settings.customScenes[name]);
 		}
 
 		private static void SwitchToCamlist(List<string> cams) {
