@@ -185,7 +185,8 @@ namespace Camera2.Behaviours {
 			}
 
 			if(Input.GetMouseButtonUp(1) && currentAction == CamAction.None) {
-				System.Threading.Tasks.Task.Run(() => WinAPI.MessageBox(IntPtr.Zero, "There is no desktop settings for Camera2, everything is done ingame!\n\nYou can drag around a cameras display and resize it with the bottom right corner from the desktop.", "FYI", 0));
+				if(HookFPFC.cameraInstance == null)
+					System.Threading.Tasks.Task.Run(() => WinAPI.MessageBox(IntPtr.Zero, "There is no desktop settings for Camera2, everything is done ingame!\n\nYou can drag around a cameras display and resize it with the bottom right corner from the desktop.", "FYI", 0));
 				//currentAction = CamAction.Menu;
 				// For now lets not add this as it can result in unclear circumstances with scenes etc.
 				//if(Input.GetKey(KeyCode.LeftControl)) {
