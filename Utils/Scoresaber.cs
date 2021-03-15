@@ -8,6 +8,7 @@ namespace Camera2.Utils {
 	static class ScoresaberUtil {
 		static Type ReplayPlayer = AccessTools.TypeByName("ScoreSaber.ReplayPlayer");
 		static PropertyInfo ReplayPlayer_playbackEnabled = ReplayPlayer?.GetProperty("playbackEnabled", BindingFlags.Public | BindingFlags.Instance);
+		static FieldInfo ReplayPlayer_instance = ReplayPlayer?.GetField("instance", BindingFlags.Public | BindingFlags.Static);
 
 		public static bool isInReplay { get; internal set; }
 		public static Camera replayCamera { get; private set; }
@@ -16,7 +17,7 @@ namespace Camera2.Utils {
 			if(ReplayPlayer_playbackEnabled == null)
 				return false;
 
-			var x = (MonoBehaviour)Resources.FindObjectsOfTypeAll(ReplayPlayer).LastOrDefault();
+			var x = (MonoBehaviour)ReplayPlayer_instance.GetValue(null);
 
 			return x?.isActiveAndEnabled == true && (bool)ReplayPlayer_playbackEnabled.GetValue(x);
 		}
