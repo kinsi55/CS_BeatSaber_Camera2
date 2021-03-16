@@ -10,6 +10,7 @@ using Camera2.Middlewares;
 using Camera2.Configuration;
 using Camera2.Utils;
 using System.Reflection;
+using Camera2.HarmonyPatches;
 
 namespace Camera2.Behaviours {
 
@@ -43,6 +44,9 @@ namespace Camera2.Behaviours {
 
 			if(parent == null) {
 				transform.parent = null;
+				// When parented to a / the origin it should already contain the offset, otherwise we need to manually apply it (unparented)
+				transform.localPosition = HookRoomAdjust.instance != null ? HookRoomAdjust.instance.transform.position : Vector3.zero;
+				transform.localRotation = HookRoomAdjust.instance != null ? HookRoomAdjust.instance.transform.rotation : Quaternion.identity;
 
 				DontDestroyOnLoad(gameObject);
 			} else {
