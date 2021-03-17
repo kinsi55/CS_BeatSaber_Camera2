@@ -305,7 +305,9 @@ namespace Camera2.Settings {
 
 		[UIComponent("deleteButton")] public NoTransitionsButton deleteButton = null;
 		[UIComponent("camList")] public CustomCellListTableData list = null;
-		[UIValue("cams")] public List<object> listData = new List<object>();
+		public List<CamListCellWrapper> listData = new List<CamListCellWrapper>();
+		public IEnumerable<CamListCellWrapper> listDataOrdered => listData.AsEnumerable().OrderByDescending(x => x.cam.settings.layer);
+		List<object> cams => listDataOrdered.Cast<object>().ToList();
 
 		public class CamListCellWrapper {
 			public Cam2 cam { get; private set; }
@@ -334,7 +336,7 @@ namespace Camera2.Settings {
 
 		internal void UpdateCamListUI() {
 			//var x = Sprite.Create(cam.screenImage.material, new Rect(0, 0, cam.renderTexture.width, cam.renderTexture.width), new Vector2(0.5f, 0.5f));
-			listData.Sort((a, b) => ((CamListCellWrapper)b).cam.settings.layer - ((CamListCellWrapper)a).cam.settings.layer);
+			list.data = cams;
 			list.tableView.ReloadData();
 			deleteButton.interactable = listData.Count > 1;
 		}
@@ -399,11 +401,10 @@ namespace Camera2.Settings {
 
 
 		void DeleteCam() {
-			listData.Remove(listData.Find(x => ((CamListCellWrapper)x).cam == SettingsView.cam));
+			listData.Remove(listData.Find(x => x.cam == SettingsView.cam));
 			CamManager.DeleteCamera(SettingsView.cam);
-			list.tableView.ReloadData();
-			Coordinator.instance.ShowSettingsForCam(CamManager.cams.Values.First());
-			deleteButton.interactable = listData.Count > 1;
+			UpdateCamListUI();
+			Coordinator.instance.ShowSettingsForCam(listDataOrdered.First().cam);
 		}
 
 		void ChangeLayer(int diff) {
@@ -446,7 +447,7 @@ namespace Camera2.Settings {
 			if(!settingsView.SetCam(cam) && !reselect)
 				return;
 
-			var cellIndex = camList.listData.FindIndex(x => ((CamList.CamListCellWrapper)x).cam == cam);
+			var cellIndex = camList.listDataOrdered.ToList().FindIndex(x => x.cam == cam);
 
 			camList.list.tableView.SelectCellWithIdx(cellIndex);
 			// This is literally the only thing making the Cam2 incompatible between 1.13.2 and 1.13.4, so it works like this now.
