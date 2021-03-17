@@ -55,6 +55,8 @@ namespace Camera2.Behaviours {
 			if(parent == null) {
 				transform.parent = null;
 
+				ApplyRoomOffset();
+
 				DontDestroyOnLoad(gameObject);
 			} else {
 				if(shield == null)
@@ -64,9 +66,6 @@ namespace Camera2.Behaviours {
 
 				transform.SetParent(shield.transform, false);
 			}
-
-			// Previous parent might've messed up the rot/pos, so lets fix it.
-			settings.ApplyPositionAndRotation();
 		}
 
 		List<KeyValuePair<string, Transformer>> transformers = new List<KeyValuePair<string, Transformer>>();
