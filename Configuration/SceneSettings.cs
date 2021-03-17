@@ -7,6 +7,7 @@ using Newtonsoft.Json;
 using Camera2.Utils;
 using Camera2.Managers;
 using System.Runtime.Serialization;
+using BeatSaberMarkupLanguage.GameplaySetup;
 
 namespace Camera2.Configuration {
 	public enum SceneTypes {
@@ -25,16 +26,10 @@ namespace Camera2.Configuration {
 		public Dictionary<SceneTypes, List<string>> scenes = new Dictionary<SceneTypes, List<string>>();
 
 		[JsonProperty(DefaultValueHandling = DefaultValueHandling.Ignore)]
-		public Dictionary<string, List<string>> customScenes = new Dictionary<string, List<string>>() {
-			{"Custom1", new string[] { "ExampleCamera1", "ExampleCamera2" }.ToList() },
-			{"AnotherCustomScene", new string[] { "ExampleCamera3", "ExampleCamera4" }.ToList() }
-		};
+		public Dictionary<string, List<string>> customScenes = new Dictionary<string, List<string>>();
 
 		[JsonProperty(DefaultValueHandling = DefaultValueHandling.Ignore)]
-		public Dictionary<KeyCode, string> customSceneBindings = new Dictionary<KeyCode, string> {
-			{KeyCode.F2, "Custom1"},
-			{KeyCode.F3, "AnotherCustomScene"}
-		};
+		public Dictionary<KeyCode, string> customSceneBindings = new Dictionary<KeyCode, string>();
 
 		public bool enableAutoSwitch = true;
 		public bool autoswitchFromCustom = true;

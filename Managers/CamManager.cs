@@ -35,7 +35,7 @@ namespace Camera2.Managers {
 
 			new GameObject("Cam2_Positioner").AddComponent<CamPositioner>();
 			
-			Settings.SpaghettiUI.Init();
+			UI.SpaghettiUI.Init();
 		}
 
 		private static void LoadCameras(bool reload = false) {

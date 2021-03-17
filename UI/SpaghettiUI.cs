@@ -21,7 +21,7 @@ using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Diagnostics;
 
-namespace Camera2.Settings {
+namespace Camera2.UI {
 	// Theres a reason this is called Spaghetti UI, I will definitely maybe possibly make this not spaghetti one day.
 
 	class SpaghettiUI {

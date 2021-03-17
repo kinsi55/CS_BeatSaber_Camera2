@@ -135,7 +135,7 @@ namespace Camera2.Behaviours {
 				settings.worldCamVisibility != WorldCamVisibility.Hidden &&
 				(settings.worldCamVisibility != WorldCamVisibility.HiddenWhilePlaying || !SceneUtil.isSongPlaying);
 
-			worldCam.gameObject.SetActive(doShowCam || (Settings.SettingsView.cam == this && settings.type == Configuration.CameraType.Positionable));
+			worldCam.gameObject.SetActive(doShowCam || (UI.SettingsView.cam == this && settings.type == Configuration.CameraType.Positionable));
 		}
 
 		public void Init(string name, LessRawImage presentor = null, bool loadConfig = false, bool rename = false) {
