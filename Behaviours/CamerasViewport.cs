@@ -142,6 +142,8 @@ namespace Camera2.Behaviours {
 
 		private Vector2 lastScreenSize = new Vector2(Screen.width, Screen.height);
 
+		private bool didShowHint = false;
+
 		void Update() {
 			if(lastScreenSize.x != Screen.width || lastScreenSize.y != Screen.height) {
 				lastScreenSize.x = Screen.width;
@@ -186,7 +188,7 @@ namespace Camera2.Behaviours {
 			}
 
 			if(Input.GetMouseButtonUp(1) && currentAction == CamAction.None) {
-				if(HookFPFC.cameraInstance == null)
+				if(HookFPFC.cameraInstance == null && !didShowHint && (didShowHint = true))
 					System.Threading.Tasks.Task.Run(() => WinAPI.MessageBox(IntPtr.Zero, "There is no desktop settings for Camera2, everything is done ingame!\n\nYou can drag around a cameras display and resize it with the bottom right corner from the desktop.", "FYI", 0));
 				//currentAction = CamAction.Menu;
 				// For now lets not add this as it can result in unclear circumstances with scenes etc.
