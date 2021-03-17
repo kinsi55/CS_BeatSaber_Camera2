@@ -16,13 +16,8 @@ namespace Camera2.HarmonyPatches {
 		static void Postfix(MonoBehaviour __instance) {
 			instance = __instance;
 
-			foreach(var cam in CamManager.cams.Values) {
-				if(cam.transform.parent != null)
-					continue;
-
-				cam.transform.position = instance.transform.position;
-				cam.transform.rotation = instance.transform.rotation;
-			}
+			foreach(var cam in CamManager.cams.Values)
+				cam.ApplyRoomOffset();
 		}
 
 		[HarmonyTargetMethods]

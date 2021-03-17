@@ -146,6 +146,7 @@ namespace Camera2.Configuration {
 		public void ApplyPositionAndRotation() {
 			cam.transformer.transform.localPosition = targetPos;
 			cam.transformer.transform.localEulerAngles = targetRot;
+			cam.ApplyRoomOffset();
 		}
 
 		public void ApplyLayerBitmask() {

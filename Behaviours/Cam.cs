@@ -36,6 +36,16 @@ namespace Camera2.Behaviours {
 			DontDestroyOnLoad(gameObject);
 		}
 
+		public void ApplyRoomOffset() {
+			if(transform.parent != null)
+				return;
+
+			bool doApply = settings.type == Configuration.CameraType.FirstPerson && HookRoomAdjust.instance != null;
+
+			transform.localPosition = doApply ? HookRoomAdjust.instance.transform.position : Vector3.zero;
+			transform.localRotation = doApply ? HookRoomAdjust.instance.transform.rotation : Quaternion.identity;
+		}
+
 
 		ParentShield shield;
 		public void SetOrigin(Transform parent, bool unparentOnDisable = true) {
@@ -44,9 +54,6 @@ namespace Camera2.Behaviours {
 
 			if(parent == null) {
 				transform.parent = null;
-				// When parented to a / the origin it should already contain the offset, otherwise we need to manually apply it (unparented)
-				transform.localPosition = HookRoomAdjust.instance != null ? HookRoomAdjust.instance.transform.position : Vector3.zero;
-				transform.localRotation = HookRoomAdjust.instance != null ? HookRoomAdjust.instance.transform.rotation : Quaternion.identity;
 
 				DontDestroyOnLoad(gameObject);
 			} else {
