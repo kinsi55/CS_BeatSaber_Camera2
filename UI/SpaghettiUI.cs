@@ -20,15 +20,20 @@ using UnityEngine.UI;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Diagnostics;
+using BeatSaberMarkupLanguage.GameplaySetup;
 
 namespace Camera2.UI {
 	// Theres a reason this is called Spaghetti UI, I will definitely maybe possibly make this not spaghetti one day.
 
 	class SpaghettiUI {
 		private static Coordinator _flow;
+		internal static CustomScenesSwitchUI scenesSwitchUI = new CustomScenesSwitchUI();
 
 		public static void Init() {
 			MenuButtons.instance.RegisterButton(new MenuButton("Camera2", "This is a Camera plugin 2 4Head", ShowFlow, true));
+
+			if(ScenesManager.settings.customScenes.Count > 0)
+				GameplaySetup.instance.AddTab("Camera2", "Camera2.UI.Views.customScenesList.bsml", scenesSwitchUI);
 		}
 
 		private static void ShowFlow() {

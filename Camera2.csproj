@@ -158,6 +158,7 @@
         <EmbeddedResource Include="manifest.json" />
         <EmbeddedResource Include="UI\Views\camList.bsml" />
         <EmbeddedResource Include="UI\Views\camSettings.bsml" />
+        <EmbeddedResource Include="UI\Views\customScenesList.bsml" />
     </ItemGroup>
 
     <ItemGroup>

@@ -1,0 +1,21 @@
+﻿<vertical xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:schemaLocation='https://monkeymanboy.github.io/BSML-Docs/ https://raw.githubusercontent.com/monkeymanboy/BSML-Docs/gh-pages/BSMLSchema.xsd'>
+	<horizontal>
+		<vertical pad-right="3">
+			<custom-list id='customScenesList' select-cell='SwitchToCustomScene' contents='scenes'>
+				<vertical id='bgContainer' bg='round-rect-panel' pad='1' horizontal-fit='Unconstrained'>
+					<horizontal>
+						<text text='~name' align='MidlineLeft' font-size='3'/>
+						<text text='~camCount' align='TopRight' font-size='2.5'/>
+					</horizontal>
+					<horizontal>
+						<text text='~camNames' align='MidlineLeft' font-size='2.3' font-color='#BBB' word-wrapping='true'/>
+					</horizontal>
+				</vertical>
+			</custom-list>
+		</vertical>
+		<vertical preferred-width='4'>
+			<page-button event-click='customScenesList#PageUp' direction='Up' pref-height='3' pref-width='4'></page-button>
+			<page-button event-click='customScenesList#PageDown' direction='Down' pref-height='3' pref-width='4'></page-button>
+		</vertical>
+	</horizontal>
+</vertical>
