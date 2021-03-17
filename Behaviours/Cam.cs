@@ -37,10 +37,7 @@ namespace Camera2.Behaviours {
 		}
 
 		public void ApplyRoomOffset() {
-			if(transform.parent != null)
-				return;
-
-			bool doApply = settings.type == Configuration.CameraType.FirstPerson && HookRoomAdjust.instance != null;
+			bool doApply = transform.parent != null && settings.type == Configuration.CameraType.FirstPerson && HookRoomAdjust.instance != null;
 
 			transform.localPosition = doApply ? HookRoomAdjust.instance.transform.position : Vector3.zero;
 			transform.localRotation = doApply ? HookRoomAdjust.instance.transform.rotation : Quaternion.identity;
@@ -55,8 +52,6 @@ namespace Camera2.Behaviours {
 			if(parent == null) {
 				transform.parent = null;
 
-				ApplyRoomOffset();
-
 				DontDestroyOnLoad(gameObject);
 			} else {
 				if(shield == null)
@@ -66,6 +61,8 @@ namespace Camera2.Behaviours {
 
 				transform.SetParent(shield.transform, false);
 			}
+
+			ApplyRoomOffset();
 		}
 
 		List<KeyValuePair<string, Transformer>> transformers = new List<KeyValuePair<string, Transformer>>();
