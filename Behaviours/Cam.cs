@@ -123,6 +123,7 @@ namespace Camera2.Behaviours {
 				UCamera.aspect = (float)w / (float)h;
 				UCamera.targetTexture = renderTexture;
 				worldCam?.SetSource(this);
+				UCamera.Render();
 			}
 
 			if(sizeChanged || previewImage.position.x != settings.viewRect.x || previewImage.position.y != settings.viewRect.y)
