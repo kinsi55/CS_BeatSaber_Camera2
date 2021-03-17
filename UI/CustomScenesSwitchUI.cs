@@ -1,6 +1,7 @@
 ﻿using BeatSaberMarkupLanguage.Attributes;
 using BeatSaberMarkupLanguage.Components;
 using Camera2.Managers;
+using HarmonyLib;
 using HMUI;
 using System;
 using System.Collections.Generic;
@@ -42,11 +43,10 @@ namespace Camera2.UI {
 
 		[UIAction("refresh-visuals")]
 		public void Refresh(bool selected, bool highlighted) {
-			var x = new UnityEngine.Color(0, 0, 0, highlighted ? 0.6f : 0.45f);
+			var x = new UnityEngine.Color(0, 0, 0, 0.45f);
 
-			//CBA to correctly set / maintain highlighted state for now
-			//if(selected || highlighted)
-			//	x.a = selected ? 0.9f : 0.6f;
+			if(selected || highlighted)
+				x.a = selected ? 0.9f : 0.6f;
 
 			bg.color = x;
 		}
@@ -69,12 +69,17 @@ namespace Camera2.UI {
 			ScenesManager.SwitchToCustomScene(row._name);
 		}
 
-		public void Update() { 
+		public void Update(int setSelected = -1) { 
 			if(list == null || list.tableView == null)
 				return;
 
 			list.data = scenes;
 			list.tableView.ReloadData();
+
+			if(setSelected > -1) {
+				list.tableView.SelectCellWithIdx(setSelected);
+				AccessTools.Method(typeof(TableView), nameof(TableView.ScrollToCellWithIdx)).Invoke(list.tableView, new object[] { setSelected, 1, false });
+			}
 		}
 	}
 }

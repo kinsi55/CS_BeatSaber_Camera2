@@ -97,13 +97,14 @@ namespace Camera2.Managers {
 
 			SwitchToCamlist(toLoad);
 			isOnCustomScene = false;
+			UI.SpaghettiUI.scenesSwitchUI.Update(0);
 		}
 
 		public static void SwitchToCustomScene(string name) {
 			if(!settings.customScenes.ContainsKey(name))
 				return;
 
-			if(settings.customScenes[name].Count() == 0)
+			if(settings.customScenes[name].Count() == 0 || !settings.customScenes[name].Any(CamManager.cams.ContainsKey))
 				return;
 
 			isOnCustomScene = true;
@@ -129,7 +130,7 @@ namespace Camera2.Managers {
 		}
 
 		private static SceneTypes FindSceneToUse(SceneTypes[] types) {
-			if(settings.scenes.Count == 0) 
+			if(settings.scenes.Count == 0)
 				return SceneTypes.Menu;
 
 			foreach(var type in types) {
