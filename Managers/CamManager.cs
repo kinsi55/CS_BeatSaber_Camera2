@@ -136,6 +136,16 @@ namespace Camera2.Managers {
 
 			if(File.Exists(cfgPath))
 				File.Delete(cfgPath);
+
+			foreach(var x in ScenesManager.settings.scenes.Values)
+				if(x.Contains(cam.name))
+					x.RemoveAll(x => x == cam.name);
+
+			foreach(var x in ScenesManager.settings.customScenes.Values)
+				if(x.Contains(cam.name))
+					x.RemoveAll(x => x == cam.name);
+
+			ScenesManager.settings.Save();
 		}
 
 		public static bool RenameCamera(Cam2 cam, string newName) {
