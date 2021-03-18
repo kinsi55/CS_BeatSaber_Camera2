@@ -44,12 +44,12 @@ namespace Camera2.Behaviours {
 		 */
 		public void ApplyRoomOffset() {
 			bool doApply =
-				HookRoomAdjust.instance != null &&
 				settings.type == Configuration.CameraType.FirstPerson &&
+				(!HookLeveldata.isModdedMap || !settings.ModmapExtensions.moveWithMap) &&
 				(!ScoresaberUtil.isInReplay || !settings.Smoothfollow.followReplayPosition);
 
-			transform.localPosition = doApply ? HookRoomAdjust.instance.transform.position : Vector3.zero;
-			transform.localRotation = doApply ? HookRoomAdjust.instance.transform.rotation : Quaternion.identity;
+			transform.localPosition = doApply ? HookRoomAdjust.position : Vector3.zero;
+			transform.localRotation = doApply ? HookRoomAdjust.rotation : Quaternion.identity;
 		}
 
 

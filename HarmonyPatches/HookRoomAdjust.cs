@@ -11,10 +11,15 @@ using UnityEngine;
 namespace Camera2.HarmonyPatches {
 	[HarmonyPatch]
 	class HookRoomAdjust {
-		public static MonoBehaviour instance { get; private set; }
+		//public static MonoBehaviour instance { get; private set; }
+		public static Vector3 position { get; private set; }
+		public static Quaternion rotation { get; private set; }
+		public static Vector3 eulerAngles { get; private set; }
 
 		static void Postfix(MonoBehaviour __instance) {
-			instance = __instance;
+			position = __instance.transform.position;
+			rotation = __instance.transform.rotation;
+			eulerAngles = __instance.transform.eulerAngles;
 
 			foreach(var cam in CamManager.cams.Values)
 				cam.ApplyRoomOffset();

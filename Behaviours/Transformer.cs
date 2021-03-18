@@ -10,6 +10,7 @@ namespace Camera2.Behaviours {
 	public
 #endif
 	enum TransformerOrders : int {
+		ModmapParenting = -600,
 		SmoothFollowPivoting = -500,
 		PositionOffset = -400,
 		Follow360 = -300,
