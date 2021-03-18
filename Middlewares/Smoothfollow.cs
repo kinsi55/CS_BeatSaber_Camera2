@@ -30,11 +30,11 @@ namespace Camera2.Configuration {
 			}
 		}
 
-		[JsonIgnore]
-		internal Transform parent;
+		[JsonIgnore] internal bool attachToLocal = true;
+		[JsonIgnore] internal Transform parent;
 
-		[JsonIgnore]
-		internal Transformer transformer;
+
+		[JsonIgnore] internal Transformer transformer;
 
 		public string targetParent = "";
 
@@ -57,18 +57,22 @@ namespace Camera2.Middlewares {
 			}
 
 			var parentToUse = parent;
-			var useLocalPosition = true;
 
-			if(ScoresaberUtil.isInReplay && settings.Smoothfollow.followReplayPosition) {
+			if(ScoresaberUtil.isInReplay && settings.Smoothfollow.followReplayPosition && settings.type == Configuration.CameraType.Attached) {
 				parentToUse = ScoresaberUtil.replayCamera?.transform;
-			} if(HookFPFC.isInFPFC && settings.type == Configuration.CameraType.FirstPerson && HookFPFC.cameraInstance != null) {
+				settings.Smoothfollow.attachToLocal = false;
+			}
+			
+			if(HookFPFC.isInFPFC && settings.type == Configuration.CameraType.FirstPerson && HookFPFC.cameraInstance != null) {
 				parentToUse = HookFPFC.cameraInstance?.transform;
-				useLocalPosition = false;
+				settings.Smoothfollow.attachToLocal = false;
 			} else if(parentToUse == null || parentToUse.gameObject?.activeInHierarchy != true) {
 				if(settings.type == Configuration.CameraType.FirstPerson) {
 					parent = parentToUse = Camera.main?.transform;
+					settings.Smoothfollow.attachToLocal = true;
 				} else if(settings.type == Configuration.CameraType.Attached) {
 					parent = parentToUse = GameObject.Find(settings.Smoothfollow.targetParent)?.transform;
+					settings.Smoothfollow.attachToLocal = false;
 				}
 			}
 
@@ -78,8 +82,8 @@ namespace Camera2.Middlewares {
 			if(parentToUse == null)
 				return false;
 
-			var targetRotation = useLocalPosition ? parentToUse.localRotation : parentToUse.rotation;
-			var targetPosition = useLocalPosition ? parentToUse.localPosition : parentToUse.position;
+			var targetRotation = settings.Smoothfollow.attachToLocal ? parentToUse.localRotation : parentToUse.rotation;
+			var targetPosition = settings.Smoothfollow.attachToLocal ? parentToUse.localPosition : parentToUse.position;
 
 			if(settings.Smoothfollow.forceUpright)
 				targetRotation *= Quaternion.Euler(0, 0, -parentToUse.transform.localEulerAngles.z);

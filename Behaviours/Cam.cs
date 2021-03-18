@@ -36,8 +36,18 @@ namespace Camera2.Behaviours {
 			DontDestroyOnLoad(gameObject);
 		}
 
+		/*
+		 * This is complete garbage and I need to fix this issue better some day because this will almost certainly cause issues down the line.
+		 * The issue is that the room offset is essentially already "Pre-applied" in FP cams, but
+		 * in third person cams we need to un-apply it when being parented to the song origin because
+		 * else the cam will adjust based on the room adjustment, eventho the room adjustment
+		 * doesnt actually move the room but rather the player
+		 */
 		public void ApplyRoomOffset() {
-			bool doApply = transform.parent != null && settings.type == Configuration.CameraType.FirstPerson && HookRoomAdjust.instance != null;
+			bool doApply =
+				HookRoomAdjust.instance != null &&
+				(settings.type == Configuration.CameraType.FirstPerson &&
+				(!ScoresaberUtil.isInReplay || !settings.Smoothfollow.followReplayPosition));
 
 			transform.localPosition = doApply ? HookRoomAdjust.instance.transform.position : Vector3.zero;
 			transform.localRotation = doApply ? HookRoomAdjust.instance.transform.rotation : Quaternion.identity;
@@ -45,7 +55,7 @@ namespace Camera2.Behaviours {
 
 
 		ParentShield shield;
-		public void SetOrigin(Transform parent, bool unparentOnDisable = true) {
+		public void SetOrigin(Transform parent, bool startFromParentTransform = true, bool unparentOnDisable = true) {
 			if(transform.parent == parent)
 				return;
 
@@ -57,9 +67,9 @@ namespace Camera2.Behaviours {
 				if(shield == null)
 					shield = new GameObject($"Cam2_{name}_Parenter").AddComponent<ParentShield>();
 
-				shield.Init(this, parent, false);
+				shield.Init(this, parent, !startFromParentTransform);
 
-				transform.SetParent(shield.transform, false);
+				transform.SetParent(shield.transform, !startFromParentTransform);
 			}
 
 			ApplyRoomOffset();

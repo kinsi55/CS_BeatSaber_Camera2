@@ -32,7 +32,7 @@ namespace Camera2.Middlewares {
 #endif
 					attachedTo = SceneUtil.songWorldTransform;
 					
-					cam.SetOrigin(SceneUtil.songWorldTransform);
+					cam.SetOrigin(SceneUtil.songWorldTransform, false);
 				}
 			} else if(attachedTo != null) {
 #if DEBUG
