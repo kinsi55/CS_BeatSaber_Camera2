@@ -398,8 +398,8 @@ namespace Camera2.UI {
 
 			cam.settings.type = CameraType.Positionable;
 			cam.settings.FOV = 75;
-			cam.settings.targetPos = new UnityEngine.Vector3(0.62f, 0.56f, -1.81f);
-			cam.settings.targetRot = new UnityEngine.Vector3(348.1f, 348.1f, 1.1f);
+			cam.settings.targetPos = new UnityEngine.Vector3(1.93f, 2.32f, -2.45f);
+			cam.settings.targetRot = new UnityEngine.Vector3(16.48f, 335.78f, 0.81f);
 
 			AddCam(cam);
 		}
