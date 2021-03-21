@@ -30,7 +30,7 @@ namespace Camera2.Configuration {
 			}
 		}
 
-		[JsonIgnore] internal bool attachToLocal = true;
+		[JsonIgnore] internal bool isAttachedToFP = true;
 		[JsonIgnore] internal Transform parent;
 
 
@@ -60,19 +60,19 @@ namespace Camera2.Middlewares {
 
 			if(ScoresaberUtil.isInReplay && settings.Smoothfollow.followReplayPosition && settings.type == Configuration.CameraType.Attached) {
 				parentToUse = ScoresaberUtil.replayCamera?.transform;
-				settings.Smoothfollow.attachToLocal = false;
+				settings.Smoothfollow.isAttachedToFP = false;
 			}
 			
 			if(HookFPFC.isInFPFC && settings.type == Configuration.CameraType.FirstPerson && HookFPFC.cameraInstance != null) {
 				parentToUse = HookFPFC.cameraInstance?.transform;
-				settings.Smoothfollow.attachToLocal = false;
+				settings.Smoothfollow.isAttachedToFP = false;
 			} else if(parentToUse == null || parentToUse.gameObject?.activeInHierarchy != true) {
 				if(settings.type == Configuration.CameraType.FirstPerson) {
 					parent = parentToUse = Camera.main?.transform;
-					settings.Smoothfollow.attachToLocal = true;
+					settings.Smoothfollow.isAttachedToFP = true;
 				} else if(settings.type == Configuration.CameraType.Attached) {
 					parent = parentToUse = GameObject.Find(settings.Smoothfollow.targetParent)?.transform;
-					settings.Smoothfollow.attachToLocal = false;
+					settings.Smoothfollow.isAttachedToFP = false;
 				}
 			}
 
@@ -82,8 +82,31 @@ namespace Camera2.Middlewares {
 			if(parentToUse == null)
 				return false;
 
-			var targetRotation = settings.Smoothfollow.attachToLocal ? parentToUse.localRotation : parentToUse.rotation;
-			var targetPosition = settings.Smoothfollow.attachToLocal ? parentToUse.localPosition : parentToUse.position;
+			var targetPosition = parentToUse.position;
+			var targetRotation = parentToUse.rotation;
+
+			// This is stupid
+			if(settings.Smoothfollow.isAttachedToFP && !(HookMultiplayerFail.hasFailed || HookMultiplayer.instance?.isSpectating == true)) {
+				targetPosition = parentToUse.localPosition;
+				targetRotation = parentToUse.localRotation;
+
+				if(HookRoomAdjust.position != Vector3.zero || HookRoomAdjust.rotation != Quaternion.identity) {
+					/*
+						* This is complete garbage and I need to fix this issue better some day because this will almost certainly cause issues down the line.
+						* The issue is that the room offset is essentially already "Pre-applied" in FP cams (Because the player has to move to "correct" for his offset), but
+						* in third person cams we need to un-apply it when being parented to the song origin because if we dont keep the cams world positon on parent it would
+						* change the 0;0;0 point of the cam and thus move to a place its not supposed to be in as "room offset" offsets the player, not the room.
+						*/
+					bool doApply =
+						settings.type == Configuration.CameraType.FirstPerson &&
+						(!HookLeveldata.isModdedMap || !settings.ModmapExtensions.moveWithMap || !SceneUtil.isInSong);
+
+					if(doApply) {
+						targetPosition = (HookRoomAdjust.rotation * targetPosition) + HookRoomAdjust.position;
+						targetRotation *= HookRoomAdjust.rotation;
+					}
+				}
+			}
 
 			if(settings.Smoothfollow.forceUpright)
 				targetRotation *= Quaternion.Euler(0, 0, -parentToUse.transform.localEulerAngles.z);

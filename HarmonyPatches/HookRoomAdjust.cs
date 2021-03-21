@@ -22,7 +22,7 @@ namespace Camera2.HarmonyPatches {
 			eulerAngles = __instance.transform.eulerAngles;
 
 			foreach(var cam in CamManager.cams.Values)
-				cam.ApplyRoomOffset();
+				cam.settings.ApplyPositionAndRotation();
 		}
 
 		[HarmonyTargetMethods]

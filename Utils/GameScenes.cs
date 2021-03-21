@@ -17,7 +17,7 @@ namespace Camera2.Utils {
 		public static bool isSongPlaying => isInSong && audioTimeSyncController.state == AudioTimeSyncController.State.Playing;
 
 
-		public static bool isInMultiplayer => HookMultiplayer.instance != null && HookMultiplayer.instance.isConnected;
+		public static bool isInMultiplayer => HookMultiplayer.instance?.isConnected == true;
 
 		public static GameObject GetMainCameraButReally() => Camera.main?.gameObject ?? GameObject.FindGameObjectsWithTag("MainCamera")[0];
 
@@ -30,6 +30,7 @@ namespace Camera2.Utils {
 
 			currentScene = newScene;
 			isInMenu = menuSceneNames.Contains(newScene.name);
+			HookMultiplayerFail.hasFailed = false;
 
 			if(oldScene.name == "GameCore") {
 #if DEBUG

@@ -36,23 +36,6 @@ namespace Camera2.Behaviours {
 			DontDestroyOnLoad(gameObject);
 		}
 
-		/*
-		 * This is complete garbage and I need to fix this issue better some day because this will almost certainly cause issues down the line.
-		 * The issue is that the room offset is essentially already "Pre-applied" in FP cams (Because the player has to move to "correct" for his offset), but
-		 * in third person cams we need to un-apply it when being parented to the song origin because if we dont keep the cams world positon on parent it would
-		 * change the 0;0;0 point of the cam and thus move to a place its not supposed to be in as "room offset" offsets the player, not the room.
-		 */
-		public void ApplyRoomOffset() {
-			bool doApply =
-				settings.type == Configuration.CameraType.FirstPerson &&
-				(!HookLeveldata.isModdedMap || !settings.ModmapExtensions.moveWithMap) &&
-				(!ScoresaberUtil.isInReplay || !settings.Smoothfollow.followReplayPosition);
-
-			transform.localPosition = doApply ? HookRoomAdjust.position : Vector3.zero;
-			transform.localRotation = doApply ? HookRoomAdjust.rotation : Quaternion.identity;
-		}
-
-
 		ParentShield shield;
 		public void SetOrigin(Transform parent, bool startFromParentTransform = true, bool unparentOnDisable = true) {
 			if(transform.parent == parent)
@@ -71,7 +54,7 @@ namespace Camera2.Behaviours {
 				transform.SetParent(shield.transform, !startFromParentTransform);
 			}
 
-			ApplyRoomOffset();
+			settings.ApplyPositionAndRotation();
 		}
 
 		List<KeyValuePair<string, Transformer>> transformers = new List<KeyValuePair<string, Transformer>>();
