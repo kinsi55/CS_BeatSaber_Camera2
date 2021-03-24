@@ -121,7 +121,7 @@ namespace Camera2.Middlewares {
 				if(targetFrame.startTime > currentAnimationTime)
 					break;
 				
-				if(targetFrame.endTime <= currentAnimationTime) {
+				if(targetFrame.transitionEndTime <= currentAnimationTime) {
 					lastPos = scriptTransformer.transform.localPosition = targetFrame.position;
 					lastRot = scriptTransformer.transform.localRotation = targetFrame.rotation;
 					if(targetFrame.FOV > 0)
