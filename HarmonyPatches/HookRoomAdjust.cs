@@ -20,9 +20,6 @@ namespace Camera2.HarmonyPatches {
 			position = __instance.transform.position;
 			rotation = __instance.transform.rotation;
 			eulerAngles = __instance.transform.eulerAngles;
-
-			foreach(var cam in CamManager.cams.Values)
-				cam.settings.ApplyPositionAndRotation();
 		}
 
 		[HarmonyTargetMethods]
