@@ -25,7 +25,8 @@ namespace Camera2.Managers {
 			foreach(int mask in Enum.GetValues(typeof(VisibilityMasks)))
 				clearedBaseCullingMask &= ~mask;
 
-			customScreen = new GameObject("Cam2_Viewport").AddComponent<CamerasViewport>();
+			//Adding _THIS_IS_NORMAL so that ends up in the stupid warning Unity logs when having a SS overlay w/ active VR
+			customScreen = new GameObject("Cam2_Viewport_THIS_IS_NORMAL").AddComponent<CamerasViewport>();
 
 			LoadCameras();
 			
