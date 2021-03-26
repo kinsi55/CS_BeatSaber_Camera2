@@ -86,16 +86,11 @@ namespace Camera2.Utils {
 			for(var i = 0; i != transformers.Count; i++) {
 				x = transformers[i];
 
-				if(i == 0 && position == Vector3.zero && rotation == Quaternion.identity) {
-					position = x.position;
-					rotation = x.rotation;
-				} else {
-					if(x.position != Vector3.zero)
-						position += x.applyAsAbsolute ? x.position : rotation * x.position;
+				if(x.position != Vector3.zero)
+					position += x.applyAsAbsolute ? x.position : rotation * x.position;
 
-					if(x.rotation != Quaternion.identity)
-						rotation *= x.rotation;
-				}
+				if(x.rotation != Quaternion.identity)
+					rotation *= x.rotation;
 
 				x.positionSum = position;
 				x.rotationSum = rotation;
