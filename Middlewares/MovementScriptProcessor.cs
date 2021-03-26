@@ -34,19 +34,14 @@ namespace Camera2.Middlewares {
 
 		Frame targetFrame => loadedScript.frames[frameIndex];
 
-		private void DoParent() {
-			if(scriptTransformer != null)
-				return;
-
-			scriptTransformer = cam.GetOrCreateTransformer("MovementScript", TransformerOrders.MovementScriptProcessor);
-		}
-
 		private void Reset() {
 			if(loadedScript == null)
 				return;
 
-			if(scriptTransformer != null)
-				GameObject.Destroy(scriptTransformer);
+			if(scriptTransformer != null) {
+				scriptTransformer.position = Vector3.zero;
+				scriptTransformer.rotation = Quaternion.identity;
+			}
 
 			loadedScript = null;
 			currentAnimationTime = 0f;
@@ -56,20 +51,6 @@ namespace Camera2.Middlewares {
 #if DEBUG
 			Plugin.Log.Info($"Resetting MovementScriptProcessor of camera {cam.name}");
 #endif
-		}
-
-		new public void CamConfigReloaded() {
-			if(loadedScript == null || !settings.MovementScript.fromOrigin)
-				return;
-
-			var x = cam.transformer;
-
-			if(x == null)
-				return;
-
-			// Having a custom position on a camera thats executing a movement script is PROBABLY not what the user wants
-			x.transform.localPosition = Vector3.zero;
-			x.transform.localRotation = Quaternion.identity;
 		}
 
 		public void OnDisable() => Reset();
@@ -100,13 +81,19 @@ namespace Camera2.Middlewares {
 				CamConfigReloaded();
 
 				Plugin.Log.Info($"Applying Movementscript {scriptToUse} for camera {cam.name}");
-				DoParent();
+
+				scriptTransformer ??= cam.transformchain.AddOrGet("MovementScript", TransformerOrders.MovementScriptProcessor);
 			}
 
 			if(loadedScript.syncToSong && SceneUtil.isInSong) {
 				currentAnimationTime = SceneUtil.audioTimeSyncController.songTime;
 			} else {
 				currentAnimationTime += cam.timeSinceLastRender;
+			}
+
+			if(settings.MovementScript.fromOrigin) {
+				cam.transformer.position = Vector3.zero;
+				cam.transformer.rotation = Quaternion.identity;
 			}
 
 			if(currentAnimationTime > loadedScript.scriptDuration) {
@@ -122,8 +109,8 @@ namespace Camera2.Middlewares {
 					break;
 				
 				if(targetFrame.transitionEndTime <= currentAnimationTime) {
-					lastPos = scriptTransformer.transform.localPosition = targetFrame.position;
-					lastRot = scriptTransformer.transform.localRotation = targetFrame.rotation;
+					lastPos = scriptTransformer.position = targetFrame.position;
+					lastRot = scriptTransformer.rotation = targetFrame.rotation;
 					if(targetFrame.FOV > 0)
 						lastFov = cam.UCamera.fieldOfView = targetFrame.FOV;
 				} else if(targetFrame.startTime <= currentAnimationTime) {
@@ -132,8 +119,8 @@ namespace Camera2.Middlewares {
 					if(targetFrame.transition == MoveType.Eased)
 						frameProgress = Easings.EaseInOutCubic01(frameProgress);
 
-					scriptTransformer.transform.localPosition = Vector3.LerpUnclamped(lastPos, targetFrame.position, frameProgress);
-					scriptTransformer.transform.localRotation = Quaternion.LerpUnclamped(lastRot, targetFrame.rotation, frameProgress);
+					scriptTransformer.position = Vector3.LerpUnclamped(lastPos, targetFrame.position, frameProgress);
+					scriptTransformer.rotation = Quaternion.LerpUnclamped(lastRot, targetFrame.rotation, frameProgress);
 
 					if(targetFrame.FOV > 0f)
 						cam.UCamera.fieldOfView = Mathf.LerpUnclamped(lastFov, targetFrame.FOV, frameProgress);

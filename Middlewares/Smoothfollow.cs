@@ -24,9 +24,7 @@ namespace Camera2.Configuration {
 
 				_pivotingOffset = value;
 
-				// Destroying it here will cause it to get re-created in the correct hierarchy-position next frame
-				if(transformer != null)
-					GameObject.Destroy(transformer);
+				settings.cam.transformer.applyAsAbsolute = !value;
 			}
 		}
 
@@ -50,8 +48,10 @@ namespace Camera2.Middlewares {
 
 		new public bool Pre() {
 			if(settings.type == Configuration.CameraType.Positionable) {
-				if(settings.Smoothfollow.transformer != null)
-					Destroy(settings.Smoothfollow.transformer);
+				if(settings.Smoothfollow.transformer != null) {
+					settings.Smoothfollow.transformer.position = Vector3.zero;
+					settings.Smoothfollow.transformer.rotation = Quaternion.identity;
+				}
 
 				return true;
 			}
@@ -116,24 +116,22 @@ namespace Camera2.Middlewares {
 				(HookFPFC.isInFPFC && (!settings.Smoothfollow.followReplayPosition || !ScoresaberUtil.isInReplay));
 
 			if(settings.Smoothfollow.transformer == null) {
-				settings.Smoothfollow.transformer = cam.GetOrCreateTransformer(
-					"SmoothFollow",
-						settings.Smoothfollow.pivotingOffset ? TransformerOrders.SmoothFollowPivoting : TransformerOrders.SmoothFollowAbsolute
-				);
+				settings.Smoothfollow.transformer = cam.transformchain.AddOrGet("SmoothFollow", TransformerOrders.SmoothFollow);
 
 				teleport = true;
 			}
 
-			var theTransform = settings.Smoothfollow.transformer.transform;
+			var theTransform = settings.Smoothfollow.transformer;
 
 			// If we switched scenes (E.g. left / entered a song) we want to snap to the correct position before smoothing again
 			if(teleport) {
-				theTransform.SetLocalPositionAndRotation(targetPosition, targetRotation);
+				theTransform.position = targetPosition;
+				theTransform.rotation = targetRotation;
 
 				lastScene = SceneUtil.currentScene;
 			} else {
-				theTransform.localPosition = Vector3.Lerp(theTransform.localPosition, targetPosition, cam.timeSinceLastRender * settings.Smoothfollow.position);
-				theTransform.localRotation = Quaternion.Slerp(theTransform.localRotation, targetRotation, cam.timeSinceLastRender * settings.Smoothfollow.rotation);
+				theTransform.position = Vector3.Lerp(theTransform.position, targetPosition, cam.timeSinceLastRender * settings.Smoothfollow.position);
+				theTransform.rotation = Quaternion.Slerp(theTransform.rotation, targetRotation, cam.timeSinceLastRender * settings.Smoothfollow.rotation);
 			}
 			return true;
 		}

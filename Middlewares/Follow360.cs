@@ -21,9 +21,9 @@ namespace Camera2.Middlewares {
 
 		private void Reset() {
 			if(rotationApplier != null) {
-				GameObject.Destroy(rotationApplier);
-				rotationApplier = null;
 				currentRotateAmount = 0f;
+				rotationApplier.rotation = Quaternion.identity;
+				rotationApplier.position = Vector3.zero;
 			}
 		}
 
@@ -41,27 +41,36 @@ namespace Camera2.Middlewares {
 				return true;
 			}
 
-			if(rotationApplier == null)
-				rotationApplier = cam.GetOrCreateTransformer("Follow360", TransformerOrders.Follow360);
+			if(rotationApplier == null) {
+				rotationApplier = cam.transformchain.AddOrGet("Follow360", TransformerOrders.Follow360);
+				rotationApplier.applyAsAbsolute = true;
+			}
 
 			if(HookLevelRotation.Instance.targetRotation != 0f) {
-				// Make sure we dont spam unnecessary calculations / rotation steps for the last little bit
-				if(Math.Abs(currentRotateAmount - HookLevelRotation.Instance.targetRotation) < 1f)
+				if(currentRotateAmount == HookLevelRotation.Instance.targetRotation)
 					return true;
 
-				var rotateStep = Mathf.LerpAngle(currentRotateAmount, HookLevelRotation.Instance.targetRotation, cam.timeSinceLastRender * settings.Follow360.smoothing);
+				var rotateStep = HookLevelRotation.Instance.targetRotation;
 
-				rotationApplier.transform.RotateAround(
-					SceneUtil.songWorldTransform != null ? SceneUtil.songWorldTransform.position : Vector3.zero,
-					Vector3.up, (rotateStep - currentRotateAmount)
-				);
+				// Make sure we dont spam unnecessary calculations / rotation steps for the last little bit
+				if(Math.Abs(currentRotateAmount - HookLevelRotation.Instance.targetRotation) > 1f)
+					rotateStep = Mathf.LerpAngle(currentRotateAmount, HookLevelRotation.Instance.targetRotation, cam.timeSinceLastRender * settings.Follow360.smoothing);
 
-				/*
-				 * Firstperson cameras w/ non-pivotingOffset get rotated by this, but since the HMD rotation is
-				 * applied to the camera we dont want to rotate the camera with the map rotation
-				 */
-				if(settings.type != Configuration.CameraType.Positionable)
-					rotationApplier.transform.rotation = Quaternion.identity;
+				var rot = Quaternion.Euler(0, rotateStep, 0);
+
+				if(SceneUtil.songWorldTransform != null) {
+					rotationApplier.position = rot * (cam.transformer.position - SceneUtil.songWorldTransform.position) + SceneUtil.songWorldTransform.position;
+				} else {
+					rotationApplier.position = rot * cam.transformer.position;
+				}
+
+				rotationApplier.position -= cam.transformer.position;
+
+				if(settings.type == Configuration.CameraType.Positionable) {
+					rotationApplier.rotation = rot;
+				} else {
+					rotationApplier.rotation = Quaternion.identity;
+				}
 
 				currentRotateAmount = rotateStep;
 			}

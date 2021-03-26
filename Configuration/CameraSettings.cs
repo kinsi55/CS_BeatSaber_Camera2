@@ -84,7 +84,7 @@ namespace Camera2.Configuration {
 	}
 	
 	class CameraSettings {
-		private Cam2 cam;
+		internal Cam2 cam { get; private set; }
 		internal bool isLoaded { get; private set; } = false;
 
 		internal OverrideToken overrideToken = null;
@@ -144,8 +144,10 @@ namespace Camera2.Configuration {
 		}
 
 		public void ApplyPositionAndRotation() {
-			cam.transformer.transform.localPosition = targetPos;
-			cam.transformer.transform.localEulerAngles = targetRot;
+			cam.transformer.position = targetPos;
+			cam.transformer.rotationEuler = targetRot;
+
+			cam.transformer.applyAsAbsolute = type != CameraType.Positionable && !Smoothfollow.pivotingOffset;
 		}
 
 		public void ApplyLayerBitmask() {

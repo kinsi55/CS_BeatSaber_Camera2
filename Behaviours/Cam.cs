@@ -30,7 +30,8 @@ namespace Camera2.Behaviours {
 
 		internal List<IMHandler> middlewares { get; private set; } = new List<IMHandler>();
 
-		internal Transform transformer;
+		internal Transformer transformer;
+		internal TransformChain transformchain;
 		
 		public void Awake() {
 			DontDestroyOnLoad(gameObject);
@@ -56,45 +57,6 @@ namespace Camera2.Behaviours {
 
 			settings.ApplyPositionAndRotation();
 		}
-
-		List<KeyValuePair<string, Transformer>> transformers = new List<KeyValuePair<string, Transformer>>();
-		public Transformer GetTransformer(string type) {
-			foreach(var x in transformers)
-				if(x.Key == type) return x.Value;
-
-			return null;
-		}
-		public Transformer GetOrCreateTransformer(string type, TransformerOrders order = TransformerOrders.Default) {
-			foreach(var x in transformers)
-				if(x.Key == type) return x.Value;
-
-			Transform parent = transform;
-			Transform child = UCamera.transform;
-			int index = transformers.FindIndex(x => x.Value.order >= (int)order);
-
-			if(index == -1)
-				index = transformers.Count();
-
-			if(transformers.Count() > 0) {
-				if(index > 0)
-					parent = transformers[index - 1].Value.transform;
-
-				if(transformers.Count() > index)
-					child = transformers[index].Value.transform;
-			}
-
-
-			var n = Transformer.Get(type, (int)order, this, transformers);
-			
-			n.transform.SetParent(parent, false);
-			child.SetParent(n.transform, false);
-
-			transformers.Insert(index, new KeyValuePair<string, Transformer>(type, n));
-
-
-			return n;
-		}
-
 
 
 		internal void UpdateRenderTextureAndView() {
@@ -157,7 +119,8 @@ namespace Camera2.Behaviours {
 			//UCamera.depthTextureMode = DepthTextureMode.None;
 			//UCamera.renderingPath = RenderingPath.DeferredLighting;
 
-			transformer = GetOrCreateTransformer("Position", TransformerOrders.PositionOffset).transform;
+			transformchain = new TransformChain(transform, UCamera.transform);
+			transformer = transformchain.AddOrGet("Position", TransformerOrders.PositionOffset, false);
 
 
 			foreach(var child in camClone.transform.Cast<Transform>())
@@ -211,7 +174,7 @@ namespace Camera2.Behaviours {
 		System.Diagnostics.Stopwatch sw = null;
 #endif
 		private void OnGUI() {
-			if(UCamera == null || renderTexture == null || !hadUpdate)
+			if(!hadUpdate || UCamera == null || renderTexture == null)
 				return;
 #if FPSCOUNT
 			if(sw == null) {
@@ -226,10 +189,12 @@ namespace Camera2.Behaviours {
 			}
 
 			hadUpdate = false;
+			transformchain.Calculate();
 			UCamera.Render();
 
-			foreach(var t in middlewares)
-				t.Post();
+			// There isnt any post processors atm so no need to waste time on that
+			//foreach(var t in middlewares)
+			//	t.Post();
 
 			timeSinceLastRender = 0f;
 #if FPSCOUNT

@@ -17,8 +17,8 @@ namespace Camera2.Configuration {
 
 namespace Camera2.Middlewares {
 	class ModmapExtensions : CamMiddleware, IMHandler {
-		private Transformer mapMovementTransformerRemoveRoomOffset = null;
 		private Transformer mapMovementTransformer = null;
+		private Transformer mapMovementTransformerDeRoomAdjust = null;
 		public new bool Pre() {
 			// We wanna parent FP cams as well so that the noodle translations are applied instantly and dont get smoothed out by SmoothFollow
 			if(
@@ -32,24 +32,30 @@ namespace Camera2.Middlewares {
 #if DEBUG
 					Plugin.Log.Info($"Enabling Modmap parenting for camera {cam.name}");
 #endif
-					mapMovementTransformer = cam.GetOrCreateTransformer("ModMapExt", TransformerOrders.ModmapParenting);
+					mapMovementTransformer = cam.transformchain.AddOrGet("ModMapExt", TransformerOrders.ModmapParenting);
 
-					if(settings.type == Configuration.CameraType.Positionable) {
-						mapMovementTransformerRemoveRoomOffset = cam.GetOrCreateTransformer("ModMapExtDe-Offset", TransformerOrders.ModmapParenting + 1);
+					if(HookRoomAdjust.position != Vector3.zero || HookRoomAdjust.rotation != Quaternion.identity)
+						mapMovementTransformerDeRoomAdjust = cam.transformchain.AddOrGet("ModMapExt2", TransformerOrders.ModmapParenting + 1);
 
-						mapMovementTransformerRemoveRoomOffset.transform.localPosition = -HookRoomAdjust.position;
-						mapMovementTransformerRemoveRoomOffset.transform.localRotation = Quaternion.Inverse(HookRoomAdjust.rotation);
+					if(mapMovementTransformerDeRoomAdjust != null) {
+						if(settings.type == Configuration.CameraType.Positionable) {
+							mapMovementTransformerDeRoomAdjust.position = -HookRoomAdjust.position;
+							mapMovementTransformerDeRoomAdjust.rotation = Quaternion.Inverse(HookRoomAdjust.rotation);
+						} else {
+							mapMovementTransformerDeRoomAdjust.position = Vector3.zero;
+							mapMovementTransformerDeRoomAdjust.rotation = Quaternion.identity;
+						}
 					}
 				}
 
-				mapMovementTransformer.transform.localPosition = SceneUtil.songWorldTransform.position;
-				mapMovementTransformer.transform.localRotation = SceneUtil.songWorldTransform.rotation;
+				mapMovementTransformer.position = SceneUtil.songWorldTransform.position;
+				mapMovementTransformer.rotation = SceneUtil.songWorldTransform.rotation;
 			} else if(mapMovementTransformer != null) {
 #if DEBUG
 				Plugin.Log.Info($"Disabling Modmap parenting for camera {cam.name}");
 #endif
-				Destroy(mapMovementTransformer);
-				if(mapMovementTransformerRemoveRoomOffset != null) Destroy(mapMovementTransformerRemoveRoomOffset);
+				mapMovementTransformer.position = mapMovementTransformerDeRoomAdjust.position = Vector3.zero;
+				mapMovementTransformer.rotation = mapMovementTransformerDeRoomAdjust.rotation = Quaternion.identity;
 				mapMovementTransformer = null;
 			}
 			return true;
