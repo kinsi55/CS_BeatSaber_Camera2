@@ -35,7 +35,7 @@ namespace Camera2.Utils {
 		public void Resort(bool calculate = true) {
 			transformers.Sort((a, b) => a.order - b.order);
 
-			Calculate();
+			if(calculate) Calculate();
 		}
 
 		public Vector3 position { get; private set; }
