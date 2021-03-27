@@ -54,8 +54,13 @@ namespace Camera2.Middlewares {
 #if DEBUG
 				Plugin.Log.Info($"Disabling Modmap parenting for camera {cam.name}");
 #endif
-				mapMovementTransformer.position = mapMovementTransformerDeRoomAdjust.position = Vector3.zero;
-				mapMovementTransformer.rotation = mapMovementTransformerDeRoomAdjust.rotation = Quaternion.identity;
+				mapMovementTransformer.position = Vector3.zero;
+				mapMovementTransformer.rotation = Quaternion.identity;
+				if(mapMovementTransformerDeRoomAdjust != null) {
+					mapMovementTransformerDeRoomAdjust.position = Vector3.zero;
+					mapMovementTransformerDeRoomAdjust.rotation = Quaternion.identity;
+				}
+
 				mapMovementTransformer = null;
 			}
 			return true;
