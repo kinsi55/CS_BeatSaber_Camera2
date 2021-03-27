@@ -58,7 +58,17 @@ namespace Camera2.Middlewares {
 
 			var parentToUse = parent;
 
-			if(ScoresaberUtil.isInReplay && settings.Smoothfollow.followReplayPosition && settings.type == Configuration.CameraType.Attached) {
+			if(
+				ScoresaberUtil.isInReplay && 
+				/*
+				 * If we DONT have an HMD connected we can just use the normal (FP) camera as SS will
+				 * apply the UNSMOOTHED, UN-OFFSET position to that. Unfortunately, that obviously
+				 * is not the case when there is an HMD :(
+				 */
+				UnityEngine.XR.XRDevice.isPresent && 
+				settings.Smoothfollow.followReplayPosition && 
+				settings.type == Configuration.CameraType.FirstPerson
+			) {
 				parentToUse = ScoresaberUtil.replayCamera?.transform;
 				settings.Smoothfollow.isAttachedToFP = false;
 			}
