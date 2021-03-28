@@ -7,6 +7,7 @@ using Camera2.Utils;
 using Camera2.Managers;
 using UnityEngine;
 using System.IO;
+using Camera2.HarmonyPatches;
 
 namespace Camera2 {
 	[Plugin(RuntimeOptions.SingleStartInit)]
@@ -56,6 +57,7 @@ namespace Camera2 {
 			Log.Debug("OnApplicationStart");
 
 			MovementScriptManager.LoadMovementScripts();
+			GlobalFPSCap.Init();
 
 			SceneManager.activeSceneChanged += SceneUtil.OnActiveSceneChanged;
 		}

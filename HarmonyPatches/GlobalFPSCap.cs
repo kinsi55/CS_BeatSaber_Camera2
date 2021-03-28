@@ -12,7 +12,39 @@ namespace Camera2.HarmonyPatches {
 	[HarmonyPatch(typeof(MainSystemInit), nameof(MainSystemInit.Init))]
 	class GlobalFPSCap {
 		public static void Postfix() {
-			if(UnityEngine.XR.XRDevice.isPresent || UnityEngine.XR.XRDevice.refreshRate != 0) {
+			ApplyFPSCap(UnityEngine.XR.XRDevice.isPresent || UnityEngine.XR.XRDevice.refreshRate != 0);
+		}
+
+		public static void Init() {
+			/*
+			 * On VRMode Oculus, when you take off the headset the game ends up in an uncapped FPS state,
+			 * this makes sure to apply an FPS cap when the headset is taken off
+			 */
+			if(!OVRPlugin.initialized)
+				return;
+
+			Task.Run(delegate () {
+				bool lastPresentState = false;
+
+				for(; ; ) {
+					var newPresentState = OVRPlugin.userPresent;
+
+					if(newPresentState != lastPresentState) {
+#if DEBUG
+						Plugin.Log.Info(newPresentState ? "HMD mounted - Removing FPS cap" : "HMD unmounted - Applying FPS cap");
+#endif
+						ApplyFPSCap(newPresentState);
+
+						lastPresentState = newPresentState;
+					}
+
+					System.Threading.Thread.Sleep(lastPresentState ? 2000 : 500);
+				}
+			});
+		}
+
+		public static void ApplyFPSCap(bool isHmdPresent) {
+			if(isHmdPresent) {
 				Application.targetFrameRate = -1;
 			} else {
 				var Kapp = 30;
