@@ -68,7 +68,7 @@ namespace Camera2.Behaviours {
 			if(sizeChanged) {
 				renderTexture?.Release();
 				renderTexture = new RenderTexture(w, h, 24) { //, RenderTextureFormat.ARGB32
-					autoGenerateMips = false,
+					useMipMap = false,
 					antiAliasing = settings.antiAliasing,
 					anisoLevel = 1,
 					useDynamicScale = false

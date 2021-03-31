@@ -89,8 +89,13 @@ namespace Camera2.Utils {
 				if(x.position != Vector3.zero)
 					position += x.applyAsAbsolute ? x.position : rotation * x.position;
 
-				if(x.rotation != Quaternion.identity)
-					rotation *= x.rotation;
+				if(x.rotation != Quaternion.identity) {
+					if(!x.applyAsAbsolute) {
+						rotation *= x.rotation;
+					} else {
+						rotation = x.rotation * rotation;
+					}
+				}
 
 				x.positionSum = position;
 				x.rotationSum = rotation;

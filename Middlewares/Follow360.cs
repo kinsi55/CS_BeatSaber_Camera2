@@ -53,7 +53,7 @@ namespace Camera2.Middlewares {
 				var rotateStep = HookLevelRotation.Instance.targetRotation;
 
 				// Make sure we dont spam unnecessary calculations / rotation steps for the last little bit
-				if(Math.Abs(currentRotateAmount - HookLevelRotation.Instance.targetRotation) > 1f)
+				if(Math.Abs(currentRotateAmount - HookLevelRotation.Instance.targetRotation) > 0.3f)
 					rotateStep = Mathf.LerpAngle(currentRotateAmount, HookLevelRotation.Instance.targetRotation, cam.timeSinceLastRender * settings.Follow360.smoothing);
 
 				var rot = Quaternion.Euler(0, rotateStep, 0);
