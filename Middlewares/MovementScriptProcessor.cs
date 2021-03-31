@@ -41,6 +41,9 @@ namespace Camera2.Middlewares {
 			if(scriptTransformer != null) {
 				scriptTransformer.position = Vector3.zero;
 				scriptTransformer.rotation = Quaternion.identity;
+
+				if(settings.MovementScript.fromOrigin)
+					cam.settings.ApplyPositionAndRotation();
 			}
 
 			loadedScript = null;
