@@ -25,7 +25,7 @@ namespace Camera2.Managers {
 
 						var script = MovementScript.Load(name);
 
-						if(script.frames.Count() <= 2)
+						if(script.frames.Count() < 2)
 							throw new Exception("Movement scripts must contain at least two keyframes");
 
 #if DEBUG
