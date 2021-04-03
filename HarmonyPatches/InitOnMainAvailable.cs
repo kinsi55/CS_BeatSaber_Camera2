@@ -7,7 +7,10 @@ namespace Camera2.HarmonyPatches {
 	[HarmonyPatch(typeof(SmoothCameraController), "Start")]
 	class InitOnMainAvailable {
 		static bool isInited = false;
-		static void Prefix() {
+		static void Prefix(MainSettingsModelSO ____mainSettingsModel) {
+			foreach(var cam in CamManager.cams.Values)
+				if(cam.UCamera != null) cam.UCamera.depthTextureMode = ____mainSettingsModel.depthTextureEnabled ? DepthTextureMode.Depth : DepthTextureMode.None;
+
 			if(isInited) return;
 			isInited = true;
 
@@ -15,6 +18,5 @@ namespace Camera2.HarmonyPatches {
 
 			CamManager.Init();
 		}
-
 	}
 }
