@@ -64,11 +64,39 @@ namespace Camera2.Utils {
 
 			return t;
 		}
+
+		//public void BacktrackTo(Transformer t, ref Vector3 pos, ref Quaternion rot) {
+		//	var index = transformers.IndexOf(t);
+
+		//	Transformer x;
+
+		//	for(int i = transformers.Count - 1; i > index; i--) {
+		//		x = transformers[i];
+
+		//		if(x.position != Vector3.zero)
+		//			pos -= x.applyAsAbsolute ? x.position : Quaternion.Inverse(x.rotation) * x.position;
+
+		//		if(x.rotation != Quaternion.identity) {
+		//			if(!x.applyAsAbsolute) {
+		//				rot *= Quaternion.Inverse(x.rotation);
+		//			} else {
+		//				rot = Quaternion.Inverse(x.rotation) * rot;
+		//			}
+		//		}
+		//	}
+
+		//	Calculate(false);
+
+		//	pos = pos - t.positionSum + t.position;
+
+		//	//rot = t.rotation * (t.rotationSum * );
+		//}
+
 #if DEBUG
 		public string debug = "";
 #endif
 
-		public void Calculate() {
+		public void Calculate(bool apply = true) {
 			if(transformers.Count == 0) {
 				position = Vector3.zero;
 				rotation = Quaternion.identity;
@@ -105,7 +133,7 @@ namespace Camera2.Utils {
 #endif
 			}
 
-			if(target == null)
+			if(target == null || !apply)
 				return;
 
 			target.position = position;

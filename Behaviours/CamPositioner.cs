@@ -41,8 +41,15 @@ namespace Camera2.Behaviours {
 		public void Update() {
 			if(grabbedCamera != null) {
 				if(controller != null && grabbedCamera.worldCam.isActiveAndEnabled) {
-					camTransform.position = controller.transform.TransformPoint(grabStartPos);
-					camTransform.rotation = controller.rotation * grabStartRot;
+					var p = controller.transform.TransformPoint(grabStartPos);
+					var r = controller.rotation * grabStartRot;
+
+					//grabbedCamera.transformchain.BacktrackTo(grabbedCamera.transformer, ref p, ref r);
+
+					grabbedCamera.transformer.position = p;
+					grabbedCamera.transformer.rotation = r;
+
+					grabbedCamera.transformchain.Calculate();
 
 					if(controller.triggerValue > 0.5f || (HookFPFC.isInFPFC && Input.GetMouseButton(0)))
 						return;
@@ -55,11 +62,8 @@ namespace Camera2.Behaviours {
 		private static void FinishCameraMove() {
 			if(grabbedCamera == null) return;
 
-			grabbedCamera.settings.targetPos = camTransform.position;
-			grabbedCamera.settings.targetRot =  camTransform.eulerAngles;
-
-			camTransform.localPosition = Vector3.zero;
-			camTransform.localRotation = Quaternion.identity;
+			grabbedCamera.settings.targetPos = grabbedCamera.transformer.position;
+			grabbedCamera.settings.targetRot = grabbedCamera.transformer.rotation.eulerAngles;
 
 			grabbedCamera.settings.ApplyPositionAndRotation();
 
