@@ -36,8 +36,24 @@ namespace Camera2.Configuration {
 		private bool wasLoaded = false;
 
 		public void Load() {
-			if(File.Exists(ConfigUtil.ScenesCfg))
-				JsonConvert.PopulateObject(File.ReadAllText(ConfigUtil.ScenesCfg), this, JsonHelpers.leanDeserializeSettings);
+			if(File.Exists(ConfigUtil.ScenesCfg)) {
+				try {
+					JsonConvert.PopulateObject(File.ReadAllText(ConfigUtil.ScenesCfg), this, JsonHelpers.leanDeserializeSettings);
+				} catch(Exception ex) {
+					if(!wasLoaded) {
+						Plugin.Log.Error($"Failed to load Scenes config, it has been reset:");
+						Plugin.Log.Error(ex);
+
+						if(File.Exists($"{ConfigUtil.ScenesCfg}.corrupted"))
+							File.Delete($"{ConfigUtil.ScenesCfg}.corrupted");
+
+						File.Move(ConfigUtil.ScenesCfg, $"{ConfigUtil.ScenesCfg}.corrupted");
+					} else {
+						System.Threading.Tasks.Task.Run(() => WinAPI.MessageBox(IntPtr.Zero, "It seems like the Formatting of your Scenes.json is invalid! It was not loaded.\n\nIf you cant figure out how to fix the formatting you can simply delete it which will recreate it on next load", "Camera2", 0x30));
+						return;
+					}
+				}
+			}
 
 			// Populate missing Scenes if the Scenes cfg was outdated
 			foreach(SceneTypes foo in Enum.GetValues(typeof(SceneTypes)))
