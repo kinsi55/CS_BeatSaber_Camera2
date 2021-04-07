@@ -23,9 +23,9 @@ namespace Camera2.HarmonyPatches {
 			HookLeveldata.difficultyBeatmap = difficultyBeatmap;
 			HookLeveldata.gameplayModifiers = gameplayModifiers;
 
-			is360Level = difficultyBeatmap.beatmapData.beatmapEventsData.Any(
+			is360Level = difficultyBeatmap?.beatmapData?.beatmapEventsData.Any(
 				x => x.type.IsRotationEvent() && spawnRotationProcessor.RotationForEventValue(x.value) != 0f
-			);
+			) == true;
 			isModdedMap = ModMapUtil.IsModdedMap(difficultyBeatmap);
 			isWallMap = ModMapUtil.IsProbablyWallmap(difficultyBeatmap);
 		}
