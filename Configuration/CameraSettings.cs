@@ -238,7 +238,10 @@ namespace Camera2.Configuration {
 		public bool ShouldSerializepreviewScreenSize() => type == CameraType.Positionable;
 
 		private float _FOV;
-		public float FOV { get => overrideToken?.FOV ?? _FOV; set { _FOV = cam.UCamera.fieldOfView = value; } }
+		public float FOV { 
+			get => overrideToken?.FOV ?? _FOV; 
+			set { _FOV = cam.UCamera.fieldOfView = value; cam.UCamera.orthographicSize = _FOV / 30f; } 
+		}
 
 		public int layer {
 			get => (int)cam.UCamera.depth;
@@ -267,6 +270,11 @@ namespace Camera2.Configuration {
 				if(isLoaded)
 					cam.UpdateRenderTextureAndView();
 			}
+		}
+
+		public bool orthographic {
+			get => cam.UCamera.orthographic;
+			set => cam.UCamera.orthographic = value;
 		}
 
 		[JsonProperty("visibleObjects")]
