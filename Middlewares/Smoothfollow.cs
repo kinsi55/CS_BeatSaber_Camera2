@@ -108,7 +108,7 @@ namespace Camera2.Middlewares {
 
 					if(doApply) {
 						targetPosition = (HookRoomAdjust.rotation * targetPosition) + HookRoomAdjust.position;
-						targetRotation *= HookRoomAdjust.rotation;
+						targetRotation = HookRoomAdjust.rotation * targetRotation;
 					}
 				}
 			}
