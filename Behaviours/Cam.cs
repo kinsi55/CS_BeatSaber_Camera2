@@ -151,6 +151,7 @@ namespace Camera2.Behaviours {
 			AddMiddleware<ModmapExtensions>();
 			AddMiddleware<Follow360>();
 			AddMiddleware<MovementScriptProcessor>();
+			AddMiddleware<VMCAvatar>();
 
 #if DEV
 			AddTransformer<PostProcessor>();
@@ -192,9 +193,8 @@ namespace Camera2.Behaviours {
 			transformchain.Calculate();
 			UCamera.Render();
 
-			// There isnt any post processors atm so no need to waste time on that
-			//foreach(var t in middlewares)
-			//	t.Post();
+			foreach(var t in middlewares)
+				t.Post();
 
 			timeSinceLastRender = 0f;
 #if FPSCOUNT
