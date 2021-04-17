@@ -9,12 +9,13 @@ namespace Camera2.Utils {
 	static class SceneUtil {
 		public static Scene currentScene { get; private set; }
 		public static bool isInMenu { get; private set; } = true;
+		public static bool isInSong { get; private set; } = false;
 		public static Transform songWorldTransform { get; private set; }
 
 		public static AudioTimeSyncController audioTimeSyncController { get; private set; }
 
-		public static bool isInSong => audioTimeSyncController != null;
-		public static bool isSongPlaying => isInSong && audioTimeSyncController.state == AudioTimeSyncController.State.Playing;
+		public static bool hasSongPlayer => audioTimeSyncController != null;
+		public static bool isSongPlaying => hasSongPlayer && audioTimeSyncController.state == AudioTimeSyncController.State.Playing;
 
 
 		public static bool isInMultiplayer => HookMultiplayer.instance?.isConnected == true;
@@ -29,7 +30,8 @@ namespace Camera2.Utils {
 				return;
 
 			currentScene = newScene;
-			isInMenu = menuSceneNames.Contains(newScene.name);
+			isInSong = newScene.name == "GameCore";
+			isInMenu = !isInSong && menuSceneNames.Contains(newScene.name);
 			HookMultiplayerFail.hasFailed = false;
 
 			if(oldScene.name == "GameCore") {

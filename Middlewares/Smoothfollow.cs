@@ -104,7 +104,7 @@ namespace Camera2.Middlewares {
 						*/
 					bool doApply =
 						settings.type == Configuration.CameraType.FirstPerson &&
-						(!HookLeveldata.isModdedMap || !settings.ModmapExtensions.moveWithMap || !SceneUtil.isInSong);
+						(!HookLeveldata.isModdedMap || !settings.ModmapExtensions.moveWithMap || !SceneUtil.hasSongPlayer);
 
 					if(doApply) {
 						targetPosition = (HookRoomAdjust.rotation * targetPosition) + HookRoomAdjust.position;

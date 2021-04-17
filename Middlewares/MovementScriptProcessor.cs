@@ -89,7 +89,12 @@ namespace Camera2.Middlewares {
 			}
 
 			if(loadedScript.syncToSong && SceneUtil.isInSong) {
-				currentAnimationTime = SceneUtil.audioTimeSyncController.songTime;
+				/*
+				 * In MP the TimeSyncController doesnt exist in the countdown phase, 
+				 * so if the script is synced to the song we'll just hardlock the time
+				 * at 0 if the controller doesnt exist
+				 */
+				currentAnimationTime = SceneUtil.audioTimeSyncController?.songTime ?? 0;
 			} else {
 				currentAnimationTime += cam.timeSinceLastRender;
 			}
