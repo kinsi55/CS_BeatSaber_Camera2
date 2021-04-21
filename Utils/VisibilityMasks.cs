@@ -12,7 +12,8 @@ namespace Camera2.Utils {
 		Walls = 11,
 		CutParticles = 16,
 		CustomNotes = 24,
-		WallTextures = 25
+		WallTextures = 25,
+		PlayerPlattform = 28
 	}
 
 	[Flags]
@@ -27,6 +28,7 @@ namespace Camera2.Utils {
 		Walls = 1 << VisibilityLayers.Walls,
 		CutParticles = 1 << VisibilityLayers.CutParticles,
 		CustomNotes = 1 << VisibilityLayers.CustomNotes,
-		WallTextures = 1 << VisibilityLayers.WallTextures
+		WallTextures = 1 << VisibilityLayers.WallTextures,
+		PlayerPlattform = 1 << VisibilityLayers.PlayerPlattform
 	}
 }

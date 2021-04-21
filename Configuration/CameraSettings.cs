@@ -174,7 +174,7 @@ namespace Camera2.Configuration {
 				maskBuilder |= type == CameraType.FirstPerson ? VisibilityMasks.FirstPersonAvatar : VisibilityMasks.ThirdPersonAvatar;
 			}
 
-			if(visibleObjects.Floor) maskBuilder |= VisibilityMasks.Floor;
+			if(visibleObjects.Floor) maskBuilder |= VisibilityMasks.Floor | VisibilityMasks.PlayerPlattform;
 			if(visibleObjects.Debris) maskBuilder |= VisibilityMasks.Debris;
 			if(visibleObjects.CutParticles) maskBuilder |= VisibilityMasks.CutParticles;
 			if(visibleObjects.UI && (!ModmapExtensions.autoHideHUD || !HookLeveldata.isWallMap))

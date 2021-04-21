@@ -60,6 +60,12 @@ namespace Camera2.Utils {
 
 			TransparentWalls.MakeWallsOpaqueForMainCam();
 			CamManager.ApplyCameraValues(worldCam: true);
+
+			if(CamManager.cams.Values.Any(x => !x.settings.visibleObjects.Floor)) {
+				// Move the plattform stuff to the correct layer because beat games didnt
+				foreach(var x in (new string[] { "Construction", "Frame", "RectangleFakeGlow" }).Select(x => GameObject.Find($"Environment/PlayersPlace/{x}")))
+					if(x != null) x.layer = (int)VisibilityLayers.PlayerPlattform;
+			}
 		}
 	}
 }
