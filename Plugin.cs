@@ -32,7 +32,7 @@ namespace Camera2 {
 			Instance = this;
 			Log = logger;
 
-			Log.Info("Camera2 initialized.");
+			Log.Info("Camera2 loaded");
 
 			harmony = new Harmony("Kinsi55.BeatSaber.Cam2");
 			harmony.PatchAll(Assembly.GetExecutingAssembly());
@@ -54,8 +54,6 @@ namespace Camera2 {
 
 		[OnStart]
 		public void OnApplicationStart() {
-			Log.Debug("OnApplicationStart");
-
 			MovementScriptManager.LoadMovementScripts();
 			GlobalFPSCap.Init();
 
@@ -64,8 +62,7 @@ namespace Camera2 {
 
 		[OnExit]
 		public void OnApplicationQuit() {
-			Log.Debug("OnApplicationQuit");
-			harmony.UnpatchAll();
+			harmony.UnpatchAll(harmony.Id);
 		}
 	}
 
