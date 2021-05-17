@@ -175,6 +175,9 @@ namespace Camera2.Behaviours {
 				}
 			}
 
+			if(HookFPFC.cameraInstance != null)
+				return;
+
 			if(currentAction == CamAction.None && lastMousePos != Input.mousePosition) {
 				possibleAction = CamAction.None;
 				lastMousePos = Input.mousePosition;
@@ -188,7 +191,7 @@ namespace Camera2.Behaviours {
 			}
 
 			if(Input.GetMouseButtonUp(1) && currentAction == CamAction.None) {
-				if(HookFPFC.cameraInstance == null && !didShowHint && (didShowHint = true))
+				if(!didShowHint && (didShowHint = true))
 					System.Threading.Tasks.Task.Run(() => WinAPI.MessageBox(IntPtr.Zero, "There is no desktop settings for Camera2, everything is done ingame!\n\nYou can drag around a cameras display and resize it with the bottom right corner from the desktop.", "FYI", 0));
 				//currentAction = CamAction.Menu;
 				// For now lets not add this as it can result in unclear circumstances with scenes etc.
