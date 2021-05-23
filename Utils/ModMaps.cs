@@ -3,8 +3,10 @@ using IPA.Loader;
 
 namespace Camera2.Utils {
 	static class ModMapUtil {
-		static bool isModCapable = 
-			PluginManager.EnabledPlugins.Any(x => x.Name == "MappingExtensions" || x.Name == "NoodleExtensions") &&
+		static bool isModCapable =
+			PluginManager.EnabledPlugins.Any(x => x.Name == "MappingExtensions" || x.Name == "NoodleExtensions");
+		
+		static bool hasSongCore =
 			PluginManager.EnabledPlugins.Any(x => x.Name == "SongCore"); // failsafe, Noodle / MapEx do require it themselves technically
 
 		public static bool IsProbablyWallmap(IDifficultyBeatmap map) {
@@ -19,6 +21,9 @@ namespace Camera2.Utils {
 		}
 
 		public static bool IsModdedMap(IDifficultyBeatmap map) {
+			if(!hasSongCore || !isModCapable)
+				return false;
+
 			try {
 				return SongCore.Collections.RetrieveDifficultyData(map)?
 					.additionalDifficultyData?
