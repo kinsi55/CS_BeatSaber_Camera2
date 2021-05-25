@@ -175,7 +175,7 @@ namespace Camera2.Behaviours {
 				}
 			}
 
-			if(HookFPFC.cameraInstance != null)
+			if(HookFPFC.isInFPFC)
 				return;
 
 			if(currentAction == CamAction.None && lastMousePos != Input.mousePosition) {
