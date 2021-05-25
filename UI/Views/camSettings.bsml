@@ -87,6 +87,30 @@
 		</vertical>
 	</tab>
 
+	<tab tags='tabs' tab-name='Misc'>
+		<vertical horizontal-fit='PreferredSize' vertical-fit='PreferredSize' spacing='5' >
+			<horizontal preferred-width="90">
+				<text color="#CCC" font-size="4" align="Center" word-wrapping="true"
+					text="ⓘ These are settings which normally would only be configurable via the config because I dont want them to clutter the UI, but now they live here"
+				/>
+			</horizontal>
+			<modifier-container child-expand-width='true' horizontal-fit='PreferredSize'>
+				<slider-setting text='X-rotation' min='-45' max='45' increment='0.5' value='xRotation' bind-value='true' apply-on-change='true'
+					hover-hint='Can be useful for Firstperson cameras if you tend to tilt your head forward / backward a lot while playing to "correct" the footage'
+				/>
+				<checkbox text='Absolute Firstperson Offset' value='misc_absOffset' bind-value='true' apply-on-change='true'
+					hover-hint='Changes the offset to be Absolute (Like it works in Camera Plus) instead of relative. Both have their advantages and disadvantages. Has no effect when Camera is not Firstperson.'
+				/>
+				<checkbox text='Use Orthoraphic projection' value='misc_orthographic' bind-value='true' apply-on-change='true'
+					hover-hint='Makes the camera use an orthographic projection instead of perspective. The FOV is still used to configure the "FOV" (orthographic size)'
+				/>
+				<checkbox text='Enable Movementscript in Menu' value='misc_MovementScript_enableInMenu' bind-value='true' apply-on-change='true'
+					hover-hint='If the camera has a movement script assigned this will make it so it doesnt run just while in songs but also while in the menu'
+				/>
+			</modifier-container>
+		</vertical>
+	</tab>
+
 	<tab tags='tabs' tab-name='Viewrect' horizontal-fit='PreferredSize' id='viewRectTab'>
 		<vertical horizontal-fit='PreferredSize' vertical-fit='PreferredSize'>
 			<slider-setting text='X Position' max='1920' integer-only='true' value='viewRect_x' bind-value='true' apply-on-change='true'/>

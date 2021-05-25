@@ -202,6 +202,34 @@ namespace Camera2.UI {
 		internal int viewRect_height {
 			get => (int)cam.settings.viewRect.height; set { var n = cam.settings.viewRect; n.height = value; cam.settings.viewRect = n; }
 		}
+
+		internal float xRotation {
+			get {
+				float ret = 0f;
+				cam.settings.Unoverriden(delegate () {
+					ret = cam.settings.targetRot.x;
+				});
+				return ret;
+			}
+			set {
+				cam.settings.Unoverriden(delegate () {
+					var x = cam.settings.targetRot;
+					x.x = value;
+
+					cam.settings.targetRot = x;
+				});
+				cam.settings.ApplyPositionAndRotation();
+			}
+		}
+		internal bool misc_absOffset {
+			get => cam.settings.Smoothfollow.pivotingOffset; set { cam.settings.Smoothfollow.pivotingOffset = value; }
+		}
+		internal bool misc_orthographic {
+			get => cam.settings.orthographic; set { cam.settings.orthographic = value; }
+		}
+		internal bool misc_MovementScript_enableInMenu {
+			get => cam.settings.MovementScript.enableInMenu; set { cam.settings.MovementScript.enableInMenu = value; }
+		}
 		#endregion
 
 
