@@ -24,6 +24,11 @@ namespace Camera2.Utils {
 			if(!hasSongCore || !isModCapable)
 				return false;
 
+			return _IsModdedMap(map);
+		}
+
+		// Seperate method so we dont throw if theres no Songcore
+		static bool _IsModdedMap(IDifficultyBeatmap map) {
 			try {
 				return SongCore.Collections.RetrieveDifficultyData(map)?
 					.additionalDifficultyData?
