@@ -23,7 +23,7 @@ namespace Camera2.Utils {
 		public static GameObject GetMainCameraButReally() => Camera.main?.gameObject ?? GameObject.FindGameObjectsWithTag("MainCamera")[0];
 
 
-		public static readonly string[] menuSceneNames = new string[] { "MenuViewCore", "MenuCore", "MenuViewControllers" };
+		public static readonly string[] menuSceneNames = new string[] { "MainMenu", "MenuViewCore", "MenuCore", "MenuViewControllers" };
 
 		public static void OnActiveSceneChanged(Scene oldScene, Scene newScene) {
 			if(newScene == null)
