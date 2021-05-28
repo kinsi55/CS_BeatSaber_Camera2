@@ -4,7 +4,7 @@ using Camera2.Utils;
 
 namespace Camera2.HarmonyPatches {
 	[HarmonyPatch(typeof(MultiplayerSessionManager), "UpdateConnectionState")]
-	class HookMultiplayer {
+	static class HookMultiplayer {
 		private static MultiplayerSessionManager _instance;
 		public static MultiplayerSessionManager instance => _instance == null ? null : _instance;
 		static void Postfix(MultiplayerSessionManager __instance) {
@@ -17,7 +17,7 @@ namespace Camera2.HarmonyPatches {
 	}
 
 	[HarmonyPatch(typeof(MultiplayerLocalActivePlayerGameplayManager), nameof(MultiplayerLocalActivePlayerGameplayManager.PerformPlayerFail))]
-	class HookMultiplayerFail {
+	static class HookMultiplayerFail {
 		public static bool hasFailed;
 		static void Postfix() {
 #if DEBUG

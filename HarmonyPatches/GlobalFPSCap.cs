@@ -10,7 +10,7 @@ using UnityEngine;
 
 namespace Camera2.HarmonyPatches {
 	[HarmonyPatch(typeof(MainSystemInit), nameof(MainSystemInit.Init))]
-	class GlobalFPSCap {
+	static class GlobalFPSCap {
 		public static void Postfix() {
 			ApplyFPSCap(UnityEngine.XR.XRDevice.isPresent || UnityEngine.XR.XRDevice.refreshRate != 0);
 		}

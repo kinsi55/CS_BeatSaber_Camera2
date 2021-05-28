@@ -25,7 +25,7 @@ namespace Camera2.HarmonyPatches {
 	 * - This. I am not sure why this works, I gave up trying to understand whatever Beat Games cooked up with their effect rendering pipeline
 	 */
 	[HarmonyPatch(typeof(MainEffectSO), nameof(MainEffectSO.Render))]
-	class BloomRendererInstantiateFix3 {
+	static class BloomRendererInstantiateFix3 {
 		static bool Prefix(RenderTexture src, RenderTexture dest) {
 			var x = RenderTexture.active;
 			Graphics.Blit(src, dest);
@@ -35,7 +35,7 @@ namespace Camera2.HarmonyPatches {
 	}
 
 	[HarmonyPatch(typeof(MainEffectController), "OnPostRender")]
-	class BloomRendererInstantiateFix4 {
+	static class BloomRendererInstantiateFix4 {
 		static void Postfix(ImageEffectController ____imageEffectController) {
 			____imageEffectController.enabled = true;
 		}

@@ -12,7 +12,7 @@ namespace Camera2.HarmonyPatches {
 	//[HarmonyPatch(typeof(PauseMenuManager))]
 	//[HarmonyPatch("Awake")]
 	[HarmonyPatch(typeof(AudioTimeSyncController), nameof(AudioTimeSyncController.StartSong))]
-	class HookAudioTimeSyncController {
+	static class HookAudioTimeSyncController {
 		static void Postfix(AudioTimeSyncController __instance) {
 #if DEBUG
 			Plugin.Log.Info("AudioTimeSyncController.StartSong()");
@@ -22,7 +22,7 @@ namespace Camera2.HarmonyPatches {
 	}
 
 	[HarmonyPatch]
-	class HookAudioTimeSyncController2 {
+	static class HookAudioTimeSyncController2 {
 		static void Postfix() {
 #if DEBUG
 			Plugin.Log.Info("AudioTimeSyncController.Pause/Resume()");

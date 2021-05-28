@@ -7,7 +7,7 @@ using Camera2.Utils;
 
 namespace Camera2.HarmonyPatches {
 	[HarmonyPatch]
-	class HookLeveldata {
+	static class HookLeveldata {
 		public static IDifficultyBeatmap difficultyBeatmap;
 		public static GameplayModifiers gameplayModifiers;
 		public static bool is360Level = false;

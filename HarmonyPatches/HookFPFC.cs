@@ -6,7 +6,7 @@ using Camera2.Managers;
 
 namespace Camera2.HarmonyPatches {
 	[HarmonyPatch]
-	class HookFPFC {
+	static class HookFPFC {
 		public static FirstPersonFlyingController instance { get; private set; }
 		public static Camera cameraInstance { get; private set; }
 		public static bool isInFPFC => instance != null;

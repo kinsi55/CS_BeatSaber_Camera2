@@ -10,7 +10,7 @@ using UnityEngine;
 
 namespace Camera2.HarmonyPatches {
 	[HarmonyPatch]
-	class HookRoomAdjust {
+	static class HookRoomAdjust {
 		//public static MonoBehaviour instance { get; private set; }
 		public static Vector3 position { get; private set; }
 		public static Quaternion rotation { get; private set; }

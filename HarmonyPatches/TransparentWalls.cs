@@ -4,7 +4,7 @@ using Camera2.Utils;
 
 namespace Camera2.HarmonyPatches {
 	[HarmonyPatch(typeof(StretchableObstacle), nameof(StretchableObstacle.SetSizeAndColor))]
-	class TransparentWalls {
+	static class TransparentWalls {
 		static void Postfix(Transform ____obstacleCore, ParametricBoxFakeGlowController ____obstacleFakeGlow) {
 			if(____obstacleCore != null) {
 				____obstacleCore.gameObject.layer = (int)VisibilityLayers.WallTextures;
@@ -28,7 +28,7 @@ namespace Camera2.HarmonyPatches {
 		
 		// No-Bloom fake bloom wall edge
 		[HarmonyPatch(typeof(ParametricBoxFakeGlowController), nameof(ParametricBoxFakeGlowController.Awake))]
-		class FunnyNoBloom {
+		static class FunnyNoBloom {
 			static void Postfix(ParametricBoxFakeGlowController __instance) {
 				__instance.gameObject.layer = (int)VisibilityLayers.Walls;
 			}

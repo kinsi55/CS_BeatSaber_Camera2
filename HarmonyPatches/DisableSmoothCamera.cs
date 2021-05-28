@@ -4,7 +4,7 @@ using HarmonyLib;
 
 namespace Camera2.HarmonyPatches {
 	[HarmonyPatch]
-	class DisableSmoothCamera {
+	static class DisableSmoothCamera {
 		static bool Prefix() {
 #if DEBUG
 			Plugin.Log.Info("Prevented Smooth camera from activating");
