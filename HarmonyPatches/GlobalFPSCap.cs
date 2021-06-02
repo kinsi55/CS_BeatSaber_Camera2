@@ -47,18 +47,22 @@ namespace Camera2.HarmonyPatches {
 		}
 
 		public static void ApplyFPSCap(bool isHmdPresent) {
+			QualitySettings.vSyncCount = 0;
+
 			if(isHmdPresent && (!isOculus || isOculusUserPresent)) {
 				Application.targetFrameRate = -1;
 			} else {
 				var Kapp = 30;
 
 				if(CamManager.cams?.Count > 0) {
+					QualitySettings.vSyncCount = 1;
 					foreach(var cam in CamManager.cams.Values.Where(x => x.gameObject.activeInHierarchy)) {
-						if(cam.settings.FPSLimiter.fpsLimit <= 0) {
+						if(cam.settings.FPSLimiter.fpsLimit <= 0 || cam.settings.FPSLimiter.fpsLimit == Screen.currentResolution.refreshRate) {
 							Kapp = Screen.currentResolution.refreshRate;
 							break;
 						} else if(Kapp < cam.settings.FPSLimiter.fpsLimit) {
 							Kapp = cam.settings.FPSLimiter.fpsLimit;
+							QualitySettings.vSyncCount = 0;
 						}
 					}
 				}
