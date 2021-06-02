@@ -278,6 +278,11 @@ namespace Camera2.Configuration {
 			set => cam.UCamera.orthographic = value;
 		}
 
+		public float farZ {
+			get => cam.UCamera.farClipPlane;
+			set => cam.UCamera.farClipPlane = value;
+		}
+
 		[JsonProperty("visibleObjects")]
 		private GameObjects _visibleObjects;
 		[JsonIgnore]
