@@ -56,18 +56,24 @@ namespace Camera2.Middlewares {
 				return true;
 			}
 
-			var parentToUse = parent;
+			Transform parentToUse = null;
 
 			if(
 				ScoresaberUtil.isInReplay && 
 				//UnityEngine.XR.XRDevice.isPresent && 
-				settings.Smoothfollow.followReplayPosition && 
 				settings.type == Configuration.CameraType.FirstPerson
 			) {
-				parentToUse = ScoresaberUtil.replayCamera?.transform;
-				settings.Smoothfollow.isAttachedToFP = false;
+				if(settings.Smoothfollow.followReplayPosition) {
+					parentToUse = ScoresaberUtil.replayCamera?.transform;
+					settings.Smoothfollow.isAttachedToFP = false;
+				}
+				
+				if(parent == ScoresaberUtil.replayCamera?.transform)
+					parent = null;
 			}
-			
+
+			parentToUse ??= parent;
+
 			if(HookFPFC.isInFPFC && settings.type == Configuration.CameraType.FirstPerson && HookFPFC.cameraInstance != null) {
 				parentToUse = HookFPFC.cameraInstance?.transform;
 				settings.Smoothfollow.isAttachedToFP = false;
@@ -97,14 +103,19 @@ namespace Camera2.Middlewares {
 
 				if(HookRoomAdjust.position != Vector3.zero || HookRoomAdjust.rotation != Quaternion.identity) {
 					/*
-						* This is complete garbage and I need to fix this issue better some day because this will almost certainly cause issues down the line.
-						* The issue is that the room offset is essentially already "Pre-applied" in FP cams (Because the player has to move to "correct" for his offset), but
-						* in third person cams we need to un-apply it when being parented to the song origin because if we dont keep the cams world positon on parent it would
-						* change the 0;0;0 point of the cam and thus move to a place its not supposed to be in as "room offset" offsets the player, not the room.
-						*/
+					 * This is complete garbage and I need to fix this issue better some day because this will almost certainly cause issues down the line.
+					 * The issue is that the room offset is essentially already "Pre-applied" in FP cams (Because the player has to move to "correct" for his offset), but
+					 * in third person cams we need to un-apply it when being parented to the song origin because if we dont keep the cams world positon on parent it would
+					 * change the 0;0;0 point of the cam and thus move to a place its not supposed to be in as "room offset" offsets the player, not the room.
+					 */
 					bool doApply =
 						settings.type == Configuration.CameraType.FirstPerson &&
-						(!HookLeveldata.isModdedMap || !settings.ModmapExtensions.moveWithMap || !SceneUtil.hasSongPlayer);
+						(!HookLeveldata.isModdedMap || !settings.ModmapExtensions.moveWithMap || !SceneUtil.hasSongPlayer) &&
+						/*
+						 * Apparently the roomadjust is magically hacked into the "RecorderCamera(Clone)" by scoresaber,
+						 * so I should not apply it, not even for Non-Following cameras
+						 */
+						!ScoresaberUtil.isInReplay;
 
 					if(doApply) {
 						targetPosition = (HookRoomAdjust.rotation * targetPosition) + HookRoomAdjust.position;
