@@ -6,7 +6,6 @@
 			<string-setting text='Camera Name' value='camName' bind-value='true' apply-on-change='true'/>
 			<dropdown-list-setting text='Camera Type' value='type' choices='types' bind-value='true' apply-on-change='true'/>
 			<slider-setting text='Field of View' min='1' max='140' increment='0.01' value='FOV' bind-value='true' apply-on-change='true'/>
-			<slider-setting text='FPS Limit (0 = off)' min='0' max='240' increment='1' integer-only='true' value='fpsLimit' bind-value='true' apply-on-change='true'/>
 			<slider-setting text='Render Scale' min='0.2' max='3' increment='0.1' value='renderScale' bind-value='true' apply-on-change='true'/>
 			<list-setting text='Anti Aliasing' value='antiAliasing' choices='antiAliasingLevels' bind-value='true' apply-on-change='true'/>
 			
@@ -88,14 +87,14 @@
 	</tab>
 
 	<tab tags='tabs' tab-name='Misc'>
-		<vertical horizontal-fit='PreferredSize' vertical-fit='PreferredSize' spacing='5' >
+		<vertical horizontal-fit='PreferredSize' vertical-fit='PreferredSize' spacing='5'>
 			<horizontal preferred-width="90">
-				<text color="#CCC" font-size="4" align="Center" word-wrapping="true"
+				<text color="#CCC" font-size="3.6" align="Center" word-wrapping="true"
 					text="ⓘ These are settings which normally would only be configurable via the config because I dont want them to clutter the UI, but now they live here"
 				/>
 			</horizontal>
 			<modifier-container child-expand-width='true' horizontal-fit='PreferredSize'>
-				<slider-setting text='X-rotation' min='-45' max='45' increment='0.5' value='xRotation' bind-value='true' apply-on-change='true'
+				<slider-setting text='X-rotation (Pitch)' min='-45' max='45' increment='0.5' value='xRotation' bind-value='true' apply-on-change='true'
 					hover-hint='Can be useful for Firstperson cameras if you tend to tilt your head forward / backward a lot while playing to "correct" the footage'
 				/>
 				<checkbox text='Absolute Firstperson Offset' value='misc_absOffset' bind-value='true' apply-on-change='true'
@@ -107,6 +106,12 @@
 				<checkbox text='Enable Movementscript in Menu' value='misc_MovementScript_enableInMenu' bind-value='true' apply-on-change='true'
 					hover-hint='If the camera has a movement script assigned this will make it so it doesnt run just while in songs but also while in the menu'
 				/>
+				<horizontal preferred-width="90" preferred-height="12">
+					<text color="#CCC" font-size="3.2" align="Center" word-wrapping="true"
+						text="⚠ Do not set an FPS limit unless you either absolutely need to, or understand the consequences. Check the Camera Configuration Wiki page for more details."
+					/>
+				</horizontal>
+				<slider-setting text='FPS Limit (0 = off)' min='0' max='240' increment='1' integer-only='true' value='fpsLimit' bind-value='true' apply-on-change='true'/>
 			</modifier-container>
 		</vertical>
 	</tab>
