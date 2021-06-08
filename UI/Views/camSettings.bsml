@@ -108,7 +108,7 @@
 				/>
 				<horizontal preferred-width="90" preferred-height="12">
 					<text color="#CCC" font-size="3.2" align="Center" word-wrapping="true"
-						text="⚠ Do not set an FPS limit unless you either absolutely need to, or understand the consequences. Check the Camera Configuration Wiki page for more details."
+						text="⚠ Do not set a FPS limit unless you either absolutely need to, or understand the consequences. Check the Camera Configuration Wiki page for more details."
 					/>
 				</horizontal>
 				<slider-setting text='FPS Limit (0 = off)' min='0' max='240' increment='1' integer-only='true' value='fpsLimit' bind-value='true' apply-on-change='true'/>
