@@ -43,7 +43,7 @@
 		</vertical>
 	</tab>
 	
-	<tab tags='tabs' tab-name='ModmapExt'>
+	<tab tags='tabs' tab-name='Modmaps'>
 		<modifier-container child-expand-width='true' horizontal-fit='PreferredSize'>
 			<checkbox id='modmapExt_moveWithMapCheckbox' text='Follow Map movement' value='modmapExt_moveWithMap' bind-value='true' apply-on-change='true'
 					  hover-hint='Make the camera follow the map movement / rotation'
@@ -57,7 +57,7 @@
 		</modifier-container>
 	</tab>
 	
-	<tab tags='tabs' tab-name='Follow360' id='follow360Tab'>
+	<tab tags='tabs' tab-name='360/90' id='follow360Tab'>
 		<vertical horizontal-fit='PreferredSize' vertical-fit='PreferredSize'>
 			<modifier-container child-expand-width='true' horizontal-fit='PreferredSize'>
 				<checkbox text='Enabled' value='follow360_moveWithMap' bind-value='true' apply-on-change='true'

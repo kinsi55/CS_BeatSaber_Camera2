@@ -74,13 +74,15 @@ namespace Camera2.Middlewares {
 
 			parentToUse ??= parent;
 
-			if(HookFPFC.isInFPFC && settings.type == Configuration.CameraType.FirstPerson && HookFPFC.cameraInstance != null) {
-				parentToUse = HookFPFC.cameraInstance?.transform;
-				settings.Smoothfollow.isAttachedToFP = false;
-			} else if(parentToUse == null || parentToUse.gameObject?.activeInHierarchy != true) {
+			if(parentToUse == null || parentToUse.gameObject?.activeInHierarchy != true) {
 				if(settings.type == Configuration.CameraType.FirstPerson) {
-					parent = parentToUse = Camera.main?.transform;
-					settings.Smoothfollow.isAttachedToFP = true;
+					if(HookFPFC.isInFPFC && HookFPFC.cameraInstance != null) {
+						parentToUse = HookFPFC.cameraInstance?.transform;
+						settings.Smoothfollow.isAttachedToFP = false;
+					} else {
+						parent = parentToUse = Camera.main?.transform;
+						settings.Smoothfollow.isAttachedToFP = true;
+					}
 				} else if(settings.type == Configuration.CameraType.Attached) {
 					parent = parentToUse = GameObject.Find(settings.Smoothfollow.targetParent)?.transform;
 					settings.Smoothfollow.isAttachedToFP = false;
