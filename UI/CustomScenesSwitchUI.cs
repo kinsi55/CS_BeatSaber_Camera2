@@ -78,7 +78,7 @@ namespace Camera2.UI {
 
 			if(setSelected > -1) {
 				list.tableView.SelectCellWithIdx(setSelected);
-				AccessTools.Method(typeof(TableView), nameof(TableView.ScrollToCellWithIdx)).Invoke(list.tableView, new object[] { setSelected, 1, false });
+				list.tableView.ScrollToCellWithIdx(setSelected, TableView.ScrollPositionType.Center, false);
 			}
 		}
 	}
