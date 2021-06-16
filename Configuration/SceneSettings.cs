@@ -17,6 +17,7 @@ namespace Camera2.Configuration {
 		Playing360,
 		PlayingModmap,
 		PlayingMulti,
+		SpectatingMulti,
 		Replay,
 		FPFC
 	}

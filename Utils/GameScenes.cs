@@ -32,7 +32,6 @@ namespace Camera2.Utils {
 			currentScene = newScene;
 			isInSong = newScene.name == "GameCore";
 			isInMenu = !isInSong && menuSceneNames.Contains(newScene.name);
-			HookMultiplayerFail.hasFailed = false;
 
 			if(oldScene.name == "GameCore") {
 #if DEBUG

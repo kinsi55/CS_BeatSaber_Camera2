@@ -16,14 +16,16 @@ namespace Camera2.HarmonyPatches {
 		}
 	}
 
-	[HarmonyPatch(typeof(MultiplayerLocalActivePlayerGameplayManager), nameof(MultiplayerLocalActivePlayerGameplayManager.PerformPlayerFail))]
-	static class HookMultiplayerFail {
-		public static bool hasFailed;
-		static void Postfix() {
+	[HarmonyPatch(typeof(MultiplayerSpectatorController), "Start")]
+	static class HookMultiplayerSpectatorController {
+		private static MultiplayerSpectatorController _instance;
+		public static MultiplayerSpectatorController instance => _instance == null || !_instance.isActiveAndEnabled ? null : _instance;
+		static void Postfix(MultiplayerSpectatorController __instance) {
 #if DEBUG
-			Plugin.Log.Info("MultiplayerLocalActivePlayerGameplayManager.PerformPlayerFail()");
+			Plugin.Log.Info($"MultiplayerSpectatorController.Start()");
 #endif
-			hasFailed = true;
+			_instance = __instance;
+			ScenesManager.ActiveSceneChanged();
 		}
 	}
 }

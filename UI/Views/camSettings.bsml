@@ -103,6 +103,9 @@
 				<checkbox text='Use Orthoraphic projection' value='misc_orthographic' bind-value='true' apply-on-change='true'
 					hover-hint='Makes the camera use an orthographic projection instead of perspective. The FOV is still used to configure the "FOV" (orthographic size)'
 				/>
+				<checkbox text='Attach to Spectating Plattform (MP)' value='multiplayer_followSpectatorPlattform' bind-value='true' apply-on-change='true'
+					hover-hint="When spectating, should this camera attach / follow the plattform you're on or not"
+				/>
 				<checkbox text='Enable Movementscript in Menu' value='misc_MovementScript_enableInMenu' bind-value='true' apply-on-change='true'
 					hover-hint='If the camera has a movement script assigned this will make it so it doesnt run just while in songs but also while in the menu'
 				/>

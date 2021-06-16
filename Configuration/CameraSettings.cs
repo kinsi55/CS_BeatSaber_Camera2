@@ -94,6 +94,7 @@ namespace Camera2.Configuration {
 
 			_visibleObjects = new GameObjects(this);
 
+			Multiplayer = CameraSubSettings.GetFor<Settings_Multiplayer>(this);
 			FPSLimiter = CameraSubSettings.GetFor<Settings_FPSLimiter>(this);
 			Smoothfollow = CameraSubSettings.GetFor<Settings_Smoothfollow>(this);
 			ModmapExtensions = CameraSubSettings.GetFor<Settings_ModmapExtensions>(this);
@@ -339,11 +340,12 @@ namespace Camera2.Configuration {
 			}
 		}
 		
-		public Settings_FPSLimiter FPSLimiter { get; private set; }
+		public Settings_Multiplayer Multiplayer { get; private set; }
 		public Settings_Smoothfollow Smoothfollow { get; private set; }
 		public Settings_ModmapExtensions ModmapExtensions { get; private set; }
 		public Settings_Follow360 Follow360 { get; private set; }
 		public Settings_VMCAvatar VMCProtocol { get; private set; }
+		public Settings_FPSLimiter FPSLimiter { get; private set; }
 
 		public bool ShouldSerializeFollow360() => type == CameraType.Positionable;
 		public bool ShouldSerializeSmoothfollow() => type != CameraType.Positionable;

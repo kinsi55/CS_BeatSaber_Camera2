@@ -146,6 +146,7 @@ namespace Camera2.Behaviours {
 			settings.Load(loadConfig);
 
 
+			AddMiddleware<Multiplayer>();
 			AddMiddleware<FPSLimiter>();
 			AddMiddleware<Smoothfollow>();
 			AddMiddleware<ModmapExtensions>();

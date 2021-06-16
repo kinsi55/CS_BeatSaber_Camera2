@@ -7,6 +7,7 @@ using UnityEngine;
 
 namespace Camera2.Utils {
 	static class TransformerOrders {
+		public static int PlayerOrigin = -6900;
 		public static int ModmapParenting = -600;
 		public static int SmoothFollow = -500;
 		public static int PositionOffset = -400;

@@ -65,6 +65,9 @@ namespace Camera2.Managers {
 					toLookup.Insert(0, SceneTypes.Replay);
 				} else if(SceneUtil.isInMultiplayer) {
 					toLookup.Insert(0, SceneTypes.PlayingMulti);
+
+					if(HookMultiplayerSpectatorController.instance != null)
+						toLookup.Insert(0, SceneTypes.SpectatingMulti);
 				}
 			}
 

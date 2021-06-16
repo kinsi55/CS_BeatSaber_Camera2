@@ -160,6 +160,10 @@ namespace Camera2.UI {
 			get => cam.settings.visibleObjects.CutParticles; set { cam.settings.visibleObjects.CutParticles = value; }
 		}
 
+		internal bool multiplayer_followSpectatorPlattform {
+			get => cam.settings.Multiplayer.followSpectatorPlattform; set { cam.settings.Multiplayer.followSpectatorPlattform = value; }
+		}
+
 		internal bool smoothFollow_forceUpright {
 			get => cam.settings.Smoothfollow.forceUpright; set { cam.settings.Smoothfollow.forceUpright = value; }
 		}

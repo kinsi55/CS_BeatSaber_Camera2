@@ -23,7 +23,7 @@ namespace Camera2.HarmonyPatches {
 
 #if DEBUG
 			Plugin.Log.Warn("HookRoomAdjust.Postfix! " + __originalMethod.Name);
-			Console.WriteLine("pos {0}, rot {1}", positionrotation);
+			Console.WriteLine("pos {0}, rot {1}", position, rotation);
 #endif
 		}
 

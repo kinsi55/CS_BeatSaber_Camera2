@@ -100,7 +100,7 @@ namespace Camera2.Middlewares {
 			var targetRotation = parentToUse.rotation;
 
 			// This is stupid
-			if(settings.Smoothfollow.isAttachedToFP && !(HookMultiplayerFail.hasFailed || HookMultiplayer.instance?.isSpectating == true)) {
+			if(settings.Smoothfollow.isAttachedToFP) {
 				targetPosition = parentToUse.localPosition;
 				targetRotation = parentToUse.localRotation;
 
