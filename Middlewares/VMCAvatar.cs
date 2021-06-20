@@ -21,7 +21,15 @@ namespace Camera2.Configuration {
 			set {
 				string[] stuff = value.Split(':');
 
-				address.Address = IPAddress.Parse(stuff[0]);
+				var parsedAddress = IPAddress.Parse(stuff[0]);
+				var b = parsedAddress.GetAddressBytes();
+
+				if(!IPAddress.IsLoopback(parsedAddress) &&  b[0] != 10 && (b[0] != 192 || b[1] != 168) && (b[0] != 172 || (b[1] < 16 || b[1] > 31))) {
+					Plugin.Log.Warn($"Tried to set public IP address ({value}) for camera {settings.cam.name} as the VMC destination. As this is almost certainly not intended it was prevented");
+					return;
+				}
+
+				address.Address = parsedAddress;
 				address.Port = stuff.Length == 2 ? ushort.Parse(stuff[1]) : 39540;
 			}
 		}
