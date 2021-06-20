@@ -28,6 +28,7 @@ namespace Camera2.Middlewares {
 			if(
 				enabled &&
 				HookLeveldata.isModdedMap &&
+				Noodle_PlayerTrack_Origin != null &&
 				(settings.ModmapExtensions.moveWithMap || settings.type != Configuration.CameraType.Positionable)
 			) {
 				// Noodle maps do not *necessarily* have a playertrack if it not actually used
