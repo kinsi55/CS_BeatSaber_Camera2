@@ -33,9 +33,6 @@ namespace Camera2.Managers {
 			if(!settings.autoswitchFromCustom && isOnCustomScene)
 				return;
 
-			if(!settings.enableAutoSwitch)
-				return;
-
 #if DEBUG
 			Plugin.Log.Info($"ActiveSceneChanged({sceneName}) - Current loadedScene: {loadedScene}");
 #endif
