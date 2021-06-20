@@ -10,7 +10,6 @@ namespace Camera2.Utils {
 		public static Scene currentScene { get; private set; }
 		public static bool isInMenu { get; private set; } = true;
 		public static bool isInSong { get; private set; } = false;
-		public static Transform songWorldTransform { get; private set; }
 
 		public static AudioTimeSyncController audioTimeSyncController { get; private set; }
 
@@ -41,7 +40,6 @@ namespace Camera2.Utils {
 				ScoresaberUtil.isInReplay = false;
 				HookLeveldata.Reset();
 				audioTimeSyncController = null;
-				songWorldTransform = null;
 			}
 
 			ScenesManager.ActiveSceneChanged();
@@ -53,9 +51,6 @@ namespace Camera2.Utils {
 		public static void SongStarted(AudioTimeSyncController controller) {
 			audioTimeSyncController = controller;
 			ScoresaberUtil.UpdateIsInReplay();
-			
-			// FPFCToggle compatible way of retreiving the origin
-			songWorldTransform = GameObject.Find("Origin/VRGameCore")?.transform.parent;
 
 			TransparentWalls.MakeWallsOpaqueForMainCam();
 			CamManager.ApplyCameraValues(worldCam: true);

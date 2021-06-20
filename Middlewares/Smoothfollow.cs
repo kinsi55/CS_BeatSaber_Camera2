@@ -65,7 +65,7 @@ namespace Camera2.Middlewares {
 			) {
 				if(settings.Smoothfollow.followReplayPosition) {
 					parentToUse = ScoresaberUtil.replayCamera?.transform;
-					settings.Smoothfollow.isAttachedToFP = false;
+					settings.Smoothfollow.isAttachedToFP = true;
 				}
 				
 				if(parent == ScoresaberUtil.replayCamera?.transform)
@@ -99,28 +99,13 @@ namespace Camera2.Middlewares {
 			var targetPosition = parentToUse.position;
 			var targetRotation = parentToUse.rotation;
 
-			// This is stupid
 			if(settings.Smoothfollow.isAttachedToFP) {
 				targetPosition = parentToUse.localPosition;
 				targetRotation = parentToUse.localRotation;
 
 				if(HookRoomAdjust.position != Vector3.zero || HookRoomAdjust.rotation != Quaternion.identity) {
-					/*
-					 * This is complete garbage and I need to fix this issue better some day because this will almost certainly cause issues down the line.
-					 * The issue is that the room offset is essentially already "Pre-applied" in FP cams (Because the player has to move to "correct" for his offset), but
-					 * in third person cams we need to un-apply it when being parented to the song origin because if we dont keep the cams world positon on parent it would
-					 * change the 0;0;0 point of the cam and thus move to a place its not supposed to be in as "room offset" offsets the player, not the room.
-					 */
-					bool doApply =
-						settings.type == Configuration.CameraType.FirstPerson &&
-						(!HookLeveldata.isModdedMap || !settings.ModmapExtensions.moveWithMap || !SceneUtil.hasSongPlayer) &&
-						/*
-						 * Apparently the roomadjust is magically hacked into the "RecorderCamera(Clone)" by scoresaber,
-						 * so I should not apply it, not even for Non-Following cameras
-						 */
-						!ScoresaberUtil.isInReplay;
-
-					if(doApply) {
+					// Not exactly sure why we gotta exclude replays from this, but thats what it is
+					if(settings.type == Configuration.CameraType.FirstPerson && !ScoresaberUtil.isInReplay) {
 						targetPosition = (HookRoomAdjust.rotation * targetPosition) + HookRoomAdjust.position;
 						targetRotation = HookRoomAdjust.rotation * targetRotation;
 					}

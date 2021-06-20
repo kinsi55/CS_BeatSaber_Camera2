@@ -4,6 +4,8 @@ using Camera2.Interfaces;
 using Camera2.Managers;
 using Camera2.HarmonyPatches;
 using Camera2.Behaviours;
+using System.Reflection;
+using HarmonyLib;
 
 namespace Camera2.Configuration {
 	class Settings_ModmapExtensions : CameraSubSettings {
@@ -17,49 +19,37 @@ namespace Camera2.Configuration {
 
 namespace Camera2.Middlewares {
 	class ModmapExtensions : CamMiddleware, IMHandler {
+		static FieldInfo Noodle_PlayerTrack_Origin = AccessTools.Field(AccessTools.TypeByName("NoodleExtensions.Animation.PlayerTrack"), "_origin");
+		static Transform noodleOrigin;
+
 		private Transformer mapMovementTransformer = null;
-		private Transformer mapMovementTransformerDeRoomAdjust = null;
 		public new bool Pre() {
 			// We wanna parent FP cams as well so that the noodle translations are applied instantly and dont get smoothed out by SmoothFollow
 			if(
 				enabled &&
 				HookLeveldata.isModdedMap &&
-				(settings.ModmapExtensions.moveWithMap || settings.type != Configuration.CameraType.Positionable) && 
-				SceneUtil.songWorldTransform != null
+				(settings.ModmapExtensions.moveWithMap || settings.type != Configuration.CameraType.Positionable)
 			) {
+				// Noodle maps do not *necessarily* have a playertrack if it not actually used
+				if(noodleOrigin == null && (noodleOrigin = (Transform)Noodle_PlayerTrack_Origin.GetValue(null)) == null)
+					return true;
+
 				// If we are not yet attached, and we dont have a parent thats active yet, try to get one!
 				if(mapMovementTransformer == null) {
 #if DEBUG
 					Plugin.Log.Info($"Enabling Modmap parenting for camera {cam.name}");
 #endif
 					mapMovementTransformer = cam.transformchain.AddOrGet("ModMapExt", TransformerOrders.ModmapParenting);
-
-					if(HookRoomAdjust.position != Vector3.zero || HookRoomAdjust.rotation != Quaternion.identity)
-						mapMovementTransformerDeRoomAdjust = cam.transformchain.AddOrGet("ModMapExt2", TransformerOrders.ModmapParenting + 1);
-
-					if(mapMovementTransformerDeRoomAdjust != null) {
-						if(settings.type == Configuration.CameraType.Positionable) {
-							mapMovementTransformerDeRoomAdjust.position = -HookRoomAdjust.position;
-							mapMovementTransformerDeRoomAdjust.rotation = Quaternion.Inverse(HookRoomAdjust.rotation);
-						} else {
-							mapMovementTransformerDeRoomAdjust.position = Vector3.zero;
-							mapMovementTransformerDeRoomAdjust.rotation = Quaternion.identity;
-						}
-					}
 				}
 
-				mapMovementTransformer.position = SceneUtil.songWorldTransform.position;
-				mapMovementTransformer.rotation = SceneUtil.songWorldTransform.rotation;
+				mapMovementTransformer.position = noodleOrigin.localPosition;
+				mapMovementTransformer.rotation = noodleOrigin.localRotation;
 			} else if(mapMovementTransformer != null) {
 #if DEBUG
 				Plugin.Log.Info($"Disabling Modmap parenting for camera {cam.name}");
 #endif
 				mapMovementTransformer.position = Vector3.zero;
 				mapMovementTransformer.rotation = Quaternion.identity;
-				if(mapMovementTransformerDeRoomAdjust != null) {
-					mapMovementTransformerDeRoomAdjust.position = Vector3.zero;
-					mapMovementTransformerDeRoomAdjust.rotation = Quaternion.identity;
-				}
 
 				mapMovementTransformer = null;
 			}

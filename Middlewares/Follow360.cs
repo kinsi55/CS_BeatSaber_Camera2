@@ -58,11 +58,7 @@ namespace Camera2.Middlewares {
 
 				var rot = Quaternion.Euler(0, rotateStep, 0);
 
-				if(SceneUtil.songWorldTransform != null) {
-					rotationApplier.position = rot * (cam.transformer.position - SceneUtil.songWorldTransform.position) + SceneUtil.songWorldTransform.position;
-				} else {
-					rotationApplier.position = rot * cam.transformer.position;
-				}
+				rotationApplier.position = rot * (cam.transformer.position - HookRoomAdjust.position) + HookRoomAdjust.position;
 
 				rotationApplier.position -= cam.transformer.position;
 
