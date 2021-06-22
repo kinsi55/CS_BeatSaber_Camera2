@@ -34,6 +34,11 @@ namespace Camera2.Configuration {
 		Visible,
 		ForceCustomNotes
 	}
+	public enum AvatarVisibility {
+		Hidden,
+		Visible,
+		ForceVisibleInFP
+	}
 
 	[JsonObject(MemberSerialization.OptIn)]
 	public class GameObjects {
@@ -60,8 +65,8 @@ namespace Camera2.Configuration {
 		private bool _Debris = true; //Maybe make Enum w/ Show / Hide / Linked like in Cam Plus
 		[JsonProperty("UI")]
 		private bool _UI = true;
-		[JsonProperty("Avatar")]
-		private bool _Avatar = true;
+		[JsonConverter(typeof(StringEnumConverterMigrateFromBool)), JsonProperty("Avatar")]
+		private AvatarVisibility _Avatar = AvatarVisibility.Visible;
 		[JsonProperty("Floor")]
 		private bool _Floor = true;
 		[JsonProperty("CutParticles")]
@@ -75,7 +80,7 @@ namespace Camera2.Configuration {
 		public WallVisiblity Walls { get => _Walls; set { _Walls = value; parentSetting?.ApplyLayerBitmask(); } }
 		public bool Debris { get => _Debris; set { _Debris = value; parentSetting?.ApplyLayerBitmask(); } }
 		public bool UI { get => _UI; set { _UI = value; parentSetting?.ApplyLayerBitmask(); } }
-		public bool Avatar { get => _Avatar; set { _Avatar = value; parentSetting?.ApplyLayerBitmask(); } }
+		public AvatarVisibility Avatar { get => _Avatar; set { _Avatar = value; parentSetting?.ApplyLayerBitmask(); } }
 		public bool Floor { get => _Floor; set { _Floor = value; parentSetting?.ApplyLayerBitmask(); } }
 		public bool CutParticles { get => _CutParticles; set { _CutParticles = value; parentSetting?.ApplyLayerBitmask(); } }
 		public NoteVisibility Notes { get => _Notes; set { _Notes = value; parentSetting?.ApplyLayerBitmask(); } }
@@ -169,10 +174,10 @@ namespace Camera2.Configuration {
 				}
 			}
 
-			if(visibleObjects.Avatar) {
+			if(visibleObjects.Avatar != AvatarVisibility.Hidden) {
 				maskBuilder |= VisibilityMasks.Avatar;
 
-				maskBuilder |= type == CameraType.FirstPerson ? VisibilityMasks.FirstPersonAvatar : VisibilityMasks.ThirdPersonAvatar;
+				maskBuilder |= (type == CameraType.FirstPerson && visibleObjects.Avatar != AvatarVisibility.ForceVisibleInFP) ? VisibilityMasks.FirstPersonAvatar : VisibilityMasks.ThirdPersonAvatar;
 			}
 
 			if(visibleObjects.Floor) maskBuilder |= VisibilityMasks.Floor | VisibilityMasks.PlayerPlattform;

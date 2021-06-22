@@ -46,13 +46,14 @@
 		</vertical>
 	</modal>
 	
-	<modal clickerino-offerino-closerino='true' move-to-center='true' hide-event='closeAddModal' show-event='addCamModal' size-delta-x='70' size-delta-y='55'>
+	<modal clickerino-offerino-closerino='true' move-to-center='true' hide-event='closeAddModal' show-event='addCamModal' size-delta-x='70' size-delta-y='62'>
 		<vertical preferred-width='80' vertical-fit='PreferredSize' pad='8'>
 			<text text='Add camera from template' align='Center'></text>
-			<vertical spacing='2' pad-top='6' pad-bottom='6' preferred-width='60'>
+			<vertical spacing='1.5' pad-top='6' pad-bottom='4' preferred-width='60'>
 				<primary-button on-click='AddCamDefault' text='Default / Unconfigured' click-event='closeAddModal' horizontal-fit='Unconstrained'></primary-button>
 				<primary-button on-click='AddCamSideview' text='Sideview / Swing cam' click-event='closeAddModal' horizontal-fit='Unconstrained'></primary-button>
 				<primary-button on-click='AddCamThirdperson' text='Static Thirdperson' click-event='closeAddModal' horizontal-fit='Unconstrained'></primary-button>
+				<primary-button on-click='AddCamAvatarFaceCam' text='"Facecam" (For Avatars)' click-event='closeAddModal' horizontal-fit='Unconstrained'></primary-button>
 			</vertical>
 			<button text='Cancel' click-event='closeAddModal'></button>
 		</vertical>

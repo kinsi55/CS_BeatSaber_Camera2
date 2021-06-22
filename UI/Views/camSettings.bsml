@@ -19,9 +19,9 @@
 		<modifier-container child-expand-width='true' horizontal-fit='PreferredSize'>
 			<dropdown-list-setting text='Walls' value="visibility_Walls" choices='visibilities_Walls' bind-value='true' apply-on-change='true'/>
 			<dropdown-list-setting text='Notes' value="visibility_Notes" choices='visibilities_Notes' bind-value='true' apply-on-change='true'/>
+			<dropdown-list-setting text='Avatar' value="visibility_Avatar" choices='visibilities_Avatar' bind-value='true' apply-on-change='true'/>
 			<checkbox text='Debris' value='visibility_Debris' bind-value='true' apply-on-change='true'/>
 			<checkbox text='Cut Particles' value='visibility_CutParticles' bind-value='true' apply-on-change='true'/>
-			<checkbox text='Avatar' value='visibility_Avatar' bind-value='true' apply-on-change='true'/>
 			<checkbox text='UI' value='visibility_UI' bind-value='true' apply-on-change='true'/>
 			<checkbox text='Floor' value='visibility_Floor' bind-value='true' apply-on-change='true'/>
 		</modifier-container>

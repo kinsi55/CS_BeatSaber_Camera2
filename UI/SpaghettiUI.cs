@@ -150,7 +150,7 @@ namespace Camera2.UI {
 		internal bool visibility_UI {
 			get => cam.settings.visibleObjects.UI; set { cam.settings.visibleObjects.UI = value; }
 		}
-		internal bool visibility_Avatar {
+		internal AvatarVisibility visibility_Avatar {
 			get => cam.settings.visibleObjects.Avatar; set { cam.settings.visibleObjects.Avatar = value; }
 		}
 		internal bool visibility_Floor {
@@ -242,6 +242,7 @@ namespace Camera2.UI {
 		private static readonly List<object> worldCamVisibilities = Enum.GetValues(typeof(WorldCamVisibility)).Cast<object>().ToList();
 		private static readonly List<object> visibilities_Walls = Enum.GetValues(typeof(WallVisiblity)).Cast<object>().ToList();
 		private static readonly List<object> visibilities_Notes = Enum.GetValues(typeof(NoteVisibility)).Cast<object>().ToList();
+		private static readonly List<object> visibilities_Avatar = Enum.GetValues(typeof(AvatarVisibility)).Cast<object>().ToList();
 		private List<SceneToggle> scenes;
 
 		class SceneToggle : NotifiableSettingsObj {
@@ -432,6 +433,24 @@ namespace Camera2.UI {
 			cam.settings.FOV = 75;
 			cam.settings.targetPos = new UnityEngine.Vector3(1.93f, 2.32f, -2.45f);
 			cam.settings.targetRot = new UnityEngine.Vector3(16.48f, 335.78f, 0.81f);
+
+			AddCam(cam);
+		}
+
+		void AddCamAvatarFaceCam() {
+			var cam = GetCam("Facecam");
+
+			cam.settings.type = CameraType.FirstPerson;
+			cam.settings.FOV = 75;
+			cam.settings.targetPos = new UnityEngine.Vector3(0, -0.1f, 0.5f);
+			cam.settings.targetRot = new UnityEngine.Vector3(0, 180f, 0);
+
+			cam.settings.Smoothfollow.followReplayPosition = false;
+			cam.settings.Smoothfollow.position = 8f;
+			cam.settings.Smoothfollow.rotation = 3f;
+
+			cam.settings.visibleObjects.Avatar = AvatarVisibility.ForceVisibleInFP;
+			cam.settings.visibleObjects.UI = false;
 
 			AddCam(cam);
 		}
