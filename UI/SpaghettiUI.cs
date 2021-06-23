@@ -446,6 +446,7 @@ namespace Camera2.UI {
 			cam.settings.targetRot = new UnityEngine.Vector3(0, 180f, 0);
 
 			cam.settings.Smoothfollow.followReplayPosition = false;
+			cam.settings.Smoothfollow.forceUpright = true;
 			cam.settings.Smoothfollow.position = 8f;
 			cam.settings.Smoothfollow.rotation = 3f;
 
