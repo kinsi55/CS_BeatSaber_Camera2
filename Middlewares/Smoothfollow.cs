@@ -28,7 +28,7 @@ namespace Camera2.Configuration {
 			}
 		}
 
-		[JsonIgnore] internal bool isAttachedToFP = true;
+		[JsonIgnore] internal bool useLocalPosition = true;
 		[JsonIgnore] internal Transform parent;
 
 
@@ -57,7 +57,7 @@ namespace Camera2.Middlewares {
 			}
 
 			Transform parentToUse = null;
-
+			bool isAttachedToReplayCam = false;
 			if(
 				ScoresaberUtil.isInReplay && 
 				//UnityEngine.XR.XRDevice.isPresent && 
@@ -65,7 +65,8 @@ namespace Camera2.Middlewares {
 			) {
 				if(settings.Smoothfollow.followReplayPosition) {
 					parentToUse = ScoresaberUtil.replayCamera?.transform;
-					settings.Smoothfollow.isAttachedToFP = true;
+					settings.Smoothfollow.useLocalPosition = true;
+					isAttachedToReplayCam = true;
 				}
 				
 				if(parent == ScoresaberUtil.replayCamera?.transform)
@@ -74,7 +75,7 @@ namespace Camera2.Middlewares {
 
 			if(parentToUse == null && settings.type == Configuration.CameraType.FirstPerson && HookFPFC.isInFPFC && HookFPFC.cameraInstance != null) {
 				parentToUse = HookFPFC.cameraInstance?.transform;
-				settings.Smoothfollow.isAttachedToFP = false;
+				settings.Smoothfollow.useLocalPosition = false;
 			}
 
 			if(parentToUse == null)
@@ -83,10 +84,10 @@ namespace Camera2.Middlewares {
 			if(parentToUse == null || parentToUse.gameObject?.activeInHierarchy != true) {
 				if(settings.type == Configuration.CameraType.FirstPerson) {
 					parent = parentToUse = Camera.main?.transform;
-					settings.Smoothfollow.isAttachedToFP = true;
+					settings.Smoothfollow.useLocalPosition = true;
 				} else if(settings.type == Configuration.CameraType.Attached) {
 					parent = parentToUse = GameObject.Find(settings.Smoothfollow.targetParent)?.transform;
-					settings.Smoothfollow.isAttachedToFP = false;
+					settings.Smoothfollow.useLocalPosition = false;
 				}
 			}
 
@@ -99,13 +100,13 @@ namespace Camera2.Middlewares {
 			var targetPosition = parentToUse.position;
 			var targetRotation = parentToUse.rotation;
 
-			if(settings.Smoothfollow.isAttachedToFP) {
+			if(settings.Smoothfollow.useLocalPosition) {
 				targetPosition = parentToUse.localPosition;
 				targetRotation = parentToUse.localRotation;
 
 				if(HookRoomAdjust.position != Vector3.zero || HookRoomAdjust.rotation != Quaternion.identity) {
 					// Not exactly sure why we gotta exclude replays from this, but thats what it is
-					if(settings.type == Configuration.CameraType.FirstPerson && !ScoresaberUtil.isInReplay) {
+					if(settings.type == Configuration.CameraType.FirstPerson && !isAttachedToReplayCam) {
 						targetPosition = (HookRoomAdjust.rotation * targetPosition) + HookRoomAdjust.position;
 						targetRotation = HookRoomAdjust.rotation * targetRotation;
 					}
