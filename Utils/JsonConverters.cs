@@ -5,6 +5,7 @@ using Newtonsoft.Json.Linq;
 using System.Globalization;
 using System.Collections.Generic;
 using Newtonsoft.Json.Converters;
+using static Camera2.Configuration.CameraSettings;
 
 namespace Camera2.Utils {
 	class RectConverter : JsonConverter<Rect> {
@@ -25,7 +26,27 @@ namespace Camera2.Utils {
 			return new Rect((float)o.x, (float)o.y, (float)o.width, (float)o.height);
 		}
 	}
-	
+
+	class ScreenRectConverter : JsonConverter<ScreenRect> {
+		public override void WriteJson(JsonWriter writer, ScreenRect rect, JsonSerializer serializer) {
+			var x = new JObject();
+
+			x.Add("x", JsonHelpers.limitFloatResolution(rect.x));
+			x.Add("y", JsonHelpers.limitFloatResolution(rect.y));
+			x.Add("width", JsonHelpers.limitFloatResolution(rect.width));
+			x.Add("height", JsonHelpers.limitFloatResolution(rect.height));
+			x.Add("locked", rect.locked);
+
+			x.WriteTo(writer);
+		}
+
+		public override ScreenRect ReadJson(JsonReader reader, Type objectType, ScreenRect existingValue, bool hasExistingValue, JsonSerializer serializer) {
+			dynamic o = JObject.Load(reader);
+
+			return new ScreenRect((float)o.x, (float)o.y, (float)o.width, (float)o.height, (bool)o.locked);
+		}
+	}
+
 	class Vector3Converter : JsonConverter<Vector3> {
 		public override void WriteJson(JsonWriter writer, Vector3 vec, JsonSerializer serializer) {
 			var x = new JObject();

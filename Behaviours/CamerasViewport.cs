@@ -114,7 +114,7 @@ namespace Camera2.Behaviours {
 			foreach(var camScreen in GetComponentsInChildren<LessRawImage>(false).Reverse()) {
 				var d = new Rect(camScreen.rekt.position, camScreen.rekt.sizeDelta);
 
-				if(d.Contains(point)) {
+				if(d.Contains(point) && (!camScreen.cam.settings.isScreenLocked || UI.SettingsView.cam == camScreen.cam)) {
 					var relativeCursorPos = point - d.position;
 
 					if(relativeCursorPos.y <= grabbersize && relativeCursorPos.x >= d.width - grabbersize) {

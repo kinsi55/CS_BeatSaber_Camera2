@@ -307,7 +307,7 @@ namespace Camera2.Configuration {
 			return p;
 		}
 
-		public Rect UpdateViewRect() => SetViewRect(new Rect(_viewRectCfg));
+		public Rect UpdateViewRect() => SetViewRect(_viewRectCfg.ToRect());
 		public Rect SetViewRect(Rect inRect) {
 			if(inRect.x < 0) inRect.x = Screen.width * -inRect.x;
 			if(inRect.y < 0) inRect.y = Screen.height * -inRect.y;
@@ -318,15 +318,40 @@ namespace Camera2.Configuration {
 			return _viewRectCalculated;
 		}
 
+		internal class ScreenRect {
+			public float x;
+			public float y;
+			public float width;
+			public float height;
+			public bool locked;
 
-		[JsonConverter(typeof(RectConverter)), JsonProperty("viewRect")]
-		private Rect iCant {
-			get => _viewRectCfg;
-			set => SetViewRect(new Rect(value));
+			public ScreenRect(float x, float y, float width, float height, bool locked) {
+				this.x = x;
+				this.y = y;
+				this.width = width;
+				this.height = height;
+				this.locked = locked;
+			}
+
+			public Rect ToRect() => new Rect(x, y, width, height);
 		}
 
-		private Rect _viewRectCfg = Rect.zero;
+		[JsonConverter(typeof(ScreenRectConverter)), JsonProperty("viewRect")]
+		private ScreenRect iCant {
+			get => _viewRectCfg;
+			set {
+				_viewRectCfg = value;
+				SetViewRect(value.ToRect());
+			}
+		}
+
+		private ScreenRect _viewRectCfg = new ScreenRect(0, 0, -1, -1, false);
 		private Rect _viewRectCalculated = Rect.zero;
+
+		internal bool isScreenLocked {
+			get => _viewRectCfg.locked;
+			set => _viewRectCfg.locked = value;
+		}
 
 		[JsonIgnore]
 		public Rect viewRect {
@@ -335,12 +360,10 @@ namespace Camera2.Configuration {
 				var x = GetClampedViewRect(value);
 
 				_viewRectCalculated = new Rect(x);
-				_viewRectCfg = new Rect(
-					-x.x / Screen.width,
-					-x.y / Screen.height,
-					-x.width / Screen.width,
-					-x.height / Screen.height
-				);
+				_viewRectCfg.x = -x.x / Screen.width;
+				_viewRectCfg.y = -x.y / Screen.height;
+				_viewRectCfg.width = -x.width / Screen.width;
+				_viewRectCfg.height = -x.height / Screen.height;
 
 				if(isLoaded)
 					cam.UpdateRenderTextureAndView();

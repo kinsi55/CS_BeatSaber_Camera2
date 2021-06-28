@@ -108,6 +108,7 @@
 				/>
 				<checkbox text='Lock screen position / size' value='viewRect_isLocked' bind-value='true' apply-on-change='true'
 					hover-hint='Locks the Position / Size of the Cameras screen to prevent accidental changes'
+				/>
 				<checkbox text='Enable Movementscript in Menu' value='misc_MovementScript_enableInMenu' bind-value='true' apply-on-change='true'
 					hover-hint='If the camera has a movement script assigned this will make it so it doesnt run just while in songs but also while in the menu'
 				/>

@@ -208,6 +208,9 @@ namespace Camera2.UI {
 		internal int viewRect_height {
 			get => (int)cam.settings.viewRect.height; set { var n = cam.settings.viewRect; n.height = value; cam.settings.SetViewRect(n); }
 		}
+		internal bool viewRect_isLocked {
+			get => cam.settings.isScreenLocked; set => cam.settings.isScreenLocked = value;
+		}
 
 		internal float xRotation {
 			get {
