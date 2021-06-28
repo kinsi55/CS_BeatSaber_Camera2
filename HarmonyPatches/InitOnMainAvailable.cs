@@ -18,6 +18,14 @@ namespace Camera2.HarmonyPatches {
 
 				CamManager.Init();
 			}
+		}
+	}
+
+	[HarmonyPatch(typeof(MainFlowCoordinator), "DidActivate")]
+	static class UpdateCamScreens {
+		static void Prefix(bool firstActivation) {
+			if(!firstActivation)
+				return;
 
 			foreach(var cam in CamManager.cams.Values)
 				cam.settings.UpdateViewRect();
