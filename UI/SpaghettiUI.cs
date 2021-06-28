@@ -65,6 +65,8 @@ namespace Camera2.UI {
 		public override string ResourceName => "Camera2.UI.Views.camSettings.bsml";
 
 		[UIComponent("zOffsetSlider")] SliderSetting zOffsetSlider = null;
+		[UIComponent("xRotationSlider")] SliderSetting xRotationSlider = null;
+		[UIComponent("pivotingOffsetToggle")] ToggleSetting pivotingOffsetToggle = null;
 		[UIComponent("previewSizeSlider")] SliderSetting previewSizeSlider = null;
 		[UIComponent("modmapExt_moveWithMapCheckbox")] ToggleSetting modmapExt_moveWithMapSlider = null;
 		[UIComponent("worldcamVisibilityInput")] LayoutElement worldcamVisibilityObj = null;
@@ -324,6 +326,8 @@ namespace Camera2.UI {
 			if(zOffsetSlider == null) return;
 
 			zOffsetSlider.gameObject.SetActive(type == CameraType.FirstPerson);
+			xRotationSlider.gameObject.SetActive(type == CameraType.FirstPerson);
+			pivotingOffsetToggle.gameObject.SetActive(type == CameraType.FirstPerson);
 			previewSizeSlider.gameObject.SetActive(type == CameraType.Positionable);
 			modmapExt_moveWithMapSlider.gameObject.SetActive(type == CameraType.Positionable);
 			worldcamVisibilityObj.gameObject.SetActive(type == CameraType.Positionable);

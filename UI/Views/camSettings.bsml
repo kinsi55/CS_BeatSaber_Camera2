@@ -11,6 +11,12 @@
 			
 			<dropdown-list-setting id='worldcamVisibilityInput' text='Ingame Cam Visibility' value='worldCamVisibility' choices='worldCamVisibilities' bind-value='true' apply-on-change='true'/>
 			<slider-setting id='zOffsetSlider' text='Z-Offset' min='-2' max='0.5' increment='0.1' value='zOffset' bind-value='true' apply-on-change='true'/>
+			<slider-setting id='xRotationSlider' text='X-rotation (Pitch)' min='-45' max='45' increment='0.5' value='xRotation' bind-value='true' apply-on-change='true'
+				hover-hint='Can be useful for Firstperson cameras if you tend to tilt your head forward / backward a lot while playing to "correct" the footage'
+			/>
+			<checkbox id='pivotingOffsetToggle' text='Pivoting Firstperson Offset' value='misc_pivotingOffset' bind-value='true' apply-on-change='true'
+				hover-hint='Turning this off Changes the offset to be Absolute (Like it works in Camera Plus) instead of pivoting around the head position. Both have their advantages and disadvantages'
+			/>
 			<slider-setting id='previewSizeSlider' text='Ingame preview size' min='0.3' max='3' increment='0.1' value='previewSize' bind-value='true' apply-on-change='true'/>
 		</modifier-container>
 	</tab>
@@ -94,18 +100,14 @@
 				/>
 			</horizontal>
 			<modifier-container child-expand-width='true' horizontal-fit='PreferredSize'>
-				<slider-setting text='X-rotation (Pitch)' min='-45' max='45' increment='0.5' value='xRotation' bind-value='true' apply-on-change='true'
-					hover-hint='Can be useful for Firstperson cameras if you tend to tilt your head forward / backward a lot while playing to "correct" the footage'
-				/>
-				<checkbox text='Pivoting Firstperson Offset' value='misc_pivotingOffset' bind-value='true' apply-on-change='true'
-					hover-hint='Turning this off Changes the offset to be Absolute (Like it works in Camera Plus) instead of pivoting around toe head position. Both have their advantages and disadvantages. Has no effect when Camera is not Firstperson'
-				/>
 				<checkbox text='Use Orthoraphic projection' value='misc_orthographic' bind-value='true' apply-on-change='true'
 					hover-hint='Makes the camera use an orthographic projection instead of perspective. The FOV is still used to configure the "FOV" (orthographic size)'
 				/>
 				<checkbox text='Attach to Spectating Plattform (MP)' value='multiplayer_followSpectatorPlattform' bind-value='true' apply-on-change='true'
 					hover-hint="When spectating, should this camera attach / follow the plattform you're on or not"
 				/>
+				<checkbox text='Lock screen position / size' value='viewRect_isLocked' bind-value='true' apply-on-change='true'
+					hover-hint='Locks the Position / Size of the Cameras screen to prevent accidental changes'
 				<checkbox text='Enable Movementscript in Menu' value='misc_MovementScript_enableInMenu' bind-value='true' apply-on-change='true'
 					hover-hint='If the camera has a movement script assigned this will make it so it doesnt run just while in songs but also while in the menu'
 				/>

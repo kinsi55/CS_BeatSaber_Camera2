@@ -111,8 +111,8 @@ namespace Camera2.Behaviours {
 
 		LessRawImage GetViewAtPoint(Vector2 point, ref CamAction actionAtPoint) {
 			// This should already be sorted in the correct order
-			foreach(var cam in GetComponentsInChildren<LessRawImage>(false).Reverse()) {
-				var d = new Rect(cam.rekt.position, cam.rekt.sizeDelta);
+			foreach(var camScreen in GetComponentsInChildren<LessRawImage>(false).Reverse()) {
+				var d = new Rect(camScreen.rekt.position, camScreen.rekt.sizeDelta);
 
 				if(d.Contains(point)) {
 					var relativeCursorPos = point - d.position;
@@ -123,7 +123,7 @@ namespace Camera2.Behaviours {
 						actionAtPoint = CamAction.Move;
 					}
 
-					return cam;
+					return camScreen;
 				}
 			}
 
