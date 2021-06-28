@@ -225,7 +225,7 @@ namespace Camera2.UI {
 				cam.settings.ApplyPositionAndRotation();
 			}
 		}
-		internal bool misc_absOffset {
+		internal bool misc_pivotingOffset {
 			get => cam.settings.Smoothfollow.pivotingOffset; set { cam.settings.Smoothfollow.pivotingOffset = value; }
 		}
 		internal bool misc_orthographic {
@@ -390,7 +390,7 @@ namespace Camera2.UI {
 		[UIAction("SelectCamera")]
 		void SelectCamera(TableView tableView, CamListCellWrapper row) => Coordinator.instance.ShowSettingsForCam(row.cam);
 
-		Cam2 GetCam(string name) {
+		Cam2 GetNewCam(string name) {
 			var cam = CamManager.AddNewCamera(name);
 			cam.settings.viewRect = new UnityEngine.Rect(UnityEngine.Random.Range(0, 200), UnityEngine.Random.Range(0, 200), UnityEngine.Screen.width / 3, UnityEngine.Screen.height / 3);
 
@@ -407,7 +407,7 @@ namespace Camera2.UI {
 			Coordinator.instance.ShowSettingsForCam(cam);
 		}
 
-		void AddCamDefault() => AddCam(GetCam("Unnamed Camera"));
+		void AddCamDefault() => AddCam(GetNewCam("Unnamed Camera"));
 
 		void AddCamSideview() {
 			var cam = CamManager.AddNewCamera("Side View");
@@ -427,7 +427,7 @@ namespace Camera2.UI {
 		}
 
 		void AddCamThirdperson() {
-			var cam = GetCam("Static Thirdperson");
+			var cam = GetNewCam("Static Thirdperson");
 
 			cam.settings.type = CameraType.Positionable;
 			cam.settings.FOV = 75;
@@ -438,7 +438,7 @@ namespace Camera2.UI {
 		}
 
 		void AddCamAvatarFaceCam() {
-			var cam = GetCam("Facecam");
+			var cam = GetNewCam("Facecam");
 
 			cam.settings.type = CameraType.FirstPerson;
 			cam.settings.FOV = 75;
