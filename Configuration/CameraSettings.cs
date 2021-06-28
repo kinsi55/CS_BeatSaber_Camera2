@@ -366,6 +366,6 @@ namespace Camera2.Configuration {
 
 		public Settings_MovementScript MovementScript { get; private set; } = new Settings_MovementScript();
 
-		public bool ShouldSerializeMovementScript() => type == CameraType.Positionable;
+		public bool ShouldSerializeMovementScript() => type != CameraType.FirstPerson;
 	}
 }

@@ -61,7 +61,7 @@ namespace Camera2.Middlewares {
 		new public bool Pre() {
 			if(settings.MovementScript.scriptList.Length == 0 || 
 				(!SceneUtil.isInSong && !settings.MovementScript.enableInMenu) || 
-				cam.settings.type != Configuration.CameraType.Positionable
+				cam.settings.type == Configuration.CameraType.FirstPerson
 			) {
 				Reset();
 				return true;
