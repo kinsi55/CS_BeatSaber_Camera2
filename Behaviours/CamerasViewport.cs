@@ -26,7 +26,7 @@ namespace Camera2.Behaviours {
 			position = pos;
 
 			if(writeToConfig && cam.settings.viewRect.position != position) {
-				cam.settings.viewRect = new Rect(cam.settings.viewRect) { position = position };
+				cam.settings.SetViewRect(new Rect(cam.settings.viewRect) { position = position });
 				cam.settings.Save();
 			}
 		}
@@ -51,7 +51,7 @@ namespace Camera2.Behaviours {
 			size = new Vector2(sizex, sizey);
 			
 			if(writeToConfig) {
-				cam.settings.viewRect = new Rect(position, size);
+				cam.settings.SetViewRect(new Rect(position, size));
 				cam.settings.Save();
 			}
 		}
@@ -145,16 +145,6 @@ namespace Camera2.Behaviours {
 		private bool didShowHint = false;
 
 		void Update() {
-			if(lastScreenSize.x != Screen.width || lastScreenSize.y != Screen.height) {
-				lastScreenSize.x = Screen.width;
-				lastScreenSize.y = Screen.height;
-
-				foreach(var cam in CamManager.cams.Values) {
-					cam.settings.UpdateViewRect();
-					cam.UpdateRenderTextureAndView();
-				}
-			}
-
 			if(Input.anyKeyDown) { //Some custom scenes to do funny stuff with
 				if(Input.GetKeyDown(KeyCode.F1)) {
 					if(Input.GetKey(KeyCode.LeftControl) && Input.GetKey(KeyCode.LeftShift)) {

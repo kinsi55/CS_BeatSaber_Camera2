@@ -307,38 +307,40 @@ namespace Camera2.Configuration {
 			return p;
 		}
 
-		public Rect UpdateViewRect() {
-			viewRect = _viewRectCfg;
-			return _viewRect;
+		public Rect UpdateViewRect() => SetViewRect(new Rect(_viewRectCfg));
+		public Rect SetViewRect(Rect inRect) {
+			if(inRect.x < 0) inRect.x = Screen.width * -inRect.x;
+			if(inRect.y < 0) inRect.y = Screen.height * -inRect.y;
+			if(inRect.width < 0) inRect.width = Screen.width * -inRect.width;
+			if(inRect.height < 0) inRect.height = Screen.height * -inRect.height;
+
+			viewRect = inRect;
+			return _viewRectCalculated;
 		}
 
 
 		[JsonConverter(typeof(RectConverter)), JsonProperty("viewRect")]
 		private Rect iCant {
 			get => _viewRectCfg;
-			set { viewRect = value; }
+			set => SetViewRect(new Rect(value));
 		}
 
 		private Rect _viewRectCfg = Rect.zero;
-		private Rect _viewRect = Rect.zero;
+		private Rect _viewRectCalculated = Rect.zero;
 
 		[JsonIgnore]
 		public Rect viewRect {
-			get => _viewRect;
-			set {
-				if(value.width <= 0) value.width = Screen.width;
-				if(value.height <= 0) value.height = Screen.height;
-
+			get => _viewRectCalculated;
+			private set {
 				var x = GetClampedViewRect(value);
 
-				_viewRect = new Rect(x);
-
-				if(x.width >= Screen.width/* && _viewRectCfg.width <= 0*/)
-					x.width = -1;
-				if(x.height >= Screen.height/* && _viewRectCfg.height <= 0 */)
-					x.height = -1;
-
-				_viewRectCfg = x;
+				_viewRectCalculated = new Rect(x);
+				_viewRectCfg = new Rect(
+					-x.x / Screen.width,
+					-x.y / Screen.height,
+					-x.width / Screen.width,
+					-x.height / Screen.height
+				);
 
 				if(isLoaded)
 					cam.UpdateRenderTextureAndView();

@@ -11,12 +11,16 @@ namespace Camera2.HarmonyPatches {
 			foreach(var cam in CamManager.cams.Values)
 				if(cam.UCamera != null) cam.UCamera.depthTextureMode = ____mainSettingsModel.depthTextureEnabled ? DepthTextureMode.Depth : DepthTextureMode.None;
 
-			if(isInited) return;
-			isInited = true;
+			if(!isInited) {
+				isInited = true;
 
-			Plugin.Log.Notice("Game is ready, Initializing...");
+				Plugin.Log.Notice("Game is ready, Initializing...");
 
-			CamManager.Init();
+				CamManager.Init();
+			}
+
+			foreach(var cam in CamManager.cams.Values)
+				cam.settings.UpdateViewRect();
 		}
 	}
 }

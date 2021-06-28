@@ -83,7 +83,7 @@ namespace Camera2.Utils {
 
 	static class JsonHelpers {
 		public static JRaw limitFloatResolution(float val) {
-			return new JRaw(val.ToString("0.0##", CultureInfo.InvariantCulture));
+			return new JRaw(val.ToString("0.0###", CultureInfo.InvariantCulture));
 		}
 
 		public static readonly JsonSerializerSettings leanDeserializeSettings = new JsonSerializerSettings {
