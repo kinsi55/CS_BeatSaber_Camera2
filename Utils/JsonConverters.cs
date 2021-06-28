@@ -41,9 +41,10 @@ namespace Camera2.Utils {
 		}
 
 		public override ScreenRect ReadJson(JsonReader reader, Type objectType, ScreenRect existingValue, bool hasExistingValue, JsonSerializer serializer) {
-			dynamic o = JObject.Load(reader);
+			JObject jo = JObject.Load(reader);
+			dynamic o = jo;
 
-			return new ScreenRect((float)o.x, (float)o.y, (float)o.width, (float)o.height, (bool)o.locked);
+			return new ScreenRect((float)o.x, (float)o.y, (float)o.width, (float)o.height, jo.GetValue("locked")?.Value<bool>() ?? false);
 		}
 	}
 
