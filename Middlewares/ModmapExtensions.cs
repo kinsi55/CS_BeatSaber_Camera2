@@ -53,6 +53,8 @@ namespace Camera2.Middlewares {
 				mapMovementTransformer.rotation = Quaternion.identity;
 
 				mapMovementTransformer = null;
+
+				noodleOrigin = null;
 			}
 			return true;
 		}
