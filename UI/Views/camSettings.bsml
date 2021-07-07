@@ -5,7 +5,7 @@
 		<modifier-container child-expand-width='true' horizontal-fit='PreferredSize'>
 			<string-setting text='Camera Name' value='camName' bind-value='true' apply-on-change='true'/>
 			<dropdown-list-setting text='Camera Type' value='type' choices='types' bind-value='true' apply-on-change='true'/>
-			<slider-setting text='Field of View' min='1' max='140' increment='0.01' value='FOV' bind-value='true' apply-on-change='true'/>
+			<slider-setting text='Field of View' min='3' max='140' increment='0.01' value='FOV' bind-value='true' apply-on-change='true'/>
 			<slider-setting text='Render Scale' min='0.2' max='3' increment='0.1' value='renderScale' bind-value='true' apply-on-change='true'/>
 			<list-setting text='Anti Aliasing' value='antiAliasing' choices='antiAliasingLevels' bind-value='true' apply-on-change='true'/>
 			
