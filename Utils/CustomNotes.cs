@@ -9,6 +9,6 @@ namespace Camera2.Utils {
 		static Type LayerUtils = AccessTools.TypeByName("CustomNotes.Utilities.LayerUtils");
 		static PropertyInfo LayerUtils_HMDOnly = LayerUtils?.GetProperty("HMDOnly", BindingFlags.Public | BindingFlags.Static);
 
-		public static bool HasHMDOnlyEnabled() => (bool)LayerUtils_HMDOnly?.GetValue(null);
+		public static bool HasHMDOnlyEnabled() => LayerUtils_HMDOnly != null && (bool)LayerUtils_HMDOnly.GetValue(null);
 	}
 }
