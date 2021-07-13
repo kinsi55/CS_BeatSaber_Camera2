@@ -18,8 +18,6 @@ namespace Camera2.HarmonyPatches {
 
 				CamManager.Init();
 			}
-
-			UpdateCamScreens.Prefix(true);
 		}
 	}
 

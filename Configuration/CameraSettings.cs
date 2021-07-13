@@ -110,7 +110,6 @@ namespace Camera2.Configuration {
 		public void Load(bool loadConfig = true) {
 			isLoaded = false;
 			// Set default value incase they're not loaded from JSON
-			viewRect = new Rect(0, 0, -1, -1);
 			FOV = 90f;
 
 			if(System.IO.File.Exists(cam.configPath)) {
@@ -123,7 +122,8 @@ namespace Camera2.Configuration {
 #if !DEV
 			Save();
 #endif
-			
+
+			UpdateViewRect();
 			ApplyPositionAndRotation();
 			ApplyLayerBitmask();
 			cam.UpdateRenderTextureAndView();
