@@ -17,6 +17,7 @@
         <RepositoryType></RepositoryType>
         <RepositoryUrl>https://github.com/kinsi55/CS_BeatSaber_Camera2</RepositoryUrl>
         <Description></Description>
+        <Platforms>x64</Platforms>
     </PropertyGroup>
 
     <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
@@ -36,14 +37,15 @@
         <DisableZipRelease>True</DisableZipRelease>
     </PropertyGroup>
 
-    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
       <DefineConstants>DEBUG;TRACE</DefineConstants>
       <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
       <DebugSymbols>true</DebugSymbols>
     </PropertyGroup>
 
-    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
       <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+      <PlatformTarget>x64</PlatformTarget>
     </PropertyGroup>
 
     <ItemGroup>
