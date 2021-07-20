@@ -12,7 +12,10 @@ namespace Camera2.Utils {
 		public static Camera replayCamera { get; private set; }
 
 		public static bool IsInReplay() {
-			return ScoreSaber_playbackEnabled != null && (bool)ScoreSaber_playbackEnabled.Invoke(null, null) == false;
+			try {
+				return ScoreSaber_playbackEnabled != null && (bool)ScoreSaber_playbackEnabled.Invoke(null, null) == false;
+			} catch { }
+			return false;
 		}
 
 		public static void UpdateIsInReplay() {
