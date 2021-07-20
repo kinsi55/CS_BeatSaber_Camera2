@@ -196,17 +196,17 @@ namespace Camera2.UI {
 			get => cam.settings.Follow360.smoothing; set { cam.settings.Follow360.smoothing = value; }
 		}
 
-		internal int viewRect_x {
-			get => (int)cam.settings.viewRect.x; set { var n = cam.settings.viewRect; n.x = value; cam.settings.SetViewRect(n); }
+		internal float viewRect_x {
+			get => -cam.settings._viewRectCfg.x; set { var n = cam.settings.viewRect; n.x = -value; cam.settings.SetViewRect(n); }
 		}
-		internal int viewRect_y {
-			get => (int)cam.settings.viewRect.y; set { var n = cam.settings.viewRect; n.y = value; cam.settings.SetViewRect(n); }
+		internal float viewRect_y {
+			get => -cam.settings._viewRectCfg.y; set { var n = cam.settings.viewRect; n.y = -value; cam.settings.SetViewRect(n); }
 		}
-		internal int viewRect_width {
-			get => (int)cam.settings.viewRect.width; set { var n = cam.settings.viewRect; n.width = value; cam.settings.SetViewRect(n); }
+		internal float viewRect_width {
+			get => -cam.settings._viewRectCfg.width; set { var n = cam.settings.viewRect; n.width = -value; cam.settings.SetViewRect(n); }
 		}
-		internal int viewRect_height {
-			get => (int)cam.settings.viewRect.height; set { var n = cam.settings.viewRect; n.height = value; cam.settings.SetViewRect(n); }
+		internal float viewRect_height {
+			get => -cam.settings._viewRectCfg.height; set { var n = cam.settings.viewRect; n.height = -value; cam.settings.SetViewRect(n); }
 		}
 		internal bool viewRect_isLocked {
 			get => cam.settings.isScreenLocked; set => cam.settings.isScreenLocked = value;

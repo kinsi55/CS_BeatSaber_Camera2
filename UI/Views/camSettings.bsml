@@ -124,10 +124,10 @@
 
 	<tab tags='tabs' tab-name='Viewrect' horizontal-fit='PreferredSize' id='viewRectTab'>
 		<vertical horizontal-fit='PreferredSize' vertical-fit='PreferredSize'>
-			<slider-setting text='X Position' max='1920' integer-only='true' value='viewRect_x' bind-value='true' apply-on-change='true'/>
-			<slider-setting text='Y Position' max='1080' integer-only='true' value='viewRect_y' bind-value='true' apply-on-change='true'/>
-			<slider-setting text='Width' min='50' max='1920' integer-only='true' value='viewRect_width' bind-value='true' apply-on-change='true'/>
-			<slider-setting text='Height' min='50' max='1080' integer-only='true' value='viewRect_height' bind-value='true' apply-on-change='true'/>
+			<slider-setting text='X Position' min='0' max='1' increment='0.02' value='viewRect_x' bind-value='true' apply-on-change='true'/>
+			<slider-setting text='Y Position' min='0' max='1' increment='0.02' value='viewRect_y' bind-value='true' apply-on-change='true'/>
+			<slider-setting text='Width' min='0.04' max='1' increment='0.02' value='viewRect_width' bind-value='true' apply-on-change='true'/>
+			<slider-setting text='Height' min='0.04' max='1' increment='0.02' value='viewRect_height' bind-value='true' apply-on-change='true'/>
 		</vertical>
 	</tab>
 </vertical>

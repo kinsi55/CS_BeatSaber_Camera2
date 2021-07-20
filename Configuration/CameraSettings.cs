@@ -345,7 +345,7 @@ namespace Camera2.Configuration {
 			}
 		}
 
-		private ScreenRect _viewRectCfg = new ScreenRect(0, 0, -1, -1, false);
+		internal ScreenRect _viewRectCfg { get; private set; } = new ScreenRect(0, 0, -1, -1, false);
 		private Rect _viewRectCalculated = Rect.zero;
 
 		internal bool isScreenLocked {
