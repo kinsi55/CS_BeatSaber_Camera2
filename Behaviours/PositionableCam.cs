@@ -31,10 +31,8 @@ namespace Camera2.Behaviours {
 			camPreview = GameObject.CreatePrimitive(PrimitiveType.Quad);
 			Destroy(camPreview.GetComponent<Collider>());
 			camPreview.transform.parent = transform;
-			
-			camPreview.transform.localEulerAngles = new Vector3(0, 180f, 0);
 
-			viewMaterial = new Material(Shader.Find("Hidden/BlitCopyWithDepth"));
+			viewMaterial = new Material(Plugin.Shader_VolumetricBlit);
 			camPreview.GetComponent<MeshRenderer>().material = viewMaterial;
 		}
 

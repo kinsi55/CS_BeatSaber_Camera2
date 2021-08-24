@@ -154,9 +154,8 @@ namespace Camera2.Behaviours {
 			AddMiddleware<MovementScriptProcessor>();
 			AddMiddleware<VMCAvatar>();
 
-#if DEV
-			AddTransformer<PostProcessor>();
-#endif
+
+			AddMiddleware<PostProcessing>();
 		}
 
 		private void AddMiddleware<T>() where T: CamMiddleware, IMHandler {

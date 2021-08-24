@@ -70,8 +70,7 @@ namespace Camera2.Behaviours {
 		public void SetSource(Cam2 cam) {
 			this.cam = cam;
 			
-			material.SetTexture("_MainTex", cam.renderTexture);
-			SetMaterialDirty();
+			texture = cam.renderTexture;
 			rekt.sizeDelta = cam.settings.viewRect.size;
 			position = cam.settings.viewRect.position;
 			gameObject.name = cam.name;
@@ -81,7 +80,6 @@ namespace Camera2.Behaviours {
 
 	class CamerasViewport : MonoBehaviour {
 		private static Canvas canvas;
-		internal static Shader blitCopyShader = Shader.Find("Hidden/BlitCopy");
 
 		public void Awake() {
 			DontDestroyOnLoad(gameObject);
@@ -94,7 +92,6 @@ namespace Camera2.Behaviours {
 		public LessRawImage AddNewView() {
 			var img = new GameObject().AddComponent<LessRawImage>();
 
-			img.material = new Material(blitCopyShader);
 			img.transform.SetParent(gameObject.transform, true); //.parent = gameObject.transform;
 
 			return img;

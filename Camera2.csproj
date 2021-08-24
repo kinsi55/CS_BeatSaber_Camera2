@@ -1,186 +1,211 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-    <PropertyGroup>
-        <TargetFramework>net472</TargetFramework>
-        <OutputType>Library</OutputType>
-        <LangVersion>8</LangVersion>
-        <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
-        <RootNamespace>Camera2</RootNamespace>
-        <LocalRefsDir Condition="Exists('..\Refs')">..\Refs</LocalRefsDir>
-        <BeatSaberDir>$(LocalRefsDir)</BeatSaberDir>
-        <AppOutputBase>$(MSBuildProjectDirectory)\</AppOutputBase>
-        <Nullable>disable</Nullable>
-        <Product>Camera2</Product>
-        <Company />
-        <Authors>Kinsi55</Authors>
-        <Copyright>Kinsi55</Copyright>
-        <RepositoryType></RepositoryType>
-        <RepositoryUrl>https://github.com/kinsi55/CS_BeatSaber_Camera2</RepositoryUrl>
-        <Description></Description>
-        <Platforms>x64</Platforms>
-    </PropertyGroup>
+  <PropertyGroup>
+    <TargetFramework>net472</TargetFramework>
+    <OutputType>Library</OutputType>
+    <LangVersion>8</LangVersion>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <RootNamespace>Camera2</RootNamespace>
+    <LocalRefsDir Condition="Exists('..\Refs')">..\Refs</LocalRefsDir>
+    <BeatSaberDir>$(LocalRefsDir)</BeatSaberDir>
+    <AppOutputBase>$(MSBuildProjectDirectory)\</AppOutputBase>
+    <Nullable>disable</Nullable>
+    <Product>Camera2</Product>
+    <Company />
+    <Authors>Kinsi55</Authors>
+    <Copyright>Kinsi55</Copyright>
+    <RepositoryType></RepositoryType>
+    <RepositoryUrl>https://github.com/kinsi55/CS_BeatSaber_Camera2</RepositoryUrl>
+    <Description></Description>
+    <Platforms>x64</Platforms>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+  </PropertyGroup>
 
-    <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
-        <DebugType>portable</DebugType>
-    </PropertyGroup>
+  <Import Project="SuppressRefereces.targets" />
 
-    <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
-        <DebugType>none</DebugType>
-    </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' OR '$(Configuration)' == 'DEV'">
+    <DefineConstants>TRACE;DEBUG</DefineConstants>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>portable</DebugType>
+    <OutputPath>bin\Debug</OutputPath>
+  </PropertyGroup>
 
-    <PropertyGroup Condition="$(DefineConstants.Contains('CIBuild')) OR '$(NCrunch)' == '1'">
-        <DisableCopyToPlugins>True</DisableCopyToPlugins>
-    </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'DEV'">
+    <DefineConstants>TRACE;DEBUG;DEV</DefineConstants>
+  </PropertyGroup>
 
-    <PropertyGroup Condition="'$(NCrunch)' == '1'">
-        <DisableCopyToPlugins>True</DisableCopyToPlugins>
-        <DisableZipRelease>True</DisableZipRelease>
-    </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+    <DebugType>none</DebugType>
+    <OutputPath>bin\</OutputPath>
+  </PropertyGroup>
 
-    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-      <DefineConstants>DEBUG;TRACE</DefineConstants>
-      <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-      <DebugSymbols>true</DebugSymbols>
-    </PropertyGroup>
+  <PropertyGroup Condition="$(DefineConstants.Contains('CIBuild')) OR '$(NCrunch)' == '1'">
+    <DisableCopyToPlugins>True</DisableCopyToPlugins>
+  </PropertyGroup>
 
-    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-      <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-      <PlatformTarget>x64</PlatformTarget>
-    </PropertyGroup>
+  <PropertyGroup Condition="'$(NCrunch)' == '1'">
+    <DisableCopyToPlugins>True</DisableCopyToPlugins>
+    <DisableZipRelease>True</DisableZipRelease>
+  </PropertyGroup>
 
-    <ItemGroup>
-      <Compile Remove="Utils\BloomShite.cs" />
-    </ItemGroup>
+  <ItemGroup>
+    <Compile Remove="Utils\BloomShite.cs" />
+  </ItemGroup>
 
-    <ItemGroup>
-        <Reference Include="0Harmony">
-          <HintPath>$(BeatSaberDir)\Libs\0Harmony.dll</HintPath>
-          <Private>False</Private>
-        </Reference>
-        <Reference Include="BeatmapCore, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-          <SpecificVersion>False</SpecificVersion>
-          <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\BeatmapCore.dll</HintPath>
-          <Private>False</Private>
-        </Reference>
-        <Reference Include="BGNet">
-          <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\BGNet.dll</HintPath>
-          <Private>False</Private>
-        </Reference>
-        <Reference Include="BSML">
-          <HintPath>$(BeatSaberDir)\Plugins\BSML.dll</HintPath>
-          <Private>False</Private>
-        </Reference>
-        <Reference Include="GameplayCore">
-          <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\GameplayCore.dll</HintPath>
-          <Private>false</Private>
-        </Reference>
-        <Reference Include="HMRendering">
-          <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\HMRendering.dll</HintPath>
-          <Private>False</Private>
-        </Reference>
-        <Reference Include="Microsoft.CSharp">
-        </Reference>
-        <Reference Include="Newtonsoft.Json">
-          <HintPath>$(BeatSaberDir)\Libs\Newtonsoft.Json.dll</HintPath>
-          <Private>False</Private>
-        </Reference>
-        <Reference Include="Oculus.VR">
-          <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\Oculus.VR.dll</HintPath>
-        </Reference>
-        <Reference Include="Rendering">
-          <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\Rendering.dll</HintPath>
-          <Private>False</Private>
-        </Reference>
-        <Reference Include="SongCore">
-          <HintPath>$(BeatSaberDir)\Plugins\SongCore.dll</HintPath>
-          <Private>False</Private>
-        </Reference>
-        <Reference Include="System">
-        </Reference>
-        <Reference Include="System.Core">
-        </Reference>
-        <Reference Include="System.Data.DataSetExtensions">
-        </Reference>
-        <Reference Include="System.Data">
-        </Reference>
-        <Reference Include="Main">
-          <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\Main.dll</HintPath>
-          <Private>False</Private>
-        </Reference>
-        <Reference Include="HMLib">
-          <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\HMLib.dll</HintPath>
-          <Private>False</Private>
-        </Reference>
-        <Reference Include="HMUI">
-          <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\HMUI.dll</HintPath>
-          <Private>False</Private>
-        </Reference>
-        <Reference Include="IPA.Loader">
-          <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\IPA.Loader.dll</HintPath>
-          <Private>False</Private>
-        </Reference>
-        <Reference Include="Unity.TextMeshPro">
-          <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\Unity.TextMeshPro.dll</HintPath>
-          <Private>False</Private>
-        </Reference>
-        <Reference Include="UnityEngine">
-          <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\UnityEngine.dll</HintPath>
-          <Private>False</Private>
-        </Reference>
-        <Reference Include="UnityEngine.AssetBundleModule">
-          <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\UnityEngine.AssetBundleModule.dll</HintPath>
-          <Private>false</Private>
-        </Reference>
-        <Reference Include="UnityEngine.CoreModule">
-          <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\UnityEngine.CoreModule.dll</HintPath>
-          <Private>False</Private>
-        </Reference>
-        <Reference Include="UnityEngine.InputLegacyModule">
-          <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\UnityEngine.InputLegacyModule.dll</HintPath>
-          <Private>False</Private>
-        </Reference>
-        <Reference Include="UnityEngine.PhysicsModule">
-          <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\UnityEngine.PhysicsModule.dll</HintPath>
-          <Private>False</Private>
-        </Reference>
-        <Reference Include="UnityEngine.UI">
-          <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\UnityEngine.UI.dll</HintPath>
-          <Private>False</Private>
-        </Reference>
-        <Reference Include="UnityEngine.UIElementsModule">
-          <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\UnityEngine.UIElementsModule.dll</HintPath>
-          <Private>False</Private>
-        </Reference>
-        <Reference Include="UnityEngine.UIModule">
-          <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\UnityEngine.UIModule.dll</HintPath>
-          <Private>False</Private>
-        </Reference>
-        <Reference Include="UnityEngine.VRModule">
-          <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\UnityEngine.VRModule.dll</HintPath>
-          <Private>False</Private>
-        </Reference>
-        <Reference Include="VRUI">
-          <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\VRUI.dll</HintPath>
-          <Private>False</Private>
-        </Reference>
-    </ItemGroup>
+  <ItemGroup>
+    <None Remove="Shaders\camera2utils" />
+  </ItemGroup>
 
-    <ItemGroup>
-        <None Include="Directory.Build.targets" Condition="Exists('Directory.Build.targets')" />
-        <None Include="Utils\BloomShite.cs" />
-    </ItemGroup>
+  <ItemGroup>
+    <Reference Include="0Harmony">
+      <HintPath>$(BeatSaberDir)\Libs\0Harmony.dll</HintPath>
 
-    <ItemGroup>
-        <EmbeddedResource Include="manifest.json" />
-        <EmbeddedResource Include="UI\Views\camList.bsml" />
-        <EmbeddedResource Include="UI\Views\camSettings.bsml" />
-        <EmbeddedResource Include="UI\Views\customScenesList.bsml" />
-    </ItemGroup>
+    </Reference>
+    <Reference Include="BeatmapCore, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\BeatmapCore.dll</HintPath>
 
-    <ItemGroup>
-        <PackageReference Include="BeatSaberModdingTools.Tasks" Version="1.3.2">
-            <PrivateAssets>all</PrivateAssets>
-            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-        </PackageReference>
-    </ItemGroup>
+    </Reference>
+    <Reference Include="BGNet">
+      <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\BGNet.dll</HintPath>
+
+    </Reference>
+    <Reference Include="BSML">
+      <HintPath>$(BeatSaberDir)\Plugins\BSML.dll</HintPath>
+
+    </Reference>
+    <Reference Include="GameplayCore">
+      <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\GameplayCore.dll</HintPath>
+
+    </Reference>
+    <Reference Include="HMRendering">
+      <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\HMRendering.dll</HintPath>
+
+    </Reference>
+    <Reference Include="Microsoft.CSharp"></Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>$(BeatSaberDir)\Libs\Newtonsoft.Json.dll</HintPath>
+
+    </Reference>
+    <Reference Include="Oculus.VR">
+      <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\Oculus.VR.dll</HintPath>
+
+    </Reference>
+    <Reference Include="Rendering">
+      <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\Rendering.dll</HintPath>
+
+    </Reference>
+    <Reference Include="SongCore">
+      <HintPath>$(BeatSaberDir)\Plugins\SongCore.dll</HintPath>
+
+    </Reference>
+    <Reference Include="System"></Reference>
+    <Reference Include="System.Core"></Reference>
+    <Reference Include="System.Data.DataSetExtensions"></Reference>
+    <Reference Include="System.Data"></Reference>
+    <Reference Include="Main">
+      <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\Main.dll</HintPath>
+
+    </Reference>
+    <Reference Include="HMLib">
+      <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\HMLib.dll</HintPath>
+
+    </Reference>
+    <Reference Include="HMUI">
+      <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\HMUI.dll</HintPath>
+
+    </Reference>
+    <Reference Include="IPA.Loader">
+      <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\IPA.Loader.dll</HintPath>
+
+    </Reference>
+    <Reference Include="Unity.TextMeshPro">
+      <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\Unity.TextMeshPro.dll</HintPath>
+
+    </Reference>
+    <Reference Include="UnityEngine">
+      <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\UnityEngine.dll</HintPath>
+
+    </Reference>
+    <Reference Include="UnityEngine.AssetBundleModule">
+      <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\UnityEngine.AssetBundleModule.dll</HintPath>
+
+    </Reference>
+    <Reference Include="UnityEngine.CoreModule">
+      <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\UnityEngine.CoreModule.dll</HintPath>
+
+    </Reference>
+    <Reference Include="UnityEngine.InputLegacyModule">
+      <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\UnityEngine.InputLegacyModule.dll</HintPath>
+
+    </Reference>
+    <Reference Include="UnityEngine.PhysicsModule">
+      <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\UnityEngine.PhysicsModule.dll</HintPath>
+
+    </Reference>
+    <Reference Include="UnityEngine.UI">
+      <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\UnityEngine.UI.dll</HintPath>
+
+    </Reference>
+    <Reference Include="UnityEngine.UIElementsModule">
+      <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\UnityEngine.UIElementsModule.dll</HintPath>
+
+    </Reference>
+    <Reference Include="UnityEngine.UIModule">
+      <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\UnityEngine.UIModule.dll</HintPath>
+
+    </Reference>
+    <Reference Include="UnityEngine.VRModule">
+      <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\UnityEngine.VRModule.dll</HintPath>
+
+    </Reference>
+    <Reference Include="VRUI">
+      <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\VRUI.dll</HintPath>
+
+    </Reference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="Utils\BloomShite.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="manifest.json" />
+    <EmbeddedResource Include="Shaders\camera2utils" />
+    <EmbeddedResource Include="UI\Views\camList.bsml" />
+    <EmbeddedResource Include="UI\Views\camSettings.bsml" />
+    <EmbeddedResource Include="UI\Views\customScenesList.bsml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="BeatSaberModdingTools.Tasks" Version="1.3.2">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Update="System.Drawing"></Reference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Update="System.IO.Compression.FileSystem"></Reference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Update="System.Numerics"></Reference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Update="System.Runtime.Serialization"></Reference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Update="System.Xml"></Reference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Update="System.Xml.Linq"></Reference>
+  </ItemGroup>
 </Project>

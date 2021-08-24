@@ -17,10 +17,8 @@ namespace Camera2 {
 
 		internal static Harmony harmony { get; private set; }
 
-#if DEV
-		public static Shader PostShader;
-		public static Material PostMaterial;
-#endif
+		public static Material ShaderMat_LuminanceKey;
+		internal static Shader Shader_VolumetricBlit;
 
 		[Init]
 		/// <summary>
@@ -37,18 +35,19 @@ namespace Camera2 {
 			harmony = new Harmony("Kinsi55.BeatSaber.Cam2");
 			harmony.PatchAll(Assembly.GetExecutingAssembly());
 
-#if DEV
-			//using(var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream("Camera2.PostProcessingShaders.chromaticaberration")) {
-			//	var bundle = AssetBundle.LoadFromStream(stream);
+#if !DEV
+			using(var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream("Camera2.Shaders.camera2utils")) {
+				var bundle = AssetBundle.LoadFromStream(stream);
 
-			//	PostShader = bundle.LoadAsset<Shader>("chromaticaberration.shader");
-			//	bundle.Unload(false);
-			//}
-			var bundle = AssetBundle.LoadFromFile(@"D:\Unity Shit\Projects\AssetBundlePacker\Assets\StreamingAssets\postprocessing");
+				ShaderMat_LuminanceKey = new Material(bundle.LoadAsset<Shader>("LuminanceKey.shader"));
+				Shader_VolumetricBlit = bundle.LoadAsset<Shader>("VolumetricBlit.shader");
+				bundle.Unload(false);
+			}
+#else
+			var bundle = AssetBundle.LoadFromFile(@"D:\Unity Shit\Projects\AssetBundlePacker\Assets\StreamingAssets\camera2utils");
 
-			PostShader = bundle.LoadAsset<Shader>("MotionBlur.shader");
-
-			PostMaterial = new Material(PostShader);
+			ShaderMat_LuminanceKey = new Material(bundle.LoadAsset<Shader>("LuminanceKey.shader"));
+			Shader_VolumetricBlit = bundle.LoadAsset<Shader>("VolumetricBlit.shader");
 #endif
 		}
 

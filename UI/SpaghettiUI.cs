@@ -196,6 +196,11 @@ namespace Camera2.UI {
 			get => cam.settings.Follow360.smoothing; set { cam.settings.Follow360.smoothing = value; }
 		}
 
+		internal float postprocessing_transparencyThreshold {
+			get => cam.settings.PostProcessing.transparencyThreshold; set { cam.settings.PostProcessing.transparencyThreshold = value; }
+		}
+		
+
 		internal float viewRect_x {
 			get => -cam.settings._viewRectCfg.x; set { var n = cam.settings.viewRect; n.x = -value; cam.settings.SetViewRect(n); }
 		}

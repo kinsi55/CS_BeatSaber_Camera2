@@ -105,6 +105,7 @@ namespace Camera2.Configuration {
 			ModmapExtensions = CameraSubSettings.GetFor<Settings_ModmapExtensions>(this);
 			Follow360 = CameraSubSettings.GetFor<Settings_Follow360>(this);
 			VMCProtocol = CameraSubSettings.GetFor<Settings_VMCAvatar>(this);
+			PostProcessing = CameraSubSettings.GetFor<Settings_PostProcessing>(this);
 		}
 
 		public void Load(bool loadConfig = true) {
@@ -376,6 +377,7 @@ namespace Camera2.Configuration {
 		public Settings_Follow360 Follow360 { get; private set; }
 		public Settings_VMCAvatar VMCProtocol { get; private set; }
 		public Settings_FPSLimiter FPSLimiter { get; private set; }
+		public Settings_PostProcessing PostProcessing { get; private set; }
 
 		public bool ShouldSerializeFollow360() => type == CameraType.Positionable;
 		public bool ShouldSerializeSmoothfollow() => type != CameraType.Positionable;
