@@ -20,18 +20,19 @@
     <Platforms>x64</Platforms>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <Configurations>Debug;Release;Dev</Configurations>
   </PropertyGroup>
 
   <Import Project="SuppressRefereces.targets" />
 
-  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' OR '$(Configuration)' == 'DEV'">
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' OR '$(Configuration)' == 'Dev'">
     <DefineConstants>TRACE;DEBUG</DefineConstants>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>portable</DebugType>
     <OutputPath>bin\Debug</OutputPath>
   </PropertyGroup>
 
-  <PropertyGroup Condition=" '$(Configuration)' == 'DEV'">
+  <PropertyGroup Condition=" '$(Configuration)' == 'Dev' ">
     <DefineConstants>TRACE;DEBUG;DEV</DefineConstants>
   </PropertyGroup>
 

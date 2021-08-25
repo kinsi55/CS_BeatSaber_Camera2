@@ -13,7 +13,7 @@ Shader "Custom/VolumetricBlit" {
 
 			#include "UnityCG.cginc"
 
-			sampler2D _MainTex;
+			sampler2D_half _MainTex;
 
 			struct ayo {
 				float4 vertex : POSITION;
@@ -39,7 +39,7 @@ Shader "Custom/VolumetricBlit" {
 
 			#include "UnityCG.cginc"
 
-			sampler2D _MainTex;
+			sampler2D_half _MainTex;
 
 			struct ayo {
 				float4 vertex : POSITION;

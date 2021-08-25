@@ -8,6 +8,11 @@ Shader "Unlit/LuminanceKey" {
 		ColorMask A
 
 		Pass {
+			ZClip False
+			Cull Off
+			ZTest Always
+			ZWrite Off
+
 			CGPROGRAM
 
 			#pragma vertex vert
@@ -24,12 +29,11 @@ Shader "Unlit/LuminanceKey" {
 				v.vertex = UnityObjectToClipPos(v.vertex);
 			}
 
-			sampler2D _MainTex;
-			float _Threshold;
-			float _NoAA;
+			sampler2D_half _MainTex;
+			half _Threshold;
 
-			half4 frag (ayo i) : SV_Target {
-				half4 col = tex2D(_MainTex, i.uv);
+			fixed4 frag (ayo i) : SV_Target {
+				fixed4 col = tex2D(_MainTex, i.uv);
 
 				if(_Threshold == 0)
 					return 1;
