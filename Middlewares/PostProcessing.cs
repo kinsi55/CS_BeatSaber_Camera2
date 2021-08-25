@@ -14,7 +14,7 @@ namespace Camera2.Middlewares {
 		new public void Post() {
 			if(enabled && Plugin.ShaderMat_LuminanceKey != null) {
 				var x = RenderTexture.active;
-				Plugin.ShaderMat_LuminanceKey.SetFloat("_Threshold", settings.PostProcessing.transparencyThreshold);
+				Plugin.ShaderMat_LuminanceKey.SetFloat("_Threshold", settings.antiAliasing > 1 ? settings.PostProcessing.transparencyThreshold : 0);
 				Graphics.Blit(cam.renderTexture, cam.renderTexture, Plugin.ShaderMat_LuminanceKey);
 				RenderTexture.active = x;
 			}
