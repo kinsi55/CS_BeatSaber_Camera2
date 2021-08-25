@@ -14,6 +14,7 @@ Shader "Custom/VolumetricBlit" {
 			#include "UnityCG.cginc"
 
 			sampler2D_half _MainTex;
+			half4 _MainTex_ST;
 
 			struct ayo {
 				float4 vertex : POSITION;
@@ -25,7 +26,7 @@ Shader "Custom/VolumetricBlit" {
 			}
 
 			fixed4 frag(ayo i) : SV_Target {
-				return tex2D(_MainTex, i.texcoord);
+				return tex2D(_MainTex, UnityStereoScreenSpaceUVAdjust(i.texcoord, _MainTex_ST));
 			}
 			ENDCG
 		}
@@ -40,6 +41,7 @@ Shader "Custom/VolumetricBlit" {
 			#include "UnityCG.cginc"
 
 			sampler2D_half _MainTex;
+			half4 _MainTex_ST;
 
 			struct ayo {
 				float4 vertex : POSITION;
@@ -53,7 +55,7 @@ Shader "Custom/VolumetricBlit" {
 			}
 
 			fixed4 frag(ayo i) : SV_Target {
-				return tex2D(_MainTex, i.texcoord);
+				return tex2D(_MainTex, UnityStereoScreenSpaceUVAdjust(i.texcoord, _MainTex_ST));
 			}
 			ENDCG
 		}
