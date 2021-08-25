@@ -32,7 +32,7 @@ namespace Camera2.Configuration {
 		[JsonProperty(DefaultValueHandling = DefaultValueHandling.Ignore)]
 		public Dictionary<KeyCode, string> customSceneBindings = new Dictionary<KeyCode, string>();
 
-		public bool autoswitchFromCustom = true;
+		public bool autoswitchFromCustom = false;
 		private bool wasLoaded = false;
 
 		public void Load() {
