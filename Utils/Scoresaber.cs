@@ -3,6 +3,7 @@ using System.Linq;
 using System.Reflection;
 using UnityEngine;
 using HarmonyLib;
+using Camera2.HarmonyPatches;
 
 namespace Camera2.Utils {
 	public static class ScoresaberUtil {
@@ -19,6 +20,8 @@ namespace Camera2.Utils {
 		}
 
 		public static void UpdateIsInReplay() {
+			var wasInReplay = isInReplay;
+
 			isInReplay = IsInReplay();
 			replayCamera = !isInReplay ? null : GameObject.Find("LocalPlayerGameCore/Recorder/RecorderCamera")?.GetComponent<Camera>();
 
@@ -30,9 +33,26 @@ namespace Camera2.Utils {
 				if(x != null) {
 					replayCamera.tag = "Untagged";
 
+
+					/*
+					 * When a replay was just started, the VRCenterAdjust isnt set up "correctly" and Cam2 has no idea about
+					 * the offset applied for the VR-Spectator. This is mainly relevant when having "Follow replay position"
+					 * off as then the camera would be too far forward, assuming default settings, until you open the Pause
+					 * menu or the Replay UI ingame
+					 * This is super hacky trash but it does the job for now™
+					 * I'm not exactly sure why I *need* to look it up again here, else it wont work - whatever.
+					 */
+					if(!wasInReplay) {
+						var y = GameObject.Find("SpectatorParent/RecorderCamera(Clone)");
+
+						if(y != null)
+							HookRoomAdjust.ApplyCustom(y.transform.parent.position, y.transform.parent.rotation);
+					}
+
 					if(!UnityEngine.XR.XRDevice.isPresent)
 						x.enabled = false;
 
+					// Doing this so other plugins that rely on Camera.main dont die
 					x.tag = "MainCamera";
 				}
 			}
