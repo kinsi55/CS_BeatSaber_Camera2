@@ -42,12 +42,24 @@ namespace Camera2.Behaviours {
 			if(grabbedCamera != null) {
 				if(controller != null && grabbedCamera.worldCam.isActiveAndEnabled) {
 					var p = controller.transform.TransformPoint(grabStartPos);
-					var r = controller.rotation * grabStartRot;
+					var r = (controller.rotation * grabStartRot).eulerAngles;
 
 					//grabbedCamera.transformchain.BacktrackTo(grabbedCamera.transformer, ref p, ref r);
 
 					grabbedCamera.transformer.position = p;
-					grabbedCamera.transformer.rotation = r;
+					void snap(ref float a, float snap = 4f, float step = 45f) {
+						var l = a % step;
+
+						if(l <= snap)
+							a -= l;
+						else if(l >= step - snap)
+							a += step - l;
+					}
+					//grabbedCamera.transformer.rotation = r;
+					snap(ref r.x);
+					snap(ref r.y);
+					snap(ref r.z);
+					grabbedCamera.transformer.rotation = Quaternion.Euler(r.x, r.y, r.z);
 
 					grabbedCamera.transformchain.Calculate();
 
