@@ -244,7 +244,18 @@ namespace Camera2.Configuration {
 			}
 		}
 
+		private bool _worldCamUnderScreen = true;
+		public bool worldCamUnderScreen {
+			get => _worldCamUnderScreen;
+			set {
+				_worldCamUnderScreen = value;
+				if(isLoaded)
+					cam.worldCam?.SetPreviewPositionAndSize();
+			}
+		}
+
 		public bool ShouldSerializepreviewScreenSize() => type == CameraType.Positionable;
+		public bool ShouldSerializeworldCamUnderScreen() => type == CameraType.Positionable;
 
 		private float _FOV;
 		public float FOV {

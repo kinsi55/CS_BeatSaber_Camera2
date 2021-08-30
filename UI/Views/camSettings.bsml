@@ -18,7 +18,7 @@
 			<checkbox id='pivotingOffsetToggle' text='Pivoting Firstperson Offset' value='misc_pivotingOffset' bind-value='true' apply-on-change='true'
 				hover-hint='Turning this off Changes the offset to be Absolute (Like it works in Camera Plus) instead of pivoting around the head position. Both have their advantages and disadvantages'
 			/>
-			<checkbox text='Lock screen position / size' value='viewRect_isLocked' bind-value='true' apply-on-change='true'
+			<checkbox text='Lock Desktop screen position / size' value='viewRect_isLocked' bind-value='true' apply-on-change='true'
 				hover-hint='Locks the Position / Size of the Cameras screen while you are not editing its settings to prevent accidental changes'
 			/>
 		</modifier-container>
