@@ -27,7 +27,8 @@ Shader "Unlit/LuminanceKey" {
 			};
 
 			void vert (inout ayo v) {
-				v.vertex = UnityObjectToClipPos(v.vertex);
+				if(_Threshold != 0)
+					v.vertex = UnityObjectToClipPos(v.vertex);
 			}
 
 			sampler2D_half _LastCameraDepthTexture;
