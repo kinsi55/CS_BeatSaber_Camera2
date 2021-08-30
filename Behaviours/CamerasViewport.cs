@@ -6,6 +6,7 @@ using Camera2.Utils;
 using System.Runtime.InteropServices;
 using System;
 using Camera2.HarmonyPatches;
+using UnityEngine.EventSystems;
 
 namespace Camera2.Behaviours {
 
@@ -16,66 +17,68 @@ namespace Camera2.Behaviours {
 		public Cam2 cam { get; private set; }
 		public RectTransform rekt { get; private set; }
 
-		public Vector2 position { get => rekt.position; set { rekt.position = value; } }
-		public Vector2 size { get => rekt.sizeDelta; set { rekt.sizeDelta = value; } }
-
-		public void SetPositionClamped(Vector2 pos, bool writeToConfig = false) {
-			pos.x = Mathf.Clamp(pos.x, 0, Screen.width - rekt.rect.width);
-			pos.y = Mathf.Clamp(pos.y, 0, Screen.height - rekt.rect.height);
-
-			position = pos;
-
-			if(writeToConfig && cam.settings.viewRect.position != position) {
-				cam.settings.SetViewRect(new Rect(cam.settings.viewRect) { position = position });
-				cam.settings.Save();
-			}
-		}
-
-		public const int MIN_SIZE = 50;
-
-		public void ModifySizeClamped(Vector2 diff, bool writeToConfig = false) {
+		public void SetPositionClamped(Vector2 delta, int[] matrix, bool writeToConfig = false) {
 			/*
-			 * Dont even try to understand this, I wont bother to comment either, 
-			 * I have no idea what is going on and kinda brute forced this solution
-			 * Feel free to make this simpler tho if you want, I hate every single line of this
-			 * Why cant Unity just have an option to make the top left of a canvas 0;0 instead of bottom left
+			 * If you can simplify this I happily invite you to do so, this took me way too long lmao
+			 * This is probably possible in half the LOC but i already spent way too much time on this
 			 */
-			var sizex = Mathf.Clamp(diff.x + cam.settings.viewRect.width, MIN_SIZE, Screen.width - position.x);
-			var sizey = Mathf.Clamp(cam.settings.viewRect.height - diff.y, MIN_SIZE, cam.settings.viewRect.y + cam.settings.viewRect.height);
+			var vrc = cam.settings.viewRect;
+			var iMin = vrc.MinAnchor();
+			var iMax = vrc.MaxAnchor();
 
-			position = new Vector2(
-				position.x,
-				Mathf.Clamp(cam.settings.viewRect.y + diff.y, 0, cam.settings.viewRect.y + cam.settings.viewRect.height - MIN_SIZE)
+			// Theoretical transform, ignoring bounds
+			var oMin = new Vector2(iMin.x + (delta.x * matrix[0]), iMin.y + (delta.y * matrix[1]));
+			var oMax = new Vector2(iMax.x + (delta.x * matrix[2]), iMax.y + (delta.y * matrix[3]));
+
+			// Constraining min/max to stay within bounds and the size to stay the same
+			var oMinConstrained = new Vector2(
+				Mathf.Clamp(oMin.x, 0, 1 - (vrc.width * matrix[2])), 
+				Mathf.Clamp(oMin.y, 0, 1 - (vrc.height * matrix[3]))
+			);
+			var oMaxConstrained = new Vector2(
+				Mathf.Clamp(oMax.x, vrc.width * matrix[0], 1), 
+				Mathf.Clamp(oMax.y, vrc.height * matrix[1], 1)
 			);
 
-			size = new Vector2(sizex, sizey);
-			
-			if(writeToConfig) {
-				cam.settings.SetViewRect(new Rect(position, size));
+			var clampW = matrix[0] | matrix[2];
+			var clampH = matrix[1] | matrix[3];
+
+			// Clamp output size to be at least N while staying in bounds
+			var oMinClamped = new Vector2(
+				matrix[0] == 0 ? iMin.x : Mathf.Clamp(oMinConstrained.x, 0, (clampW * oMaxConstrained.x) - 0.1f),
+				matrix[1] == 0 ? iMin.y : Mathf.Clamp(oMinConstrained.y, 0, (clampH * oMaxConstrained.y) - 0.1f)
+			);
+
+			var oMaxClamped = new Vector2(
+				matrix[2] == 0 ? iMax.x : Mathf.Clamp(oMaxConstrained.x, 0.1f + (clampW * oMinConstrained.x), 1),
+				matrix[3] == 0 ? iMax.y : Mathf.Clamp(oMaxConstrained.y, 0.1f + (clampH * oMinConstrained.y), 1)
+			);
+
+			rekt.anchorMin = oMinClamped;
+			rekt.anchorMax = oMaxClamped;
+
+			if(writeToConfig && delta != Vector2.zero) {
+				cam.settings.SetViewRect(oMinClamped.x, oMinClamped.y, oMaxClamped.x - oMinClamped.x, oMaxClamped.y - oMinClamped.y);
 				cam.settings.Save();
 			}
 		}
 
 		new public void Awake() {
-			rekt = gameObject.GetComponent<RectTransform>();
-			rekt.pivot = new Vector2(0, 0);
-
-			// Idea: Outline cameras when hovered, doesnt work, cba.
-			//var x = gameObject.AddComponent<Outline>();
-			//x.effectColor = Color.red;
-			//x.effectDistance = new Vector2(50, 50);
-			//x.enabled = true;
+			rekt = (transform as RectTransform);
+			rekt.pivot = rekt.sizeDelta = new Vector2(0, 0);
 		}
 
 		public void SetSource(Cam2 cam) {
 			this.cam = cam;
 			
 			texture = cam.renderTexture;
-			rekt.sizeDelta = cam.settings.viewRect.size;
-			position = cam.settings.viewRect.position;
+
+			rekt.anchorMin = cam.settings.viewRect.MinAnchor();
+			rekt.anchorMax = cam.settings.viewRect.MaxAnchor();
+
+			rekt.anchoredPosition = new Vector2(0, 0);
 			gameObject.name = cam.name;
 		}
-		
 	}
 
 	class CamerasViewport : MonoBehaviour {
@@ -99,23 +102,40 @@ namespace Camera2.Behaviours {
 
 		enum CamAction {
 			None,
-			Move,
 			Menu,
-			Resize_BR // Cba to implement scaling on other corners atm
+			Move,
+			Resize_BR,
+			Resize_TL,
+			Resize_TR,
+			Resize_BL,
 		}
 
-		const int grabbersize = 20;
+		static int[][] deltaSchemes = new int[][] {
+			new int[] { 1, 1, 1, 1 }, // Drag
+			new int[] { 0, 1, 1, 0 }, // Resize from bottom right
+			new int[] { 1, 0, 0, 1 }, // Resize from top left
+			new int[] { 0, 0, 1, 1 }, // Resize from top right
+			new int[] { 1, 1, 0, 0 } // Resize from bottom left
+		};
+
+		const float grabbersize = 25;
 
 		LessRawImage GetViewAtPoint(Vector2 point, ref CamAction actionAtPoint) {
 			// This should already be sorted in the correct order
 			foreach(var camScreen in GetComponentsInChildren<LessRawImage>(false).Reverse()) {
-				var d = new Rect(camScreen.rekt.position, camScreen.rekt.sizeDelta);
+				var d = new Rect(camScreen.rekt.position, camScreen.rekt.rect.size);
 
 				if(d.Contains(point) && (!camScreen.cam.settings.isScreenLocked || UI.SettingsView.cam == camScreen.cam)) {
 					var relativeCursorPos = point - d.position;
 
 					if(relativeCursorPos.y <= grabbersize && relativeCursorPos.x >= d.width - grabbersize) {
 						actionAtPoint = CamAction.Resize_BR;
+					} else if(relativeCursorPos.y >= d.height - grabbersize && relativeCursorPos.x >= d.width - grabbersize) {
+						actionAtPoint = CamAction.Resize_TR;
+					} else if(relativeCursorPos.y >= d.height - grabbersize && relativeCursorPos.x <= grabbersize) {
+						actionAtPoint = CamAction.Resize_TL;
+					} else if(relativeCursorPos.y <= grabbersize && relativeCursorPos.x <= grabbersize) {
+						actionAtPoint = CamAction.Resize_BL;
 					} else {
 						actionAtPoint = CamAction.Move;
 					}
@@ -130,14 +150,14 @@ namespace Camera2.Behaviours {
 		}
 		
 
-		private Vector2 mouseStartPos;
+
+		private Vector2 mouseStartPos01;
+		private Vector2 lastScreenRes = Vector2.zero;
 		private LessRawImage targetCam;
 		private CamAction possibleAction = CamAction.None;
 		private CamAction currentAction = CamAction.None;
 
 		private Vector3 lastMousePos;
-
-		private Vector2 lastScreenSize = new Vector2(Screen.width, Screen.height);
 
 		private bool didShowHint = false;
 
@@ -162,6 +182,14 @@ namespace Camera2.Behaviours {
 				}
 			}
 
+			var curRes = new Vector2(Screen.width, Screen.height);
+			if(lastScreenRes != Vector2.zero) {
+				foreach(var c in CamManager.cams)
+					c.Value.UpdateRenderTextureAndView();
+			}
+
+			lastScreenRes = curRes;
+
 			if(HookFPFC.isInFPFC)
 				return;
 
@@ -174,7 +202,11 @@ namespace Camera2.Behaviours {
 
 				targetCam = GetViewAtPoint(lastMousePos, ref possibleAction);
 
-				WinAPI.SetCursor(possibleAction == CamAction.Resize_BR ? WinAPI.WindowsCursor.IDC_SIZENWSE : WinAPI.WindowsCursor.IDC_ARROW);
+				if(possibleAction == CamAction.Resize_BR || possibleAction == CamAction.Resize_TL) {
+					WinAPI.SetCursor(WinAPI.WindowsCursor.IDC_SIZENWSE);
+				} else if(possibleAction == CamAction.Resize_BL || possibleAction == CamAction.Resize_TR) {
+					WinAPI.SetCursor(WinAPI.WindowsCursor.IDC_SIZENESW);
+				}
 			}
 
 			if(Input.GetMouseButtonUp(1) && currentAction == CamAction.None) {
@@ -192,7 +224,7 @@ namespace Camera2.Behaviours {
 			if(possibleAction != CamAction.None) {
 				// Drag handler / Resize
 				if(Input.GetMouseButtonDown(0) && targetCam != null && currentAction == CamAction.None) {
-					mouseStartPos = lastMousePos;
+					mouseStartPos01 = lastMousePos / new Vector2(Screen.width, Screen.height);
 					currentAction = possibleAction;
 				}
 
@@ -201,20 +233,19 @@ namespace Camera2.Behaviours {
 
 				bool released = !Input.GetMouseButton(0) || !targetCam.isActiveAndEnabled;
 
-				if(currentAction == CamAction.Move) {
+				var x = Input.mousePosition / new Vector2(Screen.width, Screen.height);
+
+				if((int)currentAction >= 2) {
 					targetCam.SetPositionClamped(
 						// We take the current configured position and set the view position to it + the cursor move delta
-						targetCam.cam.settings.viewRect.position + (Vector2)Input.mousePosition - mouseStartPos,
+						x - mouseStartPos01,
+
+						deltaSchemes[(int)currentAction-2],
 						// And only when the button was released, save it to the config to make it the new config value
 						released
 					);
-				} else if(currentAction == CamAction.Resize_BR) {
-					targetCam.ModifySizeClamped(
-						(Vector2)Input.mousePosition - mouseStartPos,
-						released
-					);
 				}
-				GL.Clear(true, true, Color.black);
+
 				if(released)
 					currentAction = CamAction.None;
 			}

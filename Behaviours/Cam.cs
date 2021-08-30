@@ -60,8 +60,8 @@ namespace Camera2.Behaviours {
 
 
 		internal void UpdateRenderTextureAndView() {
-			var w = (int)Math.Round(settings.viewRect.width * settings.renderScale);
-			var h = (int)Math.Round(settings.viewRect.height * settings.renderScale);
+			var w = (int)Math.Round(settings.viewRect.width * Screen.width * settings.renderScale);
+			var h = (int)Math.Round(settings.viewRect.height * Screen.height * settings.renderScale);
 
 			var sizeChanged = renderTexture?.width != w || renderTexture?.height != h || renderTexture?.antiAliasing != settings.antiAliasing;
 
@@ -80,7 +80,7 @@ namespace Camera2.Behaviours {
 				UCamera.Render();
 			}
 
-			if(sizeChanged || previewImage.position.x != settings.viewRect.x || previewImage.position.y != settings.viewRect.y)
+			if(sizeChanged || previewImage.rekt.anchorMin != settings.viewRect.MinAnchor())
 				previewImage?.SetSource(this);
 		}
 

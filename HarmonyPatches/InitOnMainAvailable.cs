@@ -27,10 +27,8 @@ namespace Camera2.HarmonyPatches {
 			if(!firstActivation)
 				return;
 
-			foreach(var cam in CamManager.cams.Values) {
-				cam.settings.UpdateViewRect();
+			foreach(var cam in CamManager.cams.Values)
 				cam.UpdateRenderTextureAndView();
-			}
 		}
 	}
 }

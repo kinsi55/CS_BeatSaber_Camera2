@@ -202,16 +202,16 @@ namespace Camera2.UI {
 		
 
 		internal float viewRect_x {
-			get => -cam.settings._viewRectCfg.x; set { var n = cam.settings.viewRect; n.x = -value; cam.settings.SetViewRect(n); }
+			get => -cam.settings.viewRect.x; set => cam.settings.SetViewRect(value, null, null, null);
 		}
 		internal float viewRect_y {
-			get => -cam.settings._viewRectCfg.y; set { var n = cam.settings.viewRect; n.y = -value; cam.settings.SetViewRect(n); }
+			get => -cam.settings.viewRect.y; set => cam.settings.SetViewRect(null, value, null, null);
 		}
 		internal float viewRect_width {
-			get => -cam.settings._viewRectCfg.width; set { var n = cam.settings.viewRect; n.width = -value; cam.settings.SetViewRect(n); }
+			get => -cam.settings.viewRect.width; set => cam.settings.SetViewRect(null, null, value, null);
 		}
 		internal float viewRect_height {
-			get => -cam.settings._viewRectCfg.height; set { var n = cam.settings.viewRect; n.height = -value; cam.settings.SetViewRect(n); }
+			get => -cam.settings.viewRect.height; set => cam.settings.SetViewRect(null, null, null, value);
 		}
 		internal bool viewRect_isLocked {
 			get => cam.settings.isScreenLocked; set => cam.settings.isScreenLocked = value;
@@ -404,12 +404,12 @@ namespace Camera2.UI {
 
 		Cam2 GetNewCam(string name) {
 			var cam = CamManager.AddNewCamera(name);
-			cam.settings.SetViewRect(new UnityEngine.Rect(
-				UnityEngine.Random.Range(-0.2f, 0), 
-				UnityEngine.Random.Range(-0.2f, 0), 
-				-1f / 3,
-				-1f / 3
-			));
+			cam.settings.SetViewRect(
+				UnityEngine.Random.Range(0, 0.2f), 
+				UnityEngine.Random.Range(0, 0.2f), 
+				1f / 3,
+				1f / 3
+			);
 
 			return cam;
 		}
@@ -431,7 +431,7 @@ namespace Camera2.UI {
 
 			cam.settings.type = CameraType.Positionable;
 			cam.settings.FOV = 75;
-			cam.settings.SetViewRect(new UnityEngine.Rect(0, 0, -.195f, -.395f));
+			cam.settings.SetViewRect(0, 0, .195f, .395f);
 			cam.settings.targetPos = new UnityEngine.Vector3(-3, 1.2f, 0);
 			cam.settings.targetRot = new UnityEngine.Vector3(0, 90f, 0);
 			cam.settings.visibleObjects.Walls = WallVisiblity.Hidden;

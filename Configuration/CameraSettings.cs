@@ -124,7 +124,9 @@ namespace Camera2.Configuration {
 			Save();
 #endif
 
-			UpdateViewRect();
+			if(viewRect == null)
+				viewRect = new ScreenRect(0, 0, 1, 1, false);
+
 			ApplyPositionAndRotation();
 			ApplyLayerBitmask();
 			cam.UpdateRenderTextureAndView();
@@ -296,29 +298,6 @@ namespace Camera2.Configuration {
 		public GameObjects visibleObjects => overrideToken?.visibleObjects ?? _visibleObjects;
 
 
-		Rect GetClampedViewRect(Rect input) {
-			Rect p = new Rect();
-
-			p.x = Math.Max(0, Math.Min(input.x, Screen.width - Math.Max(input.width, LessRawImage.MIN_SIZE)));
-			p.y = Math.Max(0, Math.Min(input.y, Screen.height - Math.Max(input.height, LessRawImage.MIN_SIZE)));
-
-			p.width = Mathf.Clamp(input.width, LessRawImage.MIN_SIZE, Screen.width - p.x);
-			p.height = Mathf.Clamp(input.height, LessRawImage.MIN_SIZE, Screen.height - p.y);
-
-			return p;
-		}
-
-		public Rect UpdateViewRect() => SetViewRect(_viewRectCfg.ToRect());
-		public Rect SetViewRect(Rect inRect) {
-			if(inRect.x < 0) inRect.x = Screen.width * -inRect.x;
-			if(inRect.y < 0) inRect.y = Screen.height * -inRect.y;
-			if(inRect.width < 0) inRect.width = Screen.width * -inRect.width;
-			if(inRect.height < 0) inRect.height = Screen.height * -inRect.height;
-
-			viewRect = inRect;
-			return _viewRectCalculated;
-		}
-
 		internal class ScreenRect {
 			public float x;
 			public float y;
@@ -335,40 +314,39 @@ namespace Camera2.Configuration {
 			}
 
 			public Rect ToRect() => new Rect(x, y, width, height);
+
+			public Vector2 MinAnchor() => new Vector2(x, y);
+			public Vector2 MaxAnchor() => new Vector2(x + width, y + height);
 		}
 
 		[JsonConverter(typeof(ScreenRectConverter)), JsonProperty("viewRect")]
-		private ScreenRect iCant {
-			get => _viewRectCfg;
-			set {
-				_viewRectCfg = value;
-				SetViewRect(value.ToRect());
+		ScreenRect _viewRectCfg {
+			get => viewRect; set {
+				value.x = Math.Abs(value.x);
+				value.y = Math.Abs(value.y);
+				value.width = Math.Abs(value.width);
+				value.height = Math.Abs(value.height);
+
+				viewRect = value;
 			}
-		}
-
-		internal ScreenRect _viewRectCfg { get; private set; } = new ScreenRect(0, 0, -1, -1, false);
-		private Rect _viewRectCalculated = Rect.zero;
-
-		internal bool isScreenLocked {
-			get => _viewRectCfg.locked;
-			set => _viewRectCfg.locked = value;
 		}
 
 		[JsonIgnore]
-		public Rect viewRect {
-			get => _viewRectCalculated;
-			private set {
-				var x = GetClampedViewRect(value);
+		internal ScreenRect viewRect { get; private set; }
 
-				_viewRectCalculated = new Rect(x);
-				_viewRectCfg.x = -x.x / Screen.width;
-				_viewRectCfg.y = -x.y / Screen.height;
-				_viewRectCfg.width = -x.width / Screen.width;
-				_viewRectCfg.height = -x.height / Screen.height;
+		public void SetViewRect(float? x, float? y, float? width, float? height) {
+			viewRect.x = x ?? viewRect.x;
+			viewRect.y = y ?? viewRect.y;
+			viewRect.width = width ?? viewRect.width;
+			viewRect.height = height ?? viewRect.height;
 
-				if(isLoaded)
-					cam.UpdateRenderTextureAndView();
-			}
+			if(isLoaded)
+				cam.UpdateRenderTextureAndView();
+		}
+
+		internal bool isScreenLocked {
+			get => viewRect.locked;
+			set => viewRect.locked = value;
 		}
 		
 		public Settings_Multiplayer Multiplayer { get; private set; }
