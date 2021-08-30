@@ -21,9 +21,12 @@ namespace Camera2.Behaviours {
 			if(grabbedCamera != null)
 				FinishCameraMove();
 
-			controller = Resources.FindObjectsOfTypeAll<VRLaserPointer>()
-				.LastOrDefault(x => x.gameObject.activeInHierarchy)
-				?.GetComponentInParent<VRController>();
+			var controllers = Resources.FindObjectsOfTypeAll<VRLaserPointer>();
+
+			controller = (!HookFPFC.isInFPFC ? 
+				controllers.LastOrDefault(x => x.isActiveAndEnabled) : 
+				controllers.LastOrDefault(x => x.transform.eulerAngles + x.transform.position != Vector3.zero)
+			)?.GetComponentInParent<VRController>();
 
 			if(controller == null)
 				return;
