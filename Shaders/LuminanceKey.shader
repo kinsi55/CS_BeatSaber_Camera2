@@ -2,7 +2,7 @@ Shader "Unlit/LuminanceKey" {
 	Properties {
 		_MainTex ("Texture", 2D) = "white" {}
 		_HasDepth ("Depthtexture enabled", Range(0.0,1.0)) = 1.0
-		_Threshold ("Transparency Threshold", Range(1.0,100.0)) = 30.0
+		_Threshold ("Transparency Threshold", Range(1.0,20.0)) = 30.0
 	}
 	SubShader {
 		Tags { "Queue"="Overlay" "IgnoreProjector"="True" }
@@ -36,19 +36,20 @@ Shader "Unlit/LuminanceKey" {
 			half _HasDepth;
 
 			fixed4 frag (ayo i) : SV_Target {
-				fixed4 col = tex2D(_MainTex, i.uv);
-
 				if(_Threshold == 0)
 					return 1;
 
-				float rgbt = min(2, col.r + col.g + col.b) / (_Threshold / 3);
+				if(_HasDepth == 1) {
+					float d = tex2D(_LastCameraDepthTexture, i.uv).r;
 
-				if(_HasDepth == 0)
-					return rgbt;
+					float outVal = pow((1 - Linear01Depth(d)) * 1.05, 3);
 
-				float d = Linear01Depth(tex2D(_LastCameraDepthTexture, i.uv).r);
+					if(outVal > 0.1)
+						return outVal;
+				}
 
-				return min(1, max((1 - d) * 10, rgbt));
+				fixed4 col = tex2D(_MainTex, i.uv);
+				return pow(min(1, (col.r + col.g + col.b) * (20 - _Threshold)), 2) - 0.1;
 			}
 			ENDCG
 		}
