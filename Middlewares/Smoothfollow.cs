@@ -1,10 +1,9 @@
-﻿using UnityEngine;
-using UnityEngine.SceneManagement;
-using Newtonsoft.Json;
+﻿using Camera2.HarmonyPatches;
 using Camera2.Interfaces;
 using Camera2.Utils;
-using Camera2.HarmonyPatches;
-using Camera2.Behaviours;
+using Newtonsoft.Json;
+using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace Camera2.Configuration {
 	class Settings_Smoothfollow : CameraSubSettings {
@@ -13,7 +12,7 @@ namespace Camera2.Configuration {
 
 		public bool forceUpright = false;
 		public bool followReplayPosition = true;
-		
+
 		private bool _pivotingOffset = true;
 		[JsonProperty("pivotingOffset")]
 		public bool pivotingOffset {
@@ -59,7 +58,7 @@ namespace Camera2.Middlewares {
 			Transform parentToUse = null;
 			bool isAttachedToReplayCam = false;
 			if(
-				ScoresaberUtil.isInReplay && 
+				ScoresaberUtil.isInReplay &&
 				//UnityEngine.XR.XRDevice.isPresent && 
 				settings.type == Configuration.CameraType.FirstPerson
 			) {
@@ -68,7 +67,7 @@ namespace Camera2.Middlewares {
 					settings.Smoothfollow.useLocalPosition = true;
 					isAttachedToReplayCam = true;
 				}
-				
+
 				if(parent == ScoresaberUtil.replayCamera?.transform)
 					parent = null;
 			}
@@ -92,7 +91,7 @@ namespace Camera2.Middlewares {
 			}
 
 			//System.Console.WriteLine("FP cam is attached to {0}", parentToUse);
-			
+
 			// If we dont have a parent we should not render.
 			if(parentToUse == null)
 				return false;

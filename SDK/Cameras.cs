@@ -1,10 +1,7 @@
 ﻿using Camera2.Configuration;
 using Camera2.Managers;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Camera2.SDK {
 	public static class Cameras {

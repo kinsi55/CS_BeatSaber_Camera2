@@ -1,15 +1,14 @@
-﻿using System;
-using System.Linq;
-using System.Text;
-using UnityEngine;
+﻿using Camera2.Behaviours;
+using Camera2.HarmonyPatches;
+using Camera2.Interfaces;
+using Camera2.Managers;
+using Camera2.SDK;
+using Camera2.Utils;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
-using Camera2.Behaviours;
-using Camera2.Utils;
-using Camera2.Managers;
-using Camera2.Interfaces;
-using Camera2.HarmonyPatches;
-using Camera2.SDK;
+using System;
+using System.Linq;
+using UnityEngine;
 
 namespace Camera2.Configuration {
 	public enum CameraType {
@@ -87,7 +86,7 @@ namespace Camera2.Configuration {
 		// Wouldnt be very useful since I havent figured out yet how to make cams have transparency
 		//public bool EverythingElse { get { return _EverythingElse; } set { _EverythingElse = value; parentSetting.ApplyLayerBitmask(); } }
 	}
-	
+
 	class CameraSettings {
 		internal Cam2 cam { get; private set; }
 		internal bool isLoaded { get; private set; } = false;
@@ -203,7 +202,7 @@ namespace Camera2.Configuration {
 				overrideToken = x;
 			}
 		}
-		
+
 
 
 		private CameraType _type = CameraType.FirstPerson;
@@ -221,7 +220,7 @@ namespace Camera2.Configuration {
 				ApplyPositionAndRotation();
 			}
 		}
-		
+
 		private WorldCamVisibility _worldCamVisibility = WorldCamVisibility.HiddenWhilePlaying;
 		[JsonConverter(typeof(StringEnumConverter))]
 		public WorldCamVisibility worldCamVisibility {
@@ -248,9 +247,9 @@ namespace Camera2.Configuration {
 		public bool ShouldSerializepreviewScreenSize() => type == CameraType.Positionable;
 
 		private float _FOV;
-		public float FOV { 
-			get => overrideToken?.FOV ?? _FOV; 
-			set { _FOV = cam.UCamera.fieldOfView = value; cam.UCamera.orthographicSize = _FOV / 30f; } 
+		public float FOV {
+			get => overrideToken?.FOV ?? _FOV;
+			set { _FOV = cam.UCamera.fieldOfView = value; cam.UCamera.orthographicSize = _FOV / 30f; }
 		}
 
 		public int layer {
@@ -267,7 +266,7 @@ namespace Camera2.Configuration {
 			get => _antiAliasing;
 			set {
 				_antiAliasing = Mathf.Clamp(value, 1, 8);
-				if(isLoaded) 
+				if(isLoaded)
 					cam.UpdateRenderTextureAndView();
 			}
 		}
@@ -348,7 +347,7 @@ namespace Camera2.Configuration {
 			get => viewRect.locked;
 			set => viewRect.locked = value;
 		}
-		
+
 		public Settings_Multiplayer Multiplayer { get; private set; }
 		public Settings_Smoothfollow Smoothfollow { get; private set; }
 		public Settings_ModmapExtensions ModmapExtensions { get; private set; }

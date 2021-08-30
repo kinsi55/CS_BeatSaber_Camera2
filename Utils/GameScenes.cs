@@ -1,9 +1,8 @@
-﻿using System.Linq;
+﻿using Camera2.HarmonyPatches;
+using Camera2.Managers;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using Camera2.HarmonyPatches;
-using Camera2.Middlewares;
-using Camera2.Managers;
 
 namespace Camera2.Utils {
 	static class SceneUtil {

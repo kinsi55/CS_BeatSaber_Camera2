@@ -1,9 +1,7 @@
-﻿using System;
-using System.Linq;
+﻿using Camera2.HarmonyPatches;
+using HarmonyLib;
 using System.Reflection;
 using UnityEngine;
-using HarmonyLib;
-using Camera2.HarmonyPatches;
 
 namespace Camera2.Utils {
 	public static class ScoresaberUtil {

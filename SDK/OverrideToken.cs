@@ -1,15 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Reflection;
-using System.Runtime.CompilerServices;
-using System.Diagnostics;
-using UnityEngine;
-using Camera2.Behaviours;
+﻿using Camera2.Behaviours;
 using Camera2.Configuration;
 using Camera2.Managers;
+using System.Collections.Generic;
+using UnityEngine;
 
 namespace Camera2.SDK {
 	/// <summary>
@@ -61,7 +54,7 @@ namespace Camera2.SDK {
 		/// Returns if the camera instance that this OverrideToken was created for still exists
 		/// </summary>
 		public bool isValid => cam != null && cam.gameObject != null && CamManager.cams.ContainsKey(camName);
-	
+
 		/// <summary>
 		/// Closes this OverrideToken and returns the camera's values back to their default
 		/// </summary>

@@ -1,8 +1,7 @@
-﻿using System;
-using UnityEngine;
-using Newtonsoft.Json;
-using Camera2.HarmonyPatches;
+﻿using Camera2.HarmonyPatches;
 using Camera2.Interfaces;
+using Newtonsoft.Json;
+using UnityEngine;
 
 
 namespace Camera2.Configuration {
@@ -26,7 +25,7 @@ namespace Camera2.Configuration {
 namespace Camera2.Middlewares {
 	class FPSLimiter : CamMiddleware, IMHandler {
 		float renderTimeRollAccu = 0f;
-		
+
 		new public bool Pre() {
 			if(!enabled || settings.FPSLimiter.fpsLimit <= 0 || Application.targetFrameRate == settings.FPSLimiter.fpsLimit) return true;
 

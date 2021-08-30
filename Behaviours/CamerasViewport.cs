@@ -1,12 +1,10 @@
-﻿using System.Linq;
-using UnityEngine;
-using UnityEngine.UI;
+﻿using Camera2.HarmonyPatches;
 using Camera2.Managers;
 using Camera2.Utils;
-using System.Runtime.InteropServices;
 using System;
-using Camera2.HarmonyPatches;
-using UnityEngine.EventSystems;
+using System.Linq;
+using UnityEngine;
+using UnityEngine.UI;
 
 namespace Camera2.Behaviours {
 
@@ -32,11 +30,11 @@ namespace Camera2.Behaviours {
 
 			// Constraining min/max to stay within bounds and the size to stay the same
 			var oMinConstrained = new Vector2(
-				Mathf.Clamp(oMin.x, 0, 1 - (vrc.width * matrix[2])), 
+				Mathf.Clamp(oMin.x, 0, 1 - (vrc.width * matrix[2])),
 				Mathf.Clamp(oMin.y, 0, 1 - (vrc.height * matrix[3]))
 			);
 			var oMaxConstrained = new Vector2(
-				Mathf.Clamp(oMax.x, vrc.width * matrix[0], 1), 
+				Mathf.Clamp(oMax.x, vrc.width * matrix[0], 1),
 				Mathf.Clamp(oMax.y, vrc.height * matrix[1], 1)
 			);
 
@@ -70,7 +68,7 @@ namespace Camera2.Behaviours {
 
 		public void SetSource(Cam2 cam) {
 			this.cam = cam;
-			
+
 			texture = cam.renderTexture;
 
 			rekt.anchorMin = cam.settings.viewRect.MinAnchor();
@@ -148,7 +146,7 @@ namespace Camera2.Behaviours {
 
 			return null;
 		}
-		
+
 
 
 		private Vector2 mouseStartPos01;
@@ -211,7 +209,7 @@ namespace Camera2.Behaviours {
 
 			if(Input.GetMouseButtonUp(1) && currentAction == CamAction.None) {
 				if(!didShowHint && (didShowHint = true))
-					System.Threading.Tasks.Task.Run(() => WinAPI.MessageBox(IntPtr.Zero, "There is no desktop settings for Camera2, everything is done ingame!\n\nYou can drag around a cameras display and resize it with the bottom right corner from the desktop.", "FYI", 0));
+					System.Threading.Tasks.Task.Run(() => WinAPI.MessageBox(IntPtr.Zero, "There is no desktop settings for Camera2, everything is done ingame!\n\nYou can drag around a cameras display with your mouse and resize it on the corners corner from the desktop.", "FYI", 0));
 				//currentAction = CamAction.Menu;
 				// For now lets not add this as it can result in unclear circumstances with scenes etc.
 				//if(Input.GetKey(KeyCode.LeftControl)) {
@@ -240,7 +238,7 @@ namespace Camera2.Behaviours {
 						// We take the current configured position and set the view position to it + the cursor move delta
 						x - mouseStartPos01,
 
-						deltaSchemes[(int)currentAction-2],
+						deltaSchemes[(int)currentAction - 2],
 						// And only when the button was released, save it to the config to make it the new config value
 						released
 					);

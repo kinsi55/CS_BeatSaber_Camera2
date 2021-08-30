@@ -1,10 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using Camera2.Configuration;
+using Camera2.HarmonyPatches;
+using Camera2.Utils;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using Camera2.Configuration;
-using Camera2.Utils;
-using System;
-using Camera2.HarmonyPatches;
 
 namespace Camera2.Managers {
 
@@ -45,13 +44,13 @@ namespace Camera2.Managers {
 				sceneName = SceneUtil.currentScene.name;
 
 			List<SceneTypes> toLookup = new List<SceneTypes> { SceneTypes.Menu };
-			
+
 			if(SceneUtil.menuSceneNames.Contains(sceneName)) {
 				if(SceneUtil.isInMultiplayer)
 					toLookup.Insert(0, SceneTypes.MultiplayerMenu);
 			} else if(sceneName == "GameCore") {
 				toLookup.Insert(0, SceneTypes.Playing);
-				
+
 				if(HookLeveldata.isModdedMap) {
 					toLookup.Insert(0, SceneTypes.PlayingModmap);
 				} else if(HookLeveldata.is360Level) {
@@ -72,7 +71,7 @@ namespace Camera2.Managers {
 				toLookup.Insert(0, SceneTypes.FPFC);
 
 #if DEBUG
-			Plugin.Log.Info($"LoadGameScene -> {String.Join(", ", toLookup)}");
+			Plugin.Log.Info($"LoadGameScene -> {string.Join(", ", toLookup)}");
 #endif
 			SwitchToScene(FindSceneToUse(toLookup.ToArray()), forceReload);
 		}
@@ -83,7 +82,7 @@ namespace Camera2.Managers {
 
 #if DEBUG
 			Plugin.Log.Info($"Switching to scene {scene}");
-			Plugin.Log.Info($"Cameras: {String.Join(", ", settings.scenes[scene])}");
+			Plugin.Log.Info($"Cameras: {string.Join(", ", settings.scenes[scene])}");
 #endif
 			if(loadedScene == scene && !forceReload && !isOnCustomScene)
 				return;

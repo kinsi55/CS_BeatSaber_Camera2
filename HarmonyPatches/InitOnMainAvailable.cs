@@ -1,7 +1,6 @@
-﻿using UnityEngine;
+﻿using Camera2.Managers;
 using HarmonyLib;
-using Camera2.Behaviours;
-using Camera2.Managers;
+using UnityEngine;
 
 namespace Camera2.HarmonyPatches {
 	[HarmonyPatch(typeof(SmoothCameraController), "Start")]

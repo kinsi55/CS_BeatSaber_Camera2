@@ -1,11 +1,6 @@
-﻿using Camera2.Interfaces;
+﻿using Camera2.HarmonyPatches;
+using Camera2.Interfaces;
 using Camera2.Utils;
-using Camera2.HarmonyPatches;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using UnityEngine;
 
 namespace Camera2.Configuration {

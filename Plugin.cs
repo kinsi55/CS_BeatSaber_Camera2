@@ -1,13 +1,12 @@
-﻿using System.Reflection;
-using UnityEngine.SceneManagement;
-using IPA;
-using IPALogger = IPA.Logging.Logger;
-using HarmonyLib;
-using Camera2.Utils;
+﻿using Camera2.HarmonyPatches;
 using Camera2.Managers;
+using Camera2.Utils;
+using HarmonyLib;
+using IPA;
+using System.Reflection;
 using UnityEngine;
-using System.IO;
-using Camera2.HarmonyPatches;
+using UnityEngine.SceneManagement;
+using IPALogger = IPA.Logging.Logger;
 
 namespace Camera2 {
 	[Plugin(RuntimeOptions.SingleStartInit)]

@@ -51,7 +51,7 @@ namespace Camera2.Middlewares {
 			if(cam.settings.VMCProtocol.mode == Configuration.VMCMode.Disabled)
 				return;
 
-			if(prevFov == cam.settings.FOV && prevPos == cam.transformchain.position && prevRot == cam.transformchain.rotation )
+			if(prevFov == cam.settings.FOV && prevPos == cam.transformchain.position && prevRot == cam.transformchain.rotation)
 				return;
 
 			try {

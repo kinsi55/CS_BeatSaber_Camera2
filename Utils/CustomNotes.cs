@@ -1,8 +1,6 @@
-﻿using System;
-using System.Linq;
+﻿using HarmonyLib;
+using System;
 using System.Reflection;
-using UnityEngine;
-using HarmonyLib;
 
 namespace Camera2.Utils {
 	class CustomNotesUtil {

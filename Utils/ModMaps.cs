@@ -1,11 +1,11 @@
-﻿using System.Linq;
-using IPA.Loader;
+﻿using IPA.Loader;
+using System.Linq;
 
 namespace Camera2.Utils {
 	static class ModMapUtil {
 		static bool isModCapable =
 			PluginManager.EnabledPlugins.Any(x => x.Name == "MappingExtensions" || x.Name == "NoodleExtensions");
-		
+
 		static bool hasSongCore =
 			PluginManager.EnabledPlugins.Any(x => x.Name == "SongCore"); // failsafe, Noodle / MapEx do require it themselves technically
 

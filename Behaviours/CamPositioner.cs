@@ -1,7 +1,7 @@
-﻿using System.Linq;
+﻿using Camera2.HarmonyPatches;
+using System.Linq;
 using UnityEngine;
 using VRUIControls;
-using Camera2.HarmonyPatches;
 
 namespace Camera2.Behaviours {
 	class CamPositioner : MonoBehaviour {

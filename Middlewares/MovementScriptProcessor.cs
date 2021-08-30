@@ -1,12 +1,10 @@
-﻿using System.Linq;
-using UnityEngine;
+﻿using Camera2.Configuration;
 using Camera2.Interfaces;
-using Camera2.Utils;
-using static Camera2.Configuration.MovementScript;
-using Camera2.Configuration;
 using Camera2.Managers;
-using Camera2.Behaviours;
-using System;
+using Camera2.Utils;
+using System.Linq;
+using UnityEngine;
+using static Camera2.Configuration.MovementScript;
 
 namespace Camera2.Configuration {
 	class Settings_MovementScript : CameraSubSettings {
@@ -59,8 +57,8 @@ namespace Camera2.Middlewares {
 		public void OnDisable() => Reset();
 
 		new public bool Pre() {
-			if(settings.MovementScript.scriptList.Length == 0 || 
-				(!SceneUtil.isInSong && !settings.MovementScript.enableInMenu) || 
+			if(settings.MovementScript.scriptList.Length == 0 ||
+				(!SceneUtil.isInSong && !settings.MovementScript.enableInMenu) ||
 				cam.settings.type == Configuration.CameraType.FirstPerson
 			) {
 				Reset();
@@ -112,10 +110,10 @@ namespace Camera2.Middlewares {
 				frameIndex = 0;
 			}
 
-			for(;;) {
+			for(; ; ) {
 				if(targetFrame.startTime > currentAnimationTime)
 					break;
-				
+
 				if(targetFrame.transitionEndTime <= currentAnimationTime) {
 					lastPos = scriptTransformer.position = targetFrame.position;
 					lastRot = scriptTransformer.rotation = targetFrame.rotation;

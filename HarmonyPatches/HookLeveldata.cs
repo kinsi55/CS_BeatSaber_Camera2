@@ -1,9 +1,9 @@
-﻿using System;
-using System.Linq;
-using System.Collections.Generic;
-using System.Reflection;
+﻿using Camera2.Utils;
 using HarmonyLib;
-using Camera2.Utils;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
 
 namespace Camera2.HarmonyPatches {
 	[HarmonyPatch]
@@ -37,7 +37,7 @@ namespace Camera2.HarmonyPatches {
 
 		[HarmonyTargetMethods]
 		static IEnumerable<MethodBase> TargetMethods() {
-			foreach(var t in new Type[] { typeof(StandardLevelScenesTransitionSetupDataSO), typeof(MissionLevelScenesTransitionSetupDataSO), typeof(MultiplayerLevelScenesTransitionSetupDataSO)})
+			foreach(var t in new Type[] { typeof(StandardLevelScenesTransitionSetupDataSO), typeof(MissionLevelScenesTransitionSetupDataSO), typeof(MultiplayerLevelScenesTransitionSetupDataSO) })
 				yield return t.GetMethod("Init", BindingFlags.Instance | BindingFlags.Public);
 		}
 	}

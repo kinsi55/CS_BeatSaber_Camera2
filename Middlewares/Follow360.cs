@@ -1,9 +1,8 @@
-﻿using System;
-using UnityEngine;
-using Camera2.HarmonyPatches;
+﻿using Camera2.HarmonyPatches;
 using Camera2.Interfaces;
 using Camera2.Utils;
-using Camera2.Behaviours;
+using System;
+using UnityEngine;
 
 namespace Camera2.Configuration {
 	class Settings_Follow360 : CameraSubSettings {

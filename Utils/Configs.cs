@@ -1,5 +1,4 @@
 ﻿using IPA.Utilities;
-using System;
 using System.IO;
 
 namespace Camera2.Utils {

@@ -1,16 +1,13 @@
 ﻿//#define FPSCOUNT
 
+using Camera2.Configuration;
+using Camera2.Interfaces;
+using Camera2.Middlewares;
+using Camera2.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using IPA.Utilities;
-using Camera2.Interfaces;
-using Camera2.Middlewares;
-using Camera2.Configuration;
-using Camera2.Utils;
-using System.Reflection;
-using Camera2.HarmonyPatches;
 
 namespace Camera2.Behaviours {
 
@@ -32,7 +29,7 @@ namespace Camera2.Behaviours {
 
 		internal Transformer transformer;
 		internal TransformChain transformchain;
-		
+
 		public void Awake() {
 			DontDestroyOnLoad(gameObject);
 		}
@@ -88,7 +85,7 @@ namespace Camera2.Behaviours {
 			if(worldCam == null)
 				return;
 
-			bool doShowCam = 
+			bool doShowCam =
 				settings.type == Configuration.CameraType.Positionable &&
 				settings.worldCamVisibility != WorldCamVisibility.Hidden &&
 				(settings.worldCamVisibility != WorldCamVisibility.HiddenWhilePlaying || !SceneUtil.isSongPlaying);
@@ -125,7 +122,7 @@ namespace Camera2.Behaviours {
 
 			foreach(var child in camClone.transform.Cast<Transform>())
 				Destroy(child.gameObject);
-			
+
 			var trash = new string[] { "AudioListener", "LIV", "MainCamera", "MeshCollider" };
 			foreach(var component in camClone.GetComponents<Behaviour>())
 				if(trash.Contains(component.GetType().Name)) Destroy(component);
@@ -158,7 +155,7 @@ namespace Camera2.Behaviours {
 			AddMiddleware<PostProcessing>();
 		}
 
-		private void AddMiddleware<T>() where T: CamMiddleware, IMHandler {
+		private void AddMiddleware<T>() where T : CamMiddleware, IMHandler {
 			middlewares.Add(gameObject.AddComponent<T>().Init(this));
 		}
 
@@ -206,7 +203,7 @@ namespace Camera2.Behaviours {
 			}
 #endif
 		}
-		
+
 		private void OnEnable() {
 			// Force a render here so we dont end up with a stale image after having just enabled this camera
 			UCamera?.Render();
@@ -214,7 +211,7 @@ namespace Camera2.Behaviours {
 				previewImage.gameObject?.SetActive(true);
 			ShowWorldCamIfNecessary();
 		}
-		
+
 		private void OnDisable() {
 			if(previewImage != null) previewImage.gameObject?.SetActive(false);
 			ShowWorldCamIfNecessary();

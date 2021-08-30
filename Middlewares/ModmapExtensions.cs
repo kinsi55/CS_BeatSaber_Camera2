@@ -1,11 +1,9 @@
-﻿using UnityEngine;
-using Camera2.Utils;
+﻿using Camera2.HarmonyPatches;
 using Camera2.Interfaces;
-using Camera2.Managers;
-using Camera2.HarmonyPatches;
-using Camera2.Behaviours;
-using System.Reflection;
+using Camera2.Utils;
 using HarmonyLib;
+using System.Reflection;
+using UnityEngine;
 
 namespace Camera2.Configuration {
 	class Settings_ModmapExtensions : CameraSubSettings {

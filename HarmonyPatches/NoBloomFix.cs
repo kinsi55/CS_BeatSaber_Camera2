@@ -1,5 +1,5 @@
-﻿using UnityEngine;
-using HarmonyLib;
+﻿using HarmonyLib;
+using UnityEngine;
 
 namespace Camera2.HarmonyPatches {
 	//[HarmonyPatch(typeof(PyramidBloomRendererSO), "OnEnable")]

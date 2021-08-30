@@ -1,26 +1,24 @@
 ﻿
+using BeatSaberMarkupLanguage;
+using BeatSaberMarkupLanguage.Attributes;
+using BeatSaberMarkupLanguage.Components;
+using BeatSaberMarkupLanguage.Components.Settings;
+using BeatSaberMarkupLanguage.GameplaySetup;
+using BeatSaberMarkupLanguage.MenuButtons;
+using BeatSaberMarkupLanguage.ViewControllers;
+using Camera2.Behaviours;
+using Camera2.Configuration;
+using Camera2.Managers;
+using HarmonyLib;
+using HMUI;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using BeatSaberMarkupLanguage.MenuButtons;
-using BeatSaberMarkupLanguage.Attributes;
-using BeatSaberMarkupLanguage.ViewControllers;
-using BeatSaberMarkupLanguage;
-using HMUI;
-using BeatSaberMarkupLanguage.Components;
-using Camera2.Managers;
-using Camera2.Behaviours;
-using BeatSaberMarkupLanguage.Components.Settings;
-using Camera2.Configuration;
 using System.ComponentModel;
-using HarmonyLib;
-using UnityEngine.UI;
+using System.Diagnostics;
+using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
-using System.Diagnostics;
-using BeatSaberMarkupLanguage.GameplaySetup;
+using UnityEngine.UI;
 
 namespace Camera2.UI {
 	// Theres a reason this is called Spaghetti UI, I will definitely maybe possibly make this not spaghetti one day.
@@ -43,23 +41,23 @@ namespace Camera2.UI {
 		}
 	}
 
-//	class PreviewView : BSMLResourceViewController {
-//		public override string ResourceName => "Camera2.UI.Views.camPreview.bsml";
-//#pragma warning disable 649
-//		//[UIComponent("previewImage")] public UnityEngine.UI.RawImage image;
-//#pragma warning restore 649
+	//	class PreviewView : BSMLResourceViewController {
+	//		public override string ResourceName => "Camera2.UI.Views.camPreview.bsml";
+	//#pragma warning disable 649
+	//		//[UIComponent("previewImage")] public UnityEngine.UI.RawImage image;
+	//#pragma warning restore 649
 
-//		internal ImageView dd;
+	//		internal ImageView dd;
 
-//		[UIAction("#post-parse")]
-//		private void Parsed() {
-//			var x = transform.Find("BSMLBackground");
+	//		[UIAction("#post-parse")]
+	//		private void Parsed() {
+	//			var x = transform.Find("BSMLBackground");
 
-//			//Destroy(x.GetComponentInChildren<UnityEngine.UI.RawImage>());
+	//			//Destroy(x.GetComponentInChildren<UnityEngine.UI.RawImage>());
 
-//			dd = x.gameObject.GetComponentInChildren<ImageView>();
-//		}
-//	}
+	//			dd = x.gameObject.GetComponentInChildren<ImageView>();
+	//		}
+	//	}
 
 	class SettingsView : BSMLResourceViewController, INotifyPropertyChanged {
 		public override string ResourceName => "Camera2.UI.Views.camSettings.bsml";
@@ -90,7 +88,7 @@ namespace Camera2.UI {
 			if(scenes == null)
 				scenes = Enum.GetValues(typeof(SceneTypes)).Cast<SceneTypes>().Select(x => new SceneToggle() { type = x, host = this }).ToList();
 		}
- #region variables
+		#region variables
 		internal string camName {
 			get => cam.name;
 			set {
@@ -199,7 +197,7 @@ namespace Camera2.UI {
 		internal float postprocessing_transparencyThreshold {
 			get => cam.settings.PostProcessing.transparencyThreshold; set { cam.settings.PostProcessing.transparencyThreshold = value; }
 		}
-		
+
 
 		internal float viewRect_x {
 			get => -cam.settings.viewRect.x; set => cam.settings.SetViewRect(value, null, null, null);
@@ -311,7 +309,7 @@ namespace Camera2.UI {
 			cam?.settings.Save();
 			ScenesManager.settings.Save();
 		}
-		
+
 		[UIAction("#post-parse")]
 		private void Parsed() {
 			cam = null;
@@ -405,8 +403,8 @@ namespace Camera2.UI {
 		Cam2 GetNewCam(string name) {
 			var cam = CamManager.AddNewCamera(name);
 			cam.settings.SetViewRect(
-				UnityEngine.Random.Range(0, 0.2f), 
-				UnityEngine.Random.Range(0, 0.2f), 
+				UnityEngine.Random.Range(0, 0.2f),
+				UnityEngine.Random.Range(0, 0.2f),
 				1f / 3,
 				1f / 3
 			);
@@ -535,7 +533,7 @@ namespace Camera2.UI {
 					ShowSettingsForCam(CamManager.cams.Values.First());
 					return;
 				}
-				
+
 				showBackButton = true;
 
 				ProvideInitialViewControllers(settingsView, camList);

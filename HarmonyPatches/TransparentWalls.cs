@@ -1,6 +1,6 @@
-﻿using UnityEngine;
+﻿using Camera2.Utils;
 using HarmonyLib;
-using Camera2.Utils;
+using UnityEngine;
 
 namespace Camera2.HarmonyPatches {
 	[HarmonyPatch(typeof(StretchableObstacle), nameof(StretchableObstacle.SetSizeAndColor))]
@@ -25,7 +25,7 @@ namespace Camera2.HarmonyPatches {
 				Camera.main.cullingMask |= (int)VisibilityMasks.WallTextures;
 			}
 		}
-		
+
 		// No-Bloom fake bloom wall edge
 		[HarmonyPatch(typeof(ParametricBoxFakeGlowController), nameof(ParametricBoxFakeGlowController.Awake))]
 		static class FunnyNoBloom {

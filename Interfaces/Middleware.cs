@@ -1,6 +1,6 @@
-﻿using UnityEngine;
+﻿using Camera2.Behaviours;
 using Camera2.Configuration;
-using Camera2.Behaviours;
+using UnityEngine;
 
 namespace Camera2.Interfaces {
 	interface IMHandler {
@@ -12,7 +12,7 @@ namespace Camera2.Interfaces {
 	abstract class CamMiddleware : MonoBehaviour {
 		protected Cam2 cam;
 		protected CameraSettings settings { get { return cam.settings; } }
-		
+
 		public IMHandler Init(Cam2 cam) {
 			this.cam = cam;
 			return (IMHandler)this;

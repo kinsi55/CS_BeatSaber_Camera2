@@ -1,6 +1,5 @@
-﻿using HarmonyLib;
-using Camera2.Managers;
-using Camera2.Utils;
+﻿using Camera2.Managers;
+using HarmonyLib;
 
 namespace Camera2.HarmonyPatches {
 	[HarmonyPatch(typeof(MultiplayerSessionManager), "UpdateConnectionState")]

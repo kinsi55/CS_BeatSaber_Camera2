@@ -1,8 +1,8 @@
-﻿using System.Reflection;
-using System.Collections.Generic;
-using HarmonyLib;
+﻿using Camera2.Managers;
 using Camera2.Utils;
-using Camera2.Managers;
+using HarmonyLib;
+using System.Collections.Generic;
+using System.Reflection;
 
 namespace Camera2.HarmonyPatches {
 	/*

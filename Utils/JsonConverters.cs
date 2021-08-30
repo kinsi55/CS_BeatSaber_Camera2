@@ -1,10 +1,10 @@
-﻿using System;
-using UnityEngine;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using System.Globalization;
-using System.Collections.Generic;
+﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
+using Newtonsoft.Json.Linq;
+using System;
+using System.Collections.Generic;
+using System.Globalization;
+using UnityEngine;
 using static Camera2.Configuration.CameraSettings;
 
 namespace Camera2.Utils {
@@ -74,7 +74,7 @@ namespace Camera2.Utils {
 		}
 	}
 
-	class DictionaryConverter<K, V> : JsonConverter<Dictionary<K, V>> where K: IConvertible where V : IConvertible {
+	class DictionaryConverter<K, V> : JsonConverter<Dictionary<K, V>> where K : IConvertible where V : IConvertible {
 		public override void WriteJson(JsonWriter writer, Dictionary<K, V> value, JsonSerializer serializer) {
 			writer.WriteStartObject();
 

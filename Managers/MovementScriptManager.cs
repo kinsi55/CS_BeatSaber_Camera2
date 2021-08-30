@@ -1,9 +1,9 @@
-﻿using System;
+﻿using Camera2.Configuration;
+using Camera2.Utils;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using Camera2.Configuration;
-using Camera2.Utils;
 
 namespace Camera2.Managers {
 
@@ -11,7 +11,7 @@ namespace Camera2.Managers {
 	public
 #endif
 	static class MovementScriptManager {
-		public static Dictionary<string, MovementScript> movementScripts { get; private set; }  = new Dictionary<string, MovementScript>();
+		public static Dictionary<string, MovementScript> movementScripts { get; private set; } = new Dictionary<string, MovementScript>();
 
 		public static void LoadMovementScripts(bool reload = false) {
 			if(!Directory.Exists(ConfigUtil.MovementScriptsDir)) {
@@ -44,8 +44,8 @@ namespace Camera2.Managers {
 					}
 				}
 				if(reload) foreach(var deletedScript in movementScripts.Where(x => !loadedNames.Contains(x.Key))) {
-					movementScripts.Remove(deletedScript.Key);
-				}
+						movementScripts.Remove(deletedScript.Key);
+					}
 			}
 		}
 	}

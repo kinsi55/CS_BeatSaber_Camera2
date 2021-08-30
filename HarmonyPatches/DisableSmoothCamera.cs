@@ -1,6 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using HarmonyLib;
+using System.Collections.Generic;
 using System.Reflection;
-using HarmonyLib;
 
 namespace Camera2.HarmonyPatches {
 	[HarmonyPatch]

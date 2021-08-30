@@ -1,12 +1,11 @@
-﻿using System;
+﻿using Camera2.Utils;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
+using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
 using UnityEngine;
-using Camera2.Utils;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using Newtonsoft.Json.Converters;
-using System.ComponentModel;
 
 namespace Camera2.Configuration {
 
@@ -68,10 +67,10 @@ namespace Camera2.Configuration {
 			var time = 0f;
 			foreach(var frame in frames) {
 				frame.startTime = time;
-				time = frame.transitionEndTime = 
+				time = frame.transitionEndTime =
 					time + frame.duration;
 
-				time = frame.endTime = 
+				time = frame.endTime =
 					time + frame.holdTime;
 			}
 			scriptDuration = time;

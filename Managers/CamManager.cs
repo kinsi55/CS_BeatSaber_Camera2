@@ -1,12 +1,11 @@
-﻿using System;
+﻿using Camera2.Behaviours;
+using Camera2.Utils;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.XR;
-using Camera2.Behaviours;
-using Camera2.Utils;
-using Camera2.Configuration;
 
 namespace Camera2.Managers {
 
@@ -29,13 +28,13 @@ namespace Camera2.Managers {
 			customScreen = new GameObject("Cam2_Viewport_THIS_IS_NORMAL").AddComponent<CamerasViewport>();
 
 			LoadCameras();
-			
+
 			ScenesManager.settings.Load();
 
 			XRSettings.gameViewRenderMode = GameViewRenderMode.None;
 
 			new GameObject("Cam2_Positioner").AddComponent<CamPositioner>();
-			
+
 			UI.SpaghettiUI.Init();
 		}
 
@@ -81,7 +80,7 @@ namespace Camera2.Managers {
 		 */
 		public static void ApplyCameraValues(bool viewLayer = false, bool bitMask = false, bool worldCam = false, bool posRot = false) {
 			var collection = viewLayer ? cams.Values.OrderBy(x => x.settings.layer).AsEnumerable() : cams.Values;
-			
+
 			foreach(var cam in collection) {
 				if(viewLayer) cam.previewImage.transform.SetAsLastSibling();
 				if(bitMask) cam.settings.ApplyLayerBitmask();

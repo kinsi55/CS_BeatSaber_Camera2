@@ -1,13 +1,9 @@
 ﻿using BeatSaberMarkupLanguage.Attributes;
 using BeatSaberMarkupLanguage.Components;
 using Camera2.Managers;
-using HarmonyLib;
 using HMUI;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Camera2.UI {
 	class CustomSceneUIEntry {
@@ -53,8 +49,8 @@ namespace Camera2.UI {
 	}
 
 	class CustomScenesSwitchUI {
-		[UIComponent("customScenesList")] public CustomCellListTableData list = null; 
-		[UIValue("scenes")] List<object> scenes => 
+		[UIComponent("customScenesList")] public CustomCellListTableData list = null;
+		[UIValue("scenes")] List<object> scenes =>
 			ScenesManager.settings.customScenes.Keys.Select(x => new CustomSceneUIEntry(x))
 				.Prepend(new CustomSceneUIEntry(null))
 				.Cast<object>()
@@ -69,7 +65,7 @@ namespace Camera2.UI {
 			ScenesManager.SwitchToCustomScene(row._name);
 		}
 
-		public void Update(int setSelected = -1) { 
+		public void Update(int setSelected = -1) {
 			if(list == null || list.tableView == null)
 				return;
 
