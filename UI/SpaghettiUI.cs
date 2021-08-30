@@ -197,6 +197,9 @@ namespace Camera2.UI {
 		internal float postprocessing_transparencyThreshold {
 			get => cam.settings.PostProcessing.transparencyThreshold; set { cam.settings.PostProcessing.transparencyThreshold = value; }
 		}
+		internal bool postprocessing_forceDepthTexture {
+			get => cam.settings.PostProcessing.forceDepthTexture; set { cam.settings.PostProcessing.forceDepthTexture = value; }
+		}
 
 
 		internal float viewRect_x {

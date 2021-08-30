@@ -105,7 +105,7 @@
 				</horizontal>
 				<horizontal preferred-width="90">
 					<text color="#CCC" font-size="4" align="Center" word-wrapping="true"
-						text="ⓘ The Ingame Preview of Cameras does not have transparency. You can consider completely Black pixels as Transparent"
+						text="ⓘ The Ingame Preview of Cameras does not have transparency. To see the full effect check the desktop view"
 					/>
 				</horizontal>
 				<horizontal preferred-width="90" pad-bottom="5">
@@ -113,9 +113,12 @@
 						text="ⓘ You can shorten the Render Distance limit of this Camera in its Config file to, depending on your situation, improve the Transparency"
 					/>
 				</horizontal>
-				<slider-setting text='Transparency Threshold *' min='0' max='100' increment='4.0' value='postprocessing_transparencyThreshold' bind-value='true' apply-on-change='true'/>
+				<checkbox text='Force Depth Texture' value='postprocessing_forceDepthTexture' bind-value='true' apply-on-change='true'
+					hover-hint='Forces a Depthtexture to be rendered for this Camera, even if you Graphic settings dont need it (Only Smoke needs it). Used by Transparency to better decide what should be transparent'
+				/>
+				<slider-setting text='Transparency Threshold *' min='0' max='100' increment='1.0' value='postprocessing_transparencyThreshold' bind-value='true' apply-on-change='true'/>
 			</modifier-container>
-			<text text="* Higher = Less Transparent, 0 = Off" color="#CCC" font-size="3" align="Center"/>
+			<text text="* Higher = More Transparent, 0 = Off" color="#CCC" font-size="3" align="Center"/>
 		</vertical>
 	</tab>
 

@@ -1,6 +1,7 @@
 ﻿//#define FPSCOUNT
 
 using Camera2.Configuration;
+using Camera2.HarmonyPatches;
 using Camera2.Interfaces;
 using Camera2.Middlewares;
 using Camera2.Utils;
@@ -93,6 +94,11 @@ namespace Camera2.Behaviours {
 			worldCam.gameObject.SetActive(doShowCam || (UI.SettingsView.cam == this && settings.type == Configuration.CameraType.Positionable));
 		}
 
+		internal void UpdateDepthTextureActive() {
+			if(UCamera != null)
+				UCamera.depthTextureMode = InitOnMainAvailable.useDepthTexture || settings?.PostProcessing.forceDepthTexture == true ? DepthTextureMode.Depth : DepthTextureMode.None;
+		}
+
 		public void Init(string name, LessRawImage presentor = null, bool loadConfig = false, bool rename = false) {
 			if(this.name != null) {
 				if(rename) {
@@ -113,7 +119,7 @@ namespace Camera2.Behaviours {
 			UCamera.enabled = false;
 			UCamera.clearFlags = CameraClearFlags.SolidColor;
 			UCamera.stereoTargetEye = StereoTargetEyeMask.None;
-			//UCamera.depthTextureMode = DepthTextureMode.None;
+			UpdateDepthTextureActive();
 			//UCamera.renderingPath = RenderingPath.DeferredLighting;
 
 			transformchain = new TransformChain(transform, UCamera.transform);

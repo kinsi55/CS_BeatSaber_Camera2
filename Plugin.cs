@@ -16,7 +16,8 @@ namespace Camera2 {
 
 		internal static Harmony harmony { get; private set; }
 
-		public static Material ShaderMat_LuminanceKey;
+		internal static Material ShaderMat_LuminanceKey;
+		internal static Material ShaderMat_CA;
 		internal static Shader Shader_VolumetricBlit;
 
 		[Init]
@@ -39,6 +40,7 @@ namespace Camera2 {
 				var bundle = AssetBundle.LoadFromStream(stream);
 
 				ShaderMat_LuminanceKey = new Material(bundle.LoadAsset<Shader>("LuminanceKey.shader"));
+				ShaderMat_CA = new Material(bundle.LoadAsset<Shader>("chromaticaberration.shader"));
 				Shader_VolumetricBlit = bundle.LoadAsset<Shader>("VolumetricBlit.shader");
 				bundle.Unload(false);
 			}
@@ -46,6 +48,7 @@ namespace Camera2 {
 			var bundle = AssetBundle.LoadFromFile(@"D:\Unity Shit\Projects\AssetBundlePacker\Assets\StreamingAssets\camera2utils");
 
 			ShaderMat_LuminanceKey = new Material(bundle.LoadAsset<Shader>("LuminanceKey.shader"));
+			ShaderMat_CA = new Material(bundle.LoadAsset<Shader>("chromaticaberration.shader"));
 			Shader_VolumetricBlit = bundle.LoadAsset<Shader>("VolumetricBlit.shader");
 #endif
 		}
