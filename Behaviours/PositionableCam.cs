@@ -11,8 +11,10 @@ namespace Camera2.Behaviours {
 		private GameObject camPreview;
 		private Material viewMaterial;
 
-		private static Material hoverMaterial = new Material(Resources.FindObjectsOfTypeAll<Material>().FirstOrDefault(m => m.name == "HandleHologram"));
-		private static Material normalMaterial = new Material(Resources.FindObjectsOfTypeAll<Material>().FirstOrDefault(m => m.name == "MenuShockwave"));
+		//private static Material hoverMaterial = new Material(Resources.FindObjectsOfTypeAll<Material>().FirstOrDefault(m => m.name == "HandleHologram"));
+		//private static Material normalMaterial = new Material(Resources.FindObjectsOfTypeAll<Material>().FirstOrDefault(m => m.name == "MenuShockwave"));
+		private static Material hoverMaterial = new Material(Shader.Find("Hidden/Internal-DepthNormalsTexture"));
+		private static Material normalMaterial = new Material(Shader.Find("Standard"));
 
 		private MeshRenderer renderer;
 
