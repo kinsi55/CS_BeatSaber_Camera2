@@ -116,7 +116,7 @@
 				<checkbox text='Force Depth Texture' value='postprocessing_forceDepthTexture' bind-value='true' apply-on-change='true'
 					hover-hint='Forces a Depthtexture to be rendered for this Camera, even if you Graphic settings dont need it (Only Smoke needs it). Used by Transparency to better decide what should be transparent'
 				/>
-				<slider-setting text='Transparency Threshold *' min='0' max='20' increment='0.5' value='postprocessing_transparencyThreshold' bind-value='true' apply-on-change='true'/>
+				<slider-setting text='Transparency Threshold *' min='0' max='79.5' increment='0.5' value='postprocessing_transparencyThreshold' bind-value='true' apply-on-change='true'/>
 			</modifier-container>
 			<text text="* Higher = More Transparent, 0 = Off" color="#CCC" font-size="3" align="Center"/>
 		</vertical>

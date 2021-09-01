@@ -51,6 +51,7 @@ namespace Camera2 {
 				bundle.Unload(false);
 			}
 #else
+			throw new Exception("Fix this lol");
 			var bundle = AssetBundle.LoadFromFile(@"D:\Unity Shit\Projects\AssetBundlePacker\Assets\StreamingAssets\camera2utils");
 
 			ShaderMat_LuminanceKey = new Material(bundle.LoadAsset<Shader>("LuminanceKey.shader"));
