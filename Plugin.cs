@@ -41,6 +41,12 @@ namespace Camera2 {
 
 				ShaderMat_LuminanceKey = new Material(bundle.LoadAsset<Shader>("LuminanceKey.shader"));
 				ShaderMat_CA = new Material(bundle.LoadAsset<Shader>("chromaticaberration.shader"));
+				bundle.Unload(false);
+			}
+
+			using(var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream("Camera2.Shaders.camera2utilsvr")) {
+				var bundle = AssetBundle.LoadFromStream(stream);
+
 				Shader_VolumetricBlit = bundle.LoadAsset<Shader>("VolumetricBlit.shader");
 				bundle.Unload(false);
 			}

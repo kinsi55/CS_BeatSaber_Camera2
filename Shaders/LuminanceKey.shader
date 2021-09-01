@@ -18,6 +18,7 @@ Shader "Unlit/LuminanceKey" {
 
 			#pragma vertex vert
 			#pragma fragment frag
+			#pragma target 3.5
 
 			#include "UnityCG.cginc"
 
@@ -27,8 +28,7 @@ Shader "Unlit/LuminanceKey" {
 			};
 
 			void vert (inout ayo v) {
-				if(_Threshold != 0)
-					v.vertex = UnityObjectToClipPos(v.vertex);
+				v.vertex = UnityObjectToClipPos(v.vertex);
 			}
 
 			sampler2D_half _LastCameraDepthTexture;

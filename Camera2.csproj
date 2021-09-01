@@ -56,6 +56,7 @@
 
   <ItemGroup>
     <None Remove="Shaders\camera2utils" />
+    <None Remove="Shaders\camera2utilsvr" />
   </ItemGroup>
 
   <ItemGroup>
@@ -174,6 +175,7 @@
   <ItemGroup>
     <EmbeddedResource Include="manifest.json" />
     <EmbeddedResource Include="Shaders\camera2utils" />
+    <EmbeddedResource Include="Shaders\camera2utilsvr" />
     <EmbeddedResource Include="UI\Views\camList.bsml" />
     <EmbeddedResource Include="UI\Views\camSettings.bsml" />
     <EmbeddedResource Include="UI\Views\customScenesList.bsml" />

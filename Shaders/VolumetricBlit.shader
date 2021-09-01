@@ -10,6 +10,7 @@ Shader "Custom/VolumetricBlit" {
 			CGPROGRAM
 			#pragma vertex vert
 			#pragma fragment frag
+			#pragma target 3.5
 
 			#include "UnityCG.cginc"
 
@@ -26,7 +27,7 @@ Shader "Custom/VolumetricBlit" {
 			}
 
 			fixed4 frag(ayo i) : SV_Target {
-				return tex2D(_MainTex, UnityStereoScreenSpaceUVAdjust(i.texcoord, _MainTex_ST));
+				return tex2D(_MainTex, i.texcoord);
 			}
 			ENDCG
 		}
@@ -37,6 +38,7 @@ Shader "Custom/VolumetricBlit" {
 			CGPROGRAM
 			#pragma vertex vert
 			#pragma fragment frag
+			#pragma target 3.5
 
 			#include "UnityCG.cginc"
 
@@ -55,7 +57,7 @@ Shader "Custom/VolumetricBlit" {
 			}
 
 			fixed4 frag(ayo i) : SV_Target {
-				return tex2D(_MainTex, UnityStereoScreenSpaceUVAdjust(i.texcoord, _MainTex_ST));
+				return tex2D(_MainTex, i.texcoord);
 			}
 			ENDCG
 		}
