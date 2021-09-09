@@ -65,12 +65,14 @@ namespace Camera2.UI {
 			ScenesManager.SwitchToCustomScene(row._name);
 		}
 
-		public void Update(int setSelected = -1) {
+		public void Update(int setSelected = -1, bool reloadData = true) {
 			if(list == null || list.tableView == null)
 				return;
 
-			list.data = scenes;
-			list.tableView.ReloadData();
+			if(reloadData) {
+				list.data = scenes;
+				list.tableView.ReloadData();
+			}
 
 			if(setSelected > -1) {
 				list.tableView.SelectCellWithIdx(setSelected);
