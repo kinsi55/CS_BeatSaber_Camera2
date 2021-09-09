@@ -54,6 +54,8 @@ namespace Camera2.Middlewares {
 #endif
 		}
 
+		new public void CamConfigReloaded() => Reset();
+
 		public void OnDisable() => Reset();
 
 		new public bool Pre() {
@@ -79,7 +81,6 @@ namespace Camera2.Middlewares {
 					return true;
 
 				lastFov = cam.UCamera.fieldOfView;
-				CamConfigReloaded();
 
 				Plugin.Log.Info($"Applying Movementscript {scriptToUse} for camera {cam.name}");
 

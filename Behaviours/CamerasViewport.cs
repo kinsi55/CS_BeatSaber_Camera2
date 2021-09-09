@@ -164,8 +164,8 @@ namespace Camera2.Behaviours {
 				if(Input.GetKeyDown(KeyCode.F1)) {
 					if(Input.GetKey(KeyCode.LeftControl) && Input.GetKey(KeyCode.LeftShift)) {
 						Plugin.Log.Info("Reloading Camera2 Config...");
-						CamManager.Reload();
 						MovementScriptManager.LoadMovementScripts(true);
+						CamManager.Reload();
 					} else {
 						ScenesManager.LoadGameScene();
 					}
