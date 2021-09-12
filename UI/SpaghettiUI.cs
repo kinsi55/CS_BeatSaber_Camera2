@@ -19,6 +19,7 @@ using System.Linq;
 using System.Net;
 using System.Reflection;
 using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
 using UnityEngine.UI;
 
 namespace Camera2.UI {
@@ -500,9 +501,17 @@ namespace Camera2.UI {
 		[UIComponent("sponsorsText")] CurvedTextMeshPro sponsorsText = null;
 		void OpenSponsorsLink() => Process.Start("https://github.com/sponsors/kinsi55");
 		void OpenSponsorsModal() {
-			try {
-				sponsorsText.text = (new WebClient()).DownloadString("http://kinsi.me/sponsors/bsout.php");
-			} catch { }
+			sponsorsText.text = "Loading...";
+			Task.Run(() => {
+				string desc = "Failed to load";
+				try {
+					desc = (new WebClient()).DownloadString("http://kinsi.me/sponsors/bsout.php");
+				} catch { }
+
+				_ = IPA.Utilities.Async.UnityMainThreadTaskScheduler.Factory.StartNew(() => {
+					sponsorsText.text = desc;
+				});
+			}).ConfigureAwait(false);
 		}
 	}
 
