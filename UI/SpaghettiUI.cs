@@ -16,6 +16,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
+using System.Net;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using UnityEngine.UI;
@@ -495,6 +496,14 @@ namespace Camera2.UI {
 
 		void ShowGithub() => Process.Start("https://github.com/kinsi55/CS_BeatSaber_Camera2");
 		void ShowWiki() => Process.Start("https://github.com/kinsi55/CS_BeatSaber_Camera2/wiki");
+
+		[UIComponent("sponsorsText")] CurvedTextMeshPro sponsorsText = null;
+		void OpenSponsorsLink() => Process.Start("https://github.com/sponsors/kinsi55");
+		void OpenSponsorsModal() {
+			try {
+				sponsorsText.text = (new WebClient()).DownloadString("http://kinsi.me/sponsors/bsout.php");
+			} catch { }
+		}
 	}
 
 	class Coordinator : FlowCoordinator {

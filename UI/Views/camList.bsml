@@ -10,6 +10,7 @@
 			<button text='Camera2 Wiki' on-click='ShowWiki' click-event='showLinkInfoModal' pad-top='13' horizontal-fit='Unconstrained'></button>
 			<button text='Github' on-click='ShowGithub' click-event='showLinkInfoModal' hover-hint='Report bugs!' horizontal-fit='Unconstrained'></button>
 			<text text="~cam2Version" align="Center" font-size="3" font-color="#CC6E3B"></text>
+			<clickable-text text='♥ Donate' font-size="4" align="Center" click-event="OpenSponsorModal" on-click="OpenSponsorsModal"/>
 			
 			<!--<button on-click='AddCam' text='Up Layer'></button>-->
 		</vertical>
@@ -70,6 +71,25 @@
 		<vertical preferred-width='90' vertical-fit='PreferredSize' pad='8'>
 			<text align='Center' word-wrapping="true" text='Changing the size / position of a camera screen is done on the desktop window (Rightclick on the desktop for more details). If you *really* want to do it from ingame however, clicking this button unlocked a secret settings tab where you can do that in a crude way'></text>
 			<primary-button text='OK' click-event='closeViewrectModal' pad-top='4'></primary-button>
+		</vertical>
+	</modal>
+
+	<modal move-to-center='true' hide-event='CloseSponsorModal' show-event='OpenSponsorModal' size-delta-x='80' size-delta-y='82'>
+		<vertical preferred-width='80' vertical-fit='PreferredSize' pad-left='2' pad-right='2' spacing='2' child-expand-width='true'>
+			<horizontal pad-bottom='2' pad-top='1'>
+				<horizontal bg='panel-top-gradient'>
+					<text text='BetterSongSearch - Sponsors' align='Center' font-size='4'/>
+				</horizontal>
+			</horizontal>
+			<text text='Are you enjoying my stuff and want to support me?' align='Center'/>
+			<horizontal>
+				<primary-button text='Open Website on Desktop' on-click='OpenSponsorsLink'/>
+				<button text='Close' click-event='CloseSponsorModal'/>
+			</horizontal>
+			<text text='Current sponsors' align='Center'/>
+			<vertical horizontal-fit='Unconstrained' vertical-fit='Unconstrained' preferred-height='45'>
+				<text-page id='sponsorsText' text='Loading...'/>
+			</vertical>
 		</vertical>
 	</modal>
 </vertical>
