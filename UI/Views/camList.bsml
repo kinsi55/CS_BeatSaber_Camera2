@@ -78,7 +78,7 @@
 		<vertical preferred-width='80' vertical-fit='PreferredSize' pad-left='2' pad-right='2' spacing='2' child-expand-width='true'>
 			<horizontal pad-bottom='2' pad-top='1'>
 				<horizontal bg='panel-top-gradient'>
-					<text text='BetterSongSearch - Sponsors' align='Center' font-size='4'/>
+					<text text='Camera2 - Sponsors' align='Center' font-size='4'/>
 				</horizontal>
 			</horizontal>
 			<text text='Are you enjoying my stuff and want to support me?' align='Center'/>
