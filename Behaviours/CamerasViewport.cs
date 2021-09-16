@@ -15,6 +15,8 @@ namespace Camera2.Behaviours {
 		public Cam2 cam { get; private set; }
 		public RectTransform rekt { get; private set; }
 
+		const float minSizePct = 0.05f;
+
 		public void SetPositionClamped(Vector2 delta, int[] matrix, bool writeToConfig = false) {
 			/*
 			 * If you can simplify this I happily invite you to do so, this took me way too long lmao
@@ -43,13 +45,13 @@ namespace Camera2.Behaviours {
 
 			// Clamp output size to be at least N while staying in bounds
 			var oMinClamped = new Vector2(
-				matrix[0] == 0 ? iMin.x : Mathf.Clamp(oMinConstrained.x, 0, (clampW * oMaxConstrained.x) - 0.1f),
-				matrix[1] == 0 ? iMin.y : Mathf.Clamp(oMinConstrained.y, 0, (clampH * oMaxConstrained.y) - 0.1f)
+				matrix[0] == 0 ? iMin.x : Mathf.Clamp(oMinConstrained.x, 0, (clampW * oMaxConstrained.x) - minSizePct),
+				matrix[1] == 0 ? iMin.y : Mathf.Clamp(oMinConstrained.y, 0, (clampH * oMaxConstrained.y) - minSizePct)
 			);
 
 			var oMaxClamped = new Vector2(
-				matrix[2] == 0 ? iMax.x : Mathf.Clamp(oMaxConstrained.x, 0.1f + (clampW * oMinConstrained.x), 1),
-				matrix[3] == 0 ? iMax.y : Mathf.Clamp(oMaxConstrained.y, 0.1f + (clampH * oMinConstrained.y), 1)
+				matrix[2] == 0 ? iMax.x : Mathf.Clamp(oMaxConstrained.x, minSizePct + (clampW * oMinConstrained.x), 1),
+				matrix[3] == 0 ? iMax.y : Mathf.Clamp(oMaxConstrained.y, minSizePct + (clampH * oMinConstrained.y), 1)
 			);
 
 			rekt.anchorMin = oMinClamped;
