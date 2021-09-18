@@ -205,16 +205,16 @@ namespace Camera2.UI {
 
 
 		internal float viewRect_x {
-			get => -cam.settings.viewRect.x; set => cam.settings.SetViewRect(value, null, null, null);
+			get => cam.settings.viewRect.x; set => cam.settings.SetViewRect(value, null, null, null);
 		}
 		internal float viewRect_y {
-			get => -cam.settings.viewRect.y; set => cam.settings.SetViewRect(null, value, null, null);
+			get => cam.settings.viewRect.y; set => cam.settings.SetViewRect(null, value, null, null);
 		}
 		internal float viewRect_width {
-			get => -cam.settings.viewRect.width; set => cam.settings.SetViewRect(null, null, value, null);
+			get => cam.settings.viewRect.width; set => cam.settings.SetViewRect(null, null, value, null);
 		}
 		internal float viewRect_height {
-			get => -cam.settings.viewRect.height; set => cam.settings.SetViewRect(null, null, null, value);
+			get => cam.settings.viewRect.height; set => cam.settings.SetViewRect(null, null, null, value);
 		}
 		internal bool viewRect_isLocked {
 			get => cam.settings.isScreenLocked; set => cam.settings.isScreenLocked = value;

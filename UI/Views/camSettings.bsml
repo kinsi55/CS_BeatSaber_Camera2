@@ -100,7 +100,7 @@
 			<modifier-container child-expand-width='true' horizontal-fit='PreferredSize' pad-bottom='5'>
 				<horizontal preferred-width="90">
 					<text color="#EEC" font-size="4" align="Center" word-wrapping="true"
-						text="⚠ For Transparency to work, you must set the Cameras Anti Aliasing to at least 2. I am not sure yet why that is the case."
+						text="⚠ For Transparency to work, you must set the Cameras Anti Aliasing to at least 2. Additionally, having Smoke on can cause issues."
 					/>
 				</horizontal>
 				<horizontal preferred-width="90">
@@ -151,8 +151,8 @@
 
 	<tab tags='tabs' tab-name='Viewrect' horizontal-fit='PreferredSize' id='viewRectTab'>
 		<vertical horizontal-fit='PreferredSize' vertical-fit='PreferredSize'>
-			<slider-setting text='X Position' min='0' max='1' increment='0.02' value='viewRect_x' bind-value='true' apply-on-change='true'/>
-			<slider-setting text='Y Position' min='0' max='1' increment='0.02' value='viewRect_y' bind-value='true' apply-on-change='true'/>
+			<slider-setting text='X Position (Lower Left corner)' min='0' max='1' increment='0.02' value='viewRect_x' bind-value='true' apply-on-change='true'/>
+			<slider-setting text='Y Position (Lower Left corner)' min='0' max='1' increment='0.02' value='viewRect_y' bind-value='true' apply-on-change='true'/>
 			<slider-setting text='Width' min='0.04' max='1' increment='0.02' value='viewRect_width' bind-value='true' apply-on-change='true'/>
 			<slider-setting text='Height' min='0.04' max='1' increment='0.02' value='viewRect_height' bind-value='true' apply-on-change='true'/>
 		</vertical>
