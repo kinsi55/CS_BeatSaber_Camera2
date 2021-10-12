@@ -16,6 +16,7 @@ namespace Camera2.HarmonyPatches {
 
 		static SpawnRotationProcessor spawnRotationProcessor = new SpawnRotationProcessor();
 
+		[HarmonyPriority(int.MinValue)]
 		static void Prefix(IDifficultyBeatmap difficultyBeatmap, GameplayModifiers gameplayModifiers) {
 #if DEBUG
 			Plugin.Log.Info("Got level data!");
