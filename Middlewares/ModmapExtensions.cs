@@ -30,20 +30,22 @@ namespace Camera2.Middlewares {
 				(settings.ModmapExtensions.moveWithMap || settings.type != Configuration.CameraType.Positionable)
 			) {
 				// Noodle maps do not *necessarily* have a playertrack if it not actually used
-				if(noodleOrigin == null && (noodleOrigin = (Transform)Noodle_PlayerTrack_Origin.GetValue(null)) == null)
-					return true;
-
-				// If we are not yet attached, and we dont have a parent thats active yet, try to get one!
-				if(mapMovementTransformer == null) {
+				if(noodleOrigin != null || (noodleOrigin = (Transform)Noodle_PlayerTrack_Origin.GetValue(null)) != null) {
+					// If we are not yet attached, and we dont have a parent thats active yet, try to get one!
+					if(mapMovementTransformer == null) {
 #if DEBUG
-					Plugin.Log.Info($"Enabling Modmap parenting for camera {cam.name}");
+						Plugin.Log.Info($"Enabling Modmap parenting for camera {cam.name}");
 #endif
-					mapMovementTransformer = cam.transformchain.AddOrGet("ModMapExt", TransformerOrders.ModmapParenting);
-				}
+						mapMovementTransformer = cam.transformchain.AddOrGet("ModMapExt", TransformerOrders.ModmapParenting);
+					}
 
-				mapMovementTransformer.position = noodleOrigin.localPosition;
-				mapMovementTransformer.rotation = noodleOrigin.localRotation;
-			} else if(mapMovementTransformer != null) {
+					mapMovementTransformer.position = noodleOrigin.localPosition;
+					mapMovementTransformer.rotation = noodleOrigin.localRotation;
+					return true;
+				}
+			}
+			
+			if(mapMovementTransformer != null) {
 #if DEBUG
 				Plugin.Log.Info($"Disabling Modmap parenting for camera {cam.name}");
 #endif
