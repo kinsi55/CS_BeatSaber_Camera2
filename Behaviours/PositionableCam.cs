@@ -13,12 +13,15 @@ namespace Camera2.Behaviours {
 
 		//private static Material hoverMaterial = new Material(Resources.FindObjectsOfTypeAll<Material>().FirstOrDefault(m => m.name == "HandleHologram"));
 		//private static Material normalMaterial = new Material(Resources.FindObjectsOfTypeAll<Material>().FirstOrDefault(m => m.name == "MenuShockwave"));
-		private static Material hoverMaterial = new Material(Shader.Find("Hidden/Internal-DepthNormalsTexture"));
-		private static Material normalMaterial = new Material(Shader.Find("Standard"));
+		private static Material hoverMaterial;
+		private static Material normalMaterial;
 
 		private MeshRenderer renderer;
 
 		public void Awake() {
+			hoverMaterial ??= new Material(Shader.Find("Hidden/Internal-DepthNormalsTexture"));
+			normalMaterial ??= new Material(Shader.Find("Standard"));
+
 			DontDestroyOnLoad(gameObject);
 
 			camOrigin = GameObject.CreatePrimitive(PrimitiveType.Cylinder);
