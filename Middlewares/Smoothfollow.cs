@@ -66,6 +66,10 @@ namespace Camera2.Middlewares {
 					parentToUse = ScoresaberUtil.replayCamera?.transform;
 					settings.Smoothfollow.useLocalPosition = true;
 					isAttachedToReplayCam = true;
+				} else {
+					// This is complete garbage
+					if(ScoresaberUtil.spectateParent != null)
+						HookRoomAdjust.ApplyCustom(ScoresaberUtil.spectateParent.position, ScoresaberUtil.spectateParent.rotation);
 				}
 
 				if(parent == ScoresaberUtil.replayCamera?.transform)

@@ -10,6 +10,8 @@ namespace Camera2.Utils {
 		public static bool isInReplay { get; internal set; }
 		public static Camera replayCamera { get; private set; }
 
+		public static Transform spectateParent { get; private set; }
+
 		public static bool IsInReplay() {
 			try {
 				return ScoreSaber_playbackEnabled != null && (bool)ScoreSaber_playbackEnabled.Invoke(null, null) == false;
@@ -43,8 +45,7 @@ namespace Camera2.Utils {
 					if(!wasInReplay) {
 						var y = GameObject.Find("SpectatorParent/RecorderCamera(Clone)");
 
-						if(y != null)
-							HookRoomAdjust.ApplyCustom(y.transform.parent.position, y.transform.parent.rotation);
+						spectateParent = y.transform.parent;
 					}
 
 					if(!UnityEngine.XR.XRDevice.isPresent)
