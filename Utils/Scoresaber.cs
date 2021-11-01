@@ -45,7 +45,7 @@ namespace Camera2.Utils {
 					if(!wasInReplay) {
 						var y = GameObject.Find("SpectatorParent/RecorderCamera(Clone)");
 
-						spectateParent = y.transform.parent;
+						spectateParent = y?.transform.parent;
 					}
 
 					if(!UnityEngine.XR.XRDevice.isPresent)
