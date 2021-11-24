@@ -17,8 +17,17 @@ namespace Camera2.Configuration {
 
 namespace Camera2.Middlewares {
 	class ModmapExtensions : CamMiddleware, IMHandler {
-		static FieldInfo Noodle_PlayerTrack_Origin = AccessTools.Field(AccessTools.TypeByName("NoodleExtensions.Animation.PlayerTrack"), "_origin");
+		static FieldInfo Noodle_PlayerTrack_Origin;
+		static FieldInfo Noodle_PlayerTrack_Instance;
 		static Transform noodleOrigin;
+		static object playertrack_instance = null;
+
+		public ModmapExtensions() {
+			Noodle_PlayerTrack_Origin ??= AccessTools.Field(AccessTools.TypeByName("NoodleExtensions.Animation.PlayerTrack"), "_origin");
+
+			if(Noodle_PlayerTrack_Origin?.IsStatic == false)
+				Noodle_PlayerTrack_Instance = AccessTools.Field(AccessTools.TypeByName("NoodleExtensions.Animation.PlayerTrack"), "_instance");
+		}
 
 		private Transformer mapMovementTransformer = null;
 		public new bool Pre() {
@@ -29,8 +38,15 @@ namespace Camera2.Middlewares {
 				Noodle_PlayerTrack_Origin != null &&
 				(settings.ModmapExtensions.moveWithMap || settings.type != Configuration.CameraType.Positionable)
 			) {
+				if(Noodle_PlayerTrack_Instance != null) {
+					// Was static before, now its a singleton 😡
+					// https://github.com/Aeroluna/Heck/commit/6a6030241336f5526854d71a6a6c70ccd82d7468#diff-2929f93d8ad2699fdec005f85284c1c7584562a9d2ba6cee66c765773a3d497bR23
+
+					playertrack_instance = Noodle_PlayerTrack_Instance.GetValue(null);
+				}
+
 				// Noodle maps do not *necessarily* have a playertrack if it not actually used
-				if(noodleOrigin != null || (noodleOrigin = (Transform)Noodle_PlayerTrack_Origin.GetValue(null)) != null) {
+				if(noodleOrigin != null || (noodleOrigin = (Transform)Noodle_PlayerTrack_Origin.GetValue(playertrack_instance)) != null) {
 					// If we are not yet attached, and we dont have a parent thats active yet, try to get one!
 					if(mapMovementTransformer == null) {
 #if DEBUG
@@ -55,6 +71,7 @@ namespace Camera2.Middlewares {
 				mapMovementTransformer = null;
 
 				noodleOrigin = null;
+				playertrack_instance = null;
 			}
 			return true;
 		}
