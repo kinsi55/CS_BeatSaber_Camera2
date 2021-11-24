@@ -101,7 +101,12 @@ namespace Camera2.Managers {
 
 			var cam = new GameObject($"Cam2_{name}").AddComponent<Cam2>();
 
-			cam.Init(name, customScreen.AddNewView(), loadConfig);
+			try {
+				cam.Init(name, customScreen.AddNewView(), loadConfig);
+			} catch {
+				GameObject.DestroyImmediate(cam);
+				throw;
+			}
 
 			cams[name] = cam;
 
