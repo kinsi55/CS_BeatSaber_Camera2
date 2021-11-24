@@ -45,6 +45,18 @@ namespace Camera2.Middlewares {
 
 		Transform parent { get { return settings.Smoothfollow.parent; } set { settings.Smoothfollow.parent = value; } }
 
+		bool teleportOnNextFrame = false;
+
+		public void OnEnable() {
+			/*
+			 * If the camera was just enabled we want to teleport the positon / rotation.
+			 * This is useful when you switch to a scene with a firstperson camera that was
+			 * not enabled for a while to make it have a "correct" initial position instead
+			 * of smoothing it to the correct position over time
+			 */
+			teleportOnNextFrame = true;
+		}
+
 		new public bool Pre() {
 			if(settings.type == Configuration.CameraType.Positionable) {
 				if(settings.Smoothfollow.transformer != null) {
@@ -119,24 +131,27 @@ namespace Camera2.Middlewares {
 			if(settings.Smoothfollow.forceUpright)
 				targetRotation *= Quaternion.Euler(0, 0, -parentToUse.transform.localEulerAngles.z);
 
-			bool teleport =
-				lastScene != SceneUtil.currentScene ||
-				(HookFPFC.isInFPFC && (!settings.Smoothfollow.followReplayPosition || !ScoresaberUtil.isInReplay));
+			if(!teleportOnNextFrame) {
+				teleportOnNextFrame =
+					lastScene != SceneUtil.currentScene ||
+					(HookFPFC.isInFPFC && (!settings.Smoothfollow.followReplayPosition || !ScoresaberUtil.isInReplay));
+			}
 
 			if(settings.Smoothfollow.transformer == null) {
 				settings.Smoothfollow.transformer = cam.transformchain.AddOrGet("SmoothFollow", TransformerOrders.SmoothFollow);
 
-				teleport = true;
+				teleportOnNextFrame = true;
 			}
 
 			var theTransform = settings.Smoothfollow.transformer;
 
 			// If we switched scenes (E.g. left / entered a song) we want to snap to the correct position before smoothing again
-			if(teleport) {
+			if(teleportOnNextFrame) {
 				theTransform.position = targetPosition;
 				theTransform.rotation = targetRotation;
 
 				lastScene = SceneUtil.currentScene;
+				teleportOnNextFrame = false;
 			} else {
 				theTransform.position = Vector3.Lerp(theTransform.position, targetPosition, cam.timeSinceLastRender * settings.Smoothfollow.position);
 				theTransform.rotation = Quaternion.Slerp(theTransform.rotation, targetRotation, cam.timeSinceLastRender * settings.Smoothfollow.rotation);
