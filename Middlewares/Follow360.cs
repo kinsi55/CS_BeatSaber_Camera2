@@ -33,7 +33,7 @@ namespace Camera2.Middlewares {
 				SceneUtil.isInMenu ||
 				!HookLeveldata.is360Level ||
 				HookLevelRotation.Instance == null ||
-				(settings.type != Configuration.CameraType.Positionable && settings.Smoothfollow.pivotingOffset)
+				settings.type != Configuration.CameraType.Positionable
 			) {
 				Reset();
 
