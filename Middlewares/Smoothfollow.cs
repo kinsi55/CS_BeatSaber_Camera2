@@ -8,7 +8,7 @@ using UnityEngine.SceneManagement;
 namespace Camera2.Configuration {
 	class Settings_Smoothfollow : CameraSubSettings {
 		public float position = 10f;
-		public float rotation = 5f;
+		public float rotation = 4f;
 
 		public bool forceUpright = false;
 		public bool followReplayPosition = true;
