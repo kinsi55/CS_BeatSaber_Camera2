@@ -49,10 +49,14 @@
 		</vertical>
 	</modal>
 	
-	<modal clickerino-offerino-closerino='true' move-to-center='true' hide-event='closeAddModal' show-event='addCamModal' size-delta-x='70' size-delta-y='72'>
-		<vertical preferred-width='82' vertical-fit='PreferredSize' pad='6'>
-			<text text='Add camera from template' align='Center'/>
-			<vertical spacing='1.5' pad-top='4' pad-bottom='3' preferred-width='60'>
+	<modal clickerino-offerino-closerino='true' move-to-center='true' hide-event='closeAddModal' show-event='addCamModal' size-delta-x='72' size-delta-y='70'>
+		<vertical preferred-width='72' vertical-fit='PreferredSize' pad-left='2' pad-right='2' spacing='2'>
+			<horizontal pad-bottom='2' pad-top='1'>
+				<horizontal bg='panel-top-gradient'>
+					<text text='Camera2 - Add camera from template' align='Center' font-size='4'/>
+				</horizontal>
+			</horizontal>
+			<vertical spacing='1.5' pad-bottom='2' preferred-width='60'>
 				<primary-button on-click='AddCamDefault' text='Default / Unconfigured' click-event='closeAddModal' horizontal-fit='Unconstrained'/>
 				<primary-button on-click='AddCamSideview' text='Side view / Swing cam' click-event='closeAddModal' horizontal-fit='Unconstrained'/>
 				<primary-button on-click='AddCamBackview' text='Back view / "Cut cam"' click-event='closeAddModal' horizontal-fit='Unconstrained'/>
@@ -72,7 +76,7 @@
 
 	<modal clickerino-offerino-closerino='true' move-to-center='true' hide-event='closeViewrectModal' show-event='showViewrectModal' size-delta-x='80' size-delta-y='45'>
 		<vertical preferred-width='90' vertical-fit='PreferredSize' pad='8'>
-			<text align='Center' word-wrapping="true" text='Changing the size / position of a camera screen is done on the desktop window (Rightclick on the desktop for more details). If you *really* want to do it from ingame however, clicking this button unlocked a secret settings tab where you can do that in a crude way'/>
+			<text align='Center' word-wrapping="true" text='Changing the size / position of a camera screen is done on the desktop window (Rightclick on the desktop for more details). If you *really* want to do it from ingame however, clicking this button unlocked a secret settings tab ("Display") where you can do that in a crude way'/>
 			<primary-button text='OK' click-event='closeViewrectModal' pad-top='4'/>
 		</vertical>
 	</modal>

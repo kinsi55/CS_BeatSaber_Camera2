@@ -14,8 +14,8 @@
 			</custom-list>
 		</vertical>
 		<vertical preferred-width='4'>
-			<page-button event-click='customScenesList#PageUp' direction='Up' pref-height='3' pref-width='4'></page-button>
-			<page-button event-click='customScenesList#PageDown' direction='Down' pref-height='3' pref-width='4'></page-button>
+			<page-button event-click='customScenesList#PageUp' direction='Up' pref-height='3' pref-width='4'/>
+			<page-button event-click='customScenesList#PageDown' direction='Down' pref-height='3' pref-width='4'/>
 		</vertical>
 	</horizontal>
 </vertical>
