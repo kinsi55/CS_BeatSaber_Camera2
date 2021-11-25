@@ -23,10 +23,20 @@ namespace Camera2.Middlewares {
 		static object playertrack_instance = null;
 
 		public ModmapExtensions() {
-			Noodle_PlayerTrack_Origin ??= AccessTools.Field(AccessTools.TypeByName("NoodleExtensions.Animation.PlayerTrack"), "_origin");
+			var c = AccessTools.TypeByName("NoodleExtensions.Animation.PlayerTrack");
 
-			if(Noodle_PlayerTrack_Origin?.IsStatic == false)
-				Noodle_PlayerTrack_Instance = AccessTools.Field(AccessTools.TypeByName("NoodleExtensions.Animation.PlayerTrack"), "_instance");
+			if(c == null)
+				return;
+
+			Noodle_PlayerTrack_Origin ??= AccessTools.Field(c, "_transform") ?? AccessTools.Field(c, "_origin");
+
+			if(Noodle_PlayerTrack_Origin?.IsStatic == false) {
+				Noodle_PlayerTrack_Instance = AccessTools.Field(c, "_instance");
+
+				// We NEED the instance, if it wasnt found, reset.
+				if(Noodle_PlayerTrack_Instance == null)
+					Noodle_PlayerTrack_Origin = null;
+			}
 		}
 
 		private Transformer mapMovementTransformer = null;
@@ -43,6 +53,9 @@ namespace Camera2.Middlewares {
 					// https://github.com/Aeroluna/Heck/commit/6a6030241336f5526854d71a6a6c70ccd82d7468#diff-2929f93d8ad2699fdec005f85284c1c7584562a9d2ba6cee66c765773a3d497bR23
 
 					playertrack_instance = Noodle_PlayerTrack_Instance.GetValue(null);
+
+					if(playertrack_instance == null)
+						return true;
 				}
 
 				// Noodle maps do not *necessarily* have a playertrack if it not actually used
