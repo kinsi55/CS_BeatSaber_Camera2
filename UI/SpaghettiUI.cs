@@ -249,6 +249,10 @@ namespace Camera2.UI {
 		}
 		#endregion
 
+		[UIAction("SetRenderDistanceNear")] void SetRenderDistanceNear() => cam.settings.farZ = 6f;
+		[UIAction("SetRenderDistanceShort")] void SetRenderDistanceShort() => cam.settings.farZ = 10f;
+		[UIAction("SetRenderDistanceUnlimited")] void SetRenderDistanceUnlimited() => cam.settings.farZ = 1000f;
+
 
 		private static readonly List<object> types = new object[] { CameraType.FirstPerson, CameraType.Positionable }.ToList();
 		private static readonly List<object> antiAliasingLevels = new object[] { 1, 2, 4, 8 }.ToList();

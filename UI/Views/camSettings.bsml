@@ -25,18 +25,30 @@
 	</tab>
 	
 	<tab tags='tabs' tab-name='Visibility'>
-		<modifier-container child-expand-width='true' horizontal-fit='PreferredSize'>
-			<dropdown-list-setting text='Walls' value="visibility_Walls" choices='visibilities_Walls' bind-value='true' apply-on-change='true'/>
-			<dropdown-list-setting text='Notes' value="visibility_Notes" choices='visibilities_Notes' bind-value='true' apply-on-change='true'/>
-			<dropdown-list-setting text='Avatar' value="visibility_Avatar" choices='visibilities_Avatar' bind-value='true' apply-on-change='true'/>
-			<checkbox text='Debris' value='visibility_Debris' bind-value='true' apply-on-change='true'/>
-			<checkbox text='Cut Particles' value='visibility_CutParticles' bind-value='true' apply-on-change='true'/>
-			<checkbox text='UI' value='visibility_UI' bind-value='true' apply-on-change='true'/>
-			<checkbox text='Floor' value='visibility_Floor' bind-value='true' apply-on-change='true'/>
-		</modifier-container>
+		<vertical horizontal-fit='PreferredSize' vertical-fit='PreferredSize'>
+			<modifier-container child-expand-width='true' horizontal-fit='PreferredSize'>
+				<dropdown-list-setting text='Walls' value="visibility_Walls" choices='visibilities_Walls' bind-value='true' apply-on-change='true'/>
+				<dropdown-list-setting text='Notes' value="visibility_Notes" choices='visibilities_Notes' bind-value='true' apply-on-change='true'/>
+				<dropdown-list-setting text='Avatar' value="visibility_Avatar" choices='visibilities_Avatar' bind-value='true' apply-on-change='true'/>
+				<checkbox text='Debris' value='visibility_Debris' bind-value='true' apply-on-change='true'/>
+				<checkbox text='Cut Particles' value='visibility_CutParticles' bind-value='true' apply-on-change='true'/>
+				<checkbox text='UI' value='visibility_UI' bind-value='true' apply-on-change='true'/>
+				<checkbox text='Floor' value='visibility_Floor' bind-value='true' apply-on-change='true'/>
+			</modifier-container>
+			<horizontal pad-top='5' preferred-width='90' horizontal-fit='PreferredSize'>
+				<horizontal>
+					<text text='Set Render Distance' font-size='3'/>
+				</horizontal>
+				<horizontal>
+					<button text='Near (6)' on-click='SetRenderDistanceNear'/>
+					<button text='Short (10)' on-click='SetRenderDistanceShort'/>
+					<button text='Unlimited' on-click='SetRenderDistanceUnlimited'/>
+				</horizontal>
+			</horizontal>
+		</vertical>
 	</tab>
 	
-	<tab tags='tabs' tab-name='Smoothfollow' id='smoothfollowTab'>
+	<tab tags='tabs' tab-name='Smoothing' id='smoothfollowTab'>
 		<vertical horizontal-fit='PreferredSize' vertical-fit='PreferredSize'>
 			<modifier-container child-expand-width='true'>
 				<checkbox text='Force Upright' value='smoothFollow_forceUpright' bind-value='true' apply-on-change='true' 
@@ -95,7 +107,7 @@
 		</vertical>
 	</tab>
 
-	<tab tags='tabs' tab-name='Processing'>
+	<tab tags='tabs' tab-name='Effects'>
 		<vertical horizontal-fit='PreferredSize' vertical-fit='PreferredSize'>
 			<modifier-container child-expand-width='true' horizontal-fit='PreferredSize' pad-bottom='5'>
 				<horizontal preferred-width="90">
@@ -110,7 +122,7 @@
 				</horizontal>
 				<horizontal preferred-width="90" pad-bottom="5">
 					<text color="#CCC" font-size="4" align="Center" word-wrapping="true"
-						text="ⓘ You can shorten the Render Distance limit of this Camera in its Config file to, depending on your situation, improve the Transparency"
+						text="ⓘ You can shorten the Render Distance limit of this Camera in the Visibility tab to, depending on your intended use, improve the transparency"
 					/>
 				</horizontal>
 				<checkbox text='Force Depth Texture' value='postprocessing_forceDepthTexture' bind-value='true' apply-on-change='true'
