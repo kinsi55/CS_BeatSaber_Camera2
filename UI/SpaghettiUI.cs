@@ -446,6 +446,25 @@ namespace Camera2.UI {
 			cam.settings.visibleObjects.UI = false;
 			cam.settings.visibleObjects.Floor = false;
 			cam.settings.visibleObjects.CutParticles = false;
+			cam.settings.farZ = 10f;
+
+			AddCam(cam);
+		}
+
+		void AddCamBackview() {
+			var cam = CamManager.AddNewCamera("Back View");
+
+			cam.settings.type = CameraType.Positionable;
+			cam.settings.FOV = 42;
+			cam.settings.SetViewRect(0.8f, 0, .2f, .3f);
+			cam.settings.targetPos = new UnityEngine.Vector3(0, 1.5f, -1.3f);
+			cam.settings.visibleObjects.Walls = WallVisiblity.Hidden;
+			cam.settings.visibleObjects.Debris = false;
+			cam.settings.visibleObjects.UI = false;
+			cam.settings.visibleObjects.Floor = false;
+			cam.settings.visibleObjects.CutParticles = false;
+			cam.settings.farZ = 6f;
+			cam.settings.orthographic = true;
 
 			AddCam(cam);
 		}
