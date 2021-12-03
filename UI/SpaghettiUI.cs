@@ -161,6 +161,9 @@ namespace Camera2.UI {
 		internal bool visibility_CutParticles {
 			get => cam.settings.visibleObjects.CutParticles; set { cam.settings.visibleObjects.CutParticles = value; }
 		}
+		internal bool visibility_EverythingElse {
+			get => cam.settings.visibleObjects.EverythingElse; set { cam.settings.visibleObjects.EverythingElse = value; }
+		}
 
 		internal bool multiplayer_followSpectatorPlattform {
 			get => cam.settings.Multiplayer.followSpectatorPlattform; set { cam.settings.Multiplayer.followSpectatorPlattform = value; }

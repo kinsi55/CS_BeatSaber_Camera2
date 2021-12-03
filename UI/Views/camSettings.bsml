@@ -34,6 +34,7 @@
 				<checkbox text='Cut Particles' value='visibility_CutParticles' bind-value='true' apply-on-change='true'/>
 				<checkbox text='UI' value='visibility_UI' bind-value='true' apply-on-change='true'/>
 				<checkbox text='Floor' value='visibility_Floor' bind-value='true' apply-on-change='true'/>
+				<checkbox text='Everything Else' value='visibility_EverythingElse' bind-value='true' apply-on-change='true'/>
 			</modifier-container>
 			<horizontal pad-top='5' preferred-width='90' horizontal-fit='PreferredSize'>
 				<horizontal>

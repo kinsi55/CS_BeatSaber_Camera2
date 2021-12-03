@@ -72,8 +72,8 @@ namespace Camera2.Configuration {
 		private bool _CutParticles = true;
 		[JsonConverter(typeof(StringEnumConverterMigrateFromBool)), JsonProperty("Notes")]
 		private NoteVisibility _Notes = NoteVisibility.Visible;
-		//[JsonProperty("EverythingElse")]
-		//private bool _EverythingElse = true;
+		[JsonProperty("EverythingElse")]
+		private bool _EverythingElse = true;
 
 
 		public WallVisiblity Walls { get => _Walls; set { _Walls = value; parentSetting?.ApplyLayerBitmask(); } }
@@ -83,8 +83,7 @@ namespace Camera2.Configuration {
 		public bool Floor { get => _Floor; set { _Floor = value; parentSetting?.ApplyLayerBitmask(); } }
 		public bool CutParticles { get => _CutParticles; set { _CutParticles = value; parentSetting?.ApplyLayerBitmask(); } }
 		public NoteVisibility Notes { get => _Notes; set { _Notes = value; parentSetting?.ApplyLayerBitmask(); } }
-		// Wouldnt be very useful since I havent figured out yet how to make cams have transparency
-		//public bool EverythingElse { get { return _EverythingElse; } set { _EverythingElse = value; parentSetting.ApplyLayerBitmask(); } }
+		public bool EverythingElse { get { return _EverythingElse; } set { _EverythingElse = value; parentSetting.ApplyLayerBitmask(); } }
 	}
 
 	class CameraSettings {
@@ -161,7 +160,7 @@ namespace Camera2.Configuration {
 		}
 
 		public void ApplyLayerBitmask() {
-			VisibilityMasks maskBuilder = (VisibilityMasks)CamManager.clearedBaseCullingMask;
+			VisibilityMasks maskBuilder = visibleObjects.EverythingElse ? (VisibilityMasks)CamManager.clearedBaseCullingMask : 0;
 
 			if(visibleObjects.Walls == WallVisiblity.Visible || (ModmapExtensions.autoOpaqueWalls && HookLeveldata.isWallMap)) {
 				maskBuilder |= VisibilityMasks.Walls | VisibilityMasks.WallTextures;
