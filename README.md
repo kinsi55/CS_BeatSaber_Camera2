@@ -4,6 +4,8 @@
 
 Please see [**The Wiki**](https://github.com/kinsi55/CS_BeatSaber_Camera2/wiki) for details on how to properly use / configure Camera2
 
+The Game version(s) specific releases are compatible with are mentioned in the Release title (Its obviously possible latest is not supported assuming its been released recently). If you need the plugin for an older version - Grab an older release that fits 🤯
+
 #### You can always find the latest Download in [the releases](https://github.com/kinsi55/CS_BeatSaber_Camera2/releases)
 
 ![Settings Screenshot](Screenshots/settings.jpg)
