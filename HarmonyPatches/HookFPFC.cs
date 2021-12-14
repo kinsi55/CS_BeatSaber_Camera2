@@ -1,55 +1,54 @@
 ﻿using Camera2.Managers;
 using HarmonyLib;
+using System;
 using System.Collections.Generic;
 using System.Reflection;
 using UnityEngine;
 
 namespace Camera2.HarmonyPatches {
-	[HarmonyPatch]
+	[HarmonyPatch(typeof(FirstPersonFlyingController), "OnEnable")]
 	static class HookFPFC {
 		public static FirstPersonFlyingController instance { get; private set; }
-		public static Camera cameraInstance { get; private set; }
-		public static bool isInFPFC => instance != null;
+		public static Transform fpfcTransform { get; private set; }
+		public static bool isInFPFC { get; private set; }
 
 		static void Postfix(FirstPersonFlyingController __instance, Camera ____camera) {
 #if DEBUG
 			Plugin.Log.Info("FPFC was activated, disabling its camera");
 #endif
 			instance = __instance;
-			cameraInstance = ____camera;
+			fpfcTransform = ____camera.transform;
 
-			/*
-			 * If I straight up disable the Camera, and theres only the FPFC camera, Camera.main
-			 * becomes null (Since Cam2 cameras are also disabled) and this will cause all sorts
-			 * of funny issues with some other plugins, so I'll just make it so the cam has to
-			 * pretty much render nothing
-			 */
 			if(CamManager.baseCullingMask == 0)
 				CamManager.baseCullingMask = ____camera.cullingMask;
 
-			____camera.cullingMask = 0;
+			isInFPFC = true;
 
 			ScenesManager.ActiveSceneChanged();
 		}
 
-		[HarmonyTargetMethods]
-		static IEnumerable<MethodBase> TargetMethods() {
-			yield return AccessTools.Method(typeof(FirstPersonFlyingController), "Start");
-			yield return AccessTools.Method(typeof(FirstPersonFlyingController), "OnEnable");
-		}
-
-		[HarmonyPatch(typeof(FirstPersonFlyingController), "OnDisable")]
-		class HookFPFCOff {
-			static void Postfix(FirstPersonFlyingController __instance, Camera ____camera) {
+		[HarmonyPatch]
+		class HookSiraFPFCToggle {
+			static void Postfix(MonoBehaviour __instance, bool value) {
 #if DEBUG
-				Plugin.Log.Info("FirstPersonFlyingController.OnDisable()");
+				Plugin.Log.Info(string.Format("HookSiraFPFCToggle: SimpleCameraController.AllowInput => {0}", value));
 #endif
-				instance = null;
-				// Not null-ing this as its probably still a valid handle and can be useful in places
-				//cameraInstance = null;
+				isInFPFC = value;
+				fpfcTransform = __instance.transform;
 
 				ScenesManager.ActiveSceneChanged();
 			}
+
+			static MethodBase TargetMethod() {
+				var x = AccessTools.TypeByName("SiraUtil.Tools.FPFC.SimpleCameraController");
+
+				if(x != null)
+					return AccessTools.PropertySetter(x, "AllowInput");
+
+				return null;
+			}
+
+			static Exception Cleanup(Exception ex) => null;
 		}
 	}
 }

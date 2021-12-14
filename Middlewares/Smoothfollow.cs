@@ -88,8 +88,8 @@ namespace Camera2.Middlewares {
 					parent = null;
 			}
 
-			if(parentToUse == null && settings.type == Configuration.CameraType.FirstPerson && HookFPFC.isInFPFC && HookFPFC.cameraInstance != null) {
-				parentToUse = HookFPFC.cameraInstance?.transform;
+			if(parentToUse == null && settings.type == Configuration.CameraType.FirstPerson && HookFPFC.isInFPFC) {
+				parentToUse = HookFPFC.fpfcTransform;
 				settings.Smoothfollow.useLocalPosition = false;
 			}
 
