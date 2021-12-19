@@ -254,7 +254,7 @@ namespace Camera2.UI {
 
 		[UIAction("SetRenderDistanceNear")] void SetRenderDistanceNear() => cam.settings.farZ = 6f;
 		[UIAction("SetRenderDistanceShort")] void SetRenderDistanceShort() => cam.settings.farZ = 10f;
-		[UIAction("SetRenderDistanceUnlimited")] void SetRenderDistanceUnlimited() => cam.settings.farZ = 1000f;
+		[UIAction("SetRenderDistanceUnlimited")] void SetRenderDistanceUnlimited() => cam.settings.farZ = 5000f;
 
 
 		private static readonly List<object> types = new object[] { CameraType.FirstPerson, CameraType.Positionable }.ToList();

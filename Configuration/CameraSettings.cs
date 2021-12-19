@@ -299,7 +299,15 @@ namespace Camera2.Configuration {
 
 		public float farZ {
 			get => cam.UCamera.farClipPlane;
-			set => cam.UCamera.farClipPlane = value;
+			set {
+				/* TODO: Remove this at some point 😀
+				 * Ingame farZ changed to 5k from 1k at some point without me noticing
+				 */
+				if(value == 1000f)
+					value = 5000f;
+
+				cam.UCamera.farClipPlane = value;
+			}
 		}
 
 		[JsonProperty("visibleObjects")]
