@@ -74,6 +74,8 @@ namespace Camera2.Configuration {
 		private NoteVisibility _Notes = NoteVisibility.Visible;
 		[JsonProperty("EverythingElse")]
 		private bool _EverythingElse = true;
+		[JsonProperty("Sabers")]
+		private bool _Sabers = true;
 
 
 		public WallVisiblity Walls { get => _Walls; set { _Walls = value; parentSetting?.ApplyLayerBitmask(); } }
@@ -83,6 +85,7 @@ namespace Camera2.Configuration {
 		public bool Floor { get => _Floor; set { _Floor = value; parentSetting?.ApplyLayerBitmask(); } }
 		public bool CutParticles { get => _CutParticles; set { _CutParticles = value; parentSetting?.ApplyLayerBitmask(); } }
 		public NoteVisibility Notes { get => _Notes; set { _Notes = value; parentSetting?.ApplyLayerBitmask(); } }
+		public bool Sabers { get { return _Sabers; } set { _Sabers = value; parentSetting.ApplyLayerBitmask(); } }
 		public bool EverythingElse { get { return _EverythingElse; } set { _EverythingElse = value; parentSetting.ApplyLayerBitmask(); } }
 	}
 
@@ -185,6 +188,7 @@ namespace Camera2.Configuration {
 			if(visibleObjects.Floor) maskBuilder |= VisibilityMasks.Floor | VisibilityMasks.PlayerPlattform;
 			if(visibleObjects.Debris) maskBuilder |= VisibilityMasks.Debris;
 			if(visibleObjects.CutParticles) maskBuilder |= VisibilityMasks.CutParticles;
+			if(visibleObjects.Sabers) maskBuilder |= VisibilityMasks.Sabers;
 			if(visibleObjects.UI && (!ModmapExtensions.autoHideHUD || !HookLeveldata.isWallMap))
 				maskBuilder |= VisibilityMasks.UI;
 

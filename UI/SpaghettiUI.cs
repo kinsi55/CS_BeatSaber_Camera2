@@ -161,6 +161,9 @@ namespace Camera2.UI {
 		internal bool visibility_CutParticles {
 			get => cam.settings.visibleObjects.CutParticles; set { cam.settings.visibleObjects.CutParticles = value; }
 		}
+		internal bool visibility_Sabers {
+			get => cam.settings.visibleObjects.Sabers; set { cam.settings.visibleObjects.Sabers = value; }
+		}
 		internal bool visibility_EverythingElse {
 			get => cam.settings.visibleObjects.EverythingElse; set { cam.settings.visibleObjects.EverythingElse = value; }
 		}
