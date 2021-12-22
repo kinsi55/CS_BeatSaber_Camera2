@@ -10,7 +10,7 @@ namespace Camera2.HarmonyPatches {
 				____obstacleCore.gameObject.layer = (int)VisibilityLayers.WallTextures;
 
 				// No-Bloom inner wall texture thingy
-				if(____obstacleFakeGlow?.enabled == true)
+				if(____obstacleFakeGlow != null && ____obstacleFakeGlow.enabled == true)
 					____obstacleCore.GetChild(0).gameObject.layer = (int)VisibilityLayers.WallTextures;
 			}
 
