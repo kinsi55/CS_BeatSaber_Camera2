@@ -13,6 +13,7 @@
 	"loadAfter": [
 		"ScoreSaber",
 		"SongCore",
+		"SiraUtil",
 		"Noodle Extensions",
 		"MappingExtensions",
 		"Custom Notes"

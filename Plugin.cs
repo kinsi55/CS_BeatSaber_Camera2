@@ -32,9 +32,6 @@ namespace Camera2 {
 
 			Log.Info("Camera2 loaded");
 
-			harmony = new Harmony("Kinsi55.BeatSaber.Cam2");
-			harmony.PatchAll(Assembly.GetExecutingAssembly());
-
 #if !DEV
 			using(var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream("Camera2.Shaders.camera2utils")) {
 				var bundle = AssetBundle.LoadFromStream(stream);
@@ -62,6 +59,9 @@ namespace Camera2 {
 
 		[OnStart]
 		public void OnApplicationStart() {
+			harmony = new Harmony("Kinsi55.BeatSaber.Cam2");
+			harmony.PatchAll(Assembly.GetExecutingAssembly());
+
 			MovementScriptManager.LoadMovementScripts();
 			GlobalFPSCap.Init();
 
