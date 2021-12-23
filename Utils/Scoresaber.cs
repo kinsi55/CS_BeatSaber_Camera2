@@ -5,7 +5,10 @@ using UnityEngine;
 
 namespace Camera2.Utils {
 	public static class ScoresaberUtil {
-		static MethodBase ScoreSaber_playbackEnabled = AccessTools.Method("ScoreSaber.Core.ReplaySystem.HarmonyPatches.PatchHandleHMDUnmounted:Prefix");
+		static MethodBase ScoreSaber_playbackEnabled =
+			IPA.Loader.PluginManager.GetPluginFromId("ScoreSaber")?
+			.Assembly.GetType("ScoreSaber.Core.ReplaySystem.HarmonyPatches.PatchHandleHMDUnmounted")?
+			.GetMethod("Prefix", BindingFlags.Static | BindingFlags.NonPublic);
 
 		public static bool isInReplay { get; internal set; }
 		public static Camera replayCamera { get; private set; }

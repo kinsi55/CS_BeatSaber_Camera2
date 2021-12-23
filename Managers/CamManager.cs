@@ -33,7 +33,7 @@ namespace Camera2.Managers {
 
 			XRSettings.gameViewRenderMode = GameViewRenderMode.None;
 
-			new GameObject("Cam2_Positioner").AddComponent<CamPositioner>();
+			new GameObject("Cam2_Positioner", new[] { typeof(CamPositioner) });
 
 			UI.SpaghettiUI.Init();
 		}

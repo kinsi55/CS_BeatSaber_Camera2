@@ -40,12 +40,9 @@ namespace Camera2.HarmonyPatches {
 			}
 
 			static MethodBase TargetMethod() {
-				var x = AccessTools.TypeByName("SiraUtil.Tools.FPFC.SimpleCameraController");
-
-				if(x != null)
-					return AccessTools.PropertySetter(x, "AllowInput");
-
-				return null;
+				return IPA.Loader.PluginManager.GetPluginFromId("SiraUtil")?
+					.Assembly.GetType("SiraUtil.Tools.FPFC.SimpleCameraController")?
+					.GetProperty("AllowInput")?.SetMethod;
 			}
 
 			static Exception Cleanup(Exception ex) => null;

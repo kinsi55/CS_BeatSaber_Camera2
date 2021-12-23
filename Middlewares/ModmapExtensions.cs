@@ -2,6 +2,7 @@
 using Camera2.Interfaces;
 using Camera2.Utils;
 using HarmonyLib;
+using System;
 using System.Reflection;
 using UnityEngine;
 
@@ -17,21 +18,20 @@ namespace Camera2.Configuration {
 
 namespace Camera2.Middlewares {
 	class ModmapExtensions : CamMiddleware, IMHandler {
+		static Type Noodle_PlayerTrack = IPA.Loader.PluginManager.GetPluginFromId("NoodleExtensions")?.Assembly.GetType("NoodleExtensions.Animation.PlayerTrack");
 		static FieldInfo Noodle_PlayerTrack_Origin;
 		static FieldInfo Noodle_PlayerTrack_Instance;
 		static Transform noodleOrigin;
 		static object playertrack_instance = null;
 
 		public ModmapExtensions() {
-			var c = AccessTools.TypeByName("NoodleExtensions.Animation.PlayerTrack");
-
-			if(c == null)
+			if(Noodle_PlayerTrack == null)
 				return;
 
-			Noodle_PlayerTrack_Origin ??= AccessTools.Field(c, "_transform") ?? AccessTools.Field(c, "_origin");
+			Noodle_PlayerTrack_Origin ??= AccessTools.Field(Noodle_PlayerTrack, "_transform") ?? AccessTools.Field(Noodle_PlayerTrack, "_origin");
 
 			if(Noodle_PlayerTrack_Origin?.IsStatic == false) {
-				Noodle_PlayerTrack_Instance = AccessTools.Field(c, "_instance");
+				Noodle_PlayerTrack_Instance ??= AccessTools.Field(Noodle_PlayerTrack, "_instance");
 
 				// We NEED the instance, if it wasnt found, reset.
 				if(Noodle_PlayerTrack_Instance == null)
