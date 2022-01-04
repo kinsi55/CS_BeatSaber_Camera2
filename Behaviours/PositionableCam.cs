@@ -27,8 +27,8 @@ namespace Camera2.Behaviours {
 			camOrigin = GameObject.CreatePrimitive(PrimitiveType.Cylinder);
 			camOrigin.transform.parent = transform;
 
-			camOrigin.transform.localScale = new Vector3(0.1f, 0.10f, 0.25f);
-			camOrigin.transform.localPosition = new Vector3(0, 0, -(camOrigin.transform.localScale.z / 2));
+			camOrigin.transform.localScale = new Vector3(0.08f, 0.08f, 0.2f);
+			camOrigin.transform.localPosition = new Vector3(0, 0, -(camOrigin.transform.localScale.x * .3f));
 			camOrigin.transform.localEulerAngles = new Vector3(90f, 0, 0);
 
 			renderer = camOrigin.GetComponent<MeshRenderer>();
@@ -57,6 +57,12 @@ namespace Camera2.Behaviours {
 				camPreview.transform.localScale = new Vector3(size, size / cam.UCamera.aspect, 0);
 			} else {
 				camPreview.transform.localScale = new Vector3(size * cam.UCamera.aspect, size, 0);
+			}
+
+			if(cam.settings.worldCamUnderScreen) {
+				camOrigin.transform.localScale = new Vector3(0.08f, 0.08f, 0.2f);
+			} else {
+				camOrigin.transform.localScale = new Vector3(0.04f, 0.05f, 0.1f);
 			}
 
 			camPreview.transform.localPosition = new Vector3(
