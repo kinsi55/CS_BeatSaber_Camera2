@@ -172,6 +172,13 @@ namespace Camera2.Behaviours {
 						ScenesManager.LoadGameScene();
 					}
 				} else {
+#if DEV
+					if(Input.GetKeyDown(KeyCode.F7)) {
+						Plugin.LoadShaders();
+						return;
+					}
+#endif
+
 					foreach(var k in ScenesManager.settings.customSceneBindings) {
 						if(!Input.GetKeyDown(k.Key))
 							continue;

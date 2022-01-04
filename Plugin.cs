@@ -31,7 +31,10 @@ namespace Camera2 {
 			Log = logger;
 
 			Log.Info("Camera2 loaded");
+			LoadShaders();
+		}
 
+		internal static void LoadShaders() {
 #if !DEV
 			using(var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream("Camera2.Shaders.camera2utils")) {
 				var bundle = AssetBundle.LoadFromStream(stream);
@@ -48,12 +51,16 @@ namespace Camera2 {
 				bundle.Unload(false);
 			}
 #else
-			throw new Exception("Fix this lol");
 			var bundle = AssetBundle.LoadFromFile(@"D:\Unity Shit\Projects\AssetBundlePacker\Assets\StreamingAssets\camera2utils");
 
 			ShaderMat_LuminanceKey = new Material(bundle.LoadAsset<Shader>("LuminanceKey.shader"));
 			ShaderMat_CA = new Material(bundle.LoadAsset<Shader>("chromaticaberration.shader"));
+			bundle.Unload(false);
+
+			bundle = AssetBundle.LoadFromFile(@"D:\Unity Shit\Projects\AssetBundlePacker\Assets\StreamingAssets\camera2utilsvr");
+
 			Shader_VolumetricBlit = bundle.LoadAsset<Shader>("VolumetricBlit.shader");
+			bundle.Unload(false);
 #endif
 		}
 
