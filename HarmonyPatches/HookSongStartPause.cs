@@ -30,7 +30,6 @@ namespace Camera2.HarmonyPatches {
 			CamManager.ApplyCameraValues(worldCam: true);
 		}
 
-		[HarmonyTargetMethods]
 		static IEnumerable<MethodBase> TargetMethods() {
 			yield return AccessTools.Method(typeof(AudioTimeSyncController), nameof(AudioTimeSyncController.Pause));
 			yield return AccessTools.Method(typeof(AudioTimeSyncController), nameof(AudioTimeSyncController.Resume));

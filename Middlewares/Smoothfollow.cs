@@ -88,8 +88,8 @@ namespace Camera2.Middlewares {
 					parent = null;
 			}
 
-			if(parentToUse == null && settings.type == Configuration.CameraType.FirstPerson && HookFPFC.isInFPFC) {
-				parentToUse = HookFPFC.fpfcTransform;
+			if(parentToUse == null && settings.type == Configuration.CameraType.FirstPerson && HookFPFCToggle.isInFPFC) {
+				parentToUse = HookFPFCToggle.fpfcTransform;
 				settings.Smoothfollow.useLocalPosition = false;
 			}
 
@@ -134,7 +134,7 @@ namespace Camera2.Middlewares {
 			if(!teleportOnNextFrame) {
 				teleportOnNextFrame =
 					lastScene != SceneUtil.currentScene ||
-					(HookFPFC.isInFPFC && (!settings.Smoothfollow.followReplayPosition || !ScoresaberUtil.isInReplay));
+					(HookFPFCToggle.isInFPFC && (!settings.Smoothfollow.followReplayPosition || !ScoresaberUtil.isInReplay));
 			}
 
 			if(settings.Smoothfollow.transformer == null) {

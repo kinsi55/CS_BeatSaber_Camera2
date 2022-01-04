@@ -36,7 +36,6 @@ namespace Camera2.HarmonyPatches {
 			difficultyBeatmap = null;
 		}
 
-		[HarmonyTargetMethods]
 		static IEnumerable<MethodBase> TargetMethods() {
 			foreach(var t in new Type[] { typeof(StandardLevelScenesTransitionSetupDataSO), typeof(MissionLevelScenesTransitionSetupDataSO), typeof(MultiplayerLevelScenesTransitionSetupDataSO) })
 				yield return t.GetMethod("Init", BindingFlags.Instance | BindingFlags.Public);

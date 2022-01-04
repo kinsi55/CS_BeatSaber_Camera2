@@ -67,7 +67,7 @@ namespace Camera2.Managers {
 				}
 			}
 
-			if(HookFPFC.isInFPFC)
+			if(HookFPFCToggle.isInFPFC)
 				toLookup.Insert(0, SceneTypes.FPFC);
 
 #if DEBUG

@@ -15,7 +15,7 @@ namespace Camera2.HarmonyPatches {
 		}
 	}
 
-	[HarmonyPatch(typeof(MultiplayerSpectatorController), "Start")]
+	[HarmonyPatch(typeof(MultiplayerSpectatorController), nameof(MultiplayerSpectatorController.Start))]
 	static class HookMultiplayerSpectatorController {
 		private static MultiplayerSpectatorController _instance;
 		public static MultiplayerSpectatorController instance => _instance == null || !_instance.isActiveAndEnabled ? null : _instance;

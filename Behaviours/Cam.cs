@@ -23,7 +23,7 @@ namespace Camera2.Behaviours {
 		internal CameraSettings settings { get; private set; } = null;
 		internal RenderTexture renderTexture { get; private set; } = null;
 
-		internal LessRawImage previewImage { get; private set; } = null;
+		internal CameraDesktopView previewImage { get; private set; } = null;
 		internal PositionableCam worldCam { get; private set; } = null;
 
 		internal List<IMHandler> middlewares { get; private set; } = new List<IMHandler>();
@@ -99,7 +99,7 @@ namespace Camera2.Behaviours {
 				UCamera.depthTextureMode = InitOnMainAvailable.useDepthTexture || settings?.PostProcessing.forceDepthTexture == true ? DepthTextureMode.Depth : DepthTextureMode.None;
 		}
 
-		public void Init(string name, LessRawImage presentor = null, bool loadConfig = false, bool rename = false) {
+		public void Init(string name, CameraDesktopView presentor = null, bool loadConfig = false, bool rename = false) {
 			if(this.name != null) {
 				if(rename) {
 					this.name = name;
@@ -114,13 +114,12 @@ namespace Camera2.Behaviours {
 			var camClone = Instantiate(SceneUtil.GetMainCameraButReally(), Vector3.zero, Quaternion.identity, transform);
 			camClone.name = "Cam";
 
-
 			UCamera = camClone.GetComponent<Camera>();
 			UCamera.enabled = false;
+			UCamera.tag = "Untagged";
 			UCamera.clearFlags = CameraClearFlags.SolidColor;
 			UCamera.stereoTargetEye = StereoTargetEyeMask.None;
 			UpdateDepthTextureActive();
-			//UCamera.renderingPath = RenderingPath.DeferredLighting;
 
 			transformchain = new TransformChain(transform, UCamera.transform);
 			transformer = transformchain.AddOrGet("Position", TransformerOrders.PositionOffset, false);

@@ -90,16 +90,16 @@ namespace Camera2.Managers {
 		}
 
 		public static Cam2 InitCamera(string name, bool loadConfig = true, bool reload = false) {
-			if(cams.ContainsKey(name)) {
+			if(cams.TryGetValue(name, out var cam)) {
 				if(reload) {
-					cams[name].settings.Reload();
-					return cams[name];
+					cam.settings.Reload();
+					return cam;
 				}
 
 				throw new Exception("Already exists??");
 			}
 
-			var cam = new GameObject($"Cam2_{name}").AddComponent<Cam2>();
+			cam = new GameObject($"Cam2_{name}").AddComponent<Cam2>();
 
 			try {
 				cam.Init(name, customScreen.AddNewView(), loadConfig);

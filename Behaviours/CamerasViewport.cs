@@ -11,7 +11,7 @@ namespace Camera2.Behaviours {
 #if DEBUG
 	public
 #endif
-	class LessRawImage : RawImage {
+	class CameraDesktopView : RawImage {
 		public Cam2 cam { get; private set; }
 		public RectTransform rekt { get; private set; }
 
@@ -92,8 +92,8 @@ namespace Camera2.Behaviours {
 			canvas.renderMode = RenderMode.ScreenSpaceOverlay;
 		}
 
-		public LessRawImage AddNewView() {
-			var img = new GameObject().AddComponent<LessRawImage>();
+		public CameraDesktopView AddNewView() {
+			var img = new GameObject().AddComponent<CameraDesktopView>();
 
 			img.transform.SetParent(gameObject.transform, true); //.parent = gameObject.transform;
 
@@ -120,9 +120,9 @@ namespace Camera2.Behaviours {
 
 		const float grabbersize = 25;
 
-		LessRawImage GetViewAtPoint(Vector2 point, ref CamAction actionAtPoint) {
+		CameraDesktopView GetViewAtPoint(Vector2 point, ref CamAction actionAtPoint) {
 			// This should already be sorted in the correct order
-			foreach(var camScreen in GetComponentsInChildren<LessRawImage>(false).Reverse()) {
+			foreach(var camScreen in GetComponentsInChildren<CameraDesktopView>(false).Reverse()) {
 				var d = new Rect(camScreen.rekt.position, camScreen.rekt.rect.size);
 
 				if(d.Contains(point) && (!camScreen.cam.settings.isScreenLocked || UI.SettingsView.cam == camScreen.cam)) {
@@ -153,7 +153,7 @@ namespace Camera2.Behaviours {
 
 		private Vector2 mouseStartPos01;
 		private Vector2 lastScreenRes = Vector2.zero;
-		private LessRawImage targetCam;
+		private CameraDesktopView targetCam;
 		private CamAction possibleAction = CamAction.None;
 		private CamAction currentAction = CamAction.None;
 
@@ -190,7 +190,7 @@ namespace Camera2.Behaviours {
 
 			lastScreenRes = curRes;
 
-			if(HookFPFC.isInFPFC)
+			if(HookFPFCToggle.isInFPFC)
 				return;
 
 			if(currentAction == CamAction.None && lastMousePos != Input.mousePosition) {

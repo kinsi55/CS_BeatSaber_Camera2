@@ -18,11 +18,11 @@ namespace Camera2.HarmonyPatches {
 		}
 
 		public static void MakeWallsOpaqueForMainCam() {
-			if(Camera.main != null) {
+			var a = Camera.main;
+			if(a != null) {
 #if DEBUG
 				Plugin.Log.Info("Made walls opaque for main cam!");
 #endif
-				Camera.main.cullingMask |= (int)VisibilityMasks.WallTextures;
 			}
 		}
 

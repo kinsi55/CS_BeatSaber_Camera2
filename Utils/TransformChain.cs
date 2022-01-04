@@ -47,10 +47,10 @@ namespace Camera2.Utils {
 		}
 
 		public Transformer AddOrGet(string name, int order = 0, bool sortIn = true) {
-			if(transformerMap.ContainsKey(name))
-				return transformerMap[name];
+			if(transformerMap.TryGetValue(name, out var t))
+				return t;
 
-			var t = new Transformer();
+			t = new Transformer();
 
 			t.order = order;
 

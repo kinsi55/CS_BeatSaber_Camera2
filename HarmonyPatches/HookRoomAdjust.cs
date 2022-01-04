@@ -34,7 +34,6 @@ namespace Camera2.HarmonyPatches {
 #endif
 		}
 
-		[HarmonyTargetMethods]
 		static IEnumerable<MethodBase> TargetMethods() {
 			yield return AccessTools.Method(typeof(VRCenterAdjust), nameof(VRCenterAdjust.OnEnable));
 			yield return AccessTools.Method(typeof(VRCenterAdjust), nameof(VRCenterAdjust.Start));
