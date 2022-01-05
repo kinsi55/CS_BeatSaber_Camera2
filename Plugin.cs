@@ -17,6 +17,7 @@ namespace Camera2 {
 		internal static Harmony harmony { get; private set; }
 
 		internal static Material ShaderMat_LuminanceKey;
+		internal static Material ShaderMat_Outline;
 		internal static Material ShaderMat_CA;
 		internal static Shader Shader_VolumetricBlit;
 
@@ -35,32 +36,26 @@ namespace Camera2 {
 		}
 
 		internal static void LoadShaders() {
-#if !DEV
-			using(var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream("Camera2.Shaders.camera2utils")) {
-				var bundle = AssetBundle.LoadFromStream(stream);
-
-				ShaderMat_LuminanceKey = new Material(bundle.LoadAsset<Shader>("LuminanceKey.shader"));
+			void LoadNormalShaders(AssetBundle bundle) {
+				ShaderMat_LuminanceKey = new Material(bundle.LoadAsset<Shader>("luminancekey.shader"));
 				ShaderMat_CA = new Material(bundle.LoadAsset<Shader>("chromaticaberration.shader"));
 				bundle.Unload(false);
 			}
 
-			using(var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream("Camera2.Shaders.camera2utilsvr")) {
-				var bundle = AssetBundle.LoadFromStream(stream);
-
-				Shader_VolumetricBlit = bundle.LoadAsset<Shader>("VolumetricBlit.shader");
+			void LoadVRShaders(AssetBundle bundle) {
+				Shader_VolumetricBlit = bundle.LoadAsset<Shader>("volumetricblit.shader");
 				bundle.Unload(false);
 			}
+
+#if !DEV
+			using(var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream("Camera2.Shaders.camera2utils"))
+				LoadNormalShaders(AssetBundle.LoadFromStream(stream));
+
+			using(var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream("Camera2.Shaders.camera2utilsvr"))
+				LoadVRShaders(AssetBundle.LoadFromStream(stream));
 #else
-			var bundle = AssetBundle.LoadFromFile(@"D:\Unity Shit\Projects\AssetBundlePacker\Assets\StreamingAssets\camera2utils");
-
-			ShaderMat_LuminanceKey = new Material(bundle.LoadAsset<Shader>("LuminanceKey.shader"));
-			ShaderMat_CA = new Material(bundle.LoadAsset<Shader>("chromaticaberration.shader"));
-			bundle.Unload(false);
-
-			bundle = AssetBundle.LoadFromFile(@"D:\Unity Shit\Projects\AssetBundlePacker\Assets\StreamingAssets\camera2utilsvr");
-
-			Shader_VolumetricBlit = bundle.LoadAsset<Shader>("VolumetricBlit.shader");
-			bundle.Unload(false);
+			LoadNormalShaders(AssetBundle.LoadFromFile(@"D:\Unity Shit\Projects\AssetBundlePacker\Assets\StreamingAssets\camera2utils"));
+			LoadVRShaders(AssetBundle.LoadFromFile(@"D:\Unity Shit\Projects\AssetBundlePacker\Assets\StreamingAssets\camera2utilsvr"));
 #endif
 		}
 

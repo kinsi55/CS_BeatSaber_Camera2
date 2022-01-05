@@ -575,8 +575,7 @@ namespace Camera2.UI {
 			var cellIndex = camList.listDataOrdered.ToList().FindIndex(x => x.cam == cam);
 
 			camList.list.tableView.SelectCellWithIdx(cellIndex);
-			// This is literally the only thing making the Cam2 incompatible between 1.13.2 and 1.13.4, so it works like this now.
-			AccessTools.Method(typeof(TableView), nameof(TableView.ScrollToCellWithIdx)).Invoke(camList.list.tableView, new object[] { cellIndex, 1, false });
+			camList.list.tableView.ScrollToCellWithIdx(cellIndex, TableView.ScrollPositionType.Center, false);
 		}
 
 		protected override void DidActivate(bool firstActivation, bool addedToHierarchy, bool screenSystemEnabling) {

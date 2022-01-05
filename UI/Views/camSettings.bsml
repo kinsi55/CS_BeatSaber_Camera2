@@ -114,7 +114,7 @@
 			<modifier-container child-expand-width='true' horizontal-fit='PreferredSize' pad-bottom='5'>
 				<horizontal preferred-width="90">
 					<text color="#EEC" font-size="4" align="Center" word-wrapping="true"
-						text="⚠ For Transparency to work, you must set the Cameras Anti Aliasing to at least 2. Additionally, having Smoke on can cause issues"
+						text="⚠ For Transparency to work, you must set the Cameras Anti Aliasing to at least 2."
 					/>
 				</horizontal>
 				<horizontal preferred-width="90">

@@ -37,7 +37,7 @@ namespace Camera2.HarmonyPatches {
 		}
 
 		static IEnumerable<MethodBase> TargetMethods() {
-			foreach(var t in new Type[] { typeof(StandardLevelScenesTransitionSetupDataSO), typeof(MissionLevelScenesTransitionSetupDataSO), typeof(MultiplayerLevelScenesTransitionSetupDataSO) })
+			foreach(var t in new [] { typeof(StandardLevelScenesTransitionSetupDataSO), typeof(MissionLevelScenesTransitionSetupDataSO), typeof(MultiplayerLevelScenesTransitionSetupDataSO) })
 				yield return t.GetMethod("Init", BindingFlags.Instance | BindingFlags.Public);
 		}
 	}

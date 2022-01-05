@@ -17,7 +17,7 @@ namespace Camera2.Utils {
 
 		public static bool IsInReplay() {
 			try {
-				return ScoreSaber_playbackEnabled != null && (bool)ScoreSaber_playbackEnabled.Invoke(null, null) == false;
+				return ScoreSaber_playbackEnabled != null && !(bool)ScoreSaber_playbackEnabled.Invoke(null, null);
 			} catch { }
 			return false;
 		}
