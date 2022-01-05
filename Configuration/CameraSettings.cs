@@ -264,7 +264,7 @@ namespace Camera2.Configuration {
 		private float _FOV;
 		public float FOV {
 			get => overrideToken?.FOV ?? _FOV;
-			set { _FOV = cam.UCamera.fieldOfView = value; cam.UCamera.orthographicSize = _FOV / 30f; }
+			set { _FOV = cam.UCamera.fieldOfView = value; cam.UCamera.orthographicSize = _FOV * 0.0333f; }
 		}
 
 		public int layer {

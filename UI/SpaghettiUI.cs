@@ -370,7 +370,7 @@ namespace Camera2.UI {
 		[UIComponent("camList")] public CustomCellListTableData list = null;
 		public List<CamListCellWrapper> listData = new List<CamListCellWrapper>();
 		public IEnumerable<CamListCellWrapper> listDataOrdered => listData.AsEnumerable().OrderByDescending(x => x.cam.settings.layer);
-		List<object> cams => listDataOrdered.Cast<object>().ToList();
+		List<object> cams => listDataOrdered.ToList<object>();
 
 		public class CamListCellWrapper {
 			public Cam2 cam { get; private set; }

@@ -99,6 +99,8 @@ namespace Camera2.Behaviours {
 				UCamera.depthTextureMode = InitOnMainAvailable.useDepthTexture || settings?.PostProcessing.forceDepthTexture == true ? DepthTextureMode.Depth : DepthTextureMode.None;
 		}
 
+		static readonly HashSet<string> CameraBehavioursToDestroy = new[] { "AudioListener", "LIV", "MainCamera", "MeshCollider" }.ToHashSet();
+
 		public void Init(string name, CameraDesktopView presentor = null, bool loadConfig = false, bool rename = false) {
 			if(this.name != null) {
 				if(rename) {
@@ -125,12 +127,11 @@ namespace Camera2.Behaviours {
 			transformer = transformchain.AddOrGet("Position", TransformerOrders.PositionOffset, false);
 
 
-			foreach(var child in camClone.transform.Cast<Transform>())
+			foreach(Transform child in camClone.transform)
 				Destroy(child.gameObject);
 
-			var trash = new string[] { "AudioListener", "LIV", "MainCamera", "MeshCollider" };
 			foreach(var component in camClone.GetComponents<Behaviour>())
-				if(trash.Contains(component.GetType().Name)) Destroy(component);
+				if(CameraBehavioursToDestroy.Contains(component.GetType().Name)) DestroyImmediate(component);
 
 
 			//Cloning post process stuff to make it controlable on a per camera basis
@@ -227,11 +228,6 @@ namespace Camera2.Behaviours {
 			destroying = true;
 			gameObject.SetActive(false);
 
-			foreach(var component in UCamera.gameObject.GetComponents<Behaviour>())
-				if(component.GetType() != typeof(Camera))
-					Destroy(component);
-
-			//if(UCamera != null) Destroy(UCamera);
 			if(previewImage != null) Destroy(previewImage.gameObject);
 			if(shield != null) Destroy(shield.gameObject);
 			Destroy(gameObject);
