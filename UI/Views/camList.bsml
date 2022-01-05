@@ -15,7 +15,7 @@
 			<!--<button on-click='AddCam' text='Up Layer'></button>-->
 		</vertical>
 		<vertical pad-left="3" pad-right="3">
-			<custom-list id='camList' select-cell='SelectCamera' contents='cams' visible-cells='8'>
+			<custom-list id='camList' select-cell='SelectCamera' contents='cams' visible-cells='8' stick-scrolling='true'>
 				<vertical id='bgContainer' bg='round-rect-panel' pad='1' horizontal-fit='Unconstrained'>
 					<horizontal>
 						<text text='~name' align='MidlineLeft' font-size='3'/>
