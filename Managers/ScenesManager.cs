@@ -120,8 +120,14 @@ namespace Camera2.Managers {
 			 * it contains it, the cam will be activated, only if its
 			 * a non-empty scene we want to hide cams that are not in it
 			 */
-			foreach(var cam in CamManager.cams)
-				if(cam.Value != null) cam.Value.gameObject.SetActive(cams?.Contains(cam.Key) != false);
+			foreach(var cam in CamManager.cams) {
+				if(cam.Value == null)
+					continue;
+
+				var camShouldBeActive = cams?.Contains(cam.Key) != false || UI.SettingsView.cam == cam.Value;
+
+				cam.Value.gameObject.SetActive(camShouldBeActive);
+			}
 
 			GL.Clear(true, true, Color.black);
 
