@@ -1,36 +1,32 @@
 ﻿using Camera2.Managers;
 using HarmonyLib;
 using UnityEngine;
+using System.Linq;
 
 namespace Camera2.HarmonyPatches {
-	[HarmonyPatch(typeof(SmoothCameraController), "Start")]
+	[HarmonyPatch(typeof(FirstPersonFlyingController), nameof(FirstPersonFlyingController.Awake))]
 	static class InitOnMainAvailable {
 		static bool isInited = false;
 		public static bool useDepthTexture { get; private set; }
-		static void Prefix(MainSettingsModelSO ____mainSettingsModel) {
-			useDepthTexture = ____mainSettingsModel.depthTextureEnabled;
-			foreach(var cam in CamManager.cams.Values) {
-				cam.UpdateDepthTextureActive();
-			}
+		static void Postfix(Camera ____camera) {
+			useDepthTexture = ____camera.depthTextureMode != DepthTextureMode.None;
 
 			if(!isInited) {
+				if(CamManager.baseCullingMask == 0)
+					CamManager.baseCullingMask = Camera.main.cullingMask;
+
 				isInited = true;
 
-				Plugin.Log.Notice("Game is ready, Initializing...");
+				Plugin.Log.Notice("MainCamera is ready, Initializing...");
 
 				CamManager.Init();
+			} else {
+				foreach(var cam in CamManager.cams.Values)
+					cam.UpdateDepthTextureActive();
 			}
-		}
-	}
 
-	[HarmonyPatch(typeof(MainFlowCoordinator), "DidActivate")]
-	static class UpdateCamScreens {
-		public static void Prefix(bool firstActivation) {
-			if(!firstActivation)
-				return;
-
-			foreach(var cam in CamManager.cams.Values)
-				cam.UpdateRenderTextureAndView();
+			if(!HookFPFCToggle.foundSiraToggle)
+				HookFPFCToggle.SetFPFCActive(____camera.transform, ____camera.isActiveAndEnabled);
 		}
 	}
 }
