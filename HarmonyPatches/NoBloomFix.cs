@@ -1,40 +1,37 @@
 ﻿using HarmonyLib;
+using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
+using System.Reflection.Emit;
 
 namespace Camera2.HarmonyPatches {
-	//[HarmonyPatch(typeof(PyramidBloomRendererSO), "OnEnable")]
-	//class BloomRendererInstantiateFix {
-	//	static bool Prefix(Shader ____shader) {
-	//		return ____shader != null;
-	//	}
-	//}
-
-	//[HarmonyPatch(typeof(PyramidBloomMainEffectSO), "OnEnable")]
-	//class BloomRendererInstantiateFix2 {
-	//	static bool Prefix(Shader ____fadeShader, Shader ____mainEffectShader, Material ____fadeMaterial, Material ____mainEffectMaterial) {
-	//		return !((____fadeShader == null && ____fadeMaterial == null) || (____mainEffectShader == null && ____mainEffectMaterial == null));
-	//	}
-	//}
-
 	/*
-	 * Ending up at this solution took me half a day. It only applies when you have bloom off - So dont have bloom off!
-	 * For WHATEVER reason, when you turn off bloom in the game, NOTHING on the desktop will render.
-	 * There were a couple of situations I found that fixed this:
-	 * - Disabling the VR camera (Obviously not an option)
-	 * - Using XRSettings.gameViewRenderMode to mirror the VR view to the Desktop (Ends up behind the camera canvas, but still kinda bad)
-	 * - This. I am not sure why this works, I gave up trying to understand whatever Beat Games cooked up with their effect rendering pipeline
+	 * Now that I have (Somewhat) better understandin of the issue...
+	 * FOR SOME REASON, the OnRenderImage() Callback in the ImageEffectController influences
+	 * the Camera - EVENTHO THE COMPONENT IS DISABLED AND THE METHOD IS NOT CALLED?!
+	 * So the patche below FORCE ENABLES it every frame, only for those to then call....
+	 * => MainEffectController.ImageEffectControllerCallback()
+	 * => this._mainEffectContainer.mainEffect(NoPostProcessMainEffectSO).Render
+	 * => Inherited from MainEffectSO
+	 * => EMPTY - So, the RenderTexture never makes it to the dest
+	 * BUT WHY DOES THIS MATTER WHEN IT DOESNT GET CALLED IN THE FIRST PLACE?! UNITY??
 	 */
 	[HarmonyPatch(typeof(MainEffectSO), nameof(MainEffectSO.Render))]
 	static class BloomRendererInstantiateFix3 {
-		static bool Prefix(RenderTexture src, RenderTexture dest) {
-			var x = RenderTexture.active;
-			Graphics.Blit(src, dest);
-			RenderTexture.active = x;
-			return false;
+		static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions) {
+			if(instructions.First()?.opcode != OpCodes.Ret)
+				return instructions;
+
+			return new[] {
+				new CodeInstruction(OpCodes.Ldarg_1),
+				new CodeInstruction(OpCodes.Ldarg_2),
+				new CodeInstruction(OpCodes.Call, typeof(Graphics).GetMethod("Blit", new[] { typeof(RenderTexture), typeof(RenderTexture) })),
+				new CodeInstruction(OpCodes.Ret)
+			};
 		}
 	}
 
-	[HarmonyPatch(typeof(MainEffectController), "OnPostRender")]
+	[HarmonyPatch(typeof(MainEffectController), "OnPreRender")]
 	static class BloomRendererInstantiateFix4 {
 		static void Postfix(ImageEffectController ____imageEffectController) {
 			____imageEffectController.enabled = true;
