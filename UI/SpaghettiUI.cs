@@ -12,6 +12,7 @@ using Camera2.Managers;
 using HarmonyLib;
 using HMUI;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -43,23 +44,47 @@ namespace Camera2.UI {
 		}
 	}
 
-	//	class PreviewView : BSMLResourceViewController {
-	//		public override string ResourceName => "Camera2.UI.Views.camPreview.bsml";
-	//#pragma warning disable 649
-	//		//[UIComponent("previewImage")] public UnityEngine.UI.RawImage image;
-	//#pragma warning restore 649
+	class PreviewView : BSMLResourceViewController {
+		public override string ResourceName => "Camera2.UI.Views.camPreview.bsml";
+		[UIComponent("previewImage")] public RawImage image = null;
 
-	//		internal ImageView dd;
+		[UIAction("#post-parse")]
+		private void Parsed() {
+			image.transform.localEulerAngles = new UnityEngine.Vector3(180f, 0, 0);
+			OnEnable();
+		}
+		UnityEngine.RenderTexture renderTexture;
 
-	//		[UIAction("#post-parse")]
-	//		private void Parsed() {
-	//			var x = transform.Find("BSMLBackground");
+		void OnEnable() {
+			if(image == null)
+				return;
 
-	//			//Destroy(x.GetComponentInChildren<UnityEngine.UI.RawImage>());
+			renderTexture = new UnityEngine.RenderTexture(UnityEngine.Screen.width, UnityEngine.Screen.height, 0);
 
-	//			dd = x.gameObject.GetComponentInChildren<ImageView>();
-	//		}
-	//	}
+			image.texture = renderTexture;
+
+			image.transform.localPosition = new UnityEngine.Vector3(0, 0, -3.7f);
+			image.transform.localEulerAngles = new UnityEngine.Vector3(10, 180, 180);
+
+			StartCoroutine(DoTheFunny());
+		}
+
+		void OnDisable() {
+			image.texture = null;
+			renderTexture?.Release();
+			renderTexture = null;
+		}
+
+		IEnumerator DoTheFunny() {
+			while(isActiveAndEnabled) {
+				yield return new UnityEngine.WaitForEndOfFrame();
+				if(renderTexture)
+					UnityEngine.ScreenCapture.CaptureScreenshotIntoRenderTexture(renderTexture);
+				yield return null;
+				yield return null;
+			}
+		}
+	}
 
 	class SettingsView : BSMLResourceViewController, INotifyPropertyChanged {
 		public override string ResourceName => "Camera2.UI.Views.camSettings.bsml";
@@ -552,6 +577,7 @@ namespace Camera2.UI {
 
 		internal SettingsView settingsView;
 		internal CamList camList;
+		internal PreviewView previewView;
 
 		public void Awake() {
 			instance = this;
@@ -562,8 +588,8 @@ namespace Camera2.UI {
 			if(settingsView == null)
 				settingsView = BeatSaberUI.CreateViewController<SettingsView>();
 
-			//if(previewView == null)
-			//	previewView = BeatSaberUI.CreateViewController<PreviewView>();
+			if(previewView == null)
+				previewView = BeatSaberUI.CreateViewController<PreviewView>();
 		}
 
 		public void ShowSettingsForCam(Cam2 cam, bool reselect = false) {
@@ -588,7 +614,7 @@ namespace Camera2.UI {
 
 				showBackButton = true;
 
-				ProvideInitialViewControllers(settingsView, camList);
+				ProvideInitialViewControllers(settingsView, camList, null, previewView);
 			} catch(Exception ex) {
 				Plugin.Log.Error(ex);
 			}

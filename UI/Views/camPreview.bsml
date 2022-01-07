@@ -1,3 +1,6 @@
-﻿<bg bg="round-rect-panel" xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:schemaLocation='https://monkeymanboy.github.io/BSML-Docs/ https://raw.githubusercontent.com/monkeymanboy/BSML-Docs/gh-pages/BSMLSchema.xsd'>
-	<!--<raw-image id='previewImage'/>-->
-</bg>
+﻿<vertical 
+		  preferred-width="114" preferred-height="63" vertical-fit="PreferredSize"
+		  child-expand-height="true" child-expand-width="true"
+pad="4" xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:schemaLocation='https://monkeymanboy.github.io/BSML-Docs/ https://raw.githubusercontent.com/monkeymanboy/BSML-Docs/gh-pages/BSMLSchema.xsd'>
+	<raw-image id='previewImage' />
+</vertical>
