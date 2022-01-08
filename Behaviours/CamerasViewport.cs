@@ -153,7 +153,7 @@ namespace Camera2.Behaviours {
 
 		private Vector2 mouseStartPos01;
 		private Vector2 lastScreenRes = Vector2.zero;
-		private CameraDesktopView targetCam;
+		public static CameraDesktopView targetCam { get; private set; }
 		private CamAction possibleAction = CamAction.None;
 		private CamAction currentAction = CamAction.None;
 
@@ -189,6 +189,7 @@ namespace Camera2.Behaviours {
 				}
 			}
 
+			// This doesnt really belong here.....
 			var curRes = new Vector2(Screen.width, Screen.height);
 			if(lastScreenRes != Vector2.zero) {
 				foreach(var c in CamManager.cams)
@@ -197,17 +198,34 @@ namespace Camera2.Behaviours {
 
 			lastScreenRes = curRes;
 
-			if(HookFPFCToggle.isInFPFC)
+			if(HookFPFCToggle.isInFPFC) {
+				if((int)currentAction >= 2)
+					ProcessCamAction(true);
+
+				targetCam = null;
 				return;
+			}
 
 			if(currentAction == CamAction.None && lastMousePos != Input.mousePosition) {
+				if(!Application.isFocused)
+					return;
+
 				possibleAction = CamAction.None;
 				lastMousePos = Input.mousePosition;
 
 				if(lastMousePos.x < 0 || lastMousePos.y < 0 || lastMousePos.x > Screen.width || lastMousePos.y > Screen.height)
 					return;
 
+				var pCam = targetCam;
 				targetCam = GetViewAtPoint(lastMousePos, ref possibleAction);
+
+				if(targetCam != pCam) {
+					if(targetCam != null)
+						targetCam.cam.PrepareMiddlewaredRender(true);
+
+					if(pCam != null)
+						pCam.cam.PrepareMiddlewaredRender(true);
+				}
 
 				if(possibleAction == CamAction.Resize_BR || possibleAction == CamAction.Resize_TL) {
 					WinAPI.SetCursor(WinAPI.WindowsCursor.IDC_SIZENWSE);
@@ -228,6 +246,25 @@ namespace Camera2.Behaviours {
 				//}
 			}
 
+			void ProcessCamAction(bool finished) {
+				var x = Input.mousePosition / new Vector2(Screen.width, Screen.height);
+
+				if((int)currentAction >= 2) {
+					targetCam.SetPositionClamped(
+						// We take the current configured position and set the view position to it + the cursor move delta
+						x - mouseStartPos01,
+
+						deltaSchemes[(int)currentAction - 2],
+						// And only when the button was released, save it to the config to make it the new config value
+						finished
+					);
+				}
+
+				GL.Clear(true, true, Color.black);
+				if(finished)
+					currentAction = CamAction.None;
+			}
+
 			if(possibleAction != CamAction.None) {
 				// Drag handler / Resize
 				if(Input.GetMouseButtonDown(0) && targetCam != null && currentAction == CamAction.None) {
@@ -240,22 +277,7 @@ namespace Camera2.Behaviours {
 
 				bool released = !Input.GetMouseButton(0) || !targetCam.isActiveAndEnabled;
 
-				var x = Input.mousePosition / new Vector2(Screen.width, Screen.height);
-
-				if((int)currentAction >= 2) {
-					targetCam.SetPositionClamped(
-						// We take the current configured position and set the view position to it + the cursor move delta
-						x - mouseStartPos01,
-
-						deltaSchemes[(int)currentAction - 2],
-						// And only when the button was released, save it to the config to make it the new config value
-						released
-					);
-				}
-
-				GL.Clear(true, true, Color.black);
-				if(released)
-					currentAction = CamAction.None;
+				ProcessCamAction(released);
 			}
 		}
 	}

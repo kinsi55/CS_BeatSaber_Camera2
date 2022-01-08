@@ -57,6 +57,7 @@
   <ItemGroup>
     <None Remove="Shaders\camera2utils" />
     <None Remove="Shaders\camera2utilsvr" />
+    <None Remove="UI\Views\camPreview.bsml" />
   </ItemGroup>
 
   <ItemGroup>
@@ -146,6 +147,9 @@
       <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\UnityEngine.PhysicsModule.dll</HintPath>
 
     </Reference>
+    <Reference Include="UnityEngine.ScreenCaptureModule">
+      <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\UnityEngine.ScreenCaptureModule.dll</HintPath>
+    </Reference>
     <Reference Include="UnityEngine.UI">
       <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\UnityEngine.UI.dll</HintPath>
 
@@ -177,6 +181,7 @@
     <EmbeddedResource Include="Shaders\camera2utils" />
     <EmbeddedResource Include="Shaders\camera2utilsvr" />
     <EmbeddedResource Include="UI\Views\camList.bsml" />
+    <EmbeddedResource Include="UI\Views\camPreview.bsml" />
     <EmbeddedResource Include="UI\Views\camSettings.bsml" />
     <EmbeddedResource Include="UI\Views\customScenesList.bsml" />
   </ItemGroup>

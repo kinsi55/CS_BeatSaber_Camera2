@@ -75,7 +75,7 @@ namespace Camera2.Behaviours {
 				UCamera.aspect = (float)w / (float)h;
 				UCamera.targetTexture = renderTexture;
 				worldCam?.SetSource(this);
-				UCamera.Render();
+				PrepareMiddlewaredRender(true);
 			}
 
 			if(sizeChanged || previewImage.rekt.anchorMin != settings.viewRect.MinAnchor())
@@ -157,8 +157,7 @@ namespace Camera2.Behaviours {
 			AddMiddleware<MovementScriptProcessor>();
 			AddMiddleware<VMCAvatar>();
 
-
-			AddMiddleware<PostProcessing>();
+			camClone.AddComponent<CamPostProcessor>().Init(this);
 		}
 
 		private void AddMiddleware<T>() where T : CamMiddleware, IMHandler {
@@ -167,18 +166,14 @@ namespace Camera2.Behaviours {
 
 		internal float timeSinceLastRender { get; private set; } = 0f;
 
-		private bool hadUpdate = false;
-		private void Update() {
-			timeSinceLastRender += Time.deltaTime;
-			hadUpdate = true;
-		}
-
 #if FPSCOUNT
 		int renderedFrames = 0;
 		System.Diagnostics.Stopwatch sw = null;
 #endif
-		private void OnGUI() {
-			if(!hadUpdate || UCamera == null || renderTexture == null)
+		private void LateUpdate() {
+			timeSinceLastRender += Time.deltaTime;
+
+			if(!UCamera || !renderTexture)
 				return;
 #if FPSCOUNT
 			if(sw == null) {
@@ -187,21 +182,8 @@ namespace Camera2.Behaviours {
 			}
 #endif
 
-			foreach(var t in middlewares) {
-				if(!t.Pre())
-					return;
-			}
-
-			hadUpdate = false;
-			transformchain.Calculate();
-			UCamera.Render();
-
-			foreach(var t in middlewares)
-				t.Post();
-
-			timeSinceLastRender = 0f;
+			PrepareMiddlewaredRender();
 #if FPSCOUNT
-			renderedFrames++;
 			if(sw.ElapsedMilliseconds > 500) {
 				Console.WriteLine("Rendered FPS for {1}: {0}", renderedFrames * 2, name);
 				renderedFrames = 0;
@@ -210,9 +192,37 @@ namespace Camera2.Behaviours {
 #endif
 		}
 
+		internal void PrepareMiddlewaredRender(bool forceRender = false) {
+			if(!UCamera || !renderTexture)
+				return;
+
+			foreach(var t in middlewares) {
+				if(!t.Pre() && !forceRender)
+					return;
+			}
+
+			transformchain.Calculate();
+			UCamera.enabled = true;
+
+			if(forceRender)
+				UCamera.Render();
+		}
+
+		internal void PostprocessCompleted() {
+			UCamera.enabled = false;
+
+			foreach(var t in middlewares)
+				t.Post();
+
+			timeSinceLastRender = 0f;
+#if FPSCOUNT
+			renderedFrames++;
+#endif
+		}
+
 		private void OnEnable() {
 			// Force a render here so we dont end up with a stale image after having just enabled this camera
-			UCamera?.Render();
+			PrepareMiddlewaredRender(true);
 			if(previewImage != null)
 				previewImage.gameObject?.SetActive(true);
 			ShowWorldCamIfNecessary();

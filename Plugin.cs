@@ -38,6 +38,8 @@ namespace Camera2 {
 		internal static void LoadShaders() {
 			void LoadNormalShaders(AssetBundle bundle) {
 				ShaderMat_LuminanceKey = new Material(bundle.LoadAsset<Shader>("luminancekey.shader"));
+				// Why does this one need the full path and others dont? I have no fing idea!
+				ShaderMat_Outline = new Material(bundle.LoadAsset<Shader>("assets/bundledassets/cam2/texouline.shader"));
 				ShaderMat_CA = new Material(bundle.LoadAsset<Shader>("chromaticaberration.shader"));
 				bundle.Unload(false);
 			}

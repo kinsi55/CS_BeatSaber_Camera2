@@ -119,6 +119,12 @@ namespace Camera2.Middlewares {
 				targetPosition = parentToUse.localPosition;
 				targetRotation = parentToUse.localRotation;
 
+				// JFC Umbra please end my suffering, also thanks Auros
+				if(isAttachedToReplayCam) {
+					targetPosition += Quaternion.Inverse(parentToUse.parent.localRotation) * parentToUse.parent.localPosition;
+					targetRotation *= parentToUse.parent.localRotation;
+				}
+
 				if(HookRoomAdjust.position != Vector3.zero || HookRoomAdjust.rotation != Quaternion.identity) {
 					// Not exactly sure why we gotta exclude replays from this, but thats what it is
 					if(settings.type == Configuration.CameraType.FirstPerson && !isAttachedToReplayCam) {
