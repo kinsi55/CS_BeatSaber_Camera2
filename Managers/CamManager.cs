@@ -79,7 +79,7 @@ namespace Camera2.Managers {
 		 * so we need to sort the cams by their set layer number and set the sibling index accordingly
 		 */
 		public static void ApplyCameraValues(bool viewLayer = false, bool bitMask = false, bool worldCam = false, bool posRot = false) {
-			var collection = viewLayer ? cams.Values.OrderBy(x => x.settings.layer).AsEnumerable() : cams.Values;
+			var collection = viewLayer ? cams.Values.OrderBy(x => x.isCurrentlySelectedInSettings ? int.MaxValue : x.settings.layer).AsEnumerable() : cams.Values;
 
 			foreach(var cam in collection) {
 				if(viewLayer) cam.previewImage.transform.SetAsLastSibling();

@@ -4,6 +4,7 @@ using Camera2.Configuration;
 using Camera2.HarmonyPatches;
 using Camera2.Interfaces;
 using Camera2.Middlewares;
+using Camera2.UI;
 using Camera2.Utils;
 using System;
 using System.Collections.Generic;
@@ -18,6 +19,8 @@ namespace Camera2.Behaviours {
 	class Cam2 : MonoBehaviour {
 		internal new string name { get; private set; } = null;
 		internal string configPath { get => ConfigUtil.GetCameraPath(name); }
+
+		internal bool isCurrentlySelectedInSettings => Coordinator.instance && Coordinator.instance.settingsView.isActiveAndEnabled && SettingsView.cam == this;
 
 		internal Camera UCamera { get; private set; } = null;
 		internal CameraSettings settings { get; private set; } = null;

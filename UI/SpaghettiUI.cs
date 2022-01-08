@@ -70,7 +70,8 @@ namespace Camera2.UI {
 		}
 
 		void OnDisable() {
-			image.texture = null;
+			if(image)
+				image.texture = null;
 			renderTexture?.Release();
 			renderTexture = null;
 		}
@@ -327,7 +328,7 @@ namespace Camera2.UI {
 			//}
 
 
-			CamManager.ApplyCameraValues(worldCam: true);
+			CamManager.ApplyCameraValues(worldCam: true, viewLayer: true);
 
 			if(cam == null)
 				return true;
