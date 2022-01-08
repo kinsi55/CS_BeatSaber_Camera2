@@ -5,13 +5,18 @@ using UnityEngine;
 namespace Camera2.HarmonyPatches {
 	[HarmonyPatch(typeof(StretchableObstacle), nameof(StretchableObstacle.SetSizeAndColor))]
 	static class TransparentWalls {
-		static void Postfix(Transform ____obstacleCore, ParametricBoxFakeGlowController ____obstacleFakeGlow) {
+		static void Postfix(Transform ____obstacleCore, ParametricBoxFakeGlowController ____obstacleFakeGlow, MaterialPropertyBlockController[] ____materialPropertyBlockControllers) {
 			if(____obstacleCore != null) {
-				____obstacleCore.gameObject.layer = (int)VisibilityLayers.WallTextures;
-
 				// No-Bloom inner wall texture thingy
-				if(____obstacleFakeGlow != null && ____obstacleFakeGlow.enabled == true)
-					____obstacleCore.GetChild(0).gameObject.layer = (int)VisibilityLayers.WallTextures;
+				if(____obstacleFakeGlow != null && ____obstacleFakeGlow.enabled == true) {
+					____obstacleFakeGlow.gameObject.layer = (int)VisibilityLayers.Walls;
+
+					// This is PROBABLY not perfect, we'll have to see if this breaks at some point
+					if(____materialPropertyBlockControllers.Length > 1)
+						____materialPropertyBlockControllers[1].gameObject.layer = (int)VisibilityLayers.WallTextures;
+				}
+
+				____obstacleCore.gameObject.layer = (int)VisibilityLayers.WallTextures;
 			}
 
 			//____obstacleFakeGlow.enabled = false;
@@ -23,14 +28,7 @@ namespace Camera2.HarmonyPatches {
 #if DEBUG
 				Plugin.Log.Info("Made walls opaque for main cam!");
 #endif
-			}
-		}
-
-		// No-Bloom fake bloom wall edge
-		[HarmonyPatch(typeof(ParametricBoxFakeGlowController), nameof(ParametricBoxFakeGlowController.Awake))]
-		static class FunnyNoBloom {
-			static void Postfix(ParametricBoxFakeGlowController __instance) {
-				__instance.gameObject.layer = (int)VisibilityLayers.Walls;
+				a.cullingMask |= (int)VisibilityMasks.WallTextures;
 			}
 		}
 	}
