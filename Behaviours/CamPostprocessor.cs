@@ -54,11 +54,9 @@ namespace Camera2.Behaviours {
 				Plugin.ShaderMat_LuminanceKey.SetFloat("_Threshold", settings.PostProcessing.transparencyThreshold);
 				Plugin.ShaderMat_LuminanceKey.SetFloat("_HasDepth", cam.UCamera.depthTextureMode != DepthTextureMode.None ? 1 : 0);
 
-				var showOutline = Coordinator.instance && Coordinator.instance.settingsView.isActiveAndEnabled && (CamerasViewport.targetCam?.cam == cam || UI.SettingsView.cam == cam);
-
 				RenderTexture tmp = null;
 
-				if(showOutline) {
+				if(cam.isCurrentlySelectedInSettings) {
 					tmp = RenderTexture.GetTemporary(dest.descriptor);
 					Graphics.Blit(src, tmp, Plugin.ShaderMat_LuminanceKey);
 
