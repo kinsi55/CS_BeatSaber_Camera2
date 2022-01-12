@@ -198,7 +198,7 @@ namespace Camera2.Behaviours {
 		}
 
 		internal void PrepareMiddlewaredRender(bool forceRender = false) {
-			if(!UCamera || !renderTexture)
+			if(!UCamera || !renderTexture || middlewares == null)
 				return;
 
 			foreach(var t in middlewares) {
