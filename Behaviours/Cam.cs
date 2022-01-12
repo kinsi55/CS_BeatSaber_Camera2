@@ -29,7 +29,7 @@ namespace Camera2.Behaviours {
 		internal CameraDesktopView previewImage { get; private set; } = null;
 		internal PositionableCam worldCam { get; private set; } = null;
 
-		internal List<IMHandler> middlewares { get; private set; } = new List<IMHandler>();
+		internal IMHandler[] middlewares { get; private set; }
 
 		internal Transformer transformer;
 		internal TransformChain transformchain;
@@ -152,19 +152,21 @@ namespace Camera2.Behaviours {
 			settings.Load(loadConfig);
 
 
-			AddMiddleware<Multiplayer>();
-			AddMiddleware<FPSLimiter>();
-			AddMiddleware<Smoothfollow>();
-			AddMiddleware<ModmapExtensions>();
-			AddMiddleware<Follow360>();
-			AddMiddleware<MovementScriptProcessor>();
-			AddMiddleware<VMCAvatar>();
+			middlewares = new[] {
+				MakeMiddleware<Multiplayer>(),
+				MakeMiddleware<FPSLimiter>(),
+				MakeMiddleware<Smoothfollow>(),
+				MakeMiddleware<ModmapExtensions>(),
+				MakeMiddleware<Follow360>(),
+				MakeMiddleware<MovementScriptProcessor>(),
+				MakeMiddleware<VMCAvatar>()
+			};
 
 			camClone.AddComponent<CamPostProcessor>().Init(this);
 		}
 
-		private void AddMiddleware<T>() where T : CamMiddleware, IMHandler {
-			middlewares.Add(gameObject.AddComponent<T>().Init(this));
+		private IMHandler MakeMiddleware<T>() where T : CamMiddleware, IMHandler {
+			return gameObject.AddComponent<T>().Init(this);
 		}
 
 		internal float timeSinceLastRender { get; private set; } = 0f;
