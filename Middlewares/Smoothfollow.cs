@@ -121,8 +121,10 @@ namespace Camera2.Middlewares {
 
 				// JFC Umbra please end my suffering, also thanks Auros
 				if(isAttachedToReplayCam) {
-					targetPosition += Quaternion.Inverse(parentToUse.parent.localRotation) * parentToUse.parent.localPosition;
-					targetRotation *= parentToUse.parent.localRotation;
+					var parentsParent = parentToUse.parent;
+					var parentsParentLocalRotation = parentsParent.localRotation;
+					targetPosition += Quaternion.Inverse(parentsParentLocalRotation) * parentsParent.localPosition;
+					targetRotation *= parentsParentLocalRotation;
 				}
 
 				if(HookRoomAdjust.position != Vector3.zero || HookRoomAdjust.rotation != Quaternion.identity) {

@@ -63,8 +63,9 @@ namespace Camera2.UI {
 
 			image.texture = renderTexture;
 
-			image.transform.localPosition = new UnityEngine.Vector3(0, 0, -3.7f);
-			image.transform.localEulerAngles = new UnityEngine.Vector3(10, 180, 180);
+			var imageTransform = image.transform;
+			imageTransform.localPosition = new UnityEngine.Vector3(0, 0, -3.7f);
+			imageTransform.localEulerAngles = new UnityEngine.Vector3(10, 180, 180);
 
 			StartCoroutine(DoTheFunny());
 		}

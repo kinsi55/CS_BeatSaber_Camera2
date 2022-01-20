@@ -13,9 +13,10 @@ namespace Camera2.HarmonyPatches {
 		public static Vector3 eulerAngles { get; private set; }
 
 		static void Postfix(MonoBehaviour __instance, MethodBase __originalMethod) {
-			position = __instance.transform.position;
-			rotation = __instance.transform.rotation;
-			eulerAngles = __instance.transform.eulerAngles;
+			var transform = __instance.transform;
+			position = transform.position;
+			rotation = transform.rotation;
+			eulerAngles = transform.eulerAngles;
 
 #if DEBUG
 			Plugin.Log.Warn("HookRoomAdjust.Postfix! " + __originalMethod.Name);

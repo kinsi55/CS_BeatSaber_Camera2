@@ -25,7 +25,11 @@ namespace Camera2.Behaviours {
 
 			controller = (!HookFPFCToggle.isInFPFC ? 
 				controllers.LastOrDefault(x => x.isActiveAndEnabled) : 
-				controllers.LastOrDefault(x => x.transform.eulerAngles + x.transform.position != Vector3.zero)
+				controllers.LastOrDefault(x =>
+				{
+					var controllerTransform = x.transform;
+					return controllerTransform.eulerAngles + controllerTransform.position != Vector3.zero;
+				})
 			)?.GetComponentInParent<VRController>();
 
 			if(controller == null)
