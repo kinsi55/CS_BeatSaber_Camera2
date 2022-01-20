@@ -5,6 +5,8 @@ using UnityEngine.EventSystems;
 
 namespace Camera2.Behaviours {
 	class PositionableCam : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler, IPointerExitHandler {
+		private static readonly int MainTex = Shader.PropertyToID("_MainTex");
+
 		public Cam2 cam { get; private set; }
 
 		private GameObject camOrigin;
@@ -46,7 +48,7 @@ namespace Camera2.Behaviours {
 		public void SetSource(Cam2 cam) {
 			this.cam = cam;
 
-			viewMaterial.SetTexture("_MainTex", cam.renderTexture);
+			viewMaterial.SetTexture(MainTex, cam.renderTexture);
 			SetPreviewPositionAndSize();
 		}
 

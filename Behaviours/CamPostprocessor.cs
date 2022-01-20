@@ -26,6 +26,12 @@ namespace Camera2.Behaviours {
 	}
 
 	class CamPostProcessor : MonoBehaviour {
+		private static readonly int Threshold = Shader.PropertyToID("_Threshold");
+		private static readonly int HasDepth = Shader.PropertyToID("_HasDepth");
+		private static readonly int MainTex = Shader.PropertyToID("_MainTex");
+		private static readonly int Width = Shader.PropertyToID("_Width");
+		private static readonly int ChromaticAberration = Shader.PropertyToID("_ChromaticAberration");
+
 		protected Cam2 cam;
 		protected CameraSettings settings => cam.settings;
 
@@ -51,8 +57,8 @@ namespace Camera2.Behaviours {
 
 		void OnRenderImage(RenderTexture src, RenderTexture dest) {
 			if(enabled && Plugin.ShaderMat_LuminanceKey) {
-				Plugin.ShaderMat_LuminanceKey.SetFloat("_Threshold", settings.PostProcessing.transparencyThreshold);
-				Plugin.ShaderMat_LuminanceKey.SetFloat("_HasDepth", cam.UCamera.depthTextureMode != DepthTextureMode.None ? 1 : 0);
+				Plugin.ShaderMat_LuminanceKey.SetFloat(Threshold, settings.PostProcessing.transparencyThreshold);
+				Plugin.ShaderMat_LuminanceKey.SetFloat(HasDepth, cam.UCamera.depthTextureMode != DepthTextureMode.None ? 1 : 0);
 
 				RenderTexture tmp = null;
 
@@ -60,8 +66,8 @@ namespace Camera2.Behaviours {
 					tmp = RenderTexture.GetTemporary(dest.descriptor);
 					Graphics.Blit(src, tmp, Plugin.ShaderMat_LuminanceKey);
 
-					Plugin.ShaderMat_Outline.SetTexture("_MainTex", dest);
-					Plugin.ShaderMat_Outline.SetFloat("_Width", settings.renderScale * 10);
+					Plugin.ShaderMat_Outline.SetTexture(MainTex, dest);
+					Plugin.ShaderMat_Outline.SetFloat(Width, settings.renderScale * 10);
 					Graphics.Blit(tmp, dest, Plugin.ShaderMat_Outline);
 					RenderTexture.ReleaseTemporary(tmp);
 				} else {
@@ -69,7 +75,7 @@ namespace Camera2.Behaviours {
 				}
 
 				if(settings.PostProcessing.chromaticAberrationAmount > 0) {
-					Plugin.ShaderMat_CA.SetFloat("_ChromaticAberration", settings.PostProcessing.chromaticAberrationAmount / 1000);
+					Plugin.ShaderMat_CA.SetFloat(ChromaticAberration, settings.PostProcessing.chromaticAberrationAmount / 1000);
 					Graphics.Blit(dest, dest, Plugin.ShaderMat_CA);
 				}
 			} else {
