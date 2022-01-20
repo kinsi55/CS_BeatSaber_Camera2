@@ -68,9 +68,9 @@ namespace Camera2.Middlewares {
 			}
 
 			if(loadedScript == null) {
-				var possibleScripts = settings.MovementScript.scriptList.Where(MovementScriptManager.movementScripts.ContainsKey);
+				var possibleScripts = settings.MovementScript.scriptList.Where(MovementScriptManager.movementScripts.ContainsKey).ToList();
 
-				if(possibleScripts.Count() == 0)
+				if(!possibleScripts.Any())
 					return true;
 
 				var scriptToUse = possibleScripts.ElementAt(randomSource.Next(possibleScripts.Count()));
