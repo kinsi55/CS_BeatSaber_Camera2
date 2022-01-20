@@ -72,8 +72,12 @@ namespace Camera2.UI {
 		void OnDisable() {
 			if(image)
 				image.texture = null;
-			renderTexture?.Release();
-			renderTexture = null;
+
+			if (renderTexture != null)
+			{
+				renderTexture.Release();
+				renderTexture = null;
+			}
 		}
 
 		IEnumerator DoTheFunny() {
@@ -347,7 +351,8 @@ namespace Camera2.UI {
 		}
 
 		internal void SaveSettings() {
-			cam?.settings.Save();
+			if (cam != null)
+				cam.settings.Save();
 			ScenesManager.settings.Save();
 		}
 
@@ -608,7 +613,8 @@ namespace Camera2.UI {
 		protected override void DidActivate(bool firstActivation, bool addedToHierarchy, bool screenSystemEnabling) {
 			try {
 				if(!firstActivation) {
-					camList?.Init();
+					if (camList != null)
+						camList.Init();
 					ShowSettingsForCam(CamManager.cams.Values.First());
 					return;
 				}

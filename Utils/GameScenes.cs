@@ -16,9 +16,17 @@ namespace Camera2.Utils {
 		public static bool isSongPlaying => hasSongPlayer && audioTimeSyncController.state == AudioTimeSyncController.State.Playing;
 
 
-		public static bool isInMultiplayer => HookMultiplayer.instance?.isConnected == true;
+		public static bool isInMultiplayer => HookMultiplayer.instance != null && HookMultiplayer.instance.isConnected == true;
 
-		public static GameObject GetMainCameraButReally() => Camera.main?.gameObject ?? GameObject.FindGameObjectsWithTag("MainCamera")[0];
+		public static GameObject GetMainCameraButReally()
+		{
+			if (Camera.main == null || Camera.main.gameObject == null)
+			{
+				return GameObject.FindGameObjectsWithTag("MainCamera")[0];
+			}
+
+			return Camera.main.gameObject;
+		}
 
 
 		public static readonly string[] menuSceneNames = new string[] { "MainMenu", "MenuViewCore", "MenuCore", "MenuViewControllers" };

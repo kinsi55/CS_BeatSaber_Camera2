@@ -93,7 +93,7 @@ namespace Camera2.Middlewares {
 				 * so if the script is synced to the song we'll just hardlock the time
 				 * at 0 if the controller doesnt exist
 				 */
-				currentAnimationTime = SceneUtil.audioTimeSyncController?.songTime ?? 0;
+				currentAnimationTime = SceneUtil.audioTimeSyncController == null ? 0 : SceneUtil.audioTimeSyncController.songTime;
 			} else {
 				currentAnimationTime += cam.timeSinceLastRender;
 			}

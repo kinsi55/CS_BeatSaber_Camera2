@@ -75,7 +75,7 @@ namespace Camera2.Middlewares {
 				settings.type == Configuration.CameraType.FirstPerson
 			) {
 				if(settings.Smoothfollow.followReplayPosition) {
-					parentToUse = ScoresaberUtil.replayCamera?.transform;
+					parentToUse = ScoresaberUtil.replayCamera == null ? null : ScoresaberUtil.replayCamera.transform;
 					settings.Smoothfollow.useLocalPosition = true;
 					isAttachedToReplayCam = true;
 				} else {
@@ -84,7 +84,7 @@ namespace Camera2.Middlewares {
 						HookRoomAdjust.ApplyCustom(ScoresaberUtil.spectateParent.position, ScoresaberUtil.spectateParent.rotation);
 				}
 
-				if(parent == ScoresaberUtil.replayCamera?.transform)
+				if(parent == (ScoresaberUtil.replayCamera == null ? null : ScoresaberUtil.replayCamera.transform))
 					parent = null;
 			}
 
@@ -96,9 +96,9 @@ namespace Camera2.Middlewares {
 			if(parentToUse == null)
 				parentToUse = parent;
 
-			if(parentToUse == null || parentToUse.gameObject?.activeInHierarchy != true) {
+			if(parentToUse == null || parentToUse.gameObject != null && parentToUse.gameObject.activeInHierarchy != true) {
 				if(settings.type == Configuration.CameraType.FirstPerson) {
-					parent = parentToUse = Camera.main?.transform;
+					parent = parentToUse = (Camera.main == null ? null : Camera.main.transform);
 					settings.Smoothfollow.useLocalPosition = true;
 				} else if(settings.type == Configuration.CameraType.Attached) {
 					parent = parentToUse = GameObject.Find(settings.Smoothfollow.targetParent)?.transform;

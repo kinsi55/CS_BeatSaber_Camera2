@@ -64,10 +64,11 @@ namespace Camera2.Behaviours {
 			var w = (int)Math.Round(settings.viewRect.width * Screen.width * settings.renderScale);
 			var h = (int)Math.Round(settings.viewRect.height * Screen.height * settings.renderScale);
 
-			var sizeChanged = renderTexture?.width != w || renderTexture?.height != h || renderTexture?.antiAliasing != settings.antiAliasing;
+			var sizeChanged = renderTexture == null || renderTexture.width != w || renderTexture.height != h || renderTexture.antiAliasing != settings.antiAliasing;
 
 			if(sizeChanged) {
-				renderTexture?.Release();
+				if (renderTexture != null)
+					renderTexture.Release();
 				renderTexture = new RenderTexture(w, h, 24) { //, RenderTextureFormat.ARGB32
 					useMipMap = false,
 					antiAliasing = settings.antiAliasing,
@@ -77,12 +78,13 @@ namespace Camera2.Behaviours {
 
 				UCamera.aspect = (float)w / (float)h;
 				UCamera.targetTexture = renderTexture;
-				worldCam?.SetSource(this);
+				if (worldCam != null)
+					worldCam.SetSource(this);
 				PrepareMiddlewaredRender(true);
 			}
 
-			if(sizeChanged || previewImage.rekt.anchorMin != settings.viewRect.MinAnchor())
-				previewImage?.SetSource(this);
+			if((sizeChanged || previewImage.rekt.anchorMin != settings.viewRect.MinAnchor()) && previewImage != null)
+				previewImage.SetSource(this);
 		}
 
 		internal void ShowWorldCamIfNecessary() {
@@ -228,13 +230,13 @@ namespace Camera2.Behaviours {
 		private void OnEnable() {
 			// Force a render here so we dont end up with a stale image after having just enabled this camera
 			PrepareMiddlewaredRender(true);
-			if(previewImage != null)
-				previewImage.gameObject?.SetActive(true);
+			if(previewImage != null && previewImage.gameObject != null)
+				previewImage.gameObject.SetActive(true);
 			ShowWorldCamIfNecessary();
 		}
 
 		private void OnDisable() {
-			if(previewImage != null) previewImage.gameObject?.SetActive(false);
+			if(previewImage != null && previewImage.gameObject != null) previewImage.gameObject.SetActive(false);
 			ShowWorldCamIfNecessary();
 		}
 
