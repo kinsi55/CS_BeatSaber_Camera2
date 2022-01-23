@@ -28,7 +28,6 @@ namespace Camera2.Behaviours {
 	class CamPostProcessor : MonoBehaviour {
 		private static readonly int Threshold = Shader.PropertyToID("_Threshold");
 		private static readonly int HasDepth = Shader.PropertyToID("_HasDepth");
-		private static readonly int MainTex = Shader.PropertyToID("_MainTex");
 		private static readonly int Width = Shader.PropertyToID("_Width");
 		private static readonly int ChromaticAberration = Shader.PropertyToID("_ChromaticAberration");
 
@@ -60,13 +59,10 @@ namespace Camera2.Behaviours {
 				Plugin.ShaderMat_LuminanceKey.SetFloat(Threshold, settings.PostProcessing.transparencyThreshold);
 				Plugin.ShaderMat_LuminanceKey.SetFloat(HasDepth, cam.UCamera.depthTextureMode != DepthTextureMode.None ? 1 : 0);
 
-				RenderTexture tmp = null;
-
 				if(cam.isCurrentlySelectedInSettings) {
-					tmp = RenderTexture.GetTemporary(dest.descriptor);
+					RenderTexture tmp = RenderTexture.GetTemporary(dest.descriptor);
 					Graphics.Blit(src, tmp, Plugin.ShaderMat_LuminanceKey);
 
-					Plugin.ShaderMat_Outline.SetTexture(MainTex, dest);
 					Plugin.ShaderMat_Outline.SetFloat(Width, settings.renderScale * 10);
 					Graphics.Blit(tmp, dest, Plugin.ShaderMat_Outline);
 					RenderTexture.ReleaseTemporary(tmp);
