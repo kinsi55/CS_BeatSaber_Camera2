@@ -53,7 +53,7 @@ namespace Camera2.SDK {
 		/// <summary>
 		/// Returns if the camera instance that this OverrideToken was created for still exists
 		/// </summary>
-		public bool isValid => cam != null && cam.gameObject != null && CamManager.cams.ContainsKey(camName);
+		public bool isValid => cam != null && CamManager.cams.ContainsKey(camName);
 
 		/// <summary>
 		/// Closes this OverrideToken and returns the camera's values back to their default
