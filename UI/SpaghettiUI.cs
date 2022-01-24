@@ -74,8 +74,7 @@ namespace Camera2.UI {
 			if(image)
 				image.texture = null;
 
-			if (renderTexture != null)
-			{
+			if(renderTexture != null) {
 				renderTexture.Release();
 				renderTexture = null;
 			}
@@ -108,18 +107,17 @@ namespace Camera2.UI {
 
 		internal static Cam2 cam { get; private set; }
 
-		static List<string> props;
+		static string[] props;
 
 		void Awake() {
 			// Dont really care which cam it is, this is just for BSML to init
 			cam = CamManager.cams.Values.First();
 
-			if(props == null) props = typeof(SettingsView).GetProperties(
+			props ??= typeof(SettingsView).GetProperties(
 				BindingFlags.Instance | BindingFlags.NonPublic
-			).Select(x => x.Name).ToList();
+			).Select(x => x.Name).ToArray();
 
-			if(scenes == null)
-				scenes = Enum.GetValues(typeof(SceneTypes)).Cast<SceneTypes>().Select(x => new SceneToggle() { type = x, host = this }).ToList();
+			scenes ??= Enum.GetValues(typeof(SceneTypes)).Cast<SceneTypes>().Select(x => new SceneToggle() { type = x, host = this }).ToArray();
 		}
 		#region variables
 		internal string camName {
@@ -297,7 +295,7 @@ namespace Camera2.UI {
 		private static readonly List<object> visibilities_Walls = Enum.GetValues(typeof(WallVisiblity)).Cast<object>().ToList();
 		private static readonly List<object> visibilities_Notes = Enum.GetValues(typeof(NoteVisibility)).Cast<object>().ToList();
 		private static readonly List<object> visibilities_Avatar = Enum.GetValues(typeof(AvatarVisibility)).Cast<object>().ToList();
-		private List<SceneToggle> scenes;
+		private SceneToggle[] scenes;
 
 		class SceneToggle : NotifiableSettingsObj {
 			internal SettingsView host;
@@ -352,7 +350,7 @@ namespace Camera2.UI {
 		}
 
 		internal void SaveSettings() {
-			if (cam != null)
+			if(cam != null)
 				cam.settings.Save();
 			ScenesManager.settings.Save();
 		}
@@ -614,7 +612,7 @@ namespace Camera2.UI {
 		protected override void DidActivate(bool firstActivation, bool addedToHierarchy, bool screenSystemEnabling) {
 			try {
 				if(!firstActivation) {
-					if (camList != null)
+					if(camList != null)
 						camList.Init();
 					ShowSettingsForCam(CamManager.cams.Values.First());
 					return;
