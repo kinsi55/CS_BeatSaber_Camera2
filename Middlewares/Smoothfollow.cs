@@ -75,30 +75,30 @@ namespace Camera2.Middlewares {
 				settings.type == Configuration.CameraType.FirstPerson
 			) {
 				if(settings.Smoothfollow.followReplayPosition) {
-					parentToUse = !ScoresaberUtil.replayCamera ? null : ScoresaberUtil.replayCamera.transform;
+					parentToUse = ScoresaberUtil.replayCamera == null ? null : ScoresaberUtil.replayCamera.transform;
 					settings.Smoothfollow.useLocalPosition = true;
 					isAttachedToReplayCam = true;
 				} else {
 					// This is complete garbage
-					if(ScoresaberUtil.spectateParent)
+					if(ScoresaberUtil.spectateParent != null)
 						HookRoomAdjust.ApplyCustom(ScoresaberUtil.spectateParent.position, ScoresaberUtil.spectateParent.rotation);
 				}
 
-				if(parent == (!ScoresaberUtil.replayCamera ? null : ScoresaberUtil.replayCamera.transform))
+				if(parent == (ScoresaberUtil.replayCamera == null ? null : ScoresaberUtil.replayCamera.transform))
 					parent = null;
 			}
 
-			if(!parentToUse && settings.type == Configuration.CameraType.FirstPerson && HookFPFCToggle.isInFPFC) {
+			if(parentToUse == null && settings.type == Configuration.CameraType.FirstPerson && HookFPFCToggle.isInFPFC) {
 				parentToUse = HookFPFCToggle.fpfcTransform;
 				settings.Smoothfollow.useLocalPosition = false;
 			}
 
-			if(!parentToUse)
+			if(parentToUse == null)
 				parentToUse = parent;
 
-			if(!parentToUse || !parentToUse.gameObject.activeInHierarchy) {
+			if(parentToUse == null || parentToUse.gameObject != null && parentToUse.gameObject.activeInHierarchy != true) {
 				if(settings.type == Configuration.CameraType.FirstPerson) {
-					parent = parentToUse = (!Camera.main ? null : Camera.main.transform);
+					parent = parentToUse = (Camera.main == null ? null : Camera.main.transform);
 					settings.Smoothfollow.useLocalPosition = true;
 				} else if(settings.type == Configuration.CameraType.Attached) {
 					parent = parentToUse = GameObject.Find(settings.Smoothfollow.targetParent)?.transform;
@@ -109,7 +109,7 @@ namespace Camera2.Middlewares {
 			//System.Console.WriteLine("FP cam is attached to {0}", parentToUse);
 
 			// If we dont have a parent we should not render.
-			if(!parentToUse)
+			if(parentToUse == null)
 				return false;
 
 			var targetPosition = parentToUse.position;

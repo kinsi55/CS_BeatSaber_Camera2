@@ -125,7 +125,8 @@ namespace Camera2.Configuration {
 			Save();
 #endif
 
-			viewRect ??= new ScreenRect(0, 0, 1, 1, false);
+			if(viewRect == null)
+				viewRect = new ScreenRect(0, 0, 1, 1, false);
 
 			ApplyPositionAndRotation();
 			ApplyLayerBitmask();
@@ -135,17 +136,16 @@ namespace Camera2.Configuration {
 		}
 
 		public void Save() {
-			if(!cam)
-				return;
-				
-			var x = overrideToken; overrideToken = null;
-			try {
-				System.IO.File.WriteAllText(cam.configPath, JsonConvert.SerializeObject(this, Formatting.Indented));
-			} catch(Exception ex) {
-				Plugin.Log.Error($"Failed to save Config for Camera {cam.name}:");
-				Plugin.Log.Error(ex);
+			if(cam != null && cam.gameObject != null) {
+				var x = overrideToken; overrideToken = null;
+				try {
+					System.IO.File.WriteAllText(cam.configPath, JsonConvert.SerializeObject(this, Formatting.Indented));
+				} catch(Exception ex) {
+					Plugin.Log.Error($"Failed to save Config for Camera {cam.name}:");
+					Plugin.Log.Error(ex);
+				}
+				overrideToken = x;
 			}
-			overrideToken = x;
 		}
 
 		public void Reload() {
@@ -243,7 +243,7 @@ namespace Camera2.Configuration {
 			get => _previewScreenSize;
 			set {
 				_previewScreenSize = Mathf.Clamp(value, 0.3f, 3f);
-				if(isLoaded && cam.worldCam)
+				if(isLoaded && cam.worldCam != null)
 					cam.worldCam.SetPreviewPositionAndSize();
 			}
 		}
@@ -253,7 +253,7 @@ namespace Camera2.Configuration {
 			get => _worldCamUnderScreen;
 			set {
 				_worldCamUnderScreen = value;
-				if(isLoaded && cam.worldCam)
+				if(isLoaded && cam.worldCam != null)
 					cam.worldCam.SetPreviewPositionAndSize();
 			}
 		}

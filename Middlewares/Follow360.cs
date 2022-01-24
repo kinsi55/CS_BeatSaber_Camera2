@@ -32,7 +32,7 @@ namespace Camera2.Middlewares {
 				!settings.Follow360.enabled ||
 				SceneUtil.isInMenu ||
 				!HookLeveldata.is360Level ||
-				!HookLevelRotation.Instance ||
+				HookLevelRotation.Instance == null ||
 				settings.type != Configuration.CameraType.Positionable
 			) {
 				Reset();

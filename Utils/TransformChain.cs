@@ -131,7 +131,7 @@ namespace Camera2.Utils {
 #endif
 			}
 
-			if(!target || !apply)
+			if(target == null || !apply)
 				return;
 
 			target.position = position;

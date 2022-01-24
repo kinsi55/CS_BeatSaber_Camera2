@@ -38,7 +38,7 @@ namespace Camera2.UI {
 		}
 
 		private static void ShowFlow() {
-			if(!_flow)
+			if(_flow == null)
 				_flow = BeatSaberUI.CreateFlowCoordinator<Coordinator>();
 			BeatSaberUI.MainFlowCoordinator.PresentFlowCoordinator(_flow);
 		}
@@ -56,7 +56,7 @@ namespace Camera2.UI {
 		UnityEngine.RenderTexture renderTexture;
 
 		void OnEnable() {
-			if(!image)
+			if(image == null)
 				return;
 
 			renderTexture = new UnityEngine.RenderTexture(UnityEngine.Screen.width, UnityEngine.Screen.height, 0);
@@ -74,7 +74,8 @@ namespace Camera2.UI {
 			if(image)
 				image.texture = null;
 
-			if(renderTexture) {
+			if (renderTexture != null)
+			{
 				renderTexture.Release();
 				renderTexture = null;
 			}
@@ -107,17 +108,18 @@ namespace Camera2.UI {
 
 		internal static Cam2 cam { get; private set; }
 
-		static string[] props;
+		static List<string> props;
 
 		void Awake() {
 			// Dont really care which cam it is, this is just for BSML to init
 			cam = CamManager.cams.Values.First();
 
-			props ??= typeof(SettingsView).GetProperties(
+			if(props == null) props = typeof(SettingsView).GetProperties(
 				BindingFlags.Instance | BindingFlags.NonPublic
-			).Select(x => x.Name).ToArray();
+			).Select(x => x.Name).ToList();
 
-			scenes ??= Enum.GetValues(typeof(SceneTypes)).Cast<SceneTypes>().Select(x => new SceneToggle() { type = x, host = this }).ToArray();
+			if(scenes == null)
+				scenes = Enum.GetValues(typeof(SceneTypes)).Cast<SceneTypes>().Select(x => new SceneToggle() { type = x, host = this }).ToList();
 		}
 		#region variables
 		internal string camName {
@@ -295,7 +297,7 @@ namespace Camera2.UI {
 		private static readonly List<object> visibilities_Walls = Enum.GetValues(typeof(WallVisiblity)).Cast<object>().ToList();
 		private static readonly List<object> visibilities_Notes = Enum.GetValues(typeof(NoteVisibility)).Cast<object>().ToList();
 		private static readonly List<object> visibilities_Avatar = Enum.GetValues(typeof(AvatarVisibility)).Cast<object>().ToList();
-		private SceneToggle[] scenes;
+		private List<SceneToggle> scenes;
 
 		class SceneToggle : NotifiableSettingsObj {
 			internal SettingsView host;
@@ -333,7 +335,7 @@ namespace Camera2.UI {
 
 			CamManager.ApplyCameraValues(worldCam: true, viewLayer: true);
 
-			if(!cam)
+			if(cam == null)
 				return true;
 
 			cam.gameObject.SetActive(true);
@@ -350,9 +352,8 @@ namespace Camera2.UI {
 		}
 
 		internal void SaveSettings() {
-			if(cam)
+			if (cam != null)
 				cam.settings.Save();
-
 			ScenesManager.settings.Save();
 		}
 
@@ -375,7 +376,7 @@ namespace Camera2.UI {
 		}
 
 		private void ToggleSettingVisibility() {
-			if(!zOffsetSlider) return;
+			if(zOffsetSlider == null) return;
 
 			zOffsetSlider.gameObject.SetActive(type == CameraType.FirstPerson);
 			xRotationSlider.gameObject.SetActive(type == CameraType.FirstPerson);
@@ -588,13 +589,13 @@ namespace Camera2.UI {
 		public void Awake() {
 			instance = this;
 
-			if(!camList)
+			if(camList == null)
 				camList = BeatSaberUI.CreateViewController<CamList>();
 
-			if(!settingsView)
+			if(settingsView == null)
 				settingsView = BeatSaberUI.CreateViewController<SettingsView>();
 
-			if(!previewView)
+			if(previewView == null)
 				previewView = BeatSaberUI.CreateViewController<PreviewView>();
 		}
 
@@ -613,9 +614,8 @@ namespace Camera2.UI {
 		protected override void DidActivate(bool firstActivation, bool addedToHierarchy, bool screenSystemEnabling) {
 			try {
 				if(!firstActivation) {
-					if(camList)
+					if (camList != null)
 						camList.Init();
-
 					ShowSettingsForCam(CamManager.cams.Values.First());
 					return;
 				}
