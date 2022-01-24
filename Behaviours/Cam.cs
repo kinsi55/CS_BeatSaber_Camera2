@@ -67,8 +67,9 @@ namespace Camera2.Behaviours {
 			var sizeChanged = renderTexture == null || renderTexture.width != w || renderTexture.height != h || renderTexture.antiAliasing != settings.antiAliasing;
 
 			if(sizeChanged) {
-				if (renderTexture != null)
+				if(renderTexture != null)
 					renderTexture.Release();
+
 				renderTexture = new RenderTexture(w, h, 24) { //, RenderTextureFormat.ARGB32
 					useMipMap = false,
 					antiAliasing = settings.antiAliasing,
@@ -78,12 +79,13 @@ namespace Camera2.Behaviours {
 
 				UCamera.aspect = (float)w / (float)h;
 				UCamera.targetTexture = renderTexture;
-				if (worldCam != null)
+				if(worldCam != null)
 					worldCam.SetSource(this);
+
 				PrepareMiddlewaredRender(true);
 			}
 
-			if((sizeChanged || previewImage.rekt.anchorMin != settings.viewRect.MinAnchor()) && previewImage != null)
+			if(previewImage != null && (sizeChanged || previewImage.rekt.anchorMin != settings.viewRect.MinAnchor()))
 				previewImage.SetSource(this);
 		}
 

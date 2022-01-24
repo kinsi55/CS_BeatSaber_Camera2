@@ -98,7 +98,9 @@ namespace Camera2.Middlewares {
 
 			if(parentToUse == null || !parentToUse.gameObject.activeInHierarchy) {
 				if(settings.type == Configuration.CameraType.FirstPerson) {
-					parent = parentToUse = (Camera.main == null ? null : Camera.main.transform);
+					var a = Camera.main;
+
+					parent = parentToUse = a == null ? null : a.transform;
 					settings.Smoothfollow.useLocalPosition = true;
 				} else if(settings.type == Configuration.CameraType.Attached) {
 					parent = parentToUse = GameObject.Find(settings.Smoothfollow.targetParent)?.transform;
