@@ -6,9 +6,9 @@ namespace Camera2.HarmonyPatches {
 	[HarmonyPatch(typeof(StretchableObstacle), nameof(StretchableObstacle.SetSizeAndColor))]
 	static class TransparentWalls {
 		static void Postfix(Transform ____obstacleCore, ParametricBoxFakeGlowController ____obstacleFakeGlow, MaterialPropertyBlockController[] ____materialPropertyBlockControllers) {
-			if(____obstacleCore != null) {
+			if(____obstacleCore) {
 				// No-Bloom inner wall texture thingy
-				if(____obstacleFakeGlow != null && ____obstacleFakeGlow.enabled == true) {
+				if(____obstacleFakeGlow && ____obstacleFakeGlow.enabled == true) {
 					____obstacleFakeGlow.gameObject.layer = (int)VisibilityLayers.Walls;
 
 					// This is PROBABLY not perfect, we'll have to see if this breaks at some point
@@ -24,7 +24,7 @@ namespace Camera2.HarmonyPatches {
 
 		public static void MakeWallsOpaqueForMainCam() {
 			var a = Camera.main;
-			if(a != null) {
+			if(a) {
 #if DEBUG
 				Plugin.Log.Info("Made walls opaque for main cam!");
 #endif

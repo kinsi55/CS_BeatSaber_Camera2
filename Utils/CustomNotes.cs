@@ -8,6 +8,6 @@ namespace Camera2.Utils {
 			.Assembly.GetType("CustomNotes.Utilities.LayerUtils")?
 			.GetProperty("HMDOnly", BindingFlags.Public | BindingFlags.Static);
 
-		public static bool HasHMDOnlyEnabled() => LayerUtils_HMDOnly != null && (bool)LayerUtils_HMDOnly.GetValue(null);
+		public static bool HasHMDOnlyEnabled() => LayerUtils_HMDOnly?.GetValue(null) == true;
 	}
 }

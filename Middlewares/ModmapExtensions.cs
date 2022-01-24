@@ -59,7 +59,7 @@ namespace Camera2.Middlewares {
 				}
 
 				// Noodle maps do not *necessarily* have a playertrack if it not actually used
-				if(noodleOrigin != null || (noodleOrigin = (Transform)Noodle_PlayerTrack_Origin.GetValue(playertrack_instance)) != null) {
+				if(noodleOrigin || (noodleOrigin = (Transform)Noodle_PlayerTrack_Origin.GetValue(playertrack_instance)) != null) {
 					// If we are not yet attached, and we dont have a parent thats active yet, try to get one!
 					if(mapMovementTransformer == null) {
 #if DEBUG

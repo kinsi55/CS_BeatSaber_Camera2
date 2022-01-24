@@ -220,10 +220,10 @@ namespace Camera2.Behaviours {
 				targetCam = GetViewAtPoint(lastMousePos, ref possibleAction);
 
 				if(targetCam != pCam) {
-					if(targetCam != null)
+					if(targetCam)
 						targetCam.cam.PrepareMiddlewaredRender(true);
 
-					if(pCam != null)
+					if(pCam)
 						pCam.cam.PrepareMiddlewaredRender(true);
 				}
 
@@ -267,7 +267,7 @@ namespace Camera2.Behaviours {
 
 			if(possibleAction != CamAction.None) {
 				// Drag handler / Resize
-				if(Input.GetMouseButtonDown(0) && targetCam != null && currentAction == CamAction.None) {
+				if(Input.GetMouseButtonDown(0) && targetCam && currentAction == CamAction.None) {
 					mouseStartPos01 = lastMousePos / new Vector2(Screen.width, Screen.height);
 					currentAction = possibleAction;
 				}

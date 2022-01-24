@@ -24,7 +24,7 @@ namespace Camera2.Managers {
 			if(sceneName == null)
 				sceneName = SceneUtil.currentScene.name;
 
-			if(CamManager.customScreen == null || CamManager.customScreen.gameObject == null)
+			if(!CamManager.customScreen)
 				return;
 
 			CamManager.customScreen.gameObject.SetActive(sceneName != "BeatmapEditor");
@@ -62,7 +62,7 @@ namespace Camera2.Managers {
 				} else if(SceneUtil.isInMultiplayer) {
 					toLookup.Insert(0, SceneTypes.PlayingMulti);
 
-					if(HookMultiplayerSpectatorController.instance != null)
+					if(HookMultiplayerSpectatorController.instance)
 						toLookup.Insert(0, SceneTypes.SpectatingMulti);
 				}
 			}
@@ -121,7 +121,7 @@ namespace Camera2.Managers {
 			 * a non-empty scene we want to hide cams that are not in it
 			 */
 			foreach(var cam in CamManager.cams) {
-				if(cam.Value == null)
+				if(!cam.Value)
 					continue;
 
 				var camShouldBeActive = cams?.Contains(cam.Key) != false || UI.SettingsView.cam == cam.Value;

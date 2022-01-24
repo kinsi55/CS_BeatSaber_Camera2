@@ -28,12 +28,12 @@ namespace Camera2.Utils {
 			isInReplay = IsInReplay();
 			replayCamera = !isInReplay ? null : GameObject.Find("LocalPlayerGameCore/Recorder/RecorderCamera")?.GetComponent<Camera>();
 
-			if(replayCamera != null) {
+			if(replayCamera) {
 				var x = GameObject.Find("RecorderCamera(Clone)")?.GetComponent<Camera>();
 
 				// Cant disable this one as otherwise SS' ReplayFrameRenderer stuff "breaks"
 				//replayCamera.enabled = false;
-				if(x != null) {
+				if(x) {
 					replayCamera.tag = "Untagged";
 
 
@@ -45,11 +45,10 @@ namespace Camera2.Utils {
 					 * This is super hacky trash but it does the job for now™
 					 * I'm not exactly sure why I *need* to look it up again here, else it wont work - whatever.
 					 */
-					if(!wasInReplay)
-					{
+					if(!wasInReplay) {
 						var y = GameObject.Find("SpectatorParent/RecorderCamera(Clone)");
 
-						spectateParent = y == null ? null : y.transform.parent;
+						spectateParent = y?.transform.parent;
 					}
 
 					if(!UnityEngine.XR.XRDevice.isPresent)

@@ -43,12 +43,12 @@ namespace Camera2.Behaviours {
 			if(transform.parent == parent)
 				return;
 
-			if(parent == null) {
+			if(!parent) {
 				transform.parent = null;
 
 				DontDestroyOnLoad(gameObject);
 			} else {
-				if(shield == null)
+				if(!shield)
 					shield = new GameObject($"Cam2_{name}_Parenter").AddComponent<ParentShield>();
 
 				shield.Init(this, parent, !startFromParentTransform);
@@ -67,8 +67,9 @@ namespace Camera2.Behaviours {
 			var sizeChanged = renderTexture == null || renderTexture.width != w || renderTexture.height != h || renderTexture.antiAliasing != settings.antiAliasing;
 
 			if(sizeChanged) {
-				if (renderTexture != null)
+				if(renderTexture)
 					renderTexture.Release();
+
 				renderTexture = new RenderTexture(w, h, 24) { //, RenderTextureFormat.ARGB32
 					useMipMap = false,
 					antiAliasing = settings.antiAliasing,
@@ -78,17 +79,17 @@ namespace Camera2.Behaviours {
 
 				UCamera.aspect = (float)w / (float)h;
 				UCamera.targetTexture = renderTexture;
-				if (worldCam != null)
+				if (worldCam)
 					worldCam.SetSource(this);
 				PrepareMiddlewaredRender(true);
 			}
 
-			if((sizeChanged || previewImage.rekt.anchorMin != settings.viewRect.MinAnchor()) && previewImage != null)
+			if(previewImage && (sizeChanged || previewImage.rekt.anchorMin != settings.viewRect.MinAnchor()))
 				previewImage.SetSource(this);
 		}
 
 		internal void ShowWorldCamIfNecessary() {
-			if(worldCam == null)
+			if(!worldCam)
 				return;
 
 			bool doShowCam =
@@ -100,7 +101,7 @@ namespace Camera2.Behaviours {
 		}
 
 		internal void UpdateDepthTextureActive() {
-			if(UCamera != null)
+			if(UCamera)
 				UCamera.depthTextureMode = InitOnMainAvailable.useDepthTexture || settings?.PostProcessing.forceDepthTexture == true ? DepthTextureMode.Depth : DepthTextureMode.None;
 		}
 
@@ -230,13 +231,15 @@ namespace Camera2.Behaviours {
 		private void OnEnable() {
 			// Force a render here so we dont end up with a stale image after having just enabled this camera
 			PrepareMiddlewaredRender(true);
-			if(previewImage != null && previewImage.gameObject != null)
+			if(previewImage)
 				previewImage.gameObject.SetActive(true);
 			ShowWorldCamIfNecessary();
 		}
 
 		private void OnDisable() {
-			if(previewImage != null && previewImage.gameObject != null) previewImage.gameObject.SetActive(false);
+			if(previewImage)
+				previewImage.gameObject.SetActive(false);
+
 			ShowWorldCamIfNecessary();
 		}
 
@@ -245,8 +248,12 @@ namespace Camera2.Behaviours {
 			destroying = true;
 			gameObject.SetActive(false);
 
-			if(previewImage != null) Destroy(previewImage.gameObject);
-			if(shield != null) Destroy(shield.gameObject);
+			if(previewImage) 
+				Destroy(previewImage.gameObject);
+
+			if(shield) 
+				Destroy(shield.gameObject);
+
 			Destroy(gameObject);
 		}
 	}

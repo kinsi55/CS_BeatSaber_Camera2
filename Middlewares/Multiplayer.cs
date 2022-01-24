@@ -21,7 +21,7 @@ namespace Camera2.Middlewares {
 			 */
 			var x = HookMultiplayerSpectatorController.instance;
 
-			if(!SceneUtil.isInMultiplayer || !SceneUtil.isInSong || x == null || !settings.Multiplayer.followSpectatorPlattform) {
+			if(!SceneUtil.isInMultiplayer || !SceneUtil.isInSong || !x || !settings.Multiplayer.followSpectatorPlattform) {
 				if(originLmao != null) {
 					originLmao.position = Vector3.zero;
 					originLmao.rotation = Quaternion.identity;

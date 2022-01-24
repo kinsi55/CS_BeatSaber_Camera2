@@ -18,21 +18,20 @@ namespace Camera2.Behaviours {
 		}
 
 		public static void BeingDragCamera(Cam2 camera) {
-			if(grabbedCamera != null)
+			if(grabbedCamera)
 				FinishCameraMove();
 
 			var controllers = Resources.FindObjectsOfTypeAll<VRLaserPointer>();
 
 			controller = (!HookFPFCToggle.isInFPFC ? 
 				controllers.LastOrDefault(x => x.isActiveAndEnabled) : 
-				controllers.LastOrDefault(x =>
-				{
+				controllers.LastOrDefault(x => {
 					var controllerTransform = x.transform;
 					return controllerTransform.eulerAngles + controllerTransform.position != Vector3.zero;
 				})
 			)?.GetComponentInParent<VRController>();
 
-			if(controller == null)
+			if(!controller)
 				return;
 
 			//TODO: I should probably move this to use a Transformer...
@@ -46,8 +45,8 @@ namespace Camera2.Behaviours {
 		}
 
 		public void Update() {
-			if(grabbedCamera != null) {
-				if(controller != null && grabbedCamera.worldCam.isActiveAndEnabled) {
+			if(grabbedCamera) {
+				if(controller && grabbedCamera.worldCam.isActiveAndEnabled) {
 					var p = controller.transform.TransformPoint(grabStartPos);
 					var r = (controller.rotation * grabStartRot).eulerAngles;
 
@@ -79,7 +78,7 @@ namespace Camera2.Behaviours {
 		}
 
 		private static void FinishCameraMove() {
-			if(grabbedCamera == null) return;
+			if(!grabbedCamera) return;
 
 			grabbedCamera.settings.targetPos = grabbedCamera.transformer.position;
 			grabbedCamera.settings.targetRot = grabbedCamera.transformer.rotation.eulerAngles;

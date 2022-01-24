@@ -12,20 +12,19 @@ namespace Camera2.Utils {
 
 		public static AudioTimeSyncController audioTimeSyncController { get; private set; }
 
-		public static bool hasSongPlayer => audioTimeSyncController != null;
+		public static bool hasSongPlayer => audioTimeSyncController;
 		public static bool isSongPlaying => hasSongPlayer && audioTimeSyncController.state == AudioTimeSyncController.State.Playing;
 
 
-		public static bool isInMultiplayer => HookMultiplayer.instance != null && HookMultiplayer.instance.isConnected == true;
+		public static bool isInMultiplayer => HookMultiplayer.instance && HookMultiplayer.instance.isConnected == true;
 
-		public static GameObject GetMainCameraButReally()
-		{
-			if (Camera.main == null || Camera.main.gameObject == null)
-			{
+		public static GameObject GetMainCameraButReally() {
+			var m = Camera.main;
+
+			if(!m)
 				return GameObject.FindGameObjectsWithTag("MainCamera")[0];
-			}
 
-			return Camera.main.gameObject;
+			return m.gameObject;
 		}
 
 
@@ -65,7 +64,7 @@ namespace Camera2.Utils {
 			if(CamManager.cams.Values.Any(x => !x.settings.visibleObjects.Floor)) {
 				// Move the plattform stuff to the correct layer because beat games didnt
 				foreach(var x in (new string[] { "Construction", "Frame", "RectangleFakeGlow" }).Select(x => GameObject.Find($"Environment/PlayersPlace/{x}")))
-					if(x != null) x.layer = (int)VisibilityLayers.PlayerPlattform;
+					if(x) x.layer = (int)VisibilityLayers.PlayerPlattform;
 			}
 		}
 	}
