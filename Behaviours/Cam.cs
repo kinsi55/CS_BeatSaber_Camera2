@@ -230,13 +230,15 @@ namespace Camera2.Behaviours {
 		private void OnEnable() {
 			// Force a render here so we dont end up with a stale image after having just enabled this camera
 			PrepareMiddlewaredRender(true);
-			if(previewImage != null && previewImage.gameObject != null)
+			if(previewImage != null)
 				previewImage.gameObject.SetActive(true);
 			ShowWorldCamIfNecessary();
 		}
 
 		private void OnDisable() {
-			if(previewImage != null && previewImage.gameObject != null) previewImage.gameObject.SetActive(false);
+			if(previewImage != null)
+				previewImage.gameObject.SetActive(false);
+
 			ShowWorldCamIfNecessary();
 		}
 

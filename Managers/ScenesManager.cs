@@ -24,7 +24,7 @@ namespace Camera2.Managers {
 			if(sceneName == null)
 				sceneName = SceneUtil.currentScene.name;
 
-			if(CamManager.customScreen == null || CamManager.customScreen.gameObject == null)
+			if(CamManager.customScreen == null)
 				return;
 
 			CamManager.customScreen.gameObject.SetActive(sceneName != "BeatmapEditor");

@@ -18,14 +18,13 @@ namespace Camera2.Utils {
 
 		public static bool isInMultiplayer => HookMultiplayer.instance != null && HookMultiplayer.instance.isConnected == true;
 
-		public static GameObject GetMainCameraButReally()
-		{
-			if (Camera.main == null || Camera.main.gameObject == null)
-			{
-				return GameObject.FindGameObjectsWithTag("MainCamera")[0];
-			}
+		public static GameObject GetMainCameraButReally() {
+			var a = Camera.main;
 
-			return Camera.main.gameObject;
+			if(a == null)
+				return GameObject.FindGameObjectsWithTag("MainCamera")[0];
+
+			return a.gameObject;
 		}
 
 
