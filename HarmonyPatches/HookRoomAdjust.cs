@@ -12,7 +12,10 @@ namespace Camera2.HarmonyPatches {
 		public static Quaternion rotation { get; private set; }
 		public static Vector3 eulerAngles { get; private set; }
 
-		static void Postfix(MonoBehaviour __instance, MethodBase __originalMethod) {
+		static void Postfix(VRCenterAdjust __instance, MethodBase __originalMethod) {
+			if(__originalMethod.Name == "OnEnable")
+				__instance.Start();
+
 			var transform = __instance.transform;
 			position = transform.position;
 			rotation = transform.rotation;
