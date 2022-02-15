@@ -18,17 +18,15 @@ namespace Camera2.Configuration {
 
 namespace Camera2.Middlewares {
 	class ModmapExtensions : CamMiddleware, IMHandler {
-		static Type Noodle_PlayerTrack = IPA.Loader.PluginManager.GetPluginFromId("NoodleExtensions")?.Assembly.GetType("NoodleExtensions.Animation.PlayerTrack");
+		static Type Noodle_PlayerTrack;
 		static FieldInfo Noodle_PlayerTrack_Origin;
 		static FieldInfo Noodle_PlayerTrack_Instance;
 		static Transform noodleOrigin;
 		static object playertrack_instance = null;
 
-		public ModmapExtensions() {
-			if(Noodle_PlayerTrack == null)
-				return;
-
-			Noodle_PlayerTrack_Origin ??= AccessTools.Field(Noodle_PlayerTrack, "_transform") ?? AccessTools.Field(Noodle_PlayerTrack, "_origin");
+		public static void Reflect() {
+			Noodle_PlayerTrack = IPA.Loader.PluginManager.GetPluginFromId("NoodleExtensions")?.Assembly.GetType("NoodleExtensions.Animation.PlayerTrack");
+			Noodle_PlayerTrack_Origin = AccessTools.Field(Noodle_PlayerTrack, "_transform") ?? AccessTools.Field(Noodle_PlayerTrack, "_origin");
 
 			if(Noodle_PlayerTrack_Origin?.IsStatic == false) {
 				Noodle_PlayerTrack_Instance ??= AccessTools.Field(Noodle_PlayerTrack, "_instance");

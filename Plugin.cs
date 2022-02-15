@@ -1,9 +1,11 @@
 ﻿using Camera2.HarmonyPatches;
 using Camera2.Managers;
+using Camera2.Middlewares;
 using Camera2.Utils;
 using HarmonyLib;
 using IPA;
 using System.Reflection;
+using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using IPALogger = IPA.Logging.Logger;
@@ -70,6 +72,13 @@ namespace Camera2 {
 			GlobalFPSCap.Init();
 
 			SceneManager.activeSceneChanged += SceneUtil.OnActiveSceneChanged;
+
+			// Marinate the Reflection stuff off-thread so the loading of cameras later is less blocking
+			new Task(() => {
+				ModmapExtensions.Reflect();
+				ScoresaberUtil.Reflect();
+				CustomNotesUtil.Reflect();
+			}).Start();
 		}
 
 		[OnExit]
