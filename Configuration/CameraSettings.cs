@@ -116,7 +116,7 @@ namespace Camera2.Configuration {
 			FOV = 90f;
 
 			if(System.IO.File.Exists(cam.configPath)) {
-				if (loadConfig)
+				if(loadConfig)
 					JsonConvert.PopulateObject(System.IO.File.ReadAllText(cam.configPath), this, JsonHelpers.leanDeserializeSettings);
 			} else {
 				layer = CamManager.cams.Count == 0 ? 1 : CamManager.cams.Max(x => x.Value.settings.layer) + 1;
