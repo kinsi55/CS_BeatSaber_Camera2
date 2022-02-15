@@ -155,10 +155,9 @@ namespace Camera2.Utils
 			return new JRaw(val.ToString("0.0###", CultureInfo.InvariantCulture));
 		}
 
-		public static float prepareFloat(float val)
-        {
+		public static float prepareFloat(float val) {
 			return (float)Math.Round(val, 4);
-        }
+		}
 
 		public static readonly JsonSerializerSettings leanDeserializeSettings = new JsonSerializerSettings {
 			NullValueHandling = NullValueHandling.Ignore,
