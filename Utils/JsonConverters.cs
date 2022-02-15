@@ -12,13 +12,13 @@ namespace Camera2.Utils
 		public override void WriteJson(JsonWriter writer, Rect rect, JsonSerializer serializer) {
 			writer.WriteStartObject();
 			writer.WritePropertyName("x");
-			writer.WriteValue(JsonHelpers.prepareFloat(rect.xMin));
+			writer.WriteValue(JsonHelpers.limitFloatResolution(rect.xMin));
 			writer.WritePropertyName("y");
-			writer.WriteValue(JsonHelpers.prepareFloat(rect.yMin));
+			writer.WriteValue(JsonHelpers.limitFloatResolution(rect.yMin));
 			writer.WritePropertyName("width");
-			writer.WriteValue(JsonHelpers.prepareFloat(rect.width));
+			writer.WriteValue(JsonHelpers.limitFloatResolution(rect.width));
 			writer.WritePropertyName("height");
-			writer.WriteValue(JsonHelpers.prepareFloat(rect.height));
+			writer.WriteValue(JsonHelpers.limitFloatResolution(rect.height));
 			writer.WriteEndObject();
 		}
 
@@ -47,13 +47,13 @@ namespace Camera2.Utils
 		public override void WriteJson(JsonWriter writer, ScreenRect rect, JsonSerializer serializer) {
 			writer.WriteStartObject();
 			writer.WritePropertyName("x");
-			writer.WriteValue(JsonHelpers.prepareFloat(rect.x));
+			writer.WriteValue(JsonHelpers.limitFloatResolution(rect.x));
 			writer.WritePropertyName("y");
-			writer.WriteValue(JsonHelpers.prepareFloat(rect.y));
+			writer.WriteValue(JsonHelpers.limitFloatResolution(rect.y));
 			writer.WritePropertyName("width");
-			writer.WriteValue(JsonHelpers.prepareFloat(rect.width));
+			writer.WriteValue(JsonHelpers.limitFloatResolution(rect.width));
 			writer.WritePropertyName("height");
-			writer.WriteValue(JsonHelpers.prepareFloat(rect.height));
+			writer.WriteValue(JsonHelpers.limitFloatResolution(rect.height));
 			writer.WritePropertyName("locked");
 			writer.WriteValue(rect.locked);
 			writer.WriteEndObject();
@@ -86,11 +86,11 @@ namespace Camera2.Utils
 		public override void WriteJson(JsonWriter writer, Vector3 vec, JsonSerializer serializer) {
 			writer.WriteStartObject();
 			writer.WritePropertyName("x");
-			writer.WriteValue(JsonHelpers.prepareFloat(vec.x));
+			writer.WriteValue(JsonHelpers.limitFloatResolution(vec.x));
 			writer.WritePropertyName("y");
-			writer.WriteValue(JsonHelpers.prepareFloat(vec.y));
+			writer.WriteValue(JsonHelpers.limitFloatResolution(vec.y));
 			writer.WritePropertyName("z");
-			writer.WriteValue(JsonHelpers.prepareFloat(vec.z));
+			writer.WriteValue(JsonHelpers.limitFloatResolution(vec.z));
 			writer.WriteEndObject();
 		}
 
@@ -151,11 +151,7 @@ namespace Camera2.Utils
 	}*/
 
 	static class JsonHelpers {
-		public static JRaw limitFloatResolution(float val) {
-			return new JRaw(val.ToString("0.0###", CultureInfo.InvariantCulture));
-		}
-
-		public static float prepareFloat(float val) {
+		public static float limitFloatResolution(float val) {
 			return (float)Math.Round(val, 4);
 		}
 
