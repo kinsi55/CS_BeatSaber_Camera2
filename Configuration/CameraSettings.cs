@@ -7,6 +7,7 @@ using Camera2.Utils;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using System;
+using System.Diagnostics;
 using System.Linq;
 using UnityEngine;
 
@@ -115,7 +116,7 @@ namespace Camera2.Configuration {
 			FOV = 90f;
 
 			if(System.IO.File.Exists(cam.configPath)) {
-				if(loadConfig)
+				if (loadConfig)
 					JsonConvert.PopulateObject(System.IO.File.ReadAllText(cam.configPath), this, JsonHelpers.leanDeserializeSettings);
 			} else {
 				layer = CamManager.cams.Count == 0 ? 1 : CamManager.cams.Max(x => x.Value.settings.layer) + 1;
@@ -137,7 +138,6 @@ namespace Camera2.Configuration {
 		public void Save() {
 			if(cam == null)
 				return;
-
 			var x = overrideToken; overrideToken = null;
 			try {
 				System.IO.File.WriteAllText(cam.configPath, JsonConvert.SerializeObject(this, Formatting.Indented));
