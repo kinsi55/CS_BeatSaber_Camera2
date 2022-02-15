@@ -7,6 +7,7 @@ using Camera2.Utils;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using System;
+using System.Diagnostics;
 using System.Linq;
 using UnityEngine;
 
@@ -137,7 +138,6 @@ namespace Camera2.Configuration {
 		public void Save() {
 			if(cam == null)
 				return;
-
 			var x = overrideToken; overrideToken = null;
 			try {
 				System.IO.File.WriteAllText(cam.configPath, JsonConvert.SerializeObject(this, Formatting.Indented));
