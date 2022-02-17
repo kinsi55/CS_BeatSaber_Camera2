@@ -5,6 +5,8 @@ Shader "Unlit/OutlineUtil" {
 	}
 	SubShader {
 		Tags { "Queue"="Overlay" "IgnoreProjector"="True" "ForceNoShadowCasting"="True" }
+
+		Blend Off
 		ColorMask RGBA
 
 		Pass {

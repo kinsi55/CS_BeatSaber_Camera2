@@ -7,6 +7,8 @@ Shader "Unlit/LuminanceKey" {
 	SubShader {
 		Tags { "Queue"="Overlay" "IgnoreProjector"="True" "ForceNoShadowCasting"="True" }
 
+		Blend Off
+
 		Pass {
 			ZClip False
 			Cull Off
@@ -51,9 +53,6 @@ Shader "Unlit/LuminanceKey" {
 
 				if(col.a < 0.01)
 					col.a = clamp(pow(Luminance(col) * (80 - _Threshold), 2), 0, 0.9);
-
-				if(col.a < 0.01)
-					discard;
 
 				return col;
 			}
