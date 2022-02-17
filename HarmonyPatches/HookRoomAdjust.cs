@@ -12,14 +12,10 @@ namespace Camera2.HarmonyPatches {
 		public static Quaternion rotation { get; private set; }
 		public static Vector3 eulerAngles { get; private set; }
 
-		static void Postfix(VRCenterAdjust __instance, MethodBase __originalMethod) {
-			if(__originalMethod.Name == "OnEnable")
-				__instance.Start();
-
-			var transform = __instance.transform;
-			position = transform.position;
-			rotation = transform.rotation;
-			eulerAngles = transform.eulerAngles;
+		static void Postfix(Vector3SO ____roomCenter, FloatSO ____roomRotation, MethodBase __originalMethod) {
+			position = ____roomCenter;
+			eulerAngles = new Vector3(0, ____roomRotation, 0);
+			rotation = Quaternion.Euler(eulerAngles);
 
 #if DEBUG
 			Plugin.Log.Warn("HookRoomAdjust.Postfix! " + __originalMethod.Name);
