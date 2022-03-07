@@ -1,6 +1,7 @@
 ﻿using Camera2.Configuration;
 using Camera2.Managers;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 
 namespace Camera2.SDK {
@@ -8,16 +9,14 @@ namespace Camera2.SDK {
 		/// <summary>
 		/// List of Scenes and what cameras belong to them
 		/// </summary>
-		public static IReadOnlyDictionary<SceneTypes, IReadOnlyList<string>> scenes =>
-			(IReadOnlyDictionary<SceneTypes, IReadOnlyList<string>>)ScenesManager.settings.scenes
-			.ToDictionary(pair => pair.Key, pair => pair.Value.AsReadOnly());
+		public static IReadOnlyDictionary<SceneTypes, ReadOnlyCollection<string>> scenes =>
+			ScenesManager.settings.scenes.ToDictionary(pair => pair.Key, pair => pair.Value.AsReadOnly());
 
 		/// <summary>
 		/// List of Scenes and what cameras belong to them
 		/// </summary>
-		public static IReadOnlyDictionary<string, IReadOnlyList<string>> customScenes =>
-			(IReadOnlyDictionary<string, IReadOnlyList<string>>)ScenesManager.settings.customScenes
-			.ToDictionary(pair => pair.Key, pair => pair.Value.AsReadOnly());
+		public static IReadOnlyDictionary<string, ReadOnlyCollection<string>> customScenes =>
+			ScenesManager.settings.customScenes.ToDictionary(pair => pair.Key, pair => pair.Value.AsReadOnly());
 
 		/// <summary>
 		/// The currently loaded scene. Must not necessarily represent the targeted scene
