@@ -74,11 +74,11 @@ namespace Camera2 {
 			SceneManager.activeSceneChanged += SceneUtil.OnActiveSceneChanged;
 
 			// Marinate the Reflection stuff off-thread so the loading of cameras later is less blocking
-			new Task(() => {
+			Task.Run(() => {
 				ModmapExtensions.Reflect();
 				ScoresaberUtil.Reflect();
 				CustomNotesUtil.Reflect();
-			}).Start();
+			});
 		}
 
 		[OnExit]
