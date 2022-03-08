@@ -237,6 +237,9 @@ namespace Camera2.UI {
 		internal bool postprocessing_forceDepthTexture {
 			get => cam.settings.PostProcessing.forceDepthTexture; set { cam.settings.PostProcessing.forceDepthTexture = value; }
 		}
+		internal float postprocessing_motionBlur {
+			get => cam.settings.PostProcessing.motionBlurBlend; set { cam.settings.PostProcessing.motionBlurBlend = value; }
+		}
 
 
 		internal float viewRect_x {

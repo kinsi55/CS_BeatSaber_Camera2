@@ -21,6 +21,7 @@ namespace Camera2 {
 		internal static Material ShaderMat_LuminanceKey;
 		internal static Material ShaderMat_Outline;
 		internal static Material ShaderMat_CA;
+		internal static Material ShaderMat_FrameBlend;
 		internal static Shader Shader_VolumetricBlit;
 
 		[Init]
@@ -43,6 +44,7 @@ namespace Camera2 {
 				// Why does this one need the full path and others dont? I have no fing idea!
 				ShaderMat_Outline = new Material(bundle.LoadAsset<Shader>("assets/bundledassets/cam2/texouline.shader"));
 				ShaderMat_CA = new Material(bundle.LoadAsset<Shader>("chromaticaberration.shader"));
+				ShaderMat_FrameBlend = new Material(bundle.LoadAsset<Shader>("MotionBlur.shader"));
 				bundle.Unload(false);
 			}
 

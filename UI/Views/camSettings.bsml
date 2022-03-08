@@ -131,6 +131,7 @@
 					hover-hint='Forces a Depthtexture to be rendered for this Camera, even if your Graphic settings dont need it (Only Smoke needs it). Used by Transparency to better decide what should be transparent'
 				/>
 				<slider-setting text='Transparency Threshold *' min='0' max='79.5' increment='0.5' value='postprocessing_transparencyThreshold' bind-value='true' apply-on-change='true'/>
+				<!--<slider-setting text='Motion Blur' min='0' max='0.4' increment='0.05' value='postprocessing_motionBlur' bind-value='true' apply-on-change='true'/>-->
 			</modifier-container>
 			<text text="* Higher = More Transparent, 0 = Off" color="#CCC" font-size="3" align="Center"/>
 		</vertical>
