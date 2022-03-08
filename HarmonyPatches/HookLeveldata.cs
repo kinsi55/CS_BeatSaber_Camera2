@@ -1,12 +1,13 @@
 ﻿using Camera2.Utils;
 using HarmonyLib;
+using IPA.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
 namespace Camera2.HarmonyPatches {
-	[HarmonyPatch]
+	[HarmonyPatch(typeof(StandardLevelScenesTransitionSetupDataSO))]
 	static class HookLeveldata {
 		public static IDifficultyBeatmap difficultyBeatmap;
 		public static GameplayModifiers gameplayModifiers;
@@ -14,31 +15,40 @@ namespace Camera2.HarmonyPatches {
 		public static bool isModdedMap = false;
 		public static bool isWallMap = false;
 
-		static SpawnRotationProcessor spawnRotationProcessor = new SpawnRotationProcessor();
-
 		[HarmonyPriority(int.MinValue)]
-		static void Prefix(IDifficultyBeatmap difficultyBeatmap, GameplayModifiers gameplayModifiers) {
+		[HarmonyPatch(nameof(StandardLevelScenesTransitionSetupDataSO.Init))]
+		[HarmonyPatch(nameof(MissionLevelScenesTransitionSetupDataSO.Init))]
+		[HarmonyPatch(nameof(MultiplayerLevelScenesTransitionSetupDataSO.Init))]
+		static void Postfix(IDifficultyBeatmap difficultyBeatmap, GameplayModifiers gameplayModifiers) {
 #if DEBUG
 			Plugin.Log.Info("Got level data!");
 #endif
 			HookLeveldata.difficultyBeatmap = difficultyBeatmap;
 			HookLeveldata.gameplayModifiers = gameplayModifiers;
 
-			is360Level = difficultyBeatmap?.beatmapData?.beatmapEventsData.Any(
-				x => x.type.IsRotationEvent() && spawnRotationProcessor.RotationForEventValue(x.value) != 0f
-			) == true;
 			isModdedMap = ModMapUtil.IsModdedMap(difficultyBeatmap);
 			isWallMap = ModMapUtil.IsProbablyWallmap(difficultyBeatmap);
+		}
+
+		// TODO: remove optional thing next update
+		static readonly bool isOneTwenty = UnityGame.GameVersion > new AlmostVersion("1.19.1");
+
+		// this is dumb this is dumb this is dumbis is dumb this is dumb this is dumb why GetBeatmapDataAsync() why hyhwhy
+		[HarmonyPatch(typeof(GameplayCoreInstaller), "InstallBindings")]
+		static void Postfix(GameplayCoreSceneSetupData ____sceneSetupData) {
+			void oneTwenty(GameplayCoreSceneSetupData ssd) {
+				is360Level = ssd.transformedBeatmapData.GetBeatmapDataItems<SpawnRotationBeatmapEventData>().Any(
+					x => x.rotation != 0f
+				) == true;
+			}
+
+			if(isOneTwenty)
+				oneTwenty(____sceneSetupData);
 		}
 
 		internal static void Reset() {
 			is360Level = isModdedMap = isWallMap = false;
 			difficultyBeatmap = null;
-		}
-
-		static IEnumerable<MethodBase> TargetMethods() {
-			foreach(var t in new [] { typeof(StandardLevelScenesTransitionSetupDataSO), typeof(MissionLevelScenesTransitionSetupDataSO), typeof(MultiplayerLevelScenesTransitionSetupDataSO) })
-				yield return t.GetMethod("Init", BindingFlags.Instance | BindingFlags.Public);
 		}
 	}
 }
