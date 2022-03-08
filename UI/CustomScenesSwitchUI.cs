@@ -23,7 +23,7 @@ namespace Camera2.UI {
 				if(!exists)
 					return "";
 
-				var c = ScenesManager.settings.customScenes[name].Count();
+				var c = ScenesManager.settings.customScenes[name].Count;
 
 				var s = $"{c} camera";
 

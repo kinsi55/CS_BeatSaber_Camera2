@@ -33,7 +33,7 @@ namespace Camera2.Managers {
 
 			XRSettings.gameViewRenderMode = GameViewRenderMode.None;
 
-			new GameObject("Cam2_Positioner", new[] { typeof(CamPositioner) });
+			new GameObject("Cam2_Positioner", typeof(CamPositioner));
 
 			UI.SpaghettiUI.Init();
 		}
@@ -62,7 +62,7 @@ namespace Camera2.Managers {
 				cams.Remove(deletedCam.Key);
 			}
 
-			if(cams.Count() == 0) {
+			if(cams.Count == 0) {
 				var cam = InitCamera("Main", false);
 			}
 

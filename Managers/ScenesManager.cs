@@ -100,15 +100,15 @@ namespace Camera2.Managers {
 		}
 
 		public static void SwitchToCustomScene(string name) {
-			if(!settings.customScenes.ContainsKey(name))
+			if(!settings.customScenes.TryGetValue(name, out var s))
 				return;
 
-			if(settings.customScenes[name].Count() == 0 || !settings.customScenes[name].Any(CamManager.cams.ContainsKey))
+			if(!s.Any(CamManager.cams.ContainsKey))
 				return;
 
 			isOnCustomScene = true;
 
-			SwitchToCamlist(settings.customScenes[name]);
+			SwitchToCamlist(s);
 		}
 
 		private static void SwitchToCamlist(List<string> cams) {
@@ -139,7 +139,7 @@ namespace Camera2.Managers {
 				return SceneTypes.Menu;
 
 			foreach(var type in types) {
-				if(settings.scenes[type].Count() > 0 && settings.scenes[type].Any(CamManager.cams.ContainsKey))
+				if(settings.scenes[type].Any(CamManager.cams.ContainsKey))
 					return type;
 			}
 			return SceneTypes.Menu;
