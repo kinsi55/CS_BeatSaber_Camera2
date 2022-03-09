@@ -30,20 +30,18 @@ namespace Camera2.HarmonyPatches {
 			isWallMap = ModMapUtil.IsProbablyWallmap(difficultyBeatmap);
 		}
 
-		// TODO: remove optional thing next update
-		static readonly bool isOneTwenty = UnityGame.GameVersion > new AlmostVersion("1.19.1");
 
-		// this is dumb this is dumb this is dumbis is dumb this is dumb this is dumb why GetBeatmapDataAsync() why hyhwhy
 		[HarmonyPatch(typeof(GameplayCoreInstaller), "InstallBindings")]
-		static void Postfix(GameplayCoreSceneSetupData ____sceneSetupData) {
-			void oneTwenty(GameplayCoreSceneSetupData ssd) {
-				is360Level = ssd.transformedBeatmapData.GetBeatmapDataItems<SpawnRotationBeatmapEventData>().Any(
+		static class threesixtycheck {
+			// TODO: remove optional thing next update
+			static bool Prepare() => UnityGame.GameVersion > new AlmostVersion("1.19.1");
+			
+			// this is dumb this is dumb this is dumbis is dumb this is dumb this is dumb why GetBeatmapDataAsync() why hyhwhy
+			static void Postfix(GameplayCoreSceneSetupData ____sceneSetupData) {
+				is360Level = ____sceneSetupData.transformedBeatmapData.GetBeatmapDataItems<SpawnRotationBeatmapEventData>().Any(
 					x => x.rotation != 0f
 				) == true;
 			}
-
-			if(isOneTwenty)
-				oneTwenty(____sceneSetupData);
 		}
 
 		internal static void Reset() {
