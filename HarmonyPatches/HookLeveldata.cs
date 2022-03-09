@@ -15,6 +15,8 @@ namespace Camera2.HarmonyPatches {
 		public static bool isModdedMap = false;
 		public static bool isWallMap = false;
 
+		static SpawnRotationProcessor spawnRotationProcessor = new SpawnRotationProcessor();
+
 		[HarmonyPriority(int.MinValue)]
 		[HarmonyPatch(nameof(StandardLevelScenesTransitionSetupDataSO.Init))]
 		[HarmonyPatch(nameof(MissionLevelScenesTransitionSetupDataSO.Init))]
@@ -27,22 +29,25 @@ namespace Camera2.HarmonyPatches {
 			HookLeveldata.gameplayModifiers = gameplayModifiers;
 
 			isModdedMap = ModMapUtil.IsModdedMap(difficultyBeatmap);
+			is360Level = difficultyBeatmap?.beatmapData?.beatmapEventsData.Any(
+				x => x.type.IsRotationEvent() && spawnRotationProcessor.RotationForEventValue(x.value) != 0f
+			) == true;
 			isWallMap = ModMapUtil.IsProbablyWallmap(difficultyBeatmap);
 		}
 
 
-		[HarmonyPatch(typeof(GameplayCoreInstaller), "InstallBindings")]
-		static class threesixtycheck {
-			// TODO: remove optional thing next update
-			static bool Prepare() => UnityGame.GameVersion > new AlmostVersion("1.19.1");
+		//[HarmonyPatch(typeof(GameplayCoreInstaller), "InstallBindings")]
+		//static class threesixtycheck {
+		//	// TODO: remove optional thing next update
+		//	static bool Prepare() => UnityGame.GameVersion > new AlmostVersion("1.19.1");
 			
-			// this is dumb this is dumb this is dumbis is dumb this is dumb this is dumb why GetBeatmapDataAsync() why hyhwhy
-			static void Postfix(GameplayCoreSceneSetupData ____sceneSetupData) {
-				is360Level = ____sceneSetupData.transformedBeatmapData.GetBeatmapDataItems<SpawnRotationBeatmapEventData>().Any(
-					x => x.rotation != 0f
-				) == true;
-			}
-		}
+		//	// this is dumb this is dumb this is dumbis is dumb this is dumb this is dumb why GetBeatmapDataAsync() why hyhwhy
+		//	static void Postfix(GameplayCoreSceneSetupData ____sceneSetupData) {
+		//		is360Level = ____sceneSetupData.transformedBeatmapData.GetBeatmapDataItems<SpawnRotationBeatmapEventData>().Any(
+		//			x => x.rotation != 0f
+		//		) == true;
+		//	}
+		//}
 
 		internal static void Reset() {
 			is360Level = isModdedMap = isWallMap = false;
