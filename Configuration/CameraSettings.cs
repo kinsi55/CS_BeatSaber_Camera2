@@ -307,7 +307,7 @@ namespace Camera2.Configuration {
 				/* TODO: Remove this at some point 😀
 				 * Ingame farZ changed to 5k from 1k at some point without me noticing
 				 */
-				if(value == 1000f)
+				if(value >= 1000f)
 					value = 5000f;
 
 				cam.UCamera.farClipPlane = value;

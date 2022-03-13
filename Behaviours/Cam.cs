@@ -124,6 +124,7 @@ namespace Camera2.Behaviours {
 			camClone.name = "Cam";
 
 			UCamera = camClone.GetComponent<Camera>();
+			UCamera.farClipPlane = 5000f;
 			UCamera.enabled = false;
 			UCamera.tag = "Untagged";
 			UCamera.clearFlags = CameraClearFlags.SolidColor;
