@@ -7,7 +7,7 @@ using System.Linq;
 using System.Reflection;
 
 namespace Camera2.HarmonyPatches {
-	[HarmonyPatch(typeof(StandardLevelScenesTransitionSetupDataSO))]
+	[HarmonyPatch]
 	static class HookLeveldata {
 		public static IDifficultyBeatmap difficultyBeatmap;
 		public static GameplayModifiers gameplayModifiers;
@@ -18,9 +18,9 @@ namespace Camera2.HarmonyPatches {
 		static SpawnRotationProcessor spawnRotationProcessor = new SpawnRotationProcessor();
 
 		[HarmonyPriority(int.MinValue)]
-		[HarmonyPatch(nameof(StandardLevelScenesTransitionSetupDataSO.Init))]
-		[HarmonyPatch(nameof(MissionLevelScenesTransitionSetupDataSO.Init))]
-		[HarmonyPatch(nameof(MultiplayerLevelScenesTransitionSetupDataSO.Init))]
+		[HarmonyPatch(typeof(StandardLevelScenesTransitionSetupDataSO), nameof(StandardLevelScenesTransitionSetupDataSO.Init))]
+		[HarmonyPatch(typeof(MissionLevelScenesTransitionSetupDataSO), nameof(MissionLevelScenesTransitionSetupDataSO.Init))]
+		[HarmonyPatch(typeof(MultiplayerLevelScenesTransitionSetupDataSO), nameof(MultiplayerLevelScenesTransitionSetupDataSO.Init))]
 		static void Postfix(IDifficultyBeatmap difficultyBeatmap, GameplayModifiers gameplayModifiers) {
 #if DEBUG
 			Plugin.Log.Info("Got level data!");
