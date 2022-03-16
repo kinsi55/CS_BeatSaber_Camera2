@@ -13,8 +13,17 @@ namespace Camera2.HarmonyPatches {
 		public static Vector3 eulerAngles { get; private set; }
 
 		static void Postfix(Vector3SO ____roomCenter, FloatSO ____roomRotation, MethodBase __originalMethod) {
-			position = ____roomCenter;
-			eulerAngles = new Vector3(0, ____roomRotation, 0);
+			if(____roomCenter == null) {
+				position = Vector3.zero;
+			} else {
+				position = ____roomCenter;
+			}
+
+			if(____roomRotation == null) {
+				eulerAngles = Vector3.zero;
+			} else {
+				eulerAngles = new Vector3(0, ____roomRotation, 0);
+			}
 			rotation = Quaternion.Euler(eulerAngles);
 
 #if DEBUG
