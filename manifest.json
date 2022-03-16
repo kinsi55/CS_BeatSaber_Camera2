@@ -5,7 +5,7 @@
 	"author": "Kinsi55",
 	"version": "0.6.9",
 	"description": "If Camera Plus is so good, why is there no Camera Plus 2?",
-	"gameVersion": "1.19.0",
+	"gameVersion": "1.20.0",
 	"dependsOn": {
 		"BSIPA": "^4.1.4",
 		"BeatSaberMarkupLanguage": "^1.4.5"
