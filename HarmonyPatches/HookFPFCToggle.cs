@@ -1,5 +1,6 @@
 ﻿using Camera2.Managers;
 using HarmonyLib;
+using IPA.Loader;
 using IPA.Utilities;
 using System;
 using System.Collections.Generic;
@@ -40,9 +41,14 @@ namespace Camera2.HarmonyPatches {
 			SetFPFCActive(__instance.transform, allowInput);
 		}
 
+		static PluginMetadata SiraUtilSimpleCameraController = PluginManager.GetPluginFromId("SiraUtil");
+		//TODO: remove next version
+		public static readonly bool isSiraSettingLocalPostionYes = SiraUtilSimpleCameraController != null && SiraUtilSimpleCameraController.HVersion > new Hive.Versioning.Version("3.0.5");
+
+		static bool Prepare() => SiraUtilSimpleCameraController != null;
+
 		static MethodBase TargetMethod() {
-			var x = IPA.Loader.PluginManager.GetPluginFromId("SiraUtil")?
-				.Assembly.GetType("SiraUtil.Tools.FPFC.SimpleCameraController");
+			var x = SiraUtilSimpleCameraController.Assembly.GetType("SiraUtil.Tools.FPFC.SimpleCameraController");
 
 			var y = x?.GetMethod("Update", BindingFlags.NonPublic | BindingFlags.Instance);
 			FIELD_SimpleCameraController_AllowInput = x?.GetProperty("AllowInput");

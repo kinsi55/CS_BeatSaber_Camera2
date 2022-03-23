@@ -90,7 +90,7 @@ namespace Camera2.Middlewares {
 
 			if(parentToUse == null && settings.type == Configuration.CameraType.FirstPerson && HookFPFCToggle.isInFPFC) {
 				parentToUse = HookFPFCToggle.fpfcTransform;
-				settings.Smoothfollow.useLocalPosition = false;
+				settings.Smoothfollow.useLocalPosition = HookFPFCToggle.isSiraSettingLocalPostionYes;
 			}
 
 			if(parentToUse == null)

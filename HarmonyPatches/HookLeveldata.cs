@@ -34,9 +34,6 @@ namespace Camera2.HarmonyPatches {
 
 		[HarmonyPatch(typeof(GameplayCoreInstaller), "InstallBindings")]
 		static class threesixtycheck {
-			// TODO: remove optional thing next update
-			static bool Prepare() => UnityGame.GameVersion > new AlmostVersion("1.19.1");
-
 			static void Postfix(GameplayCoreSceneSetupData ____sceneSetupData) {
 				is360Level = ____sceneSetupData.transformedBeatmapData.allBeatmapDataItems.Any(
 					x => x.type == BeatmapDataItem.BeatmapDataItemType.BeatmapEvent && x is SpawnRotationBeatmapEventData sr && sr.rotation != 0f
