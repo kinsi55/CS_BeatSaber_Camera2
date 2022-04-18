@@ -131,7 +131,7 @@ namespace Camera2.Managers {
 
 			GL.Clear(true, true, Color.black);
 
-			GlobalFPSCap.Postfix();
+			GlobalFPSCap.ApplyFPSCap();
 		}
 
 		private static SceneTypes FindSceneToUse(SceneTypes[] types) {

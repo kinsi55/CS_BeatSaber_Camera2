@@ -16,7 +16,7 @@ namespace Camera2.Configuration {
 				_limit = value;
 				targetFrameTime = value != 0f ? 1f / value : 0f;
 
-				GlobalFPSCap.Postfix();
+				GlobalFPSCap.ApplyFPSCap();
 			}
 		}
 	}

@@ -7,9 +7,7 @@ using UnityEngine;
 namespace Camera2.HarmonyPatches {
 	[HarmonyPatch(typeof(MainSystemInit), nameof(MainSystemInit.Init))]
 	static class GlobalFPSCap {
-		public static void Postfix() {
-			ApplyFPSCap(UnityEngine.XR.XRDevice.isPresent || UnityEngine.XR.XRDevice.refreshRate != 0);
-		}
+		static void Postfix() => ApplyFPSCap();
 
 		static bool isOculus = false;
 		static bool isOculusUserPresent = false;
@@ -42,7 +40,11 @@ namespace Camera2.HarmonyPatches {
 			});
 		}
 
-		public static void ApplyFPSCap(bool isHmdPresent) {
+		public static void ApplyFPSCap() {
+			ApplyFPSCap(UnityEngine.XR.XRDevice.isPresent || UnityEngine.XR.XRDevice.refreshRate != 0);
+		}
+
+		static void ApplyFPSCap(bool isHmdPresent) {
 			QualitySettings.vSyncCount = 0;
 
 			if(isHmdPresent && (!isOculus || isOculusUserPresent)) {
@@ -52,10 +54,12 @@ namespace Camera2.HarmonyPatches {
 
 				if(CamManager.cams?.Count > 0) {
 					QualitySettings.vSyncCount = 1;
+					var srr = Screen.currentResolution.refreshRate;
+
 					foreach(var cam in CamManager.cams.Values.Where(x => x.gameObject.activeInHierarchy)) {
-						if(cam.settings.FPSLimiter.fpsLimit <= 0 || cam.settings.FPSLimiter.fpsLimit == Screen.currentResolution.refreshRate) {
-							Kapp = Screen.currentResolution.refreshRate;
-							break;
+						if(cam.settings.FPSLimiter.fpsLimit <= 0 || cam.settings.FPSLimiter.fpsLimit == srr) {
+							if(Kapp < srr)
+								Kapp = srr;
 						} else if(Kapp < cam.settings.FPSLimiter.fpsLimit) {
 							Kapp = cam.settings.FPSLimiter.fpsLimit;
 							QualitySettings.vSyncCount = 0;

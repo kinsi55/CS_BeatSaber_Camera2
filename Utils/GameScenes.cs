@@ -52,6 +52,8 @@ namespace Camera2.Utils {
 
 			// Updating the bitmask on scene change to allow for things like the auto wall toggle
 			CamManager.ApplyCameraValues(bitMask: true, worldCam: true, posRot: true);
+
+			GlobalFPSCap.ApplyFPSCap();
 		}
 
 		public static void SongStarted(AudioTimeSyncController controller) {
