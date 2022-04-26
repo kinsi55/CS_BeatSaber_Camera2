@@ -133,7 +133,7 @@ namespace Camera2.UI {
 			set {
 				// When switching to FP reset Rot / Pos so that the previous TP values arent used as the FP offset
 				if(value == CameraType.FirstPerson) {
-					cam.settings.targetPos = new UnityEngine.Vector3(0, 0, zOffset);
+					cam.settings.targetPos = new UnityEngine.Vector3(0, 0, 0);
 					NotifyPropertyChanged("zOffset");
 				} else if(value == CameraType.Positionable) {
 					cam.settings.targetPos = new UnityEngine.Vector3(0, 1.5f, 1f);
