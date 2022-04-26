@@ -27,18 +27,8 @@ namespace Camera2.HarmonyPatches {
 			HookLeveldata.gameplayModifiers = gameplayModifiers;
 
 			isModdedMap = ModMapUtil.IsModdedMap(difficultyBeatmap);
-			is360Level = false;
+			is360Level = difficultyBeatmap.parentDifficultyBeatmapSet.beatmapCharacteristic.containsRotationEvents;
 			isWallMap = ModMapUtil.IsProbablyWallmap(difficultyBeatmap);
-		}
-
-
-		[HarmonyPatch(typeof(GameplayCoreInstaller), "InstallBindings")]
-		static class threesixtycheck {
-			static void Postfix(GameplayCoreSceneSetupData ____sceneSetupData) {
-				is360Level = ____sceneSetupData.transformedBeatmapData.allBeatmapDataItems.Any(
-					x => x.type == BeatmapDataItem.BeatmapDataItemType.BeatmapEvent && x is SpawnRotationBeatmapEventData sr && sr.rotation != 0f
-				) == true;
-			}
 		}
 
 		internal static void Reset() {
