@@ -344,8 +344,8 @@ namespace Camera2.Configuration {
 		[JsonConverter(typeof(ScreenRectConverter)), JsonProperty("viewRect")]
 		ScreenRect _viewRectCfg {
 			get => viewRect; set {
-				value.width = Math.Min(1, Math.Abs(value.width));
-				value.height = Math.Min(1, Math.Abs(value.height));
+				value.width = Math.Min(2, Math.Abs(value.width));
+				value.height = Math.Min(2, Math.Abs(value.height));
 				value.x = Math.Min(1 - value.width, Math.Abs(value.x));
 				value.y = Math.Min(1 - value.height, Math.Abs(value.y));
 
