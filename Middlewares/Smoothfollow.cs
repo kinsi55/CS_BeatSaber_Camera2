@@ -129,7 +129,7 @@ namespace Camera2.Middlewares {
 					targetRotation *= parentsParentLocalRotation;
 				}
 
-				if(HookRoomAdjust.position != Vector3.zero || HookRoomAdjust.rotation != Quaternion.identity) {
+				if(!HookFPFCToggle.isInFPFC && (HookRoomAdjust.position != Vector3.zero || HookRoomAdjust.rotation != Quaternion.identity)) {
 					// Not exactly sure why we gotta exclude replays from this, but thats what it is
 					if(settings.type == Configuration.CameraType.FirstPerson && !isAttachedToReplayCam) {
 						targetPosition = (HookRoomAdjust.rotation * targetPosition) + HookRoomAdjust.position;
