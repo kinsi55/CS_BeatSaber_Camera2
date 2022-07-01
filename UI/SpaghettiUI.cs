@@ -478,8 +478,8 @@ namespace Camera2.UI {
 			cam.settings.type = CameraType.Positionable;
 			cam.settings.FOV = 75;
 			cam.settings.SetViewRect(0, 0, .195f, .395f);
-			cam.settings.targetPos = new UnityEngine.Vector3(-3, 1.2f, 0);
-			cam.settings.targetRot = new UnityEngine.Vector3(0, 90f, 0);
+			cam.settings.targetPos = new UnityEngine.Vector3(3, 1.2f, 0);
+			cam.settings.targetRot = new UnityEngine.Vector3(0, -90f, 0);
 			cam.settings.visibleObjects.Walls = WallVisiblity.Hidden;
 			cam.settings.visibleObjects.Debris = false;
 			cam.settings.visibleObjects.UI = false;
