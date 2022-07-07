@@ -292,8 +292,8 @@ namespace Camera2.UI {
 		[UIAction("SetRenderDistanceUnlimited")] void SetRenderDistanceUnlimited() => cam.settings.farZ = 5000f;
 
 
-		private static readonly List<object> types = new object[] { CameraType.FirstPerson, CameraType.Positionable }.ToList();
-		private static readonly List<object> antiAliasingLevels = new object[] { 1, 2, 4, 8 }.ToList();
+		private static readonly List<object> types = new List<object> { CameraType.FirstPerson, CameraType.Positionable };
+		private static readonly List<object> antiAliasingLevels = new List<object> { 1, 2, 4, 8 };
 		private static readonly List<object> worldCamVisibilities = Enum.GetValues(typeof(WorldCamVisibility)).Cast<object>().ToList();
 		private static readonly List<object> visibilities_Walls = Enum.GetValues(typeof(WallVisiblity)).Cast<object>().ToList();
 		private static readonly List<object> visibilities_Notes = Enum.GetValues(typeof(NoteVisibility)).Cast<object>().ToList();
@@ -402,7 +402,7 @@ namespace Camera2.UI {
 		[UIComponent("deleteButton")] public NoTransitionsButton deleteButton = null;
 		[UIComponent("camList")] public CustomCellListTableData list = null;
 		public List<CamListCellWrapper> listData = new List<CamListCellWrapper>();
-		public IEnumerable<CamListCellWrapper> listDataOrdered => listData.AsEnumerable().OrderByDescending(x => x.cam.settings.layer);
+		public IEnumerable<CamListCellWrapper> listDataOrdered => listData.OrderByDescending(x => x.cam.settings.layer);
 		List<object> cams => listDataOrdered.ToList<object>();
 
 		public class CamListCellWrapper {
@@ -606,7 +606,7 @@ namespace Camera2.UI {
 			if(!settingsView.SetCam(cam) && !reselect)
 				return;
 
-			var cellIndex = camList.listDataOrdered.ToList().FindIndex(x => x.cam == cam);
+			var cellIndex = Array.FindIndex(camList.listDataOrdered.ToArray(), x => x.cam == cam);
 
 			camList.list.tableView.SelectCellWithIdx(cellIndex);
 			camList.list.tableView.ScrollToCellWithIdx(cellIndex, TableView.ScrollPositionType.Center, false);

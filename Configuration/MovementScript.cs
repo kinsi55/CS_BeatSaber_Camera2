@@ -89,7 +89,7 @@ namespace Camera2.Configuration {
 				JsonConvert.PopulateObject(scriptContent, script, JsonHelpers.leanDeserializeSettings);
 			} else {
 				// Camera Plus movement script, we need to convert it...
-				dynamic camPlusScript = JObject.Parse(scriptContent.ToLower());
+				dynamic camPlusScript = JObject.Parse(scriptContent.ToLowerInvariant());
 
 				script.syncToSong = camPlusScript.activeinpausemenu != "true";
 
