@@ -17,6 +17,9 @@ namespace Camera2.Managers {
 		internal static SceneTypes loadedScene { get; private set; } = SceneTypes.MultiplayerMenu;
 		internal static bool isOnCustomScene = false;
 
+		public static readonly HashSet<string> menuSceneNames = new HashSet<string>() { "MainMenu", "MenuViewCore", "MenuCore", "MenuViewControllers" };
+		public static readonly HashSet<string> disabledSceneNames = new HashSet<string>() { "PCInit", "BeatmapEditor3D", "BeatmapLevelEditorWorldUi" };
+
 		public static void ActiveSceneChanged(string sceneName = null) {
 			if(SceneUtil.currentScene == null)
 				return;
@@ -26,8 +29,6 @@ namespace Camera2.Managers {
 
 			if(CamManager.customScreen == null)
 				return;
-
-			CamManager.customScreen.gameObject.SetActive(sceneName != "BeatmapEditor3D" && sceneName != "BeatmapLevelEditorWorldUi");
 
 			if(!settings.autoswitchFromCustom && isOnCustomScene)
 				return;
@@ -43,37 +44,42 @@ namespace Camera2.Managers {
 			if(sceneName == null)
 				sceneName = SceneUtil.currentScene.name;
 
-			List<SceneTypes> toLookup = new List<SceneTypes> { SceneTypes.Menu };
 
-			if(SceneUtil.menuSceneNames.Contains(sceneName)) {
-				if(SceneUtil.isInMultiplayer)
-					toLookup.Insert(0, SceneTypes.MultiplayerMenu);
-			} else if(sceneName == "GameCore") {
-				toLookup.Insert(0, SceneTypes.Playing);
+			if(!disabledSceneNames.Contains(sceneName)) {
+				List<SceneTypes> toLookup = new List<SceneTypes>(2) { SceneTypes.Menu };
 
-				if(HookLeveldata.isModdedMap) {
-					toLookup.Insert(0, SceneTypes.PlayingModmap);
-				} else if(HookLeveldata.is360Level) {
-					toLookup.Insert(0, SceneTypes.Playing360);
+				if(menuSceneNames.Contains(sceneName)) {
+					if(SceneUtil.isInMultiplayer)
+						toLookup.Insert(0, SceneTypes.MultiplayerMenu);
+				} else if(sceneName == "GameCore") {
+					toLookup.Insert(0, SceneTypes.Playing);
+
+					if(HookLeveldata.isModdedMap) {
+						toLookup.Insert(0, SceneTypes.PlayingModmap);
+					} else if(HookLeveldata.is360Level) {
+						toLookup.Insert(0, SceneTypes.Playing360);
+					}
+
+					if(ScoresaberUtil.IsInReplay()) {
+						toLookup.Insert(0, SceneTypes.Replay);
+					} else if(SceneUtil.isInMultiplayer) {
+						toLookup.Insert(0, SceneTypes.PlayingMulti);
+
+						if(HookMultiplayerSpectatorController.instance != null)
+							toLookup.Insert(0, SceneTypes.SpectatingMulti);
+					}
 				}
 
-				if(ScoresaberUtil.IsInReplay()) {
-					toLookup.Insert(0, SceneTypes.Replay);
-				} else if(SceneUtil.isInMultiplayer) {
-					toLookup.Insert(0, SceneTypes.PlayingMulti);
-
-					if(HookMultiplayerSpectatorController.instance != null)
-						toLookup.Insert(0, SceneTypes.SpectatingMulti);
-				}
-			}
-
-			if(HookFPFCToggle.isInFPFC)
-				toLookup.Insert(0, SceneTypes.FPFC);
+				if(HookFPFCToggle.isInFPFC)
+					toLookup.Insert(0, SceneTypes.FPFC);
 
 #if DEBUG
 			Plugin.Log.Info($"LoadGameScene -> {string.Join(", ", toLookup)}");
 #endif
-			SwitchToScene(FindSceneToUse(toLookup.ToArray()), forceReload);
+				SwitchToScene(FindSceneToUse(toLookup), forceReload);
+			} else {
+				SwitchToCamlist(null, false);
+			}
 		}
 
 		public static void SwitchToScene(SceneTypes scene, bool forceReload = false) {
@@ -111,7 +117,7 @@ namespace Camera2.Managers {
 			SwitchToCamlist(s);
 		}
 
-		private static void SwitchToCamlist(List<string> cams) {
+		private static void SwitchToCamlist(List<string> cams, bool activateAllWhenEmpty = true) {
 			if(cams?.Count == 0)
 				cams = null;
 
@@ -124,7 +130,9 @@ namespace Camera2.Managers {
 				if(cam.Value == null)
 					continue;
 
-				var camShouldBeActive = cams?.Contains(cam.Key) != false || UI.SettingsView.cam == cam.Value;
+				var isContained = cams?.Contains(cam.Key);
+
+				var camShouldBeActive = (activateAllWhenEmpty && isContained != false) || isContained == true || UI.SettingsView.cam == cam.Value;
 
 				cam.Value.gameObject.SetActive(camShouldBeActive);
 			}
@@ -134,7 +142,7 @@ namespace Camera2.Managers {
 			GlobalFPSCap.ApplyFPSCap();
 		}
 
-		private static SceneTypes FindSceneToUse(SceneTypes[] types) {
+		private static SceneTypes FindSceneToUse(IEnumerable<SceneTypes> types) {
 			if(settings.scenes.Count == 0)
 				return SceneTypes.Menu;
 

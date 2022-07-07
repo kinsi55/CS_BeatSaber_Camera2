@@ -1,5 +1,6 @@
 ﻿using Camera2.HarmonyPatches;
 using Camera2.Managers;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -28,15 +29,13 @@ namespace Camera2.Utils {
 		}
 
 
-		public static readonly string[] menuSceneNames = new string[] { "MainMenu", "MenuViewCore", "MenuCore", "MenuViewControllers" };
-
 		public static void OnActiveSceneChanged(Scene oldScene, Scene newScene) {
 			if(newScene == null)
 				return;
 
 			currentScene = newScene;
 			isInSong = newScene.name == "GameCore";
-			isInMenu = !isInSong && menuSceneNames.Contains(newScene.name);
+			isInMenu = !isInSong && ScenesManager.menuSceneNames.Contains(newScene.name);
 
 			if(oldScene.name == "GameCore") {
 #if DEBUG
@@ -49,6 +48,9 @@ namespace Camera2.Utils {
 			}
 
 			ScenesManager.ActiveSceneChanged();
+
+			if(CamManager.customScreen != null)
+				CamManager.customScreen.gameObject.SetActive(!ScenesManager.disabledSceneNames.Contains(newScene.name));
 
 			// Updating the bitmask on scene change to allow for things like the auto wall toggle
 			CamManager.ApplyCameraValues(bitMask: true, worldCam: true, posRot: true);
