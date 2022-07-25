@@ -55,6 +55,7 @@ namespace Camera2.HarmonyPatches {
 				if(CamManager.cams?.Count > 0) {
 					QualitySettings.vSyncCount = 1;
 					var srr = Screen.currentResolution.refreshRate;
+					Kapp = -1;
 
 					foreach(var cam in CamManager.cams.Values.Where(x => x.gameObject.activeInHierarchy)) {
 						if(cam.settings.FPSLimiter.fpsLimit <= 0 || cam.settings.FPSLimiter.fpsLimit == srr) {
