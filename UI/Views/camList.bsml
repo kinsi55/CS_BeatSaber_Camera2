@@ -76,7 +76,7 @@
 
 	<modal clickerino-offerino-closerino='true' move-to-center='true' hide-event='closeViewrectModal' show-event='showViewrectModal' size-delta-x='80' size-delta-y='45'>
 		<vertical preferred-width='90' vertical-fit='PreferredSize' pad='8'>
-			<text align='Center' word-wrapping="true" text='Changing the size / position of a camera screen is done on the desktop window (Rightclick on the desktop for more details). If you *really* want to do it from ingame however, clicking this button unlocked a secret settings tab ("Display") where you can do that in a crude way'/>
+			<text align='Center' word-wrapping="true" text='Changing the size / position of a camera screen is done on the desktop window by dragging out the corners of a cameras view. If you *really* want to do it from ingame however, clicking this button unlocked a secret settings tab ("Display") where you can do that in a crude way'/>
 			<primary-button text='OK' click-event='closeViewrectModal' pad-top='4'/>
 		</vertical>
 	</modal>
