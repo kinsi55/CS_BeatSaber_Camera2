@@ -23,7 +23,7 @@ namespace Camera2.SDK {
 		/// (E.g. Playing) incase the Playing scene was empty and Cam2 resorted to using Menu
 		/// instead, etc.
 		/// </summary>
-		public static SceneTypes current => ScenesManager.loadedScene;
+		public static SceneTypes current => ScenesManager.loadedScene ?? SceneTypes.Menu;
 
 		/// <summary>
 		/// Switches to the requested custom scene. If the scene you try to switch to does not have

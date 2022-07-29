@@ -14,7 +14,7 @@ namespace Camera2.Managers {
 		internal static ScenesSettings settings { get; private set; } = new ScenesSettings();
 
 		// Kind of a hack not having it start off Menu but else the first menu load will not apply..
-		internal static SceneTypes loadedScene { get; private set; } = SceneTypes.MultiplayerMenu;
+		internal static SceneTypes? loadedScene { get; private set; } = null;
 		internal static bool isOnCustomScene = false;
 
 		public static readonly HashSet<string> menuSceneNames = new HashSet<string>() { "MainMenu", "MenuViewCore", "MenuCore", "MenuViewControllers" };
@@ -44,6 +44,8 @@ namespace Camera2.Managers {
 			if(sceneName == null)
 				sceneName = SceneUtil.currentScene.name;
 
+			if(sceneName == "EmptyTransition" || sceneName == "ShaderWarmup" || sceneName == "ShaderWarmup")
+				return;
 
 			if(!disabledSceneNames.Contains(sceneName)) {
 				List<SceneTypes> toLookup = new List<SceneTypes>(2) { SceneTypes.Menu };
@@ -79,6 +81,7 @@ namespace Camera2.Managers {
 				SwitchToScene(FindSceneToUse(toLookup), forceReload);
 			} else {
 				SwitchToCamlist(null, false);
+				loadedScene = null;
 			}
 		}
 
