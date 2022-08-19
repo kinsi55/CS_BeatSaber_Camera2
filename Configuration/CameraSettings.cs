@@ -346,8 +346,12 @@ namespace Camera2.Configuration {
 			get => viewRect; set {
 				value.width = Math.Min(2, Math.Abs(value.width));
 				value.height = Math.Min(2, Math.Abs(value.height));
-				value.x = Math.Min(1 - value.width, Math.Abs(value.x));
-				value.y = Math.Min(1 - value.height, Math.Abs(value.y));
+
+				var _x = 1 - value.width;
+				var _y = 1 - value.height;
+
+				value.x = Mathf.Clamp(value.x, Math.Min(0, _x), Math.Max(0, _x));
+				value.y = Mathf.Clamp(value.y, Math.Min(0, _y), Math.Max(0, _y));
 
 				viewRect = value;
 			}
