@@ -24,8 +24,6 @@ namespace Camera2.Behaviours {
 
 		public bool ShouldSerializechromaticAberrationAmount() => chromaticAberrationAmount != 0;
 		public float chromaticAberrationAmount = 0f;
-		public bool ShouldSerializemotionBlurBlend() => motionBlurBlend != 0;
-		public float motionBlurBlend = 0f;
 	}
 
 	class CamPostProcessor : MonoBehaviour {
@@ -33,79 +31,22 @@ namespace Camera2.Behaviours {
 		private static readonly int HasDepth = Shader.PropertyToID("_HasDepth");
 		private static readonly int Width = Shader.PropertyToID("_Width");
 		private static readonly int ChromaticAberration = Shader.PropertyToID("_ChromaticAberration");
-		private static readonly int MotionBlurAmount = Shader.PropertyToID("_AccumOrig");
 
 		protected Cam2 cam;
 		protected CameraSettings settings => cam.settings;
 
 		public void Init(Cam2 cam) {
 			this.cam = cam;
-
-			//cam.UCamera.GetComponent<MainEffectController>().afterImageEffectEvent += CamPostProcessor_afterImageEffectEvent;
 		}
 
-		//private void CamPostProcessor_afterImageEffectEvent(RenderTexture obj) {
-		//	if(enabled && Plugin.ShaderMat_LuminanceKey) {
-		//		Plugin.ShaderMat_LuminanceKey.SetFloat("_Threshold", settings.PostProcessing.transparencyThreshold);// settings.antiAliasing > 1 ? settings.PostProcessing.transparencyThreshold : 0);
-		//		Plugin.ShaderMat_LuminanceKey.SetFloat("_HasDepth", cam.UCamera.depthTextureMode != DepthTextureMode.None ? 1 : 0);
-		//		Graphics.Blit(obj, obj, Plugin.ShaderMat_LuminanceKey);
-		//		if(settings.PostProcessing.chromaticAberrationAmount > 0) {
-		//			Plugin.ShaderMat_CA.SetFloat("_ChromaticAberration", settings.PostProcessing.chromaticAberrationAmount / 1000);
-		//			Graphics.Blit(obj, obj, Plugin.ShaderMat_CA);
-		//		}
-		//	}
-
-		//	cam.PostprocessCompleted();
-		//}
-
-		RenderTexture motionblurPreviousFrame;
-		RenderTexture motionblurAccumulator;
-
 		void OnDisable() {
-			if(motionblurAccumulator != null)
-				motionblurAccumulator.DiscardContents();
-
-			if(motionblurPreviousFrame != null)
-				motionblurPreviousFrame.DiscardContents();
+			
 		}
 
 		void OnRenderImage(RenderTexture src, RenderTexture dest) {
 			if(enabled && Plugin.ShaderMat_LuminanceKey) {
 				Plugin.ShaderMat_LuminanceKey.SetFloat(Threshold, settings.PostProcessing.transparencyThreshold);
 				Plugin.ShaderMat_LuminanceKey.SetFloat(HasDepth, cam.UCamera.depthTextureMode != DepthTextureMode.None ? 1 : 0);
-
-				if(settings.PostProcessing.motionBlurBlend != 0) {
-					if(motionblurAccumulator == null || motionblurAccumulator.width != src.width || motionblurAccumulator.height != src.height) {
-						if(motionblurAccumulator != null)
-							motionblurAccumulator.Release();
-
-						if(motionblurPreviousFrame != null)
-							motionblurPreviousFrame.Release();
-
-						motionblurAccumulator = new RenderTexture(src.width, src.height, 0);
-						motionblurPreviousFrame = new RenderTexture(src.width, src.height, 0);
-						Graphics.Blit(src, motionblurAccumulator);
-						Graphics.Blit(src, motionblurPreviousFrame);
-					}
-
-					//RenderTexture blurbuffer = RenderTexture.GetTemporary(src.width / 4, src.height / 4, 0);
-					//Graphics.Blit(motionblurAccumulator, blurbuffer);
-					//Graphics.Blit(blurbuffer, motionblurAccumulator);
-					//RenderTexture.ReleaseTemporary(blurbuffer);
-
-					Plugin.ShaderMat_FrameBlend.SetFloat(MotionBlurAmount, 0.9f - settings.PostProcessing.motionBlurBlend);
-
-					Graphics.Blit(src, motionblurAccumulator, Plugin.ShaderMat_FrameBlend);
-					Graphics.Blit(motionblurPreviousFrame, motionblurAccumulator, Plugin.ShaderMat_FrameBlend);
-					Graphics.Blit(src, motionblurPreviousFrame);
-					Graphics.Blit(motionblurAccumulator, src);
-				} else if(motionblurAccumulator != null) {
-					motionblurAccumulator.Release();
-					motionblurAccumulator = null;
-
-					motionblurPreviousFrame.Release();
-					motionblurPreviousFrame = null;
-				}
 
 				if(cam.isCurrentlySelectedInSettings) {
 					RenderTexture tmp = RenderTexture.GetTemporary(src.width, src.height, 0);
