@@ -202,7 +202,15 @@ namespace Camera2.UI {
 		}
 
 		internal bool smoothFollow_forceUpright {
-			get => cam.settings.Smoothfollow.forceUpright; set { cam.settings.Smoothfollow.forceUpright = value; }
+			get => cam.settings.Smoothfollow.limits.rot_z == "0:0"; 
+			set { 
+				if(value) {
+					cam.settings.Smoothfollow.limits.rot_z = "0:0";
+				} else {
+					cam.settings.Smoothfollow.limits.rot_z_min = float.NegativeInfinity;
+					cam.settings.Smoothfollow.limits.rot_z_max = float.PositiveInfinity;
+				}
+			}
 		}
 		internal bool smoothFollow_followReplayPosition {
 			get => cam.settings.Smoothfollow.followReplayPosition; set { cam.settings.Smoothfollow.followReplayPosition = value; }
@@ -236,9 +244,6 @@ namespace Camera2.UI {
 		}
 		internal bool postprocessing_forceDepthTexture {
 			get => cam.settings.PostProcessing.forceDepthTexture; set { cam.settings.PostProcessing.forceDepthTexture = value; }
-		}
-		internal float postprocessing_motionBlur {
-			get => cam.settings.PostProcessing.motionBlurBlend; set { cam.settings.PostProcessing.motionBlurBlend = value; }
 		}
 
 
@@ -528,7 +533,7 @@ namespace Camera2.UI {
 			cam.settings.targetRot = new UnityEngine.Vector3(0, 180f, 0);
 
 			cam.settings.Smoothfollow.followReplayPosition = false;
-			cam.settings.Smoothfollow.forceUpright = true;
+			cam.settings.Smoothfollow.limits.rot_z = "0:0";
 			cam.settings.Smoothfollow.position = 8f;
 			cam.settings.Smoothfollow.rotation = 3f;
 

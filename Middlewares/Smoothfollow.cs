@@ -1,4 +1,5 @@
-﻿using Camera2.HarmonyPatches;
+﻿using System;
+using Camera2.HarmonyPatches;
 using Camera2.Interfaces;
 using Camera2.Utils;
 using Newtonsoft.Json;
@@ -10,7 +11,6 @@ namespace Camera2.Configuration {
 		public float position = 10f;
 		public float rotation = 4f;
 
-		public bool forceUpright = false;
 		public bool followReplayPosition = true;
 
 		private bool _pivotingOffset = true;
@@ -26,6 +26,12 @@ namespace Camera2.Configuration {
 				settings.cam.transformer.applyAsAbsolute = !value;
 			}
 		}
+
+		public CameraBoundsConfig limits = new CameraBoundsConfig();
+
+		// TODO: Yeet this at some point
+		bool forceUpright { get => false; set => limits.rot_z_min = limits.rot_z_min = 0; }
+		public bool ShouldSerializeforceUpright() => false;
 
 		[JsonIgnore] internal bool useLocalPosition = true;
 		[JsonIgnore] internal Transform parent;
@@ -55,6 +61,15 @@ namespace Camera2.Middlewares {
 			 * of smoothing it to the correct position over time
 			 */
 			teleportOnNextFrame = true;
+		}
+
+		float ClampAngle(float angle, float from, float to) {
+			// accepts e.g. -80, 80
+			if(angle < 0f)
+				angle = 360 + angle;
+			if(angle > 180f)
+				return Math.Max(angle, 360 + from);
+			return Math.Min(angle, to);
 		}
 
 		new public bool Pre() {
@@ -138,8 +153,19 @@ namespace Camera2.Middlewares {
 				}
 			}
 
-			if(settings.Smoothfollow.forceUpright)
-				targetRotation *= Quaternion.Euler(0, 0, -parentToUse.transform.localEulerAngles.z);
+			targetPosition.x = Mathf.Clamp(targetPosition.x, settings.Smoothfollow.limits.pos_x_min, settings.Smoothfollow.limits.pos_x_max);
+			targetPosition.y = Mathf.Clamp(targetPosition.y, settings.Smoothfollow.limits.pos_y_min, settings.Smoothfollow.limits.pos_y_max);
+			targetPosition.z = Mathf.Clamp(targetPosition.z, settings.Smoothfollow.limits.pos_z_min, settings.Smoothfollow.limits.pos_z_max);
+
+			var E = targetRotation.eulerAngles;
+			var l = settings.Smoothfollow.limits;
+
+			E.x = ClampAngle(E.x, l.rot_x_min, l.rot_x_max);
+			E.y = ClampAngle(E.y, l.rot_y_min, l.rot_y_max);
+			E.z = ClampAngle(E.z, l.rot_z_min, l.rot_z_max);
+
+			targetRotation.eulerAngles = E;
+
 
 			if(!teleportOnNextFrame) {
 				teleportOnNextFrame =
