@@ -9,7 +9,7 @@ using Newtonsoft.Json;
 namespace Camera2.Configuration {
 	[JsonObject(MemberSerialization.OptIn)]
 	class CameraBoundsConfig {
-		static IFormatProvider h = CultureInfo.InvariantCulture.NumberFormat;
+		static readonly IFormatProvider h = CultureInfo.InvariantCulture.NumberFormat;
 
 		static void ParseInto(ref float min, ref float max, string val) {
 			min = float.NegativeInfinity;
