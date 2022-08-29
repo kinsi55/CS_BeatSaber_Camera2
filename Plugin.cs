@@ -76,8 +76,9 @@ namespace Camera2 {
 			// Marinate the Reflection stuff off-thread so the loading of cameras later is less blocking
 			Task.Run(() => {
 				ModmapExtensions.Reflect();
-				ScoresaberUtil.Reflect();
 				CustomNotesUtil.Reflect();
+				if(ScoresaberUtil.Reflect())
+					SDK.ReplaySources.Register(new ScoresaberUtil.SSReplaySource());
 			});
 		}
 

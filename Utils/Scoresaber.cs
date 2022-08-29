@@ -1,5 +1,7 @@
 ﻿using Camera2.HarmonyPatches;
+using Camera2.SDK;
 using HarmonyLib;
+using System;
 using System.Reflection;
 using UnityEngine;
 
@@ -7,11 +9,11 @@ namespace Camera2.Utils {
 	public static class ScoresaberUtil {
 		static MethodBase ScoreSaber_playbackEnabled;
 
-		public static void Reflect() {
-			ScoreSaber_playbackEnabled =
+		public static bool Reflect() {
+			return (ScoreSaber_playbackEnabled =
 				IPA.Loader.PluginManager.GetPluginFromId("ScoreSaber")?
 				.Assembly.GetType("ScoreSaber.Core.ReplaySystem.HarmonyPatches.PatchHandleHMDUnmounted")?
-				.GetMethod("Prefix", BindingFlags.Static | BindingFlags.NonPublic);
+				.GetMethod("Prefix", BindingFlags.Static | BindingFlags.NonPublic)) != null;
 		}
 
 		public static bool isInReplay { get; internal set; }
@@ -66,6 +68,24 @@ namespace Camera2.Utils {
 #if DEBUG
 			Plugin.Log.Info($"UpdateIsInReplay() -> isInReplay: {isInReplay}, replayCamera: {replayCamera}");
 #endif
+		}
+
+
+		public class SSReplaySource : ReplaySources.ISource {
+			public string name => "ScoreSaber";
+
+			public bool isPlaying => ScoresaberUtil.isInReplay;
+
+			public Transform replayHeadTransform {
+				get {
+					if(ScoresaberUtil.replayCamera == null)
+						return null;
+
+					return ScoresaberUtil.replayCamera.transform;
+				}
+			}
+
+			public Transform offset => throw new NotImplementedException();
 		}
 	}
 }

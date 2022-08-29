@@ -1,6 +1,7 @@
 ﻿using System;
 using Camera2.HarmonyPatches;
 using Camera2.Interfaces;
+using Camera2.SDK;
 using Camera2.Utils;
 using Newtonsoft.Json;
 using UnityEngine;
@@ -83,24 +84,25 @@ namespace Camera2.Middlewares {
 			}
 
 			Transform parentToUse = null;
-			bool isAttachedToReplayCam = false;
-			if(
-				ScoresaberUtil.isInReplay &&
-				//UnityEngine.XR.XRDevice.isPresent && 
-				settings.type == Configuration.CameraType.FirstPerson
-			) {
-				if(settings.Smoothfollow.followReplayPosition) {
-					parentToUse = ScoresaberUtil.replayCamera == null ? null : ScoresaberUtil.replayCamera.transform;
-					settings.Smoothfollow.useLocalPosition = true;
-					isAttachedToReplayCam = true;
-				} else {
-					// This is complete garbage
-					if(ScoresaberUtil.spectateParent != null)
-						HookRoomAdjust.ApplyCustom(ScoresaberUtil.spectateParent.position, ScoresaberUtil.spectateParent.rotation);
-				}
+			ReplaySources.ISource currentReplaySource = null;
 
-				if(parent == (ScoresaberUtil.replayCamera == null ? null : ScoresaberUtil.replayCamera.transform))
-					parent = null;
+			if(settings.type == Configuration.CameraType.FirstPerson) {
+				foreach(var source in ReplaySources.sources) {
+					if(!source.isPlaying)
+						continue;
+
+					currentReplaySource = source;
+					if(settings.Smoothfollow.followReplayPosition) {
+						parentToUse = source.replayHeadTransform;
+						settings.Smoothfollow.useLocalPosition = false;
+
+						if(parent != parentToUse)
+							parent = null;
+					} else if(parent == source.replayHeadTransform) {
+						parent = null;
+					}
+					break;
+				}
 			}
 
 			if(parentToUse == null && settings.type == Configuration.CameraType.FirstPerson && HookFPFCToggle.isInFPFC) {
@@ -116,7 +118,7 @@ namespace Camera2.Middlewares {
 					var a = Camera.main;
 
 					parent = parentToUse = a == null ? null : a.transform;
-					settings.Smoothfollow.useLocalPosition = true;
+					settings.Smoothfollow.useLocalPosition = currentReplaySource?.name != "ScoreSaber";
 				} else if(settings.type == Configuration.CameraType.Attached) {
 					parent = parentToUse = GameObject.Find(settings.Smoothfollow.targetParent)?.transform;
 					settings.Smoothfollow.useLocalPosition = false;
@@ -136,17 +138,8 @@ namespace Camera2.Middlewares {
 				targetPosition = parentToUse.localPosition;
 				targetRotation = parentToUse.localRotation;
 
-				// JFC Umbra please end my suffering, also thanks Auros
-				if(isAttachedToReplayCam) {
-					var parentsParent = parentToUse.parent;
-					var parentsParentLocalRotation = parentsParent.localRotation;
-					targetPosition += Quaternion.Inverse(parentsParentLocalRotation) * parentsParent.localPosition;
-					targetRotation *= parentsParentLocalRotation;
-				}
-
 				if(!HookFPFCToggle.isInFPFC && (HookRoomAdjust.position != Vector3.zero || HookRoomAdjust.rotation != Quaternion.identity)) {
-					// Not exactly sure why we gotta exclude replays from this, but thats what it is
-					if(settings.type == Configuration.CameraType.FirstPerson && !isAttachedToReplayCam) {
+					if(settings.type == Configuration.CameraType.FirstPerson) {
 						targetPosition = (HookRoomAdjust.rotation * targetPosition) + HookRoomAdjust.position;
 						targetRotation = HookRoomAdjust.rotation * targetRotation;
 					}
