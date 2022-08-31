@@ -76,16 +76,9 @@ namespace Camera2.Utils {
 
 			public bool isPlaying => ScoresaberUtil.isInReplay;
 
-			public Transform replayHeadTransform {
-				get {
-					if(ScoresaberUtil.replayCamera == null)
-						return null;
+			public Vector3 localHeadPosition => ScoresaberUtil.replayCamera.transform.localPosition;
 
-					return ScoresaberUtil.replayCamera.transform;
-				}
-			}
-
-			public Transform offset => throw new NotImplementedException();
+			public Quaternion localHeadRotation => ScoresaberUtil.replayCamera.transform.localRotation;
 		}
 	}
 }

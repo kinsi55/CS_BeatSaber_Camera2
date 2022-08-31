@@ -86,64 +86,62 @@ namespace Camera2.Middlewares {
 			Transform parentToUse = null;
 			ReplaySources.ISource currentReplaySource = null;
 
-			if(settings.type == Configuration.CameraType.FirstPerson) {
+			if(settings.type == Configuration.CameraType.FirstPerson && settings.Smoothfollow.followReplayPosition) {
 				foreach(var source in ReplaySources.sources) {
 					if(!source.isPlaying)
 						continue;
 
 					currentReplaySource = source;
-					if(settings.Smoothfollow.followReplayPosition) {
-						parentToUse = source.replayHeadTransform;
-						settings.Smoothfollow.useLocalPosition = false;
-
-						if(parent != parentToUse)
-							parent = null;
-					} else if(parent == source.replayHeadTransform) {
-						parent = null;
-					}
 					break;
 				}
 			}
 
-			if(parentToUse == null && settings.type == Configuration.CameraType.FirstPerson && HookFPFCToggle.isInFPFC) {
+			if(settings.type == Configuration.CameraType.FirstPerson && HookFPFCToggle.isInFPFC) {
 				parentToUse = HookFPFCToggle.fpfcTransform;
+				currentReplaySource = null;
 				settings.Smoothfollow.useLocalPosition = HookFPFCToggle.isSiraSettingLocalPostionYes;
 			}
 
-			if(parentToUse == null)
-				parentToUse = parent;
+			Vector3 targetPosition = Vector3.zero;
+			Quaternion targetRotation = Quaternion.identity;
 
-			if(parentToUse == null || !parentToUse.gameObject.activeInHierarchy) {
-				if(settings.type == Configuration.CameraType.FirstPerson) {
-					var a = Camera.main;
+			if(currentReplaySource == null) {
+				if(parentToUse == null)
+					parentToUse = parent;
 
-					parent = parentToUse = a == null ? null : a.transform;
-					settings.Smoothfollow.useLocalPosition = currentReplaySource?.name != "ScoreSaber";
-				} else if(settings.type == Configuration.CameraType.Attached) {
-					parent = parentToUse = GameObject.Find(settings.Smoothfollow.targetParent)?.transform;
-					settings.Smoothfollow.useLocalPosition = false;
-				}
-			}
-
-			//System.Console.WriteLine("FP cam is attached to {0}", parentToUse);
-
-			// If we dont have a parent we should not render.
-			if(parentToUse == null)
-				return false;
-
-			var targetPosition = parentToUse.position;
-			var targetRotation = parentToUse.rotation;
-
-			if(settings.Smoothfollow.useLocalPosition) {
-				targetPosition = parentToUse.localPosition;
-				targetRotation = parentToUse.localRotation;
-
-				if(!HookFPFCToggle.isInFPFC && (HookRoomAdjust.position != Vector3.zero || HookRoomAdjust.rotation != Quaternion.identity)) {
+				if(parentToUse == null || !parentToUse.gameObject.activeInHierarchy) {
 					if(settings.type == Configuration.CameraType.FirstPerson) {
-						targetPosition = (HookRoomAdjust.rotation * targetPosition) + HookRoomAdjust.position;
-						targetRotation = HookRoomAdjust.rotation * targetRotation;
+						var a = Camera.main;
+
+						parent = parentToUse = a == null ? null : a.transform;
+						// Dont even try to understand why this is necessary
+						settings.Smoothfollow.useLocalPosition = !ScoresaberUtil.isInReplay;
+					} else if(settings.type == Configuration.CameraType.Attached) {
+						parent = parentToUse = GameObject.Find(settings.Smoothfollow.targetParent)?.transform;
+						settings.Smoothfollow.useLocalPosition = false;
 					}
 				}
+
+				//System.Console.WriteLine("FP cam is attached to {0}", parentToUse);
+
+				// If we dont have a parent we should not render.
+				if(parentToUse == null)
+					return false;
+
+				if(settings.Smoothfollow.useLocalPosition) {
+					targetPosition = parentToUse.localPosition;
+					targetRotation = parentToUse.localRotation;
+
+					if(!HookFPFCToggle.isInFPFC && (HookRoomAdjust.position != Vector3.zero || HookRoomAdjust.rotation != Quaternion.identity)) {
+						if(settings.type == Configuration.CameraType.FirstPerson) {
+							targetPosition = (HookRoomAdjust.rotation * targetPosition) + HookRoomAdjust.position;
+							targetRotation = HookRoomAdjust.rotation * targetRotation;
+						}
+					}
+				}
+			} else {
+				targetPosition = currentReplaySource.localHeadPosition;
+				targetRotation = currentReplaySource.localHeadRotation;
 			}
 
 			targetPosition.x = Mathf.Clamp(targetPosition.x, settings.Smoothfollow.limits.pos_x_min, settings.Smoothfollow.limits.pos_x_max);
@@ -163,7 +161,7 @@ namespace Camera2.Middlewares {
 			if(!teleportOnNextFrame) {
 				teleportOnNextFrame =
 					lastScene != SceneUtil.currentScene ||
-					(HookFPFCToggle.isInFPFC && (!settings.Smoothfollow.followReplayPosition || !ScoresaberUtil.isInReplay));
+					(HookFPFCToggle.isInFPFC && currentReplaySource == null);
 			}
 
 			if(settings.Smoothfollow.transformer == null) {

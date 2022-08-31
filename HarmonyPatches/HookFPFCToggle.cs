@@ -36,7 +36,7 @@ namespace Camera2.HarmonyPatches {
 			}
 
 #if DEBUG
-			//Plugin.Log.Info(string.Format("HookSiraFPFCToggle: SimpleCameraController.AllowInput => {0}", ___AllowInput));
+			Plugin.Log.Info(string.Format("HookSiraFPFCToggle: SimpleCameraController.AllowInput => {0}", allowInput));
 #endif
 			SetFPFCActive(__instance.transform, allowInput);
 		}

@@ -13,8 +13,8 @@ namespace Camera2.SDK {
 		public interface ISource {
 			public string name { get; }
 			public bool isPlaying { get; }
-			public Transform replayHeadTransform { get; }
-			public Transform offset { get; }
+			public Vector3 localHeadPosition { get; }
+			public Quaternion localHeadRotation { get; }
 		}
 
 		public static void Register(ISource source) => sources.Add(source);
