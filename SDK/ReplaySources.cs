@@ -12,9 +12,29 @@ namespace Camera2.SDK {
 
 		public interface ISource {
 			public string name { get; }
-			public bool isPlaying { get; }
+			public bool isInReplay { get; }
 			public Vector3 localHeadPosition { get; }
 			public Quaternion localHeadRotation { get; }
+		}
+
+		public class GenericSource : ISource {
+			public string name { get; private set; }
+			public bool isInReplay { get; private set; }
+			public Vector3 localHeadPosition { get; private set; }
+			public Quaternion localHeadRotation { get; private set; }
+
+			public GenericSource(string name) {
+				this.name = name;
+			}
+
+			public void Update(ref Vector3 localHeadPosition, ref Quaternion localHeadRotation) {
+				this.localHeadPosition = localHeadPosition;
+				this.localHeadRotation = localHeadRotation;
+			}
+
+			public void SetActive(bool isInReplay) {
+				this.isInReplay = isInReplay;
+			}
 		}
 
 		public static void Register(ISource source) => sources.Add(source);

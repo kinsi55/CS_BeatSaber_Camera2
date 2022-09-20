@@ -88,7 +88,7 @@ namespace Camera2.Middlewares {
 
 			if(settings.type == Configuration.CameraType.FirstPerson && settings.Smoothfollow.followReplayPosition) {
 				foreach(var source in ReplaySources.sources) {
-					if(!source.isPlaying)
+					if(!source.isInReplay)
 						continue;
 
 					currentReplaySource = source;

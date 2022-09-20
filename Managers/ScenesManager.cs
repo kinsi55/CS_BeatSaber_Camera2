@@ -1,6 +1,8 @@
 ﻿using Camera2.Configuration;
 using Camera2.HarmonyPatches;
+using Camera2.SDK;
 using Camera2.Utils;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -37,6 +39,11 @@ namespace Camera2.Managers {
 			Plugin.Log.Info($"ActiveSceneChanged({sceneName}) - Current loadedScene: {loadedScene}");
 #endif
 
+			SharedCoroutineStarter.instance.StartCoroutine(LoadGameSceneNextFrame(sceneName));
+		}
+
+		static IEnumerator LoadGameSceneNextFrame(string sceneName = null) {
+			yield return null;
 			LoadGameScene(sceneName);
 		}
 
@@ -62,7 +69,7 @@ namespace Camera2.Managers {
 						toLookup.Insert(0, SceneTypes.Playing360);
 					}
 
-					if(ScoresaberUtil.IsInReplay()) {
+					if(ReplaySources.sources.Any(x => x.isInReplay)) {
 						toLookup.Insert(0, SceneTypes.Replay);
 					} else if(SceneUtil.isInMultiplayer) {
 						toLookup.Insert(0, SceneTypes.PlayingMulti);

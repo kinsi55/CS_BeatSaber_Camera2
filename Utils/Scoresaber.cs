@@ -74,11 +74,11 @@ namespace Camera2.Utils {
 		public class SSReplaySource : ReplaySources.ISource {
 			public string name => "ScoreSaber";
 
-			public bool isPlaying => ScoresaberUtil.isInReplay;
+			public bool isInReplay => ScoresaberUtil.isInReplay;
 
-			public Vector3 localHeadPosition => ScoresaberUtil.replayCamera.transform.localPosition;
+			public Vector3 localHeadPosition => replayCamera == null ? Vector3.zero : replayCamera.transform.localPosition;
 
-			public Quaternion localHeadRotation => ScoresaberUtil.replayCamera.transform.localRotation;
+			public Quaternion localHeadRotation => replayCamera == null ? Quaternion.identity : replayCamera.transform.localRotation;
 		}
 	}
 }
