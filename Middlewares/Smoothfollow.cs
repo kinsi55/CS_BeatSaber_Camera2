@@ -132,10 +132,15 @@ namespace Camera2.Middlewares {
 					targetPosition = parentToUse.localPosition;
 					targetRotation = parentToUse.localRotation;
 
-					if(!HookFPFCToggle.isInFPFC && (HookRoomAdjust.position != Vector3.zero || HookRoomAdjust.rotation != Quaternion.identity)) {
-						if(settings.type == Configuration.CameraType.FirstPerson) {
+					if(settings.type == Configuration.CameraType.FirstPerson && (HookRoomAdjust.position != Vector3.zero || HookRoomAdjust.rotation != Quaternion.identity)) {
+						if(!HookFPFCToggle.isInFPFC) {
 							targetPosition = (HookRoomAdjust.rotation * targetPosition) + HookRoomAdjust.position;
 							targetRotation = HookRoomAdjust.rotation * targetRotation;
+						} else {
+							//var parentsParent = parentToUse.parent;
+							//var parentsParentLocalRotation = parentsParent.rotation;
+							//targetPosition += parentsParent.localPosition;
+							//targetRotation *= Quaternion.Inverse(parentsParentLocalRotation);
 						}
 					}
 				}
