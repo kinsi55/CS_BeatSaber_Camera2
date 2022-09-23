@@ -149,16 +149,28 @@ namespace Camera2.Middlewares {
 				targetRotation = currentReplaySource.localHeadRotation;
 			}
 
-			targetPosition.x = Mathf.Clamp(targetPosition.x, settings.Smoothfollow.limits.pos_x_min, settings.Smoothfollow.limits.pos_x_max);
-			targetPosition.y = Mathf.Clamp(targetPosition.y, settings.Smoothfollow.limits.pos_y_min, settings.Smoothfollow.limits.pos_y_max);
-			targetPosition.z = Mathf.Clamp(targetPosition.z, settings.Smoothfollow.limits.pos_z_min, settings.Smoothfollow.limits.pos_z_max);
-
-			var E = targetRotation.eulerAngles;
+			// TODO: This is kinda shit
 			var l = settings.Smoothfollow.limits;
 
-			E.x = ClampAngle(E.x, l.rot_x_min, l.rot_x_max);
-			E.y = ClampAngle(E.y, l.rot_y_min, l.rot_y_max);
-			E.z = ClampAngle(E.z, l.rot_z_min, l.rot_z_max);
+			if(!float.IsNegativeInfinity(l.pos_x_min) || !float.IsPositiveInfinity(l.pos_x_max))
+				targetPosition.x = Mathf.Clamp(targetPosition.x, l.pos_x_min, l.pos_x_max);
+
+			if(!float.IsNegativeInfinity(l.pos_y_min) || !float.IsPositiveInfinity(l.pos_y_max))
+				targetPosition.y = Mathf.Clamp(targetPosition.y, l.pos_y_min, l.pos_y_max);
+
+			if(!float.IsNegativeInfinity(l.pos_z_min) || !float.IsPositiveInfinity(l.pos_z_max))
+				targetPosition.z = Mathf.Clamp(targetPosition.z, l.pos_z_min, l.pos_z_max);
+
+			var E = targetRotation.eulerAngles;
+
+			if(!float.IsNegativeInfinity(l.rot_x_min) || !float.IsPositiveInfinity(l.rot_x_max))
+				E.x = ClampAngle(E.x, l.rot_x_min, l.rot_x_max);
+
+			if(!float.IsNegativeInfinity(l.rot_y_min) || !float.IsPositiveInfinity(l.rot_y_max))
+				E.x = ClampAngle(E.x, l.rot_y_min, l.rot_y_max);
+
+			if(!float.IsNegativeInfinity(l.rot_z_min) || !float.IsPositiveInfinity(l.rot_z_max))
+				E.x = ClampAngle(E.x, l.rot_z_min, l.rot_z_max);
 
 			targetRotation.eulerAngles = E;
 
