@@ -112,6 +112,16 @@ namespace Camera2.Middlewares {
 			}
 
 			for(; ; ) {
+				// Rollback logic for skipping through replays
+				if(targetFrame.startTime > currentAnimationTime) {
+					while(frameIndex > 0) {
+						frameIndex--;
+
+						if(targetFrame.startTime <= currentAnimationTime)
+							break;
+					}
+				}
+
 				if(targetFrame.startTime > currentAnimationTime)
 					break;
 
