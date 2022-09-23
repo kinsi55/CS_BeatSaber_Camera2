@@ -33,9 +33,6 @@ namespace Camera2.Middlewares {
 		Frame targetFrame => loadedScript.frames[frameIndex];
 
 		private void Reset() {
-			if(loadedScript == null)
-				return;
-
 			if(scriptTransformer != null) {
 				scriptTransformer.position = Vector3.zero;
 				scriptTransformer.rotation = Quaternion.identity;
@@ -43,6 +40,9 @@ namespace Camera2.Middlewares {
 				if(settings.MovementScript.fromOrigin)
 					cam.settings.ApplyPositionAndRotation();
 			}
+
+			if(loadedScript == null)
+				return;
 
 			loadedScript = null;
 			currentAnimationTime = 0f;
