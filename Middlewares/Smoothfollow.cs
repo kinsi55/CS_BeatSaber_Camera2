@@ -167,10 +167,10 @@ namespace Camera2.Middlewares {
 				E.x = ClampAngle(E.x, l.rot_x_min, l.rot_x_max);
 
 			if(!float.IsNegativeInfinity(l.rot_y_min) || !float.IsPositiveInfinity(l.rot_y_max))
-				E.x = ClampAngle(E.x, l.rot_y_min, l.rot_y_max);
+				E.y = ClampAngle(E.x, l.rot_y_min, l.rot_y_max);
 
 			if(!float.IsNegativeInfinity(l.rot_z_min) || !float.IsPositiveInfinity(l.rot_z_max))
-				E.x = ClampAngle(E.x, l.rot_z_min, l.rot_z_max);
+				E.z = ClampAngle(E.x, l.rot_z_min, l.rot_z_max);
 
 			targetRotation.eulerAngles = E;
 
