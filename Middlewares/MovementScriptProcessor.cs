@@ -30,6 +30,8 @@ namespace Camera2.Middlewares {
 		Vector3 lastPos = Vector3.zero;
 		Quaternion lastRot = Quaternion.identity;
 
+		float lastAnimTime = 0;
+
 		Frame targetFrame => loadedScript.frames[frameIndex];
 
 		private void Reset() {
@@ -41,11 +43,13 @@ namespace Camera2.Middlewares {
 					cam.settings.ApplyPositionAndRotation();
 			}
 
+			currentAnimationTime = 0f;
+			lastAnimTime = 0;
+
 			if(loadedScript == null)
 				return;
 
 			loadedScript = null;
-			currentAnimationTime = 0f;
 			frameIndex = 0;
 			lastFov = 0f;
 			cam.UCamera.fieldOfView = settings.FOV;
@@ -108,18 +112,20 @@ namespace Camera2.Middlewares {
 					return true;
 
 				currentAnimationTime %= loadedScript.scriptDuration;
+				lastAnimTime = currentAnimationTime;
 				frameIndex = 0;
 			}
 
 			for(; ; ) {
 				// Rollback logic for skipping through replays
-				if(targetFrame.startTime > currentAnimationTime) {
+				if(lastAnimTime > currentAnimationTime) {
 					while(frameIndex > 0) {
 						frameIndex--;
 
 						if(targetFrame.startTime <= currentAnimationTime)
 							break;
 					}
+					lastAnimTime = currentAnimationTime;
 				}
 
 				if(targetFrame.startTime > currentAnimationTime)
@@ -150,6 +156,8 @@ namespace Camera2.Middlewares {
 					break;
 				}
 			}
+
+			lastAnimTime = currentAnimationTime;
 
 			return true;
 		}
