@@ -314,6 +314,11 @@ namespace Camera2.Configuration {
 			}
 		}
 
+		public float nearZ {
+			get => cam.UCamera.nearClipPlane;
+			set => cam.UCamera.nearClipPlane = value;
+		}
+
 		[JsonProperty("visibleObjects")]
 		private GameObjects _visibleObjects;
 		[JsonIgnore]
