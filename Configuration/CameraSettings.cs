@@ -352,11 +352,11 @@ namespace Camera2.Configuration {
 				value.width = Math.Min(2, Math.Abs(value.width));
 				value.height = Math.Min(2, Math.Abs(value.height));
 
-				var _x = 1 - value.width;
-				var _y = 1 - value.height;
+				var _x = value.width * .5f;
+				var _y = value.height * .5f;
 
-				value.x = Mathf.Clamp(value.x, Math.Min(0, _x), Math.Max(_x, -_x));
-				value.y = Mathf.Clamp(value.y, Math.Min(0, _y), Math.Max(_y, -_y));
+				value.x = Mathf.Clamp(value.x, -_x, _x);
+				value.y = Mathf.Clamp(value.y, -_y, _y);
 
 				viewRect = value;
 			}
