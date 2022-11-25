@@ -52,9 +52,9 @@ namespace Camera2.HarmonyPatches {
 			} else {
 				var Kapp = 30;
 
+				var srr = Screen.currentResolution.refreshRate;
 				if(CamManager.cams?.Count > 0) {
 					QualitySettings.vSyncCount = 1;
-					var srr = Screen.currentResolution.refreshRate;
 					Kapp = -1;
 
 					foreach(var cam in CamManager.cams.Values.Where(x => x.gameObject.activeInHierarchy)) {
@@ -66,6 +66,8 @@ namespace Camera2.HarmonyPatches {
 							QualitySettings.vSyncCount = 0;
 						}
 					}
+				} else {
+					Kapp = srr;
 				}
 
 				Application.targetFrameRate = Kapp;
