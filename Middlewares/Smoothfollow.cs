@@ -143,6 +143,9 @@ namespace Camera2.Middlewares {
 							//targetRotation *= Quaternion.Inverse(parentsParentLocalRotation);
 						}
 					}
+				} else {
+					targetPosition = parentToUse.position;
+					targetRotation = parentToUse.rotation;
 				}
 			} else {
 				targetPosition = currentReplaySource.localHeadPosition;

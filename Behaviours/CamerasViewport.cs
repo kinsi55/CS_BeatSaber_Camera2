@@ -168,6 +168,7 @@ namespace Camera2.Behaviours {
 						Plugin.Log.Info("Reloading Camera2 Config...");
 						MovementScriptManager.LoadMovementScripts(true);
 						CamManager.Reload();
+						ShaderManager.Reload();
 					} else {
 						ScenesManager.LoadGameScene();
 					}

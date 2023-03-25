@@ -1,5 +1,6 @@
 ﻿using Camera2.Configuration;
 using Camera2.Interfaces;
+using Camera2.Managers;
 using Camera2.UI;
 using System;
 using System.Collections.Generic;
@@ -10,6 +11,13 @@ using UnityEngine;
 using UnityEngine.Rendering;
 
 namespace Camera2.Behaviours {
+	class Settings_Shader {
+		public string assetBundlePath = "";
+		public string shaderName = "";
+
+		public readonly Dictionary<string, float> properties = new Dictionary<string, float>();
+	}
+
 	class Settings_PostProcessing : CameraSubSettings {
 		public float transparencyThreshold = 0f;
 
@@ -22,15 +30,13 @@ namespace Camera2.Behaviours {
 			}
 		}
 
-		public bool ShouldSerializechromaticAberrationAmount() => chromaticAberrationAmount != 0;
-		public float chromaticAberrationAmount = 0f;
+		public Settings_Shader[] shaders = new Settings_Shader[0];
 	}
 
 	class CamPostProcessor : MonoBehaviour {
 		private static readonly int Threshold = Shader.PropertyToID("_Threshold");
 		private static readonly int HasDepth = Shader.PropertyToID("_HasDepth");
 		private static readonly int Width = Shader.PropertyToID("_Width");
-		private static readonly int ChromaticAberration = Shader.PropertyToID("_ChromaticAberration");
 
 		protected Cam2 cam;
 		protected CameraSettings settings => cam.settings;
@@ -43,28 +49,51 @@ namespace Camera2.Behaviours {
 			
 		}
 
-		void OnRenderImage(RenderTexture src, RenderTexture dest) {
+		void OnRenderImage(RenderTexture _src, RenderTexture dest) {
 			if(enabled && Plugin.ShaderMat_LuminanceKey) {
 				Plugin.ShaderMat_LuminanceKey.SetFloat(Threshold, settings.PostProcessing.transparencyThreshold);
 				Plugin.ShaderMat_LuminanceKey.SetFloat(HasDepth, cam.UCamera.depthTextureMode != DepthTextureMode.None ? 1 : 0);
 
-				if(cam.isCurrentlySelectedInSettings) {
-					RenderTexture tmp = RenderTexture.GetTemporary(src.width, src.height, 0);
-					Graphics.Blit(src, tmp, Plugin.ShaderMat_LuminanceKey);
+				RenderTexture main = _src;
 
-					Plugin.ShaderMat_Outline.SetFloat(Width, settings.renderScale * 10);
-					Graphics.Blit(tmp, dest, Plugin.ShaderMat_Outline);
-					RenderTexture.ReleaseTemporary(tmp);
-				} else {
-					Graphics.Blit(src, dest, Plugin.ShaderMat_LuminanceKey);
+				void Apply(Material mat) {
+					RenderTexture temp = RenderTexture.GetTemporary(main.descriptor);
+					Graphics.Blit(main, temp, mat);
+					if(main != _src)
+						RenderTexture.ReleaseTemporary(main);
+
+					main = temp;
 				}
 
-				if(settings.PostProcessing.chromaticAberrationAmount > 0) {
-					Plugin.ShaderMat_CA.SetFloat(ChromaticAberration, settings.PostProcessing.chromaticAberrationAmount / 1000);
-					Graphics.Blit(dest, dest, Plugin.ShaderMat_CA);
+				foreach(var shader in settings.PostProcessing.shaders) {
+					var loadedShader = ShaderManager.GetOrLoadShader(shader.assetBundlePath, shader.shaderName);
+					var shaderMat = loadedShader.shaderMat;
+
+					foreach(var prop in shader.properties) {
+						if(!loadedShader.propIds.TryGetValue(prop.Key, out var propId))
+							continue;
+
+						shaderMat.SetFloat(propId, prop.Value);
+					}
+
+					Apply(shaderMat);
 				}
+
+				Apply(Plugin.ShaderMat_LuminanceKey);
+
+				if(cam.isCurrentlySelectedInSettings)
+					Apply(Plugin.ShaderMat_Outline);
+
+				//if(settings.PostProcessing.chromaticAberrationAmount > 0) {
+				//	Plugin.ShaderMat_CA.SetFloat(ChromaticAberration, settings.PostProcessing.chromaticAberrationAmount / 1000);
+				//	Graphics.Blit(dest, dest, Plugin.ShaderMat_CA);
+				//}
+
+				Graphics.Blit(main, dest);
+				if(main != _src)
+					RenderTexture.ReleaseTemporary(main);
 			} else {
-				Graphics.Blit(src, dest);
+				Graphics.Blit(_src, dest);
 			}
 
 			cam.PostprocessCompleted();
