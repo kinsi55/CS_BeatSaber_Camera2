@@ -66,7 +66,8 @@ namespace Camera2.Managers {
 				UnityEngine.Object.Destroy(loadedShader.shaderMat);
 			}
 
-			return loadedShaderMats[key] = new LoadedShader(assetBundlePath, shaderName);
+			return null;
+			//return loadedShaderMats[key] = new LoadedShader(assetBundlePath, shaderName);
 		}
 
 		public static void Reload() {

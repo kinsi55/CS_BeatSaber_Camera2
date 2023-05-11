@@ -51,14 +51,13 @@ namespace Camera2.Utils {
 					 * This is super hacky trash but it does the job for now™
 					 * I'm not exactly sure why I *need* to look it up again here, else it wont work - whatever.
 					 */
-					if(!wasInReplay)
-					{
+					if(!wasInReplay) {
 						var y = GameObject.Find("SpectatorParent/RecorderCamera(Clone)");
 
 						spectateParent = y == null ? null : y.transform.parent;
 					}
 
-					if(!UnityEngine.XR.XRDevice.isPresent)
+					if(GlobalFPSCap.GetActiveVrDevice() == null)
 						x.enabled = false;
 
 					// Doing this so other plugins that rely on Camera.main dont die

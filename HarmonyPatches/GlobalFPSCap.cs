@@ -1,8 +1,10 @@
 ﻿using Camera2.Managers;
 using HarmonyLib;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.XR;
 
 namespace Camera2.HarmonyPatches {
 	[HarmonyPatch(typeof(MainSystemInit), nameof(MainSystemInit.Init))]
@@ -40,8 +42,21 @@ namespace Camera2.HarmonyPatches {
 			});
 		}
 
+		public static XRDisplaySubsystem GetActiveVrDevice() {
+			var xrDisplaySubsystems = new List<XRDisplaySubsystem>();
+			SubsystemManager.GetInstances<XRDisplaySubsystem>(xrDisplaySubsystems);
+			foreach(var xrDisplay in xrDisplaySubsystems) {
+				if(xrDisplay.running)
+					return xrDisplay;
+			}
+			return null;
+		}
+
 		public static void ApplyFPSCap() {
-			ApplyFPSCap(UnityEngine.XR.XRDevice.isPresent || UnityEngine.XR.XRDevice.refreshRate != 0);
+			float refreshRate = 0;
+			GetActiveVrDevice()?.TryGetDisplayRefreshRate(out refreshRate);
+
+			ApplyFPSCap(refreshRate != 0);
 		}
 
 		static void ApplyFPSCap(bool isHmdPresent) {
