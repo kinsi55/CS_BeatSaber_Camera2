@@ -12,6 +12,11 @@ namespace Camera2.HarmonyPatches {
 		public static Quaternion rotation { get; private set; }
 		public static Vector3 eulerAngles { get; private set; }
 
+		[HarmonyPatch(typeof(VRCenterAdjust), nameof(VRCenterAdjust.OnEnable))]
+		[HarmonyPatch(typeof(VRCenterAdjust), nameof(VRCenterAdjust.Start))]
+		[HarmonyPatch(typeof(VRCenterAdjust), nameof(VRCenterAdjust.HandleRoomCenterDidChange))]
+		[HarmonyPatch(typeof(VRCenterAdjust), nameof(VRCenterAdjust.HandleRoomRotationDidChange))]
+		[HarmonyPatch(typeof(VRCenterAdjust), nameof(VRCenterAdjust.ResetRoom))]
 		static void Postfix(Vector3SO ____roomCenter, FloatSO ____roomRotation, MethodBase __originalMethod) {
 			if(____roomCenter == null) {
 				position = Vector3.zero;
@@ -41,14 +46,6 @@ namespace Camera2.HarmonyPatches {
 			Plugin.Log.Warn("HookRoomAdjust.ApplyCustom!");
 			Console.WriteLine("pos {0}, rot {1}", position, rotation);
 #endif
-		}
-
-		static IEnumerable<MethodBase> TargetMethods() {
-			yield return AccessTools.Method(typeof(VRCenterAdjust), nameof(VRCenterAdjust.OnEnable));
-			yield return AccessTools.Method(typeof(VRCenterAdjust), nameof(VRCenterAdjust.Start));
-			yield return AccessTools.Method(typeof(VRCenterAdjust), nameof(VRCenterAdjust.HandleRoomCenterDidChange));
-			yield return AccessTools.Method(typeof(VRCenterAdjust), nameof(VRCenterAdjust.HandleRoomRotationDidChange));
-			yield return AccessTools.Method(typeof(VRCenterAdjust), nameof(VRCenterAdjust.ResetRoom));
 		}
 	}
 }

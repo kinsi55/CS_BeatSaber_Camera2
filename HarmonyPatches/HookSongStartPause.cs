@@ -23,16 +23,13 @@ namespace Camera2.HarmonyPatches {
 
 	[HarmonyPatch]
 	static class HookAudioTimeSyncController2 {
+		[HarmonyPatch(typeof(AudioTimeSyncController), nameof(AudioTimeSyncController.Pause))]
+		[HarmonyPatch(typeof(AudioTimeSyncController), nameof(AudioTimeSyncController.Resume))]
 		static void Postfix() {
 #if DEBUG
 			Plugin.Log.Info("AudioTimeSyncController.Pause/Resume()");
 #endif
 			CamManager.ApplyCameraValues(worldCam: true);
-		}
-
-		static IEnumerable<MethodBase> TargetMethods() {
-			yield return AccessTools.Method(typeof(AudioTimeSyncController), nameof(AudioTimeSyncController.Pause));
-			yield return AccessTools.Method(typeof(AudioTimeSyncController), nameof(AudioTimeSyncController.Resume));
 		}
 	}
 }

@@ -75,6 +75,9 @@ namespace Camera2.SDK {
 		public Vector3 position;
 		public Vector3 rotation;
 
+		public Vector3 currentPosition => cam.transformchain.position;
+		public Quaternion currentRotation => cam.transformchain.rotation;
+
 		/// <summary>
 		/// Applies the currently set position / rotation to the camera, 
 		/// needs to be called for changes to have an effect

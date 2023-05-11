@@ -30,7 +30,7 @@ namespace Camera2.Utils {
 		// Seperate method so we dont throw if theres no Songcore
 		static bool _IsModdedMap(IDifficultyBeatmap map) {
 			try {
-				return SongCore.Collections.RetrieveDifficultyData(map)?
+				return map != null && SongCore.Collections.RetrieveDifficultyData(map)?
 					.additionalDifficultyData?
 					._requirements?.Any(x => x == "Mapping Extensions" || x == "Noodle Extensions") == true;
 			} catch {
