@@ -19,8 +19,8 @@ namespace Camera2.HarmonyPatches {
 			 * On VRMode Oculus, when you take off the headset the game ends up in an uncapped FPS state,
 			 * this makes sure to apply an FPS cap when the headset is taken off
 			 */
-			if(!OVRPlugin.initialized)
-				return;
+			//if(!OVRPlugin.initialized)
+			//	return;
 
 			isOculus = true;
 
