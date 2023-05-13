@@ -14,13 +14,13 @@ namespace Camera2.HarmonyPatches {
 		static bool isOculus = false;
 		static bool isOculusUserPresent = false;
 
-		public static void Init() {
+		//public static void Init() {
 			/*
 			 * On VRMode Oculus, when you take off the headset the game ends up in an uncapped FPS state,
 			 * this makes sure to apply an FPS cap when the headset is taken off
 			 */
-			//if(!OVRPlugin.initialized)
-			//	return;
+			/*if(!OVRPlugin.initialized)
+				return;
 
 			isOculus = true;
 
@@ -40,7 +40,7 @@ namespace Camera2.HarmonyPatches {
 					System.Threading.Thread.Sleep(isOculusUserPresent ? 2000 : 500);
 				}
 			});
-		}
+		}*/
 
 		public static XRDisplaySubsystem GetActiveVrDevice() {
 			var xrDisplaySubsystems = new List<XRDisplaySubsystem>();
