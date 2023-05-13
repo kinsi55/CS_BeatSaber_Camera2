@@ -67,7 +67,7 @@ namespace Camera2 {
 			harmony.PatchAll(Assembly.GetExecutingAssembly());
 
 			MovementScriptManager.LoadMovementScripts();
-			GlobalFPSCap.Init();
+			//GlobalFPSCap.Init();
 
 			SceneManager.activeSceneChanged += SceneUtil.OnActiveSceneChanged;
 
