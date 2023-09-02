@@ -119,10 +119,10 @@ namespace Camera2.Middlewares {
 					} else if(settings.type == Configuration.CameraType.Attached) {
 						parent = parentToUse = GameObject.Find(settings.Smoothfollow.targetParent)?.transform;
 						settings.Smoothfollow.useLocalPosition = false;
+
+						//System.Console.WriteLine("FP cam {1} is attached to {0}", parentToUse, settings.cam.name);
 					}
 				}
-
-				//System.Console.WriteLine("FP cam is attached to {0}", parentToUse);
 
 				// If we dont have a parent we should not render.
 				if(parentToUse == null)
@@ -143,6 +143,9 @@ namespace Camera2.Middlewares {
 							//targetRotation *= Quaternion.Inverse(parentsParentLocalRotation);
 						}
 					}
+				} else {
+					targetPosition = parentToUse.position;
+					targetRotation = parentToUse.rotation;
 				}
 			} else {
 				targetPosition = currentReplaySource.localHeadPosition;
