@@ -33,7 +33,7 @@ namespace Camera2.Middlewares {
 				HookLeveldata.isModdedMap &&
 				(settings.ModmapExtensions.moveWithMap || settings.type != Configuration.CameraType.Positionable)
 			) {
-				if(noodleOrigin == null) {
+				if(noodleOrigin is null) {
 					// This stinks just as much as Mawntees fur
 					noodleOrigin = (GameObject.Find("NoodlePlayerTrackHead") ?? GameObject.Find("NoodlePlayerTrackRoot"))?.transform;
 				}
@@ -54,7 +54,7 @@ namespace Camera2.Middlewares {
 				}
 			}
 			
-			if(noodleOrigin != null) {
+			if(!(noodleOrigin is null)) {
 #if DEBUG
 				Plugin.Log.Info($"Disabling Modmap parenting for camera {cam.name}");
 #endif

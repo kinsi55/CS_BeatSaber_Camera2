@@ -43,9 +43,11 @@ namespace Camera2.Utils {
 #endif
 
 				ScoresaberUtil.isInReplay = false;
-				HookLeveldata.Reset();
 				audioTimeSyncController = null;
 			}
+
+			if(newScene.name == "MainMenu")
+				HookLeveldata.Reset();
 
 			ScenesManager.ActiveSceneChanged();
 
