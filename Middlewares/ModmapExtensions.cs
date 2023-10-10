@@ -19,7 +19,8 @@ namespace Camera2.Configuration {
 namespace Camera2.Middlewares {
 	class ModmapExtensions : CamMiddleware, IMHandler {
 		//static Type Noodle_PlayerTrack;
-		static Transform noodleOrigin = null;
+		static Transform g_noodleOrigin = null;
+		Transform noodleOrigin = null;
 
 		public static void Reflect() {
 			//Noodle_PlayerTrack ??= IPA.Loader.PluginManager.GetPluginFromId("NoodleExtensions")?.Assembly.GetType("NoodleExtensions.Animation.PlayerTrack");
@@ -34,8 +35,14 @@ namespace Camera2.Middlewares {
 				(settings.ModmapExtensions.moveWithMap || settings.type != Configuration.CameraType.Positionable)
 			) {
 				if(noodleOrigin is null) {
+					// Unity momento
+					if(g_noodleOrigin == null)
+						g_noodleOrigin = null;
+
 					// This stinks just as much as Mawntees fur
-					noodleOrigin = (GameObject.Find("NoodlePlayerTrackHead") ?? GameObject.Find("NoodlePlayerTrackRoot"))?.transform;
+					noodleOrigin = g_noodleOrigin ?? (GameObject.Find("NoodlePlayerTrackHead") ?? GameObject.Find("NoodlePlayerTrackRoot"))?.transform;
+
+					g_noodleOrigin = noodleOrigin;
 				}
 
 				// Noodle maps do not *necessarily* have a playertrack if it not actually used
