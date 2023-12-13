@@ -47,6 +47,9 @@ namespace Camera2.Utils {
 				audioTimeSyncController = null;
 			}
 
+			if(newScene.name == "MainMenu")
+				HookLeveldata.Reset();
+
 			ScenesManager.ActiveSceneChanged();
 
 			if(CamManager.customScreen != null)
