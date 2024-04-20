@@ -15,81 +15,23 @@ namespace Camera2.HarmonyPatches {
 		public static bool isModdedMap = false;
 		public static bool isWallMap = false;
 
-		[HarmonyPatch(
-		typeof(StandardLevelScenesTransitionSetupDataSO),
-		nameof(StandardLevelScenesTransitionSetupDataSO.Init),
-			new Type[] {
-				typeof(string),
-				typeof(BeatmapKey),
-				typeof(BeatmapLevel),
-				typeof(OverrideEnvironmentSettings),
-				typeof(ColorScheme),
-				typeof(ColorScheme),
-				typeof(GameplayModifiers),
-				typeof(PlayerSpecificSettings),
-				typeof(PracticeSettings),
-				typeof(EnvironmentsListModel),
-				typeof(AudioClipAsyncLoader),
-				typeof(BeatmapDataLoader),
-				typeof(string),
-				typeof(BeatmapLevelsModel),
-				typeof(bool),
-				typeof(bool),
-				typeof(RecordingToolManager.SetupData?) 
-			},
-			new ArgumentType[] { 
-				ArgumentType.Normal,
-				ArgumentType.Ref,
-				ArgumentType.Normal, 
-				ArgumentType.Normal, 
-				ArgumentType.Normal,
-				ArgumentType.Normal, 
-				ArgumentType.Normal,
-				ArgumentType.Normal,
-				ArgumentType.Normal,
-				ArgumentType.Normal,
-				ArgumentType.Normal, 
-				ArgumentType.Normal,
-				ArgumentType.Normal,
-				ArgumentType.Normal,
-				ArgumentType.Normal,
-				ArgumentType.Normal,
-				ArgumentType.Normal
-			}
-		)]
-		[HarmonyPatch(
-			typeof(MissionLevelScenesTransitionSetupDataSO),
-			nameof(MissionLevelScenesTransitionSetupDataSO.Init),
-			new Type[] {
-				typeof(string),
-				typeof(BeatmapKey),
-				typeof(BeatmapLevel),
-				typeof(MissionObjective[]),
-				typeof(ColorScheme),
-				typeof(GameplayModifiers),
-				typeof(PlayerSpecificSettings),
-				typeof(EnvironmentsListModel),
-				typeof(BeatmapLevelsModel),
-				typeof(AudioClipAsyncLoader),
-				typeof(BeatmapDataLoader),
-				typeof(string)
-			},
-			new ArgumentType[] {
-				ArgumentType.Normal,
-				ArgumentType.Ref,
-				ArgumentType.Normal,
-				ArgumentType.Normal,
-				ArgumentType.Normal,
-				ArgumentType.Normal,
-				ArgumentType.Normal,
-				ArgumentType.Normal,
-				ArgumentType.Normal,
-				ArgumentType.Normal,
-				ArgumentType.Normal,
-				ArgumentType.Normal
-			}
-		)]
-		[HarmonyPatch(typeof(MultiplayerLevelScenesTransitionSetupDataSO), nameof(MultiplayerLevelScenesTransitionSetupDataSO.Init))]
+		[HarmonyTargetMethods]
+		static IEnumerable<MethodBase> TargetMethods() {
+			foreach(var m in AccessTools.GetDeclaredMethods(typeof(StandardLevelScenesTransitionSetupDataSO)))
+				if(m.Name == nameof(StandardLevelScenesTransitionSetupDataSO.Init))
+					yield return m;
+
+			foreach(var m in AccessTools.GetDeclaredMethods(typeof(MissionLevelScenesTransitionSetupDataSO)))
+				if(m.Name == nameof(MissionLevelScenesTransitionSetupDataSO.Init))
+					yield return m;
+
+			yield return AccessTools.FirstMethod(
+				typeof(MultiplayerLevelScenesTransitionSetupDataSO),
+				x => x.Name == "Init"
+			);
+		}
+
+		[HarmonyPostfix]
 		static void Postfix(BeatmapKey beatmapKey, BeatmapLevel beatmapLevel, GameplayModifiers gameplayModifiers) {
 #if DEBUG
 			Plugin.Log.Info("Got level data!");
