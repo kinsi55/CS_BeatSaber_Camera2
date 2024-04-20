@@ -78,9 +78,25 @@
       <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\BGLib.UnityExtension.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="BGNet">
-      <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\BGNet.dll</HintPath>
-
+    <Reference Include="BGNetCore">
+      <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\BGNetCore.dll</HintPath>
+      <Private>False</Private>
+      <SpecificVersion>False</SpecificVersion>
+    </Reference>
+    <Reference Include="Colors">
+      <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\Colors.dll</HintPath>
+      <Private>False</Private>
+      <SpecificVersion>False</SpecificVersion>
+    </Reference>
+    <Reference Include="DataModels">
+      <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\DataModels.dll</HintPath>
+      <Private>False</Private>
+      <SpecificVersion>False</SpecificVersion>
+    </Reference>
+    <Reference Include="MediaLoader">
+      <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\MediaLoader.dll</HintPath>
+      <Private>False</Private>
+      <SpecificVersion>False</SpecificVersion>
     </Reference>
     <Reference Include="BSML">
       <HintPath>$(BeatSaberDir)\Plugins\BSML.dll</HintPath>
