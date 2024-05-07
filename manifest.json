@@ -3,9 +3,9 @@
 	"id": "Camera2",
 	"name": "Camera2",
 	"author": "Kinsi55",
-	"version": "0.6.109",
+	"version": "0.6.110",
 	"description": "If Camera Plus is so good, why is there no Camera Plus 2?",
-	"gameVersion": "1.34.2",
+	"gameVersion": "1.36.2",
 	"dependsOn": {
 		"BSIPA": "^4.1.4",
 		"BeatSaberMarkupLanguage": "^1.4.5"
