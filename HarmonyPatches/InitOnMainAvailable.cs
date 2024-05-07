@@ -2,16 +2,21 @@
 using HarmonyLib;
 using UnityEngine;
 using System.Linq;
+using BeatSaber.GameSettings;
+using Camera2.Utils;
 
 namespace Camera2.HarmonyPatches {
 	[HarmonyPatch(typeof(SmoothCameraController), nameof(SmoothCameraController.ActivateSmoothCameraIfNeeded))]
 	static class InitOnMainAvailable {
 		static bool isInited = false;
 		public static bool useDepthTexture { get; private set; }
-		static void Postfix(MainSettingsModelSO ____mainSettingsModel) {
-			useDepthTexture = ____mainSettingsModel.smokeGraphicsSettings;
-
+		static void Postfix(SmoothCameraController __instance) {
 			if(!isInited) {
+				useDepthTexture = false;
+
+				if(SceneUtil.GetMainCameraButReally().GetComponent<DepthTextureController>()._handler.TryGetCurrentPerformancePreset(out var pp))
+					useDepthTexture = pp.smokeGraphics; // TODO: Change to .depthTexture when they fixed that its true even with smoke off
+
 				if(CamManager.baseCullingMask == 0)
 					CamManager.baseCullingMask = Camera.main.cullingMask;
 

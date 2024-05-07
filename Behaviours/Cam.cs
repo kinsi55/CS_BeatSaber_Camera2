@@ -106,7 +106,9 @@ namespace Camera2.Behaviours {
 				UCamera.depthTextureMode = InitOnMainAvailable.useDepthTexture || settings?.PostProcessing.forceDepthTexture == true ? DepthTextureMode.Depth : DepthTextureMode.None;
 		}
 
-		static readonly HashSet<string> CameraBehavioursToDestroy = new HashSet<string>() { "AudioListener", "LIV", "MainCamera", "MeshCollider", "TrackedPoseDriver" };
+		static readonly HashSet<string> CameraBehavioursToDestroy = new HashSet<string>() { 
+			"AudioListener", "LIV", "MainCamera", "MeshCollider", "TrackedPoseDriver", "DepthTextureController"
+		};
 
 		public void Init(string name, CameraDesktopView presentor = null, bool loadConfig = false, bool rename = false) {
 			if(this.name != null) {

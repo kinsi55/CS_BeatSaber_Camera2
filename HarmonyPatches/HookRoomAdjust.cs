@@ -3,6 +3,7 @@ using HarmonyLib;
 using System.Collections.Generic;
 using System.Reflection;
 using UnityEngine;
+using BeatSaber.GameSettings;
 
 namespace Camera2.HarmonyPatches {
 	[HarmonyPatch]
@@ -17,18 +18,15 @@ namespace Camera2.HarmonyPatches {
 		[HarmonyPatch(typeof(VRCenterAdjust), nameof(VRCenterAdjust.HandleRoomCenterDidChange))]
 		[HarmonyPatch(typeof(VRCenterAdjust), nameof(VRCenterAdjust.HandleRoomRotationDidChange))]
 		[HarmonyPatch(typeof(VRCenterAdjust), nameof(VRCenterAdjust.ResetRoom))]
-		static void Postfix(Vector3SO ____roomCenter, FloatSO ____roomRotation, MethodBase __originalMethod) {
-			if(____roomCenter == null) {
-				position = Vector3.zero;
+		static void Postfix(MainSettingsHandler ____mainSettingsHandler, MethodBase __originalMethod) {
+			if(____mainSettingsHandler != null) {
+				position = ____mainSettingsHandler.instance.roomCenter;
+				eulerAngles = new Vector3(0, ____mainSettingsHandler.instance.roomRotation, 0);
 			} else {
-				position = ____roomCenter;
+				position = Vector3.zero;
+				eulerAngles = Vector3.zero;
 			}
 
-			if(____roomRotation == null) {
-				eulerAngles = Vector3.zero;
-			} else {
-				eulerAngles = new Vector3(0, ____roomRotation, 0);
-			}
 			rotation = Quaternion.Euler(eulerAngles);
 
 #if DEBUG
