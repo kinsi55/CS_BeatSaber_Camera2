@@ -15,8 +15,7 @@ namespace Camera2.HarmonyPatches {
 
 		[HarmonyPatch(typeof(VRCenterAdjust), nameof(VRCenterAdjust.OnEnable))]
 		[HarmonyPatch(typeof(VRCenterAdjust), nameof(VRCenterAdjust.Start))]
-		[HarmonyPatch(typeof(VRCenterAdjust), nameof(VRCenterAdjust.HandleRoomCenterDidChange))]
-		[HarmonyPatch(typeof(VRCenterAdjust), nameof(VRCenterAdjust.HandleRoomRotationDidChange))]
+		[HarmonyPatch(typeof(VRCenterAdjust), nameof(VRCenterAdjust.SetRoomTransformOffset))]
 		[HarmonyPatch(typeof(VRCenterAdjust), nameof(VRCenterAdjust.ResetRoom))]
 		static void Postfix(MainSettingsHandler ____mainSettingsHandler, MethodBase __originalMethod) {
 			if(____mainSettingsHandler != null) {
