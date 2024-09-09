@@ -66,17 +66,17 @@ namespace Camera2.UI {
 		}
 
 		public void Update(int setSelected = -1, bool reloadData = true) {
-			if(list == null || list.tableView == null)
+			if(list == null || list.TableView == null)
 				return;
 
 			if(reloadData) {
-				list.data = scenes;
-				list.tableView.ReloadData();
+				list.Data = scenes;
+				list.TableView.ReloadData();
 			}
 
 			if(setSelected > -1) {
-				list.tableView.SelectCellWithIdx(setSelected);
-				list.tableView.ScrollToCellWithIdx(setSelected, TableView.ScrollPositionType.Center, false);
+				list.TableView.SelectCellWithIdx(setSelected);
+				list.TableView.ScrollToCellWithIdx(setSelected, TableView.ScrollPositionType.Center, false);
 			}
 		}
 	}
