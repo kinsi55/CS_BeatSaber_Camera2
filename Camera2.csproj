@@ -61,6 +61,9 @@
 		<Reference Include="BeatSaber.Settings">
 			<HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\BeatSaber.Settings.dll</HintPath>
 		</Reference>
+		<Reference Include="BeatSaber.ViewSystem">
+			<HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\BeatSaber.ViewSystem.dll</HintPath>
+		</Reference>
 		<Reference Include="BGLib.AppFlow">
 			<HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\BGLib.AppFlow.dll</HintPath>
 			<Private>False</Private>
@@ -86,6 +89,9 @@
 			<HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\DataModels.dll</HintPath>
 			<Private>False</Private>
 			<SpecificVersion>False</SpecificVersion>
+		</Reference>
+		<Reference Include="GameInit">
+			<HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\GameInit.dll</HintPath>
 		</Reference>
 		<Reference Include="MediaLoader">
 			<HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\MediaLoader.dll</HintPath>
@@ -114,6 +120,9 @@
 		</Reference>
 		<Reference Include="Rendering">
 			<HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\Rendering.dll</HintPath>
+		</Reference>
+		<Reference Include="SegmentedControl">
+			<HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\SegmentedControl.dll</HintPath>
 		</Reference>
 		<Reference Include="SemVer">
 			<HintPath>$(BeatSaberDir)\Libs\SemVer.dll</HintPath>
