@@ -1,4 +1,5 @@
-﻿using Camera2.Behaviours;
+﻿using BeatSaberMarkupLanguage.Util;
+using Camera2.Behaviours;
 using Camera2.Utils;
 using System;
 using System.Collections.Generic;
@@ -36,6 +37,9 @@ namespace Camera2.Managers {
 			new GameObject("Cam2_Positioner", typeof(CamPositioner));
 
 			UI.SpaghettiUI.Init();
+			MainMenuAwaiter.MainMenuInitializing += delegate {
+				UI.SpaghettiUI.Init();
+			};
 		}
 
 		private static void LoadCameras(bool reload = false) {
