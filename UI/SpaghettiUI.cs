@@ -31,10 +31,10 @@ namespace Camera2.UI {
 		internal static CustomScenesSwitchUI scenesSwitchUI = new CustomScenesSwitchUI();
 
 		public static void Init() {
-			MenuButtons.instance.RegisterButton(new MenuButton("Camera2", "This is a Camera plugin 2 4Head", ShowFlow, true));
+			MenuButtons.Instance.RegisterButton(new MenuButton("Camera2", "This is a Camera plugin 2 4Head", ShowFlow, true));
 
 			if(ScenesManager.settings.customScenes.Count > 0)
-				GameplaySetup.instance.AddTab("Camera2", "Camera2.UI.Views.customScenesList.bsml", scenesSwitchUI);
+				GameplaySetup.Instance.AddTab("Camera2", "Camera2.UI.Views.customScenesList.bsml", scenesSwitchUI);
 		}
 
 		private static void ShowFlow() {
@@ -124,7 +124,7 @@ namespace Camera2.UI {
 			get => cam.name;
 			set {
 				if(CamManager.RenameCamera(cam, value))
-					Coordinator.instance.camList.list.tableView.ReloadData();
+					Coordinator.instance.camList.list.TableView.ReloadData();
 				NotifyPropertyChanged("camName");
 			}
 		}
@@ -394,8 +394,8 @@ namespace Camera2.UI {
 			follow360Tab.IsVisible = type == CameraType.Positionable;
 
 			// Apparently this is the best possible way to programmatically switch the selected tab
-			tabSelector.textSegmentedControl.SelectCellWithNumber(0);
-			AccessTools.Method(typeof(TabSelector), "TabSelected").Invoke(tabSelector, new object[] { tabSelector.textSegmentedControl, 0 });
+			tabSelector.TextSegmentedControl.SelectCellWithNumber(0);
+			AccessTools.Method(typeof(TabSelector), "TabSelected").Invoke(tabSelector, new object[] { tabSelector.TextSegmentedControl, 0 });
 		}
 	}
 
@@ -437,8 +437,8 @@ namespace Camera2.UI {
 
 		internal void UpdateCamListUI() {
 			//var x = Sprite.Create(cam.screenImage.material, new Rect(0, 0, cam.renderTexture.width, cam.renderTexture.width), new Vector2(0.5f, 0.5f));
-			list.data = cams;
-			list.tableView.ReloadData();
+			list.Data = cams;
+			list.TableView.ReloadData();
 			deleteButton.interactable = listData.Count > 1;
 		}
 
@@ -613,8 +613,8 @@ namespace Camera2.UI {
 
 			var cellIndex = Array.FindIndex(camList.listDataOrdered.ToArray(), x => x.cam == cam);
 
-			camList.list.tableView.SelectCellWithIdx(cellIndex);
-			camList.list.tableView.ScrollToCellWithIdx(cellIndex, TableView.ScrollPositionType.Center, false);
+			camList.list.TableView.SelectCellWithIdx(cellIndex);
+			camList.list.TableView.ScrollToCellWithIdx(cellIndex, TableView.ScrollPositionType.Center, false);
 		}
 
 		protected override void DidActivate(bool firstActivation, bool addedToHierarchy, bool screenSystemEnabling) {
