@@ -33,14 +33,6 @@ namespace Camera2.Managers {
 			ScenesManager.settings.Load();
 
 			XRSettings.gameViewRenderMode = GameViewRenderMode.None;
-
-			new GameObject("Cam2_Positioner", typeof(CamPositioner));
-
-			// This Method is intially already "Late" Called, so we gotta attach an Eventhandler and call it ourselves here
-			UI.SpaghettiUI.Init();
-			MainMenuAwaiter.MainMenuInitializing += delegate {
-				UI.SpaghettiUI.Init();
-			};
 		}
 
 		private static void LoadCameras(bool reload = false) {

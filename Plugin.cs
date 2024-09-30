@@ -1,4 +1,5 @@
-﻿using Camera2.HarmonyPatches;
+﻿using BeatSaberMarkupLanguage.Util;
+using Camera2.HarmonyPatches;
 using Camera2.Managers;
 using Camera2.Middlewares;
 using Camera2.Utils;
@@ -78,6 +79,10 @@ namespace Camera2 {
 				if(ScoresaberUtil.Reflect())
 					SDK.ReplaySources.Register(new ScoresaberUtil.SSReplaySource());
 			});
+
+			MainMenuAwaiter.MainMenuInitializing += delegate {
+				UI.SpaghettiUI.Init();
+			};
 		}
 
 		[OnExit]

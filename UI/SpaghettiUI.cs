@@ -33,8 +33,7 @@ namespace Camera2.UI {
 		public static void Init() {
 			MenuButtons.Instance.RegisterButton(new MenuButton("Camera2", "This is a Camera plugin 2 4Head", ShowFlow, true));
 
-			if(ScenesManager.settings.customScenes.Count > 0)
-				GameplaySetup.Instance.AddTab("Camera2", "Camera2.UI.Views.customScenesList.bsml", scenesSwitchUI);
+			GameplaySetup.Instance.AddTab("Camera2", "Camera2.UI.Views.customScenesList.bsml", scenesSwitchUI);
 		}
 
 		private static void ShowFlow() {
