@@ -2,7 +2,6 @@
 using HarmonyLib;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.XR;
 
@@ -67,22 +66,22 @@ namespace Camera2.HarmonyPatches {
 			} else {
 				var Kapp = 30;
 
-				var srr = Screen.currentResolution.refreshRate;
+				var srr = Screen.currentResolution.refreshRateRatio;
 				if(CamManager.cams?.Count > 0) {
 					QualitySettings.vSyncCount = 1;
 					Kapp = -1;
 
 					foreach(var cam in CamManager.cams.Values.Where(x => x.gameObject.activeInHierarchy)) {
-						if(cam.settings.FPSLimiter.fpsLimit <= 0 || cam.settings.FPSLimiter.fpsLimit == srr) {
-							if(Kapp < srr)
-								Kapp = srr;
+						if(cam.settings.FPSLimiter.fpsLimit <= 0 || cam.settings.FPSLimiter.fpsLimit == srr.value) {
+							if(Kapp < srr.value)
+								Kapp = (int)srr.value;
 						} else if(Kapp < cam.settings.FPSLimiter.fpsLimit) {
 							Kapp = cam.settings.FPSLimiter.fpsLimit;
 							QualitySettings.vSyncCount = 0;
 						}
 					}
 				} else {
-					Kapp = srr;
+					Kapp = (int)srr.value;
 				}
 
 				Application.targetFrameRate = Kapp;
