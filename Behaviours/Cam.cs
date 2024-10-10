@@ -103,7 +103,7 @@ namespace Camera2.Behaviours {
 
 		internal void UpdateDepthTextureActive() {
 			if(UCamera != null)
-				UCamera.depthTextureMode = InitOnMainAvailable.useDepthTexture || settings?.PostProcessing.forceDepthTexture == true ? DepthTextureMode.Depth : DepthTextureMode.None;
+				UCamera.depthTextureMode = HookSettingsManager.useDepthTexture || settings?.PostProcessing.forceDepthTexture == true ? DepthTextureMode.Depth : DepthTextureMode.None;
 		}
 
 		static readonly HashSet<string> CameraBehavioursToDestroy = new HashSet<string>() { 

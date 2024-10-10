@@ -8,12 +8,8 @@ namespace Camera2.HarmonyPatches {
 	[HarmonyPatch(typeof(SmoothCameraController), nameof(SmoothCameraController.ActivateSmoothCameraIfNeeded))]
 	static class InitOnMainAvailable {
 		static bool isInited = false;
-		public static bool useDepthTexture { get; private set; }
 		static void Postfix(SmoothCameraController __instance) {
 			if(!isInited) {
-				// IDK
-				useDepthTexture = SceneUtil.GetMainCameraButReally().GetComponent<DepthTextureController>()._settingsManager.settings.quality.smokeGraphics;
-
 				if(CamManager.baseCullingMask == 0)
 					CamManager.baseCullingMask = Camera.main.cullingMask;
 
