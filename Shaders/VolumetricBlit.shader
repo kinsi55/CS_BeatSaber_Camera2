@@ -1,6 +1,6 @@
 Shader "Custom/VolumetricBlit" {
 	Properties {
-		_MainTex ("Texture", 2D) = "white" {}
+		_MainTex ("Texture", any) = "white" {}
 	}
 	SubShader {
 		ColorMask RGB
@@ -31,6 +31,7 @@ Shader "Custom/VolumetricBlit" {
 				UNITY_INITIALIZE_VERTEX_OUTPUT_STEREO(o);
 
 				o.vertex = UnityObjectToClipPos(v.vertex);
+				o.uv = v.texcoord.xy;
 
 				return o;
 			}
@@ -38,7 +39,7 @@ Shader "Custom/VolumetricBlit" {
 			fixed4 frag(v2f i) : SV_Target {
 				UNITY_SETUP_STEREO_EYE_INDEX_POST_VERTEX(i); //Insert
 
-				return tex2D(_MainTex, i.uv);
+				return UNITY_SAMPLE_SCREENSPACE_TEXTURE(_MainTex, i.uv);
 			}
 			ENDCG
 		}
@@ -69,9 +70,10 @@ Shader "Custom/VolumetricBlit" {
 				UNITY_INITIALIZE_OUTPUT(v2f, o);
 				UNITY_INITIALIZE_VERTEX_OUTPUT_STEREO(o);
 
-				v.vertex = UnityObjectToClipPos(v.vertex);
+				o.vertex = UnityObjectToClipPos(v.vertex);
+				o.uv = v.texcoord.xy;
 				// For back face, we mirror the texture so that it appears right way around from both sides
-				v.texcoord.x = 1 - v.texcoord.x;
+				o.uv.x = 1 - o.uv.x;
 
 				return o;
 			}
