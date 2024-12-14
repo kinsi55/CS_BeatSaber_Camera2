@@ -3,7 +3,7 @@ using HarmonyLib;
 using UnityEngine;
 
 namespace Camera2.HarmonyPatches {
-	[HarmonyPatch(typeof(StretchableObstacle), nameof(StretchableObstacle.SetSizeAndColor))]
+	[HarmonyPatch(typeof(StretchableObstacle), nameof(StretchableObstacle.SetAllProperties))]
 	static class TransparentWalls {
 		static void Postfix(Transform ____obstacleCore, ParametricBoxFakeGlowController ____obstacleFakeGlow, MaterialPropertyBlockController[] ____materialPropertyBlockControllers) {
 			if(____obstacleCore != null) {

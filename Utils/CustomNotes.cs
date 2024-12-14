@@ -7,9 +7,9 @@ namespace Camera2.Utils {
 		static PropertyInfo LayerUtils_HMDOnly;
 
 		public static void Reflect() {
-			LayerUtils_HMDOnly = IPA.Loader.PluginManager.GetPluginFromId("Custom Notes")?
-				.Assembly.GetType("CustomNotes.Utilities.LayerUtils")?
-				.GetProperty("HMDOnly", BindingFlags.Public | BindingFlags.Static);
+			LayerUtils_HMDOnly = IPA.Loader.PluginManager.GetPluginFromId("CustomNotes")?
+				.Assembly.GetType("CustomNotes.Utilities.Configuration")?
+				.GetProperty("HmdOnlyEnabled", BindingFlags.Public | BindingFlags.Static);
 		}
 
 		public static bool HasHMDOnlyEnabled() => LayerUtils_HMDOnly != null && (bool)LayerUtils_HMDOnly.GetValue(null);

@@ -16,7 +16,7 @@
 		"SiraUtil",
 		"Noodle Extensions",
 		"MappingExtensions",
-		"Custom Notes"
+		"CustomNotes"
 	],
 	"conflictsWith": {
 		"CameraPlus": ">=4.0.0"
