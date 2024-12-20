@@ -9,7 +9,7 @@ namespace Camera2.Utils {
 		static bool hasSongCore =
 			PluginManager.EnabledPlugins.Any(x => x.Name == "SongCore"); // failsafe, Noodle / MapEx do require it themselves technically
 
-		public static bool IsProbablyWallmap(BeatmapLevel map, BeatmapKey beatmapKey) {
+		public static bool IsProbablyWallmap(BeatmapKey beatmapKey) {
 			if(!isModCapable)
 				return false;
 
@@ -17,22 +17,21 @@ namespace Camera2.Utils {
 			// if(map.beatmapData.obstaclesCount != 0 && map.beatmapData.obstaclesCount < 100)
 			// 	return false;
 
-			return IsModdedMap(map, beatmapKey);
+			return IsModdedMap(beatmapKey);
 		}
 
-		public static bool IsModdedMap(BeatmapLevel map, BeatmapKey beatmapKey) {
+		public static bool IsModdedMap(BeatmapKey beatmapKey) {
 			if(!hasSongCore || !isModCapable)
 				return false;
 
-			return _IsModdedMap(map, beatmapKey);
+			return _IsModdedMap(beatmapKey);
 		}
 
 		// Seperate method so we dont throw if theres no Songcore
-		static bool _IsModdedMap(BeatmapLevel map, BeatmapKey beatmapKey) {
+		static bool _IsModdedMap(BeatmapKey beatmapKey) {
 			try {
-				return map != null && SongCore.Collections.RetrieveDifficultyData(map, beatmapKey)?
-					.additionalDifficultyData?
-					._requirements?.Any(x => x == "Mapping Extensions" || x == "Noodle Extensions") == true;
+				return SongCore.Collections.GetCustomLevelSongDifficultyData(beatmapKey)?
+					.additionalDifficultyData._requirements.Any(x => x == "Mapping Extensions" || x == "Noodle Extensions") == true;
 			} catch {
 				return false;
 			}
