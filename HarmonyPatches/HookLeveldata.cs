@@ -39,9 +39,9 @@ namespace Camera2.HarmonyPatches {
 			HookLeveldata.beatmapLevel = beatmapLevel;
 			HookLeveldata.gameplayModifiers = gameplayModifiers;
 
-			isModdedMap = ModMapUtil.IsModdedMap(beatmapLevel, beatmapKey);
+			isModdedMap = ModMapUtil.IsModdedMap(beatmapKey);
 			is360Level = beatmapKey.beatmapCharacteristic.containsRotationEvents;
-			isWallMap = ModMapUtil.IsProbablyWallmap(beatmapLevel, beatmapKey);
+			isWallMap = ModMapUtil.IsProbablyWallmap(beatmapKey);
 		}
 
 		internal static void Reset() {
