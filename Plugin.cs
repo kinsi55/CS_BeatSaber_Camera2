@@ -1,5 +1,4 @@
 ﻿using BeatSaberMarkupLanguage.Util;
-using Camera2.HarmonyPatches;
 using Camera2.Managers;
 using Camera2.Middlewares;
 using Camera2.Utils;
@@ -40,12 +39,7 @@ namespace Camera2 {
 		internal static void LoadShaders() {
 			void LoadNormalShaders(AssetBundle bundle) {
 				ShaderMat_LuminanceKey = new Material(bundle.LoadAsset<Shader>("luminancekey.shader"));
-				// Why does this one need the full path and others dont? I have no fing idea!
-				ShaderMat_Outline = new Material(bundle.LoadAsset<Shader>("assets/bundledassets/cam2/texouline.shader"));
-				bundle.Unload(false);
-			}
-
-			void LoadVRShaders(AssetBundle bundle) {
+				ShaderMat_Outline = new Material(bundle.LoadAsset<Shader>("texouline.shader"));
 				Shader_VolumetricBlit = bundle.LoadAsset<Shader>("volumetricblit.shader");
 				bundle.Unload(false);
 			}
@@ -53,12 +47,8 @@ namespace Camera2 {
 #if !DEV
 			using(var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream("Camera2.Shaders.camera2utils"))
 				LoadNormalShaders(AssetBundle.LoadFromStream(stream));
-
-			using(var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream("Camera2.Shaders.camera2utilsvr"))
-				LoadVRShaders(AssetBundle.LoadFromStream(stream));
 #else
 			LoadNormalShaders(AssetBundle.LoadFromFile(@"D:\Unity Shit\Projects\AssetBundlePacker\Assets\StreamingAssets\camera2utils"));
-			LoadVRShaders(AssetBundle.LoadFromFile(@"D:\Unity Shit\Projects\AssetBundlePacker\Assets\StreamingAssets\camera2utilsvr"));
 #endif
 		}
 
