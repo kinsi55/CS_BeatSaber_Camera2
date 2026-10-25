@@ -25,6 +25,36 @@ namespace Camera2.Behaviours {
 		internal Camera UCamera { get; private set; } = null;
 		internal CameraSettings settings { get; private set; } = null;
 		internal RenderTexture renderTexture { get; private set; } = null;
+		private Spout.SpoutSender spoutSender;
+		private bool includedInScene = true;
+
+		internal void ApplySceneActivation(bool included) {
+			includedInScene = included;
+			var selected = UI.SettingsView.cam == this;
+			gameObject.SetActive(Spout.CameraOutput.ShouldRender(included, selected));
+			UpdateDesktopVisibility();
+			ShowWorldCamIfNecessary();
+		}
+
+		internal void UpdateDesktopVisibility() {
+			if(previewImage != null)
+				previewImage.gameObject.SetActive(Spout.CameraOutput.ShouldShowDesktop(
+					isActiveAndEnabled, includedInScene, UI.SettingsView.cam == this, settings?.spoutHideDesktop == true));
+		}
+
+		internal void SendSpoutFrame(RenderTexture source) {
+			if(settings?.spoutEnabled != true || !isActiveAndEnabled)
+				return;
+
+			spoutSender ??= new Spout.SpoutSender();
+			Spout.CameraOutput.GetOutputSize(settings.spoutResolution, source.width, source.height, out var width, out var height);
+			spoutSender.Send(source, "Camera2 - " + name, width, height);
+		}
+
+		internal void StopSpoutOutput() {
+			spoutSender?.Dispose();
+			spoutSender = null;
+		}
 
 		internal CameraDesktopView previewImage { get; private set; } = null;
 		internal PositionableCam worldCam { get; private set; } = null;
@@ -61,14 +91,18 @@ namespace Camera2.Behaviours {
 
 
 		internal void UpdateRenderTextureAndView() {
-			var w = (int)Math.Round(settings.viewRect.width * Screen.width * settings.renderScale);
-			var h = (int)Math.Round(settings.viewRect.height * Screen.height * settings.renderScale);
+			Spout.CameraOutput.GetRenderSize(settings.spoutEnabled, settings.spoutResolution,
+				(int)Math.Round(settings.viewRect.width * Screen.width), (int)Math.Round(settings.viewRect.height * Screen.height),
+				settings.renderScale, out var w, out var h);
 
 			var sizeChanged = renderTexture == null || renderTexture.width != w || renderTexture.height != h || renderTexture.antiAliasing != settings.antiAliasing;
 
 			if(sizeChanged) {
-				if(renderTexture != null)
+				if(renderTexture != null) {
+					UCamera.targetTexture = null;
 					renderTexture.Release();
+					Destroy(renderTexture);
+				}
 
 				renderTexture = new RenderTexture(w, h, 24) { //, RenderTextureFormat.ARGB32
 					useMipMap = false,
@@ -94,6 +128,7 @@ namespace Camera2.Behaviours {
 				return;
 
 			bool doShowCam =
+				includedInScene &&
 				settings.type == Configuration.CameraType.Positionable &&
 				settings.worldCamVisibility != WorldCamVisibility.Hidden &&
 				(settings.worldCamVisibility != WorldCamVisibility.HiddenWhilePlaying || !SceneUtil.isSongPlaying);
@@ -235,12 +270,12 @@ namespace Camera2.Behaviours {
 		private void OnEnable() {
 			// Force a render here so we dont end up with a stale image after having just enabled this camera
 			PrepareMiddlewaredRender(true);
-			if(previewImage != null)
-				previewImage.gameObject.SetActive(true);
+			UpdateDesktopVisibility();
 			ShowWorldCamIfNecessary();
 		}
 
 		private void OnDisable() {
+			StopSpoutOutput();
 			if(previewImage != null)
 				previewImage.gameObject.SetActive(false);
 
@@ -249,6 +284,7 @@ namespace Camera2.Behaviours {
 
 		internal bool destroying { get; private set; } = false;
 		private void OnDestroy() {
+			StopSpoutOutput();
 			destroying = true;
 			gameObject.SetActive(false);
 

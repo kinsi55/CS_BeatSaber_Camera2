@@ -32,6 +32,22 @@ The Game version(s) specific releases are compatible with are mentioned in the R
 - Can either be always visible / hidden or hidden just while playing
 - Ingame preview size customizable
 
+## Spout2
+
+This fork adds per-camera Spout2 output to Camera2. Select a camera and open its
+**Spout2** tab to enable output, hide its desktop preview, or choose an output
+resolution. OBS receives each enabled camera as **Camera2 - <camera name>**.
+
+- Fixed output sizes are independent of the desktop window. General's Render
+  Scale controls internal rendering relative to that size.
+- On Windows, use the OBS plugin [Spout2](https://github.com/Off-World-Live/obs-spout2-plugin).
+- On Linux use [Spout2PW](https://github.com/hoshinolina/spout2pw), [Spout2PW fork for newer protons](https://github.com/tasokait/spout2pw) and the OBS plugin [OBS-PWVideo](https://github.com/hoshinolina/obs-pwvideo).
+
+Camera2 is by Kinsi55. This integration uses KlakSpout by Keijiro Takahashi and
+the Spout SDK by Lynn Jarvis; their license notices are included. See the
+[Spout2 documentation](Spout/README.md) for setup, dependencies and test details.
+The upstream Camera2 releases linked below do not include this fork's additions.
+
 ### Changes
 
 #### General

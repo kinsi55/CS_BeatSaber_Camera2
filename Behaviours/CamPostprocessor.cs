@@ -81,6 +81,9 @@ namespace Camera2.Behaviours {
 
 				Apply(Plugin.ShaderMat_LuminanceKey);
 
+				// Capture the finished image before adding the editor selection outline.
+				cam.SendSpoutFrame(main);
+
 				if(cam.isCurrentlySelectedInSettings)
 					Apply(Plugin.ShaderMat_Outline);
 
@@ -94,6 +97,7 @@ namespace Camera2.Behaviours {
 					RenderTexture.ReleaseTemporary(main);
 			} else {
 				Graphics.Blit(_src, dest);
+				cam.SendSpoutFrame(_src);
 			}
 
 			cam.PostprocessCompleted();

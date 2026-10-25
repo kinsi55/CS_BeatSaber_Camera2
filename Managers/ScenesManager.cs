@@ -18,6 +18,8 @@ namespace Camera2.Managers {
 		// Kind of a hack not having it start off Menu but else the first menu load will not apply..
 		internal static SceneTypes? loadedScene { get; private set; } = null;
 		internal static bool isOnCustomScene = false;
+		private static List<string> currentCameraList;
+		private static bool activateWhenEmpty = true;
 
 		public static readonly HashSet<string> menuSceneNames = new HashSet<string>() { "MainMenu", "MenuViewCore", "MenuCore", "MenuViewControllers" };
 		public static readonly HashSet<string> disabledSceneNames = new HashSet<string>() { "PCInit", "BeatmapEditor3D", "BeatmapLevelEditorWorldUi" };
@@ -130,21 +132,20 @@ namespace Camera2.Managers {
 		private static void SwitchToCamlist(List<string> cams, bool activateAllWhenEmpty = true) {
 			if(cams?.Count == 0)
 				cams = null;
+			currentCameraList = cams;
+			activateWhenEmpty = activateAllWhenEmpty;
+			RefreshCameraActivity();
+		}
 
-			/*
-			 * Intentionally checking != false, this way if cams is null OR
-			 * it contains it, the cam will be activated, only if its
-			 * a non-empty scene we want to hide cams that are not in it
-			 */
+		internal static void RefreshCameraActivity() {
 			foreach(var cam in CamManager.cams) {
 				if(cam.Value == null)
 					continue;
 
-				var isContained = cams?.Contains(cam.Key);
-
-				var camShouldBeActive = (activateAllWhenEmpty && isContained != false) || isContained == true || UI.SettingsView.cam == cam.Value;
-
-				cam.Value.gameObject.SetActive(camShouldBeActive);
+				var isContained = currentCameraList?.Contains(cam.Key);
+				var included = (activateWhenEmpty && isContained != false) || isContained == true;
+				// Spout and desktop hiding never override Camera2's scene activation.
+				cam.Value.ApplySceneActivation(included);
 			}
 
 			GL.Clear(true, true, Color.black);

@@ -9,6 +9,7 @@
 		<BeatSaberDir>$(LocalRefsDir)</BeatSaberDir>
 		<AppOutputBase>$(MSBuildProjectDirectory)\</AppOutputBase>
 		<Nullable>disable</Nullable>
+		<DefaultItemExcludes>$(DefaultItemExcludes);.build/**</DefaultItemExcludes>
 		<Product>Camera2</Product>
 		<Company />
 		<Authors>Kinsi55</Authors>
@@ -44,6 +45,7 @@
 	</PropertyGroup>
 	<ItemGroup>
 		<Compile Remove="Utils\BloomShite.cs" />
+		<Compile Remove="Tests\**\*.cs" />
 	</ItemGroup>
 	<ItemGroup>
 		<None Remove="Shaders\camera2utils" />
@@ -195,6 +197,9 @@
 	</ItemGroup>
 	<ItemGroup>
 		<EmbeddedResource Include="manifest.json" />
+		<EmbeddedResource Include="Spout\Native\Camera2Spout.dll" LogicalName="Camera2.Spout.Native.Camera2Spout.dll" />
+		<EmbeddedResource Include="Spout\Native\LICENSE.KlakSpout.md" LogicalName="Camera2.Spout.Native.LICENSE.KlakSpout.md" />
+		<EmbeddedResource Include="Spout\Native\LICENSE.Spout.txt" LogicalName="Camera2.Spout.Native.LICENSE.Spout.txt" />
 		<EmbeddedResource Include="Shaders\camera2utils" />
 		<EmbeddedResource Include="UI\Views\camList.bsml" />
 		<EmbeddedResource Include="UI\Views\camPreview.bsml" />

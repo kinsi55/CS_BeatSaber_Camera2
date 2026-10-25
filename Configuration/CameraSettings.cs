@@ -150,6 +150,7 @@ namespace Camera2.Configuration {
 
 		public void Reload() {
 			Load();
+			ScenesManager.RefreshCameraActivity();
 			foreach(var x in cam.middlewares)
 				x.CamConfigReloaded();
 		}
@@ -273,6 +274,41 @@ namespace Camera2.Configuration {
 				cam.UCamera.depth = value;
 				if(isLoaded)
 					CamManager.ApplyCameraValues(viewLayer: true);
+			}
+		}
+
+		private bool _spoutEnabled;
+		public bool spoutEnabled {
+			get => _spoutEnabled;
+			set {
+				_spoutEnabled = value;
+				if(!value)
+					cam.StopSpoutOutput();
+				if(isLoaded) {
+					cam.UpdateRenderTextureAndView();
+					ScenesManager.RefreshCameraActivity();
+				}
+			}
+		}
+
+		private bool _spoutHideDesktop;
+		public bool spoutHideDesktop {
+			get => _spoutHideDesktop;
+			set {
+				_spoutHideDesktop = value;
+				if(isLoaded)
+					ScenesManager.RefreshCameraActivity();
+			}
+		}
+
+		private Spout.SpoutResolution _spoutResolution;
+		[JsonConverter(typeof(StringEnumConverter))]
+		public Spout.SpoutResolution spoutResolution {
+			get => _spoutResolution;
+			set {
+				_spoutResolution = Enum.IsDefined(typeof(Spout.SpoutResolution), value) ? value : Spout.SpoutResolution.MatchCamera;
+				if(isLoaded)
+					cam.UpdateRenderTextureAndView();
 			}
 		}
 

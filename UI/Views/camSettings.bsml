@@ -24,6 +24,21 @@
 		</modifier-container>
 	</tab>
 	
+	<tab tags='tabs' tab-name='Spout2'>
+		<vertical horizontal-fit='PreferredSize' vertical-fit='PreferredSize' pad-top='3'>
+			<modifier-container child-expand-width='true' horizontal-fit='PreferredSize'>
+				<checkbox text='Enable Spout2' value='spoutEnabled' bind-value='true' apply-on-change='true'
+					hover-hint='Sends this camera to OBS as Camera2 - followed by its camera name. Output follows Camera2 scene rules, including when the desktop preview is hidden.'/>
+				<checkbox text='Hide on Beat Saber window' value='spoutHideDesktop' bind-value='true' apply-on-change='true'
+					hover-hint='Hides only this camera on the desktop window. Does not change scene activation: Spout2 stops when Camera2 disables the camera.'/>
+				<dropdown-list-setting text='Output resolution' value='spoutResolution' choices='spoutResolutions' bind-value='true' apply-on-change='true'
+					hover-hint='Fixed sizes set the pixels sent to OBS. General Render Scale sets the internal render size relative to that output. Match camera keeps the existing desktop-based sizing.'/>
+			</modifier-container>
+			<text text='Each camera has its own Spout2 settings.' font-size='3' align='Center'/>
+			<text text='Fixed output size x General Render Scale = internal render size.' font-size='3' align='Center'/>
+		</vertical>
+	</tab>
+
 	<tab tags='tabs' tab-name='Visibility'>
 		<vertical horizontal-fit='PreferredSize' vertical-fit='PreferredSize' pad-top='3'>
 			<modifier-container child-expand-width='true' horizontal-fit='PreferredSize'>

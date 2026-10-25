@@ -147,6 +147,29 @@ namespace Camera2.UI {
 		internal int fpsLimit { get => cam.settings.FPSLimiter.fpsLimit; set { cam.settings.FPSLimiter.fpsLimit = value; } }
 		internal float renderScale { get => cam.settings.renderScale; set { cam.settings.renderScale = value; } }
 		internal int antiAliasing { get => cam.settings.antiAliasing; set { cam.settings.antiAliasing = value; } }
+		internal bool spoutEnabled {
+			get => cam.settings.spoutEnabled;
+			set {
+				cam.settings.spoutEnabled = value;
+				cam.settings.Save();
+			}
+		}
+		internal bool spoutHideDesktop {
+			get => cam.settings.spoutHideDesktop;
+			set { cam.settings.spoutHideDesktop = value; cam.settings.Save(); }
+		}
+		private static readonly List<object> spoutResolutions = new List<object> {
+			"Match camera", "1280 x 720", "1920 x 1080", "2560 x 1440", "3840 x 2160"
+		};
+		internal string spoutResolution {
+			get => (string)spoutResolutions[(int)cam.settings.spoutResolution];
+			set {
+				var index = spoutResolutions.IndexOf(value);
+				if(index < 0) return;
+				cam.settings.spoutResolution = (Spout.SpoutResolution)index;
+				cam.settings.Save();
+			}
+		}
 		internal float previewSize { get => cam.settings.previewScreenSize; set { cam.settings.previewScreenSize = value; } }
 
 		internal float zOffset {

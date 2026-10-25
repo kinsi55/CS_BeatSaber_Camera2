@@ -32,7 +32,10 @@ namespace Camera2 {
 			Instance = this;
 			Log = logger;
 
-			Log.Info("Camera2 loaded");
+			// Extract/load before Unity initializes its native graphics plugins.
+			Spout.SpoutPlugin.Load();
+
+			Log.Info("Camera2 loaded (Spout2 build 4)");
 			LoadShaders();
 		}
 
